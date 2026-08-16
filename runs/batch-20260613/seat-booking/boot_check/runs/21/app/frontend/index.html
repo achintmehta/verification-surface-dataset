@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>🎭 Seat Booking</h1>
+
+      <div id="inventory-bar">
+        <span id="inv-available">Available: -</span>
+        <span id="inv-held">Held: -</span>
+        <span id="inv-booked">Booked: -</span>
+        <span id="inv-total">Total: -</span>
+      </div>
+
+      <div id="seat-map"></div>
+
+      <div id="controls">
+        <div id="selection-info">
+          <p>Selected: <span id="selected-count">0</span> seat(s)</p>
+          <p id="selected-list"></p>
+        </div>
+        <button id="btn-hold" disabled>Hold Selected Seats</button>
+        <button id="btn-confirm" disabled>Confirm Booking</button>
+        <button id="btn-release" disabled>Release Hold</button>
+      </div>
+
+      <div id="hold-info" class="hidden">
+        <h3>Active Hold</h3>
+        <p>Hold ID: <span id="hold-id-display"></span></p>
+        <p>Expires in: <span id="hold-countdown"></span>s</p>
+        <p>Seats: <span id="hold-seats-display"></span></p>
+      </div>
+
+      <div id="status-message" class="hidden"></div>
+      <div id="legend">
+        <span class="legend-item"><span class="legend-swatch available"></span> Available</span>
+        <span class="legend-item"><span class="legend-swatch held"></span> Held (others)</span>
+        <span class="legend-item"><span class="legend-swatch held-mine"></span> Held (yours)</span>
+        <span class="legend-item"><span class="legend-swatch booked"></span> Booked</span>
+        <span class="legend-item"><span class="legend-swatch selected"></span> Selected</span>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

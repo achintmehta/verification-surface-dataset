@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1 class="header-title">Metrics Dashboard</h1>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-icon" id="theme-icon">☀️</span>
+      </button>
+    </header>
+    <main class="dashboard" id="dashboard">
+      <div class="loading-state" id="loading-state">Loading dashboard…</div>
+      <div class="error-state" id="error-state" style="display:none;">
+        <p>⚠️ Unable to load dashboard data. Please ensure the backend server is running.</p>
+      </div>
+      <div class="dashboard-content" id="dashboard-content" style="display:none;">
+        <!-- Stat cards -->
+        <section class="stat-cards" id="stat-cards"></section>
+        <!-- Chart + Categories side by side on wide -->
+        <section class="body-grid">
+          <div class="card chart-card">
+            <h2 class="card-title">Visitors — Last 30 Days</h2>
+            <div class="chart-container" id="chart-container"></div>
+          </div>
+          <div class="card categories-card">
+            <h2 class="card-title">Category Breakdown</h2>
+            <div class="categories-container" id="categories-container"></div>
+          </div>
+        </section>
+        <!-- Recent items table -->
+        <section class="card table-card">
+          <h2 class="card-title">Recent Items</h2>
+          <div class="table-wrapper" id="table-wrapper"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #eef2f7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem clamp(1rem, 4vw, 2rem);
+  background: linear-gradient(135deg, #1f3b73, #5d5fef);
+  color: white;
+  box-shadow: 0 8px 30px rgba(31, 59, 115, 0.25);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(1.55rem, 4vw, 2.35rem);
+  letter-spacing: -0.04em;
+}
+
+.topbar p {
+  margin: 0.3rem 0 0;
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.status-online::before,
+.status-offline::before {
+  content: '';
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  vertical-align: 0.02rem;
+}
+
+.status-online::before {
+  background: #38ef7d;
+  box-shadow: 0 0 0 4px rgba(56, 239, 125, 0.18);
+}
+
+.status-offline::before {
+  background: #ffcb5d;
+  box-shadow: 0 0 0 4px rgba(255, 203, 93, 0.18);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  align-items: start;
+  overflow-x: auto;
+}
+
+.column {
+  min-width: 260px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(128, 148, 180, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(48, 66, 98, 0.12);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+}
+
+.column h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.count {
+  min-width: 1.75rem;
+  padding: 0.18rem 0.48rem;
+  border-radius: 999px;
+  background: #e7ecf5;
+  color: #53627a;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.cards {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.2rem 0.8rem 0.85rem;
+  transition: background 120ms ease, outline-color 120ms ease;
+}
+
+.cards:empty::before {
+  content: 'Drop cards here';
+  display: flex;
+  place-content: center;
+  align-items: center;
+  min-height: 150px;
+  border: 1px dashed #b8c2d5;
+  border-radius: 14px;
+  color: #8090aa;
+  font-weight: 700;
+}
+
+.cards.drop-target {
+  background: rgba(93, 95, 239, 0.08);
+  outline: 2px dashed rgba(93, 95, 239, 0.35);
+  outline-offset: -6px;
+}
+
+.card {
+  cursor: grab;
+  user-select: none;
+  border-radius: 14px;
+  border: 1px solid rgba(128, 148, 180, 0.35);
+  background: white;
+  padding: 0.85rem;
+  box-shadow: 0 6px 18px rgba(37, 52, 82, 0.1);
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 52, 82, 0.14);
+}
+
+.card.dragging {
+  opacity: 0.48;
+  cursor: grabbing;
+  transform: rotate(1deg) scale(1.015);
+}
+
+.card.pending {
+  outline: 2px solid rgba(93, 95, 239, 0.4);
+}
+
+.card-text {
+  line-height: 1.35;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.card-meta {
+  margin-top: 0.55rem;
+  color: #8a97ad;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.add-card {
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.8rem;
+  border-top: 1px solid rgba(128, 148, 180, 0.25);
+  background: rgba(244, 247, 251, 0.72);
+}
+
+.add-card input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid #c9d2e3;
+  border-radius: 11px;
+  padding: 0.62rem 0.7rem;
+  outline: none;
+  background: white;
+}
+
+.add-card input:focus {
+  border-color: #5d5fef;
+  box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.14);
+}
+
+.add-card button {
+  border: 0;
+  border-radius: 11px;
+  padding: 0.62rem 0.78rem;
+  background: #243f78;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.add-card button:hover {
+  background: #1b315f;
+}
+
+.fatal {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  border-radius: 14px;
+  background: #fff0f0;
+  border: 1px solid #ffc9c9;
+  color: #a62424;
+  font-weight: 800;
+}
+
+@media (max-width: 860px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .board {
+    grid-template-columns: repeat(3, minmax(260px, 82vw));
+  }
+}

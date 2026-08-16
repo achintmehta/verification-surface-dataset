@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Seat Booking - Concert Hall</h1>
+    
+    <div class="controls">
+      <div class="session">
+        <label>Session ID: </label>
+        <input type="text" id="sessionId" placeholder="Enter session ID">
+        <button id="setSession">Set</button>
+      </div>
+      
+      <div class="actions">
+        <button id="holdBtn" disabled>Hold Selected Seats</button>
+        <button id="confirmBtn" disabled>Confirm Hold</button>
+        <button id="releaseBtn" disabled>Release Hold</button>
+        <button id="refreshBtn">Refresh Seats</button>
+      </div>
+      
+      <div id="holdInfo" class="hold-info" style="display: none;">
+        Hold active: <span id="holdId"></span> | Expires in: <span id="countdown"></span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="seat available"></span> Available</span>
+      <span class="legend-item"><span class="seat held"></span> Held</span>
+      <span class="legend-item"><span class="seat booked"></span> Booked</span>
+      <span class="legend-item"><span class="seat selected"></span> Selected</span>
+    </div>
+
+    <div id="seatMap" class="seat-map"></div>
+
+    <div id="status" class="status"></div>
+    <div id="inventory" class="inventory"></div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

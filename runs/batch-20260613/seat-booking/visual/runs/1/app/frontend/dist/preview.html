@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking – Preview</title>
+  <link rel="stylesheet" href="/assets/index-CsOXl2Lx.css">
+  <style>
+    /* Override loading state so we can show a pre-rendered map */
+    .seat-map { display: flex; flex-direction: column; gap: .6rem; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1>🎭 Seat Booking</h1>
+        <div class="session-info">
+          <span class="label">Your session:</span>
+          <code id="session-id-display">a3f9c2d1-7b4e-4…</code>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="stage-bar">
+        <div class="stage-label">STAGE</div>
+      </div>
+
+      <div class="legend">
+        <span class="legend-item"><span class="seat-demo available"></span> Available</span>
+        <span class="legend-item"><span class="seat-demo held-own"></span> Your Hold</span>
+        <span class="legend-item"><span class="seat-demo held-other"></span> Held by Other</span>
+        <span class="legend-item"><span class="seat-demo selected"></span> Selected</span>
+        <span class="legend-item"><span class="seat-demo booked"></span> Booked</span>
+      </div>
+
+      <!-- Pre-rendered seat map -->
+      <div id="seat-map" class="seat-map"></div>
+
+      <div class="inventory-bar">
+        <span>Available: 40</span>
+        <span>Held: 4</span>
+        <span>Booked: 6</span>
+        <span>Total: 50</span>
+      </div>
+
+      <!-- Action panel – show "hold active" state -->
+      <div class="action-panel">
+        <div class="panel-state active">
+          <div class="hold-info">
+            <div class="hold-seats">Holding: <strong>C3, C4</strong></div>
+            <div class="hold-timer">Expires in: <strong class="countdown">0:47</strong></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-success">Confirm Booking</button>
+            <button class="btn btn-danger">Release Hold</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sse-status">
+        <span class="sse-dot connected"></span>
+        <span>Live</span>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Seat layout: rows A-E, seats 1-10
+    const ROWS = ['A','B','C','D','E'];
+    // Pre-defined statuses for visual variety
+    const STATUS_MAP = {
+      // Row A: mostly available, 2 booked
+      A1:'booked', A2:'booked', A3:'available', A4:'available', A5:'available',
+      A6:'available', A7:'available', A8:'available', A9:'available', A10:'available',
+      // Row B: some held by others, some available
+      B1:'available', B2:'available', B3:'held-other', B4:'held-other', B5:'available',
+      B6:'available', B7:'available', B8:'booked', B9:'booked', B10:'available',
+      // Row C: our hold on C3,C4; some selected; rest available
+      C1:'available', C2:'selected', C3:'held-own', C4:'held-own', C5:'available',
+      C6:'available', C7:'available', C8:'available', C9:'booked', C10:'booked',
+      // Row D: held by others, rest available
+      D1:'available', D2:'available', D3:'available', D4:'available', D5:'held-other',
+      D6:'held-other', D7:'available', D8:'available', D9:'available', D10:'available',
+      // Row E: all available
+      E1:'available', E2:'available', E3:'available', E4:'available', E5:'available',
+      E6:'available', E7:'available', E8:'available', E9:'available', E10:'available',
+    };
+
+    const mapEl = document.getElementById('seat-map');
+
+    for (const row of ROWS) {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'seat-row';
+
+      const labelEl = document.createElement('div');
+      labelEl.className = 'row-label';
+      labelEl.textContent = row;
+      rowEl.appendChild(labelEl);
+
+      const seatsEl = document.createElement('div');
+      seatsEl.className = 'seats-in-row';
+
+      for (let n = 1; n <= 10; n++) {
+        const id = `${row}${n}`;
+        const status = STATUS_MAP[id] || 'available';
+        const btn = document.createElement('button');
+        btn.className = `seat ${status}`;
+        btn.textContent = n;
+        btn.title = `${id} – ${status}`;
+        if (status !== 'available' && status !== 'selected') btn.disabled = true;
+        seatsEl.appendChild(btn);
+      }
+
+      rowEl.appendChild(seatsEl);
+      mapEl.appendChild(rowEl);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+const http = require('http');
+
+const events = [
+  { title: 'Event 1', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T11:00:00Z' },
+  { title: 'Event 2', start_at: '2026-06-15T10:00:00Z', end_at: '2026-06-15T12:00:00Z' },
+  { title: 'Event 3', start_at: '2026-06-15T11:30:00Z', end_at: '2026-06-15T13:00:00Z' },
+  { title: 'Event 4', start_at: '2026-06-15T14:00:00Z', end_at: '2026-06-15T15:00:00Z' },
+  { title: 'Event 5', start_at: '2026-06-16T09:00:00Z', end_at: '2026-06-16T10:00:00Z' },
+  { title: 'Event 6', start_at: '2026-06-16T09:00:00Z', end_at: '2026-06-16T10:00:00Z' },
+  { title: 'Event 7', start_at: '2026-06-16T09:00:00Z', end_at: '2026-06-16T10:00:00Z' },
+  { title: 'Event 8', start_at: '2026-06-17T22:00:00Z', end_at: '2026-06-18T02:00:00Z' }
+];
+
+async function createEvent(event) {
+  return new Promise((resolve, reject) => {
+    const req = http.request('http://localhost:3001/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    }, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        console.log(data);
+        resolve(JSON.parse(data));
+      });
+    });
+    req.on('error', reject);
+    req.write(JSON.stringify(event));
+    req.end();
+  });
+}
+
+async function run() {
+  for (const event of events) {
+    await createEvent(event);
+  }
+  console.log('Done');
+}
+
+run();

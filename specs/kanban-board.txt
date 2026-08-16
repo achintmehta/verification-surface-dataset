@@ -1,0 +1,98 @@
+## Context
+
+We are building a traditional client-server web application with real-time collaborative capabilities: a multi-user Kanban board. Multiple users view the same board and can create cards, move them between columns, and reorder them within a column via drag-and-drop. All connected clients must converge on the same board state in real time. To minimize external dependencies while retaining the power of PostgreSQL, we use PGLite embedded within a Node.js server, with Server-Sent Events (SSE) pushing updates to clients. Clients apply optimistic updates and reconcile against authoritative server state.
+
+## Goals / Non-Goals
+
+**Goals:**
+- A shared Kanban board with ordered columns, each containing an ordered list of cards.
+- Create cards, move cards across columns, and reorder cards within a column via drag-and-drop.
+- Persist board state durably on local disk using PGLite.
+- Broadcast every mutation to all connected clients so boards stay convergent in real time.
+- Optimistic UI: the dragging client updates immediately, then reconciles against the server's authoritative ordering.
+
+**Non-Goals:**
+- User authentication and authorization.
+- Multiple boards, labels, due dates, comments, or attachments.
+- Offline editing or CRDT-grade conflict resolution beyond last-write-wins convergence.
+
+## Decisions
+
+**Decision 1: Fractional position ordering**
+- *Rationale*: Each card carries a numeric `position` within its column. Inserting a card between two others uses a value between their positions, avoiding a full re-index on every move. This keeps moves cheap and ordering stable under concurrent edits.
+
+**Decision 2: Server-Sent Events (SSE) + HTTP mutations**
+- *Rationale*: We only need one-way real-time push (server → clients). Mutations are sent as standard HTTP requests. SSE is simple, native over HTTP, and avoids a WebSocket dependency.
+
+**Decision 3: Server is authoritative on ordering**
+- *Rationale*: Clients send intent ("move card X into column C between A and B"). The server computes the final canonical position, persists it atomically, and broadcasts the canonical result. Clients reconcile their optimistic guess against this canonical state.
+
+## Risks / Trade-offs
+
+- [Risk] Concurrent moves of the same card from two clients can diverge.
+  - *Mitigation*: Server-authoritative ordering plus broadcast of canonical state; clients replace their optimistic state with the server's on receipt.
+- [Risk] Fractional positions can collide or exhaust numeric precision after many inserts at the same spot.
+  - *Mitigation*: Detect collisions/exhaustion and renormalize the affected column's positions, then broadcast the corrected order.
+- [Risk] A card could momentarily appear in two columns during a cross-column move.
+  - *Mitigation*: Perform the move (remove from source, add to target) atomically in a single transaction; only broadcast committed state.
+
+## Why
+
+Real-time collaborative tools demand that every client converges on the same state despite concurrent edits. A Kanban board is a compact but demanding instance of this: it combines an interactive drag-and-drop UI with non-trivial ordering and concurrency requirements on the backend. It is an excellent demonstration of embedded PGLite plus SSE for a robust, lightweight, low-latency collaborative application without external infrastructure.
+
+## What Changes
+
+- We are introducing a brand new collaborative Kanban web application.
+- The backend is a Node.js server using embedded PGLite for raw SQL, persisting board state to local disk.
+- Real-time synchronization is handled via Server-Sent Events (SSE).
+- The frontend is a simple, lightweight Single Page Application (Vanilla JS via Vite) with drag-and-drop.
+
+## Capabilities
+
+### New Capabilities
+- `kanban-board`: ordered columns and cards, drag-and-drop move/reorder, real-time convergence via SSE, and optimistic client updates reconciled against server-authoritative ordering.
+
+### Modified Capabilities
+None (Greenfield project).
+
+## Impact
+
+This is a brand new project. It establishes the Node.js backend, the embedded PGLite schema for columns and cards, SSE connection handling, the ordering/concurrency logic, and the drag-and-drop frontend UI.
+
+## 1. Project Initialization
+
+- [ ] 1.1 Initialize the Node.js project and install backend dependencies (express, @electric-sql/pglite, cors)
+- [ ] 1.2 Initialize the Vanilla JS / Vite project for the frontend and install frontend dependencies
+- [ ] 1.3 Set up basic npm scripts for concurrently running backend and frontend development servers
+
+## 2. Backend Infrastructure & Database
+
+- [ ] 2.1 Set up a basic Express server with CORS and JSON body parsing
+- [ ] 2.2 Initialize embedded PGLite configured to write to the local file system
+- [ ] 2.3 Create the database initialization script: a `columns` table (`id`, `title`, `position`) and a `cards` table (`id`, `column_id`, `text`, `position`, `created_at`). Seed default columns (e.g., "To Do", "In Progress", "Done")
+- [ ] 2.4 Create the board state endpoint (`GET /api/board`) returning all columns each with their cards ordered by `position`
+
+## 3. Board Mutations & Real-time Sync
+
+- [ ] 3.1 Implement `POST /api/cards` to create a card at the end of a column, persist it, and broadcast it
+- [ ] 3.2 Implement `PATCH /api/cards/:id/move` accepting `{ columnId, beforeId, afterId }`; the server computes the card's new `position` (between `afterId` and `beforeId`), updates `column_id` and `position` atomically in a transaction, and returns the canonical card
+- [ ] 3.3 Implement the SSE endpoint (`GET /api/stream`) that maintains active connections and broadcasts every create and move with the canonical card and its column id
+- [ ] 3.4 Guarantee that a move is atomic and that broadcasts reflect only committed state (no client may ever observe the same card in two columns)
+- [ ] 3.5 Handle `position` collisions or precision exhaustion by renormalizing the affected column's positions and broadcasting the corrected order
+
+## 4. Frontend Implementation
+
+- [ ] 4.1 Render columns and their cards from `GET /api/board` on initial load
+- [ ] 4.2 Implement drag-and-drop to move a card within a column and across columns
+- [ ] 4.3 On drop, optimistically reposition the card in the DOM, then send `PATCH /api/cards/:id/move`
+- [ ] 4.4 Connect to the SSE endpoint using `EventSource`; on incoming create/move events, update the DOM to the canonical state, ensuring a card never renders in more than one place
+- [ ] 4.5 Reconcile optimistic state: when the server's canonical position differs from the optimistic guess, snap the card to the server's order
+
+## Acceptance Criteria (graded)
+
+- A newly created card appears on every connected client.
+- Moving a card across columns updates all clients; the card exists in exactly one column on every client.
+- Two clients reordering cards within the same column converge to one identical order.
+- Concurrent moves of the same card by two clients leave it in exactly one place on all clients, with no duplication and no loss.
+- Reloading any client reproduces the server's exact board state.
+- Card ordering within each column is total and stable; no two cards occupy the same rendered slot.

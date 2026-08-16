@@ -1,0 +1,18 @@
+{
+  "name": "metrics-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "node server/index.js",
+    "dev:frontend": "cd frontend && npx vite --port 5173",
+    "build:frontend": "cd frontend && npx vite build",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@electric-sql/pglite": "^0.2.17",
+    "cors": "^2.8.5",
+    "concurrently": "^8.2.2"
+  }
+}

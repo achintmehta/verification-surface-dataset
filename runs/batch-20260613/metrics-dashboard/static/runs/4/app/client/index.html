@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <!--
+    Theme is applied before first paint by an inline script injected by the
+    server (or by the JS bootstrap) to avoid flash of wrong theme.
+  -->
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__brand">
+          <span class="header__icon" aria-hidden="true">📊</span>
+          <h1 class="header__title">Metrics Dashboard</h1>
+        </div>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="Toggle light/dark theme"
+          title="Toggle theme"
+        >
+          <span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__icon--dark"  aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Error banner (hidden by default) -->
+      <div id="error-banner" class="error-banner" role="alert" hidden>
+        <span class="error-banner__icon" aria-hidden="true">⚠️</span>
+        <span id="error-message">Unable to reach the server. Please check that the backend is running.</span>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading dashboard…</p>
+      </div>
+
+      <!-- Dashboard content (hidden until data loads) -->
+      <div id="dashboard" class="dashboard" hidden>
+
+        <!-- ── Stat cards ──────────────────────────────────────────────── -->
+        <section class="section" aria-labelledby="stats-heading">
+          <h2 id="stats-heading" class="sr-only">Summary Statistics</h2>
+          <div class="stat-grid" id="stat-grid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ── Charts row ──────────────────────────────────────────────── -->
+        <div class="charts-row">
+
+          <!-- Time-series chart -->
+          <section class="card chart-card" aria-labelledby="timeseries-heading">
+            <h2 id="timeseries-heading" class="card__title">30-Day Visitors</h2>
+            <div class="chart-container" id="timeseries-container">
+              <canvas id="timeseries-canvas" aria-label="30-day visitor time series chart"></canvas>
+            </div>
+          </section>
+
+          <!-- Category breakdown -->
+          <section class="card chart-card" aria-labelledby="categories-heading">
+            <h2 id="categories-heading" class="card__title">Revenue by Category</h2>
+            <div class="categories-container" id="categories-container">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ── Recent items table ──────────────────────────────────────── -->
+        <section class="card table-card" aria-labelledby="recent-heading">
+          <h2 id="recent-heading" class="card__title">Recent Items</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="text-right">Value</th>
+                  <th scope="col" class="text-right">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div><!-- /#dashboard -->
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

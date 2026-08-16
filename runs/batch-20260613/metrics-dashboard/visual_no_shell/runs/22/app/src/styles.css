@@ -1,0 +1,360 @@
+/* ========== CSS Custom Properties (Light Theme) ========== */
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --text: #1a1a2e;
+  --text-secondary: #555566;
+  --border: #e0e0e8;
+  --accent: #4361ee;
+  --accent-light: #dce3fc;
+  --chart-grid: #e8e8ee;
+  --chart-line: #4361ee;
+  --chart-fill: rgba(67, 97, 238, 0.1);
+  --chart-axis: #666680;
+  --bar-bg: #e8e8f0;
+  --bar-fill: #4361ee;
+  --trend-up: #22c55e;
+  --trend-down: #ef4444;
+  --table-stripe: #f8f8fc;
+  --table-hover: #eef0f8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+
+/* ========== Dark Theme ========== */
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --border: #334155;
+  --accent: #818cf8;
+  --accent-light: #312e81;
+  --chart-grid: #334155;
+  --chart-line: #818cf8;
+  --chart-fill: rgba(129, 140, 248, 0.15);
+  --chart-axis: #94a3b8;
+  --bar-bg: #334155;
+  --bar-fill: #818cf8;
+  --trend-up: #4ade80;
+  --trend-down: #f87171;
+  --table-stripe: #1a2436;
+  --table-hover: #253349;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* ========== Reset & Base ========== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========== Header ========== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.theme-toggle:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+/* ========== Dashboard Container ========== */
+.dashboard {
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ========== Loading / Error ========== */
+.loading, .error-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+.error-state {
+  color: var(--trend-down);
+}
+
+/* ========== Card Base ========== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ========== Stat Cards ========== */
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.card-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.card-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.trend-indicator.up { color: var(--trend-up); }
+.trend-indicator.down { color: var(--trend-down); }
+
+/* ========== Charts Row ========== */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.chart-card {
+  padding: 16px;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 280px;
+  position: relative;
+}
+
+#timeseries-svg {
+  display: block;
+}
+
+/* ========== Categories ========== */
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.82rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.category-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.category-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ========== Table ========== */
+.table-card {
+  padding: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 480px;
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+tbody tr:hover {
+  background: var(--table-hover);
+}
+
+td.category-cell {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========== Responsive Breakpoints ========== */
+
+/* Medium: ≥640px */
+@media (min-width: 640px) {
+  .header {
+    padding: 14px 24px;
+  }
+  .header-title {
+    font-size: 1.3rem;
+  }
+  .dashboard {
+    padding: 20px 24px;
+  }
+  .stat-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .charts-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .card-value {
+    font-size: 1.65rem;
+  }
+}
+
+/* Large: ≥1024px */
+@media (min-width: 1024px) {
+  .header {
+    padding: 16px 32px;
+  }
+  .header-title {
+    font-size: 1.4rem;
+  }
+  .dashboard {
+    padding: 24px 32px;
+  }
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .charts-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .chart-container {
+    height: 320px;
+  }
+}

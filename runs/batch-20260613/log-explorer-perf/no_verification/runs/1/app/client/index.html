@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="app-title">
+          <span class="title-icon">📋</span>
+          Log Explorer
+        </h1>
+        <div class="row-count" id="row-count">Loading...</div>
+      </div>
+      <div class="header-right">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="severity-filter" class="filter-label">Severity</label>
+            <select id="severity-filter" class="filter-select">
+              <option value="">All</option>
+              <option value="error">Error</option>
+              <option value="warn">Warn</option>
+              <option value="info">Info</option>
+              <option value="debug">Debug</option>
+            </select>
+          </div>
+          <div class="filter-group search-group">
+            <label for="search-input" class="filter-label">Search</label>
+            <div class="search-wrapper">
+              <input
+                type="text"
+                id="search-input"
+                class="filter-input"
+                placeholder="Filter by message..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button id="search-clear" class="search-clear" title="Clear search" aria-label="Clear search">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="stats-bar" id="stats-bar">
+          <span class="stat-badge stat-error" id="stat-error" title="Error count">E: –</span>
+          <span class="stat-badge stat-warn" id="stat-warn" title="Warn count">W: –</span>
+          <span class="stat-badge stat-info" id="stat-info" title="Info count">I: –</span>
+          <span class="stat-badge stat-debug" id="stat-debug" title="Debug count">D: –</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col col-ts">Timestamp</div>
+        <div class="col col-severity">Severity</div>
+        <div class="col col-service">Service</div>
+        <div class="col col-message">Message</div>
+      </div>
+
+      <div class="virtual-scroll-container" id="scroll-container">
+        <div class="virtual-scroll-spacer" id="scroll-spacer"></div>
+        <div class="virtual-rows" id="virtual-rows"></div>
+      </div>
+
+      <div class="empty-state" id="empty-state" style="display:none">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-text">No log entries match your filters.</div>
+      </div>
+
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading logs...</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

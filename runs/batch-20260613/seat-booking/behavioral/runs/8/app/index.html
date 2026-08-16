@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+  </head>
+  <body>
+    <main id="app">
+      <header>
+        <h1>Seat Booking</h1>
+        <p>Pick available seats, place a temporary hold, then confirm your booking.</p>
+      </header>
+      <section class="toolbar">
+        <div>
+          <strong>Session:</strong> <span id="sessionId"></span>
+        </div>
+        <div id="inventory" class="inventory"></div>
+      </section>
+      <section id="message" class="message" aria-live="polite"></section>
+      <section id="seatMap" class="seat-map" aria-label="Seat map"></section>
+      <section class="actions">
+        <button id="holdButton" type="button">Hold selected seats</button>
+        <button id="confirmButton" type="button" disabled>Confirm hold</button>
+        <button id="releaseButton" type="button" disabled>Release hold</button>
+        <span id="countdown" class="countdown"></span>
+      </section>
+      <section class="legend">
+        <span><i class="swatch available"></i>Available</span>
+        <span><i class="swatch selected"></i>Selected</span>
+        <span><i class="swatch held"></i>Held</span>
+        <span><i class="swatch mine"></i>My hold</span>
+        <span><i class="swatch booked"></i>Booked</span>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "metrics-dashboard",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node backend/server.js",
+    "client": "vite frontend --port 3000",
+    "clean": "node delete-db.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.15",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "puppeteer": "^21.5.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "vite": "^5.4.10"
+  }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body class="theme-light">
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <h1 class="brand-title">Metrics Dashboard</h1>
+        </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme" title="Toggle light/dark theme">
+          <span class="theme-icon theme-icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon--dark" aria-hidden="true">🌙</span>
+          <span class="theme-label">Toggle theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading dashboard data…</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="error-state" role="alert" aria-live="assertive" hidden>
+        <div class="error-icon" aria-hidden="true">⚠️</div>
+        <h2 class="error-title">Unable to load dashboard</h2>
+        <p class="error-message" id="error-message">The backend server is not reachable. Please ensure the server is running and try again.</p>
+        <button id="retry-btn" class="retry-btn">Retry</button>
+      </div>
+
+      <!-- Dashboard content -->
+      <div id="dashboard" class="dashboard" hidden>
+        <!-- Stat cards -->
+        <section class="stat-cards" aria-label="Summary statistics">
+          <div class="stat-card" id="card-visitors">
+            <div class="stat-card__label">Total Visitors</div>
+            <div class="stat-card__value" id="stat-visitors">—</div>
+            <div class="stat-card__trend" id="trend-visitors"></div>
+          </div>
+          <div class="stat-card" id="card-revenue">
+            <div class="stat-card__label">Total Revenue</div>
+            <div class="stat-card__value" id="stat-revenue">—</div>
+            <div class="stat-card__trend" id="trend-revenue"></div>
+          </div>
+          <div class="stat-card" id="card-best-day">
+            <div class="stat-card__label">Best Day Revenue</div>
+            <div class="stat-card__value" id="stat-best-day">—</div>
+            <div class="stat-card__trend" id="trend-best-day"></div>
+          </div>
+          <div class="stat-card" id="card-trend">
+            <div class="stat-card__label">7-Day Visitor Trend</div>
+            <div class="stat-card__value" id="stat-trend">—</div>
+            <div class="stat-card__trend" id="trend-indicator"></div>
+          </div>
+        </section>
+
+        <!-- Body: chart + categories -->
+        <div class="dashboard-body">
+          <!-- Time-series chart -->
+          <section class="chart-section card" aria-label="30-day time series">
+            <div class="section-header">
+              <h2 class="section-title">30-Day Overview</h2>
+              <div class="chart-legend" id="chart-legend">
+                <span class="legend-item legend-item--visitors">
+                  <span class="legend-dot" aria-hidden="true"></span>Visitors
+                </span>
+                <span class="legend-item legend-item--revenue">
+                  <span class="legend-dot" aria-hidden="true"></span>Revenue
+                </span>
+              </div>
+            </div>
+            <div class="chart-container" id="chart-container" role="img" aria-label="Line chart showing visitors and revenue over 30 days">
+              <svg id="timeseries-chart" class="chart-svg" aria-hidden="true"></svg>
+            </div>
+          </section>
+
+          <!-- Category breakdown -->
+          <section class="categories-section card" aria-label="Category breakdown">
+            <div class="section-header">
+              <h2 class="section-title">Category Breakdown</h2>
+            </div>
+            <div class="categories-list" id="categories-list" role="list">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+        </div>
+
+        <!-- Recent items table -->
+        <section class="table-section card" aria-label="Recent items">
+          <div class="section-header">
+            <h2 class="section-title">Recent Items</h2>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="col-value">Value</th>
+                  <th scope="col" class="col-date">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Metrics Dashboard &mdash; Data refreshes on reload</p>
+    </footer>
+  </div>
+</body>
+</html>

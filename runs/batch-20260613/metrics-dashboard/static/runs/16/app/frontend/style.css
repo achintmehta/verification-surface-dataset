@@ -1,0 +1,247 @@
+:root {
+  --bg-color: #f3f4f6;
+  --text-color: #111827;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --primary-color: #3b82f6;
+  --chart-line: #3b82f6;
+  --chart-grid: #e5e7eb;
+  --chart-text: #6b7280;
+  --bar-bg: #bfdbfe;
+  --bar-fill: #3b82f6;
+  --trend-up: #10b981;
+  --trend-down: #ef4444;
+}
+
+[data-theme="dark"] {
+  --bg-color: #111827;
+  --text-color: #f9fafb;
+  --card-bg: #1f2937;
+  --border-color: #374151;
+  --primary-color: #60a5fa;
+  --chart-line: #60a5fa;
+  --chart-grid: #374151;
+  --chart-text: #9ca3af;
+  --bar-bg: #374151;
+  --bar-fill: #60a5fa;
+  --trend-up: #34d399;
+  --trend-down: #f87171;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+#app {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-size: 1.5rem;
+}
+
+button#theme-toggle {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button#theme-toggle:hover {
+  background-color: var(--border-color);
+}
+
+.hidden {
+  display: none !important;
+}
+
+#error-state {
+  background-color: var(--card-bg);
+  border: 1px solid var(--trend-down);
+  color: var(--trend-down);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.card h2, .card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--chart-text);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  overflow-wrap: break-word;
+}
+
+.trend-positive {
+  color: var(--trend-up);
+}
+
+.trend-negative {
+  color: var(--trend-down);
+}
+
+/* Layout */
+main {
+  display: grid;
+  gap: 1rem;
+}
+
+.stat-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.charts-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.table-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* Breakpoints */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .charts-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Chart */
+#timeseries-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Category Bars */
+#category-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bar-label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.bar-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.bar-value {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bar-track {
+  width: 100%;
+  height: 0.75rem;
+  background-color: var(--bar-bg);
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background-color: var(--bar-fill);
+  border-radius: 0.375rem;
+}
+
+/* Table */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 400px;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-weight: 600;
+  color: var(--chart-text);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}

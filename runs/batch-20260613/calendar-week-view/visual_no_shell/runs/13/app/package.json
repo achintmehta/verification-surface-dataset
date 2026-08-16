@@ -1,0 +1,22 @@
+{
+  "name": "week-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Single-user week-view calendar with cluster overlap layout",
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c blue,green \"npm:dev:server\" \"npm:dev:web\"",
+    "dev:server": "node server/index.js",
+    "dev:web": "vite --port 5173 --strictPort",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.12",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,413 @@
+/* ───────────────────────────────────────────────
+   CSS Custom Properties — Light & Dark Themes
+   ─────────────────────────────────────────────── */
+
+:root,
+[data-theme="light"] {
+  --bg-primary: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-header: #1e293b;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-header: #ffffff;
+  --border-color: #e2e8f0;
+  --chart-grid: #e2e8f0;
+  --chart-axis: #94a3b8;
+  --chart-line: #3b82f6;
+  --chart-fill: rgba(59, 130, 246, 0.1);
+  --chart-dot: #3b82f6;
+  --bar-fill: #3b82f6;
+  --bar-bg: #e2e8f0;
+  --trend-up: #22c55e;
+  --trend-down: #ef4444;
+  --table-stripe: #f8fafc;
+  --table-hover: #f1f5f9;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --toggle-bg: #e2e8f0;
+  --toggle-text: #1e293b;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --bg-header: #0f172a;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-header: #f1f5f9;
+  --border-color: #334155;
+  --chart-grid: #334155;
+  --chart-axis: #94a3b8;
+  --chart-line: #60a5fa;
+  --chart-fill: rgba(96, 165, 250, 0.15);
+  --chart-dot: #60a5fa;
+  --bar-fill: #60a5fa;
+  --bar-bg: #334155;
+  --trend-up: #4ade80;
+  --trend-down: #f87171;
+  --table-stripe: #1e293b;
+  --table-hover: #334155;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --toggle-bg: #334155;
+  --toggle-text: #f1f5f9;
+}
+
+/* ───────────────────────────────────────────────
+   Reset & Base
+   ─────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* ───────────────────────────────────────────────
+   Header
+   ─────────────────────────────────────────────── */
+
+.header {
+  background: var(--bg-header);
+  color: var(--text-header);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--toggle-bg);
+  color: var(--toggle-text);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+  opacity: 0.85;
+}
+
+/* ───────────────────────────────────────────────
+   Dashboard Layout
+   ─────────────────────────────────────────────── */
+
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+.loading,
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.error-state {
+  color: var(--trend-down);
+}
+
+/* ───────────────────────────────────────────────
+   Stat Cards
+   ─────────────────────────────────────────────── */
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.stat-card__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-card__sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.stat-card__indicator {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stat-card__indicator.up {
+  color: var(--trend-up);
+}
+
+.stat-card__indicator.down {
+  color: var(--trend-down);
+}
+
+/* ───────────────────────────────────────────────
+   Charts Row
+   ─────────────────────────────────────────────── */
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.chart-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 300px;
+}
+
+/* ───────────────────────────────────────────────
+   Category Bars
+   ─────────────────────────────────────────────── */
+
+.bars-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.bar-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.bar-item__name {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.bar-item__value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bar-item__track {
+  width: 100%;
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-item__fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ───────────────────────────────────────────────
+   Data Table
+   ─────────────────────────────────────────────── */
+
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 480px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.data-table th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+.data-table tbody tr:hover {
+  background: var(--table-hover);
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/* ───────────────────────────────────────────────
+   Responsive Breakpoints
+   ─────────────────────────────────────────────── */
+
+/* Medium: 640px–1023px → 2 columns */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .data-table {
+    min-width: 0;
+  }
+}
+
+/* Large: ≥1024px → 4-col stat cards, 2-col body */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .charts-row {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* Extra narrow: ensure nothing breaks below 360px */
+@media (max-width: 639px) {
+  .header__title {
+    font-size: 1rem;
+  }
+
+  .stat-card__value {
+    font-size: 1.25rem;
+  }
+
+  .dashboard {
+    padding: 0.75rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
+    max-width: 120px;
+  }
+}

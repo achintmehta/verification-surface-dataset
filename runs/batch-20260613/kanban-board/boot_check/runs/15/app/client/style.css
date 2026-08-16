@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  background: #0e1726;
+  color: #e6edf3;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #131c2e;
+  border-bottom: 1px solid #223;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.status {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status--connected {
+  background: #14532d;
+  color: #86efac;
+}
+
+.status--connecting {
+  background: #5c4813;
+  color: #fde68a;
+}
+
+.status--disconnected {
+  background: #5c1a1a;
+  color: #fca5a5;
+}
+
+.board {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  min-height: calc(100vh - 60px);
+}
+
+.column {
+  background: #18233a;
+  border-radius: 10px;
+  width: 280px;
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 110px);
+}
+
+.column__title {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-bottom: 1px solid #243;
+}
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 40px;
+}
+
+.cards.drag-over {
+  outline: 2px dashed #3b82f6;
+  outline-offset: -4px;
+  border-radius: 8px;
+}
+
+.card {
+  background: #233351;
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: grab;
+  border: 1px solid transparent;
+  word-break: break-word;
+  user-select: none;
+}
+
+.card:hover {
+  border-color: #3b82f6;
+}
+
+.card.dragging {
+  opacity: 0.4;
+}
+
+.card.drop-after {
+  box-shadow: 0 3px 0 #3b82f6;
+}
+
+.card.drop-before {
+  box-shadow: 0 -3px 0 #3b82f6;
+}
+
+.column__add {
+  padding: 0.75rem;
+  border-top: 1px solid #243;
+}
+
+.column__add form {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.column__add input {
+  flex: 1;
+  background: #0e1726;
+  border: 1px solid #2a3a55;
+  color: #e6edf3;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.column__add button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0 0.7rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.column__add button:hover {
+  background: #1d4ed8;
+}

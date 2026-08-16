@@ -1,0 +1,544 @@
+/* ============================================================
+   CSS Custom Properties — Light theme (default)
+   ============================================================ */
+:root {
+  /* Surfaces */
+  --color-bg:           #f0f2f5;
+  --color-surface:      #ffffff;
+  --color-surface-alt:  #f8f9fb;
+  --color-border:       #e2e6ea;
+
+  /* Text */
+  --color-text-primary:   #1a1d23;
+  --color-text-secondary: #5a6270;
+  --color-text-muted:     #8a93a0;
+
+  /* Accent / brand */
+  --color-accent:         #3b6ef8;
+  --color-accent-light:   #dce8ff;
+
+  /* Semantic */
+  --color-positive:  #16a34a;
+  --color-negative:  #dc2626;
+  --color-positive-bg: #dcfce7;
+  --color-negative-bg: #fee2e2;
+
+  /* Chart */
+  --color-chart-line:      #3b6ef8;
+  --color-chart-line2:     #f59e0b;
+  --color-chart-grid:      #e2e6ea;
+  --color-chart-axis:      #8a93a0;
+  --color-chart-area:      rgba(59,110,248,0.08);
+
+  /* Bar chart */
+  --color-bar-fill:        #3b6ef8;
+  --color-bar-bg:          #e8eeff;
+
+  /* Header */
+  --color-header-bg:       #ffffff;
+  --color-header-border:   #e2e6ea;
+  --color-header-text:     #1a1d23;
+
+  /* Misc */
+  --radius-card:   12px;
+  --radius-sm:      6px;
+  --shadow-card:   0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+  --transition:    0.2s ease;
+
+  /* Layout */
+  --header-height: 60px;
+  --gap:           20px;
+}
+
+/* ============================================================
+   Dark theme
+   ============================================================ */
+[data-theme="dark"] {
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-surface-alt:  #22263a;
+  --color-border:       #2e3347;
+
+  --color-text-primary:   #e8eaf0;
+  --color-text-secondary: #9aa3b8;
+  --color-text-muted:     #5e6880;
+
+  --color-accent:         #6b8fff;
+  --color-accent-light:   #1e2a4a;
+
+  --color-positive:  #4ade80;
+  --color-negative:  #f87171;
+  --color-positive-bg: #052e16;
+  --color-negative-bg: #450a0a;
+
+  --color-chart-line:      #6b8fff;
+  --color-chart-line2:     #fbbf24;
+  --color-chart-grid:      #2e3347;
+  --color-chart-axis:      #5e6880;
+  --color-chart-area:      rgba(107,143,255,0.10);
+
+  --color-bar-fill:        #6b8fff;
+  --color-bar-bg:          #1e2a4a;
+
+  --color-header-bg:       #1a1d27;
+  --color-header-border:   #2e3347;
+  --color-header-text:     #e8eaf0;
+
+  --shadow-card: 0 1px 4px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+}
+
+/* ============================================================
+   Reset / Base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  /* Prevent horizontal overflow at the body level */
+  overflow-x: hidden;
+}
+
+img, svg, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-header-border);
+  height: var(--header-height);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--gap);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-header-text);
+  min-width: 0;
+}
+
+.brand-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.brand-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   Theme Toggle
+   ============================================================ */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.theme-toggle:hover {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Show sun in dark mode (to switch to light), moon in light mode (to switch to dark) */
+[data-theme="light"] .theme-icon--light  { display: none; }
+[data-theme="light"] .theme-icon--dark   { display: flex; }
+[data-theme="dark"]  .theme-icon--dark   { display: none; }
+[data-theme="dark"]  .theme-icon--light  { display: flex; }
+
+/* ============================================================
+   Dashboard Layout
+   ============================================================ */
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* ---- Stat Cards ---- */
+.stat-cards {
+  display: grid;
+  gap: var(--gap);
+  /* Mobile: 1 column */
+  grid-template-columns: 1fr;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 4 columns */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---- Dashboard Body (chart + categories) ---- */
+.dashboard-body {
+  display: grid;
+  gap: var(--gap);
+  /* Mobile + tablet: 1 column */
+  grid-template-columns: 1fr;
+}
+
+/* Desktop: chart takes 3/5, categories 2/5 */
+@media (min-width: 1024px) {
+  .dashboard-body {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* ============================================================
+   Panels (cards)
+   ============================================================ */
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  min-width: 0; /* prevent grid blowout */
+  overflow: hidden;
+}
+
+.panel__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   Stat Cards
+   ============================================================ */
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.stat-card__value {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  /* Prevent 7-digit numbers from overflowing */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.stat-card__trend {
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.stat-card__trend--positive {
+  color: var(--color-positive);
+  background: var(--color-positive-bg);
+}
+
+.stat-card__trend--negative {
+  color: var(--color-negative);
+  background: var(--color-negative-bg);
+}
+
+.stat-card__sub {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   Skeleton loading state
+   ============================================================ */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton .stat-card__value,
+.skeleton .stat-card__label {
+  background: linear-gradient(90deg,
+    var(--color-border) 25%,
+    var(--color-surface-alt) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 4px;
+  color: transparent;
+  user-select: none;
+}
+
+/* ============================================================
+   Chart
+   ============================================================ */
+.chart-container {
+  position: relative;
+  width: 100%;
+  /* Maintain a sensible aspect ratio; canvas fills this */
+  aspect-ratio: 16 / 7;
+  min-height: 200px;
+}
+
+.chart-container canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ============================================================
+   Category Bars
+   ============================================================ */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.category-row__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.category-row__name {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  /* Truncate long names */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.category-row__value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.category-row__bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--color-bar-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.category-row__bar-fill {
+  height: 100%;
+  background: var(--color-bar-fill);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+  min-width: 2px;
+}
+
+/* ============================================================
+   Recent Items Table
+   ============================================================ */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Scrollable internally; does NOT cause page-level overflow */
+  border-radius: var(--radius-sm);
+}
+
+.recent-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  /* Prevent table from forcing page overflow */
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.recent-table th,
+.recent-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-alt);
+  position: sticky;
+  top: 0;
+}
+
+.recent-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.recent-table tbody tr:hover td {
+  background: var(--color-surface-alt);
+}
+
+/* Column widths — name gets most space */
+.recent-table th:nth-child(1),
+.recent-table td:nth-child(1) { width: 35%; }
+.recent-table th:nth-child(2),
+.recent-table td:nth-child(2) { width: 30%; }
+.col-value { width: 18%; text-align: right; }
+.recent-table td:nth-child(3) { text-align: right; }
+.col-date  { width: 17%; }
+
+/* On narrow screens, collapse category column */
+@media (max-width: 480px) {
+  .recent-table th:nth-child(2),
+  .recent-table td:nth-child(2) { display: none; }
+  .recent-table th:nth-child(1),
+  .recent-table td:nth-child(1) { width: 50%; }
+  .col-value { width: 25%; }
+  .col-date  { width: 25%; }
+}
+
+/* ============================================================
+   Error Banner
+   ============================================================ */
+.error-banner {
+  background: var(--color-negative-bg);
+  color: var(--color-negative);
+  border: 1px solid var(--color-negative);
+  border-radius: var(--radius-card);
+  padding: 16px 20px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Loading message
+   ============================================================ */
+.loading-msg {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  padding: 8px 0;
+  text-align: center;
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

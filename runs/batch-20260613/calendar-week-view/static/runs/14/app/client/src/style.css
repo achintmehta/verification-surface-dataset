@@ -1,0 +1,306 @@
+:root {
+  --axis-width: 56px;
+  --border: #d8dce3;
+  --border-strong: #c3c9d4;
+  --bg: #ffffff;
+  --bg-muted: #f6f7f9;
+  --today: #eef4ff;
+  --today-line: #3b82f6;
+  --event-bg: #3b82f6;
+  --event-bg-2: #2563eb;
+  --text: #1f2933;
+  --text-muted: #6b7280;
+  --ghost: rgba(59, 130, 246, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg-muted);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar ------------------------------------------------------------------ */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.toolbar__title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.toolbar__range {
+  font-size: 15px;
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.toolbar__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.btn:hover {
+  background: var(--bg-muted);
+}
+
+.btn--primary {
+  background: var(--event-bg);
+  border-color: var(--event-bg-2);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--event-bg-2);
+}
+
+.btn--danger {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn--danger:hover {
+  background: #fef2f2;
+}
+
+/* Calendar grid ------------------------------------------------------------ */
+.calendar {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.calendar__head {
+  display: grid;
+  grid-template-columns: var(--axis-width) repeat(7, 1fr);
+  border-bottom: 1px solid var(--border-strong);
+  flex: 0 0 auto;
+  /* leave room for the body's scrollbar so columns line up */
+  padding-right: 0;
+}
+
+.calendar__corner {
+  border-right: 1px solid var(--border);
+}
+
+.dayhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-right: 1px solid var(--border);
+}
+
+.dayhead--today {
+  background: var(--today);
+}
+
+.dayhead__name {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dayhead__date {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.dayhead--today .dayhead__date {
+  color: var(--today-line);
+}
+
+/* Body: time axis + columns ----------------------------------------------- */
+.calendar__body {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: var(--axis-width) 1fr;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.axis {
+  position: relative;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.axis__hour {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.columns {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.col {
+  position: relative;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.col--today {
+  background: var(--today);
+}
+
+.col__hourline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Event blocks ------------------------------------------------------------- */
+.event {
+  position: absolute;
+  background: var(--event-bg);
+  color: #fff;
+  border: 1px solid var(--event-bg-2);
+  border-radius: 4px;
+  padding: 2px 5px;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  /* min-height so very short events stay clickable */
+  min-height: 14px;
+}
+
+.event:hover {
+  background: var(--event-bg-2);
+  z-index: 5;
+}
+
+.event__title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event__time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+  font-size: 11px;
+}
+
+.event--ghost {
+  background: var(--ghost);
+  border: 1px dashed var(--event-bg-2);
+  pointer-events: none;
+  left: 0;
+  width: 100%;
+  box-shadow: none;
+}
+
+/* Modal -------------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 20px 22px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.modal h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.form__field input {
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  padding: 7px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+
+.form__error {
+  color: #ef4444;
+  font-size: 13px;
+}
+
+.form__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.form__actions .btn--danger {
+  margin-left: auto;
+}

@@ -1,0 +1,420 @@
+/* ============================================================
+   CSS Custom Properties & Themes
+   ============================================================ */
+
+:root,
+[data-theme="light"] {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --accent: #3b82f6;
+  --accent-light: #93c5fd;
+  --success: #10b981;
+  --danger: #ef4444;
+  --chart-grid: #e5e7eb;
+  --chart-axis: #374151;
+  --chart-line: #3b82f6;
+  --chart-dot: #2563eb;
+  --bar-bg: #e5e7eb;
+  --bar-fill: #3b82f6;
+  --table-stripe: #f9fafb;
+  --table-hover: #f3f4f6;
+  --header-bg: #ffffff;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+}
+
+[data-theme="dark"] {
+  --bg: #111827;
+  --surface: #1f2937;
+  --text: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border: #374151;
+  --accent: #60a5fa;
+  --accent-light: #3b82f6;
+  --success: #34d399;
+  --danger: #f87171;
+  --chart-grid: #374151;
+  --chart-axis: #d1d5db;
+  --chart-line: #60a5fa;
+  --chart-dot: #93c5fd;
+  --bar-bg: #374151;
+  --bar-fill: #60a5fa;
+  --table-stripe: #1a2332;
+  --table-hover: #263044;
+  --header-bg: #1f2937;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.theme-toggle:hover {
+  background: var(--bg);
+}
+
+/* ============================================================
+   Dashboard Grid
+   ============================================================ */
+
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Stat Cards */
+.stat-cards {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  /* Default: 1 column */
+  grid-template-columns: 1fr;
+}
+
+/* Body grid (chart + categories) */
+.body-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* ============================================================
+   Breakpoints
+   ============================================================ */
+
+/* Medium: 640px+ → 2 columns */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .body-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Large: 1024px+ → 4 stat cards in one row, chart+categories side by side */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .body-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+  .header__title {
+    font-size: 1.35rem;
+  }
+}
+
+/* ============================================================
+   Cards
+   ============================================================ */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  overflow: hidden;
+  min-width: 0; /* prevent grid blowout */
+}
+
+.card__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Stat Card */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-card__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.stat-card__sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.stat-card__indicator {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.stat-card__indicator.up {
+  color: var(--success);
+}
+
+.stat-card__indicator.down {
+  color: var(--danger);
+}
+
+/* ============================================================
+   Chart
+   ============================================================ */
+
+.chart-card {
+  min-height: 300px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 260px;
+  position: relative;
+}
+
+@media (min-width: 640px) {
+  .chart-container {
+    height: 300px;
+  }
+}
+
+#timeseries-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================================
+   Category Breakdown
+   ============================================================ */
+
+.categories-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  flex: 1;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.category-row__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.category-row__name {
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.category-row__value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.category-row__bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-row__bar-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.table-card {
+  min-width: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* This ensures the table scrolls inside the card, not the page */
+  max-width: 100%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 480px; /* table scrolls inside wrapper at narrow widths */
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.data-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+.data-table tbody tr:hover {
+  background: var(--table-hover);
+}
+
+.num-col {
+  text-align: right !important;
+}
+
+/* ============================================================
+   Error State
+   ============================================================ */
+
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--danger);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.error-state[hidden] {
+  display: none;
+}
+
+/* ============================================================
+   Utility: prevent body horizontal scroll
+   ============================================================ */
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Smooth transitions for theme change */
+body,
+.card,
+.header,
+.theme-toggle,
+.data-table th {
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}

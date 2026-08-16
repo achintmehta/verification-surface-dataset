@@ -1,0 +1,202 @@
+:root {
+  --bg: #0f1729;
+  --panel: #1b2440;
+  --panel-2: #222c4d;
+  --card: #2b3760;
+  --card-hover: #34406f;
+  --accent: #5b8cff;
+  --text: #e7ecf6;
+  --muted: #92a0c4;
+  --border: #33406b;
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% -10%, #1a244a 0%, var(--bg) 55%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 20px;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.04);
+}
+.dot.online { background: #38d39f; }
+.dot.offline { background: #e0606b; }
+
+.board {
+  display: flex;
+  gap: 18px;
+  padding: 24px;
+  align-items: flex-start;
+  overflow-x: auto;
+  min-height: calc(100vh - 140px);
+}
+
+.column {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 300px;
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 120px);
+  box-shadow: var(--shadow);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.column-header .count {
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--panel-2);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 40px;
+}
+
+.cards.drag-over {
+  background: rgba(91, 140, 255, 0.06);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: grab;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+  transition: background 0.12s ease, transform 0.06s ease;
+  user-select: none;
+}
+.card:hover { background: var(--card-hover); }
+.card.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.drop-indicator {
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 2px 0;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.add-card {
+  padding: 10px 12px 14px;
+}
+
+.add-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-card textarea {
+  resize: none;
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  min-height: 38px;
+}
+
+.add-card textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-card .actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  font: inherit;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button.primary {
+  background: var(--accent);
+  color: #fff;
+}
+button.primary:hover { background: #6f9bff; }
+
+button.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+button.ghost:hover { color: var(--text); }
+
+.add-toggle {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+}
+.add-toggle:hover { color: var(--text); border-color: var(--accent); }

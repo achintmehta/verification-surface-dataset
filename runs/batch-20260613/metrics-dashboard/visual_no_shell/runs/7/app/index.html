@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-theme="__THEME__">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (function () {
+        var theme = '__THEME__';
+        if (theme !== 'dark') theme = 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="title-block">
+          <p class="eyebrow">Read-mostly analytics</p>
+          <h1>Metrics Dashboard</h1>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+          <span class="toggle-dot" aria-hidden="true"></span>
+          <span id="themeLabel">Light mode</span>
+        </button>
+      </header>
+
+      <main>
+        <section id="status" class="status" role="status" hidden></section>
+
+        <section class="stats-grid" aria-label="Summary statistics">
+          <article class="card stat-card">
+            <span class="stat-label">Total visitors</span>
+            <strong id="totalVisitors" class="stat-value skeleton">—</strong>
+            <span id="visitorsTrend" class="stat-meta">30 day total</span>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">Total revenue</span>
+            <strong id="totalRevenue" class="stat-value skeleton">—</strong>
+            <span class="stat-meta">Seeded from PostgreSQL</span>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">Best day</span>
+            <strong id="bestDay" class="stat-value stat-date skeleton">—</strong>
+            <span id="bestDayMeta" class="stat-meta">Highest visitors</span>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">7-day trend</span>
+            <strong id="trendPercent" class="stat-value skeleton">—</strong>
+            <span class="stat-meta">Vs previous 7 days</span>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div>
+                <h2>30-day time series</h2>
+                <p>Visitors and revenue trend</p>
+              </div>
+            </div>
+            <div id="lineChart" class="chart-shell" role="img" aria-label="Line chart of visitors for the last thirty seeded days"></div>
+          </article>
+
+          <article class="card category-card">
+            <div class="card-heading">
+              <div>
+                <h2>Category breakdown</h2>
+                <p>Horizontal bars by value</p>
+              </div>
+            </div>
+            <div id="categoryBars" class="category-list"></div>
+          </article>
+
+          <article class="card table-card">
+            <div class="card-heading">
+              <div>
+                <h2>Recent items</h2>
+                <p>Latest 20 seeded records</p>
+              </div>
+            </div>
+            <div class="responsive-table-wrap">
+              <table class="recent-table">
+                <thead>
+                  <tr><th>Name</th><th>Category</th><th>Value</th><th>Created</th></tr>
+                </thead>
+                <tbody id="recentTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

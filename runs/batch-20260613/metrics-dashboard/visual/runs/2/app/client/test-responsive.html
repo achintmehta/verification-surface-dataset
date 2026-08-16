@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Responsive Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #333; font-family: sans-serif; padding: 20px; }
+    .test-row {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .test-case {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .test-label {
+      background: #222;
+      color: #fff;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .iframe-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+    iframe {
+      border: none;
+      display: block;
+      transform-origin: top left;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-row">
+    <div class="test-case">
+      <div class="test-label">360px — Mobile (1 column)</div>
+      <div class="iframe-wrapper" id="w360" style="width:360px; height:900px; overflow:hidden;">
+        <iframe src="http://localhost:5173" style="width:360px; height:2400px;"></iframe>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <div class="test-label">768px — Tablet (2 columns)</div>
+      <div class="iframe-wrapper" id="w768" style="width:768px; height:900px; overflow:hidden;">
+        <iframe src="http://localhost:5173" style="width:768px; height:2400px;"></iframe>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <div class="test-label">1280px — Desktop (4 stat cards + 2-col body)</div>
+      <div class="iframe-wrapper" id="w1280" style="width:1280px; height:900px; overflow:hidden;">
+        <iframe src="http://localhost:5173" style="width:1280px; height:2400px;"></iframe>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

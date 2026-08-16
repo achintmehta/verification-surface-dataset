@@ -1,0 +1,201 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+header button {
+  margin-right: 10px;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.calendar-header {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  background: #fafafa;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.time-axis-header {
+  width: 60px;
+  border-right: 1px solid #ccc;
+}
+
+.day-header {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  border-right: 1px solid #ccc;
+}
+
+.day-header.today {
+  background: #e0f0ff;
+  font-weight: bold;
+}
+
+.calendar-body {
+  display: flex;
+  position: relative;
+  /* 24 hours * 60px per hour = 1440px */
+  height: 1440px;
+}
+
+.time-axis {
+  width: 60px;
+  border-right: 1px solid #ccc;
+  position: relative;
+}
+
+.time-label {
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  color: #666;
+  transform: translateY(-50%);
+}
+
+.day-column {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  position: relative;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #eee;
+  pointer-events: none;
+}
+
+.event {
+  position: absolute;
+  background: #3174ad;
+  color: white;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-title {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal h3 {
+  margin-top: 0;
+}
+
+.modal label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.modal input {
+  margin-top: 5px;
+  padding: 5px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-delete {
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.btn-save {
+  background: #5cb85c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.btn-cancel {
+  background: #ccc;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}

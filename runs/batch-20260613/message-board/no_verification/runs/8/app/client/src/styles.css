@@ -1,0 +1,279 @@
+:root {
+  color: #152033;
+  background: #eef2ff;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.22), transparent 34rem),
+    linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 0.9rem;
+  padding: 0.85rem 1.2rem;
+  color: #ffffff;
+  background: #4f46e5;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    background 150ms ease,
+    transform 150ms ease,
+    opacity 150ms ease;
+}
+
+button:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.app-shell {
+  width: min(880px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.hero {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  color: #4f46e5;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.55rem;
+  font-size: clamp(2rem, 6vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.subtitle {
+  margin-bottom: 0;
+  color: #475569;
+  font-size: 1.05rem;
+}
+
+.composer,
+.feed {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 24px 60px rgba(79, 70, 229, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.composer {
+  margin-bottom: 1rem;
+  padding: 1.1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.9rem;
+  padding: 0.85rem 1rem;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+}
+
+input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+}
+
+.status {
+  min-height: 1.25rem;
+  margin: 0.6rem 0 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.status.error {
+  color: #dc2626;
+}
+
+.feed {
+  padding: 1.2rem;
+}
+
+.feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.feed-header h2 {
+  margin-bottom: 0;
+  font-size: 1.15rem;
+}
+
+.connection-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  color: #475569;
+  background: #f1f5f9;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.connection-status::before {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #f59e0b;
+  content: "";
+}
+
+.connection-status[data-state="connected"] {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.connection-status[data-state="connected"]::before {
+  background: #22c55e;
+}
+
+.connection-status[data-state="error"] {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.connection-status[data-state="error"]::before {
+  background: #ef4444;
+}
+
+.message-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.message-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: #ffffff;
+  animation: slide-in 180ms ease-out;
+}
+
+.message-text {
+  margin-bottom: 0.65rem;
+  color: #0f172a;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.message-time {
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.empty-state {
+  margin-bottom: 0;
+  border: 1px dashed #cbd5e1;
+  border-radius: 1rem;
+  padding: 1.4rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    width: min(100% - 1rem, 880px);
+    padding: 1.2rem 0;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,147 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #213547;
+  background-color: #f8f9fa;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.message-board {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+h1 {
+  margin: 0 0 1.5rem 0;
+  font-size: 2rem;
+  text-align: center;
+  color: #1a1a2e;
+}
+
+h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  color: #4a5568;
+}
+
+.messages-container {
+  margin-bottom: 1.5rem;
+}
+
+.messages {
+  height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.message {
+  background: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #646cff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.message-text {
+  font-size: 1rem;
+  color: #2d3748;
+  word-break: break-word;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 0.25rem;
+  text-align: right;
+}
+
+.message-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#message-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#message-input:focus {
+  border-color: #646cff;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #535bf2;
+}
+
+.error {
+  color: #e53e3e;
+  text-align: center;
+  padding: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #e2e8f0;
+    background-color: #1a202c;
+  }
+  
+  .message-board {
+    background: #2d3748;
+  }
+  
+  .messages {
+    background: #1a202c;
+    border-color: #4a5568;
+  }
+  
+  .message {
+    background: #4a5568;
+    border-left-color: #818cf8;
+  }
+  
+  .message-text {
+    color: #e2e8f0;
+  }
+}

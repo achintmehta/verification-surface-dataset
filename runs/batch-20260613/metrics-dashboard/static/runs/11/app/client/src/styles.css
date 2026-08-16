@@ -1,0 +1,399 @@
+/* ---------- Theme tokens ---------- */
+:root,
+:root[data-theme='light'] {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-alt: #f0f3f9;
+  --border: #e2e7f0;
+  --text: #1a2233;
+  --text-muted: #5b6678;
+  --accent: #2f6df6;
+  --accent-soft: rgba(47, 109, 246, 0.12);
+  --series: #2f6df6;
+  --series-fill: rgba(47, 109, 246, 0.14);
+  --grid: #e7ebf3;
+  --axis: #98a2b6;
+  --bar: #2f6df6;
+  --bar-track: #eef1f7;
+  --pos: #1a9d62;
+  --neg: #d8453b;
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 6px 18px rgba(20, 30, 60, 0.05);
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e131f;
+  --surface: #18202f;
+  --surface-alt: #1f2940;
+  --border: #2a3650;
+  --text: #e9eef7;
+  --text-muted: #9aa6bd;
+  --accent: #5b8dff;
+  --accent-soft: rgba(91, 141, 255, 0.18);
+  --series: #6ea0ff;
+  --series-fill: rgba(110, 160, 255, 0.16);
+  --grid: #26324a;
+  --axis: #6b7894;
+  --bar: #6ea0ff;
+  --bar-track: #232f47;
+  --pos: #44d493;
+  --neg: #ff7a70;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* Hard guarantee against sideways scrolling. */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100%;
+}
+
+/* ---------- Layout shell ---------- */
+.shell {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+@media (min-width: 640px) {
+  .shell {
+    padding: 24px;
+  }
+}
+
+/* ---------- Header ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.header .subtitle {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle .icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ---------- Grid ---------- */
+/* Mobile-first: 1 column. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Medium: 2 columns. */
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Wide: four stat cards in one row, chart + breakdown side by side. */
+@media (min-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .body-grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+  /* Recent table spans the full width under the chart row. */
+  .body-grid .card-table {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  min-width: 0; /* allow grid children to shrink instead of overflowing */
+}
+
+.card-title {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ---------- Stat card ---------- */
+.stat-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  margin: 8px 0 0;
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  /* The 7-digit revenue value must fit without overflowing the card. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.stat-sub {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.trend.pos {
+  color: var(--pos);
+}
+
+.trend.neg {
+  color: var(--neg);
+}
+
+/* ---------- Chart ---------- */
+.chart-wrap {
+  width: 100%;
+  /* Fixed aspect-ratio container the SVG fills exactly. */
+  position: relative;
+}
+
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-axis-label {
+  fill: var(--axis);
+  font-size: 11px;
+}
+
+.chart-grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.chart-axis {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+
+.chart-series {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-area {
+  fill: var(--series-fill);
+  stroke: none;
+}
+
+/* ---------- Category bars ---------- */
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 10px;
+  align-items: baseline;
+}
+
+.bar-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.bar-value {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bar-track {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 10px;
+  background: var(--bar-track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--bar);
+  border-radius: 999px;
+  min-width: 4px;
+}
+
+/* ---------- Table ---------- */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto; /* table scrolls inside its card, page never does */
+  -webkit-overflow-scrolling: touch;
+}
+
+table.recent {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+table.recent th,
+table.recent td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+table.recent th {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+table.recent td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+table.recent td.cat {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.recent tr:last-child td {
+  border-bottom: none;
+}
+
+/* ---------- States ---------- */
+.banner {
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.banner.error {
+  border-color: var(--neg);
+  color: var(--neg);
+}
+
+.banner .retry {
+  margin-top: 10px;
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.skeleton {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}

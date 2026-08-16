@@ -1,0 +1,390 @@
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-alt: #f0f2f8;
+  --border: #e2e6ef;
+  --text: #1a2233;
+  --text-muted: #5b6678;
+  --accent: #3a6df0;
+  --accent-soft: rgba(58, 109, 240, 0.12);
+  --pos: #157a4a;
+  --neg: #b8243a;
+  --chart-grid: #e2e6ef;
+  --chart-axis: #9aa4b6;
+  --chart-line: #3a6df0;
+  --chart-fill: rgba(58, 109, 240, 0.14);
+  --bar: #3a6df0;
+  --bar-track: #eef1f8;
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 1px 2px rgba(20, 30, 60, 0.04);
+}
+
+html[data-theme='dark'] {
+  --bg: #0f1420;
+  --surface: #18202e;
+  --surface-alt: #1f2937;
+  --border: #2a3547;
+  --text: #e8edf6;
+  --text-muted: #9aa6ba;
+  --accent: #6f9bff;
+  --accent-soft: rgba(111, 155, 255, 0.16);
+  --pos: #4cd17f;
+  --neg: #ff7088;
+  --chart-grid: #2a3547;
+  --chart-axis: #6b7892;
+  --chart-line: #6f9bff;
+  --chart-fill: rgba(111, 155, 255, 0.16);
+  --bar: #6f9bff;
+  --bar-track: #222c3c;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Reset / base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* Prevent any sideways scrolling regardless of content width. */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-title {
+  font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--accent-soft);
+}
+
+.theme-toggle__icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #f5b942;
+  box-shadow: inset 0 0 0 2px var(--surface-alt);
+}
+
+html[data-theme='dark'] .theme-toggle__icon {
+  background: #cfd6e6;
+  box-shadow: inset -4px -4px 0 0 var(--surface-alt);
+}
+
+/* ---------- Dashboard grid ---------- */
+.dashboard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr; /* mobile: single column */
+}
+
+.state-msg {
+  grid-column: 1 / -1;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.state-msg--error {
+  color: var(--neg);
+  border-color: var(--neg);
+}
+
+/* Stat cards always occupy a slot in the dashboard grid. */
+.stat-card {
+  min-width: 0;
+}
+
+/* The big content widgets span the full dashboard width on mobile. */
+.widget {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+}
+
+.card__title {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ---------- Stat cards ---------- */
+.stat-card .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.stat-card .stat-value {
+  margin-top: 0.25rem;
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  /* Large 7-digit values must never overflow the card. */
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+}
+
+.stat-card .stat-sub {
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.trend {
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.trend--up {
+  color: var(--pos);
+}
+
+.trend--down {
+  color: var(--neg);
+}
+
+/* ---------- Chart ---------- */
+.chart-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.chart-legend__dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  background: var(--chart-line);
+}
+
+/* ---------- Category bars ---------- */
+.bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.bar-row__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.bar-row__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  /* Long category names truncate with an ellipsis. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar-row__value {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+  white-space: nowrap;
+}
+
+.bar-track {
+  background: var(--bar-track);
+  border-radius: 999px;
+  height: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--bar);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ---------- Table ---------- */
+.table-scroll {
+  width: 100%;
+  /* Keep horizontal scrolling local to the table, never the page. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 380px;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table th {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.data-table td.num,
+.data-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody tr:hover {
+  background: var(--surface-alt);
+}
+
+.data-table .cat-cell {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Responsive grid ---------- */
+
+/* Medium: 640–1023px -> 2 columns */
+@media (min-width: 640px) {
+  .dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* stat cards take 1 of 2 columns; widgets span both */
+  .widget {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Wide: >=1024px -> 4 stat cards in one row, chart + breakdown side by side */
+@media (min-width: 1024px) {
+  .dashboard {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .stat-card {
+    grid-column: span 1;
+  }
+  /* chart and category breakdown sit side by side (2 cols each) */
+  .widget--chart {
+    grid-column: span 2;
+  }
+  .widget--categories {
+    grid-column: span 2;
+  }
+  /* table spans full width below */
+  .widget--table {
+    grid-column: 1 / -1;
+  }
+}

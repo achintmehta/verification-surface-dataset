@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>🎟️ Seat Booking</h1>
+      <div class="conn" id="conn">
+        <span class="dot" id="conn-dot"></span>
+        <span id="conn-text">connecting…</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="screen">SCREEN</div>
+
+      <section class="stage">
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+      </section>
+
+      <section class="legend">
+        <span><i class="swatch available"></i> Available</span>
+        <span><i class="swatch selected"></i> Selected</span>
+        <span><i class="swatch held"></i> Held</span>
+        <span><i class="swatch mine"></i> Your hold</span>
+        <span><i class="swatch booked"></i> Booked</span>
+      </section>
+
+      <section class="counts" id="counts"></section>
+
+      <section class="controls">
+        <div class="selection-info" id="selection-info">
+          No seats selected.
+        </div>
+
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected</button>
+          <button id="confirm-btn" disabled>Confirm booking</button>
+          <button id="release-btn" class="secondary" disabled>Release hold</button>
+        </div>
+
+        <div id="countdown" class="countdown hidden"></div>
+        <div id="message" class="message"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>session: <code id="session-id"></code></span>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

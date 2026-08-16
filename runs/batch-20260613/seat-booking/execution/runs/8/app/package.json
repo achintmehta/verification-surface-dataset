@@ -1,0 +1,21 @@
+{
+  "name": "seat-booking",
+  "version": "1.0.0",
+  "description": "Concurrent-safe seat booking demo with PGLite, Express, SSE, and Vite.",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "node server/index.js",
+    "client": "vite frontend --host 0.0.0.0",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test:smoke": "node server/smoke-test.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "latest",
+    "concurrently": "^8.2.2",
+    "cors": "latest",
+    "express": "latest",
+    "vite": "^5.4.11"
+  },
+  "devDependencies": {}
+}

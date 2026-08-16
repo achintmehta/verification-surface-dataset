@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top navigation header -->
+    <header id="cal-header">
+      <div class="header-nav">
+        <button id="btn-prev" class="nav-btn">&#8249; Prev</button>
+        <button id="btn-today" class="nav-btn today-btn">Today</button>
+        <button id="btn-next" class="nav-btn">Next &#8250;</button>
+      </div>
+      <h1 id="week-label">Week</h1>
+    </header>
+
+    <!-- Calendar grid -->
+    <div id="calendar-container">
+      <!-- Sticky day-header row -->
+      <div id="day-headers-row">
+        <div class="day-headers-spacer"></div>
+        <div id="day-headers">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Scrollable area: time axis + day columns -->
+      <div id="scroll-area">
+        <div id="time-axis">
+          <!-- Hour labels injected by JS -->
+        </div>
+        <div id="days-body">
+          <!-- Day columns injected by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal">
+      <h2 id="modal-title">New Event</h2>
+      <form id="event-form">
+        <label>
+          Title
+          <input type="text" id="field-title" placeholder="Event title" required />
+        </label>
+        <label>
+          Start
+          <input type="datetime-local" id="field-start" required />
+        </label>
+        <label>
+          End
+          <input type="datetime-local" id="field-end" required />
+        </label>
+        <div class="form-error hidden" id="form-error"></div>
+        <div class="form-actions">
+          <button type="submit" id="btn-save" class="btn-primary">Save</button>
+          <button type="button" id="btn-delete" class="btn-danger hidden">Delete</button>
+          <button type="button" id="btn-cancel" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

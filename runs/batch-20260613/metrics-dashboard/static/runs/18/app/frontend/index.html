@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <header>
+    <h1>Dashboard</h1>
+    <button id="theme-toggle">Toggle Theme</button>
+  </header>
+  <main id="dashboard" class="hidden">
+    <section class="stat-cards">
+      <div class="card" id="card-visitors">
+        <h3>Total Visitors</h3>
+        <p class="value">--</p>
+      </div>
+      <div class="card" id="card-revenue">
+        <h3>Total Revenue</h3>
+        <p class="value">--</p>
+      </div>
+      <div class="card" id="card-best-day">
+        <h3>Best Day</h3>
+        <p class="value">--</p>
+      </div>
+      <div class="card" id="card-trend">
+        <h3>7-Day Trend</h3>
+        <p class="value">--</p>
+      </div>
+    </section>
+    <section class="charts-row">
+      <div class="card chart-container">
+        <h2>Revenue (30 Days)</h2>
+        <div id="chart-wrapper">
+          <canvas id="timeseries-chart"></canvas>
+        </div>
+      </div>
+      <div class="card breakdown-container">
+        <h2>Category Breakdown</h2>
+        <div id="category-breakdown"></div>
+      </div>
+    </section>
+    <section class="table-row">
+      <div class="card table-container">
+        <h2>Recent Items</h2>
+        <div class="table-responsive">
+          <table id="recent-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Value</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="error-state" class="hidden">
+    <h2>Error loading dashboard</h2>
+    <p>Could not connect to the API.</p>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

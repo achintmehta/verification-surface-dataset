@@ -1,0 +1,222 @@
+[
+  {
+    "step": 1,
+    "tool": "run_command",
+    "args_head": "mkdir -p backend frontend"
+  },
+  {
+    "step": 2,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"{\\n  \\\"name\\\": \\\"calendar-week-view\\\",\\n  \\\"version\\\": \\\"1.0.0\\\",\\n  \\\"scripts\\\": {\\n  "
+  },
+  {
+    "step": 3,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"{\\n  \\\"name\\\": \\\"backend\\\",\\n  \\\"version\\\": \\\"1.0.0\\\",\\n  \\\"main\\\": \\\"server.js\\\",\\n  \\"
+  },
+  {
+    "step": 4,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"{\\n  \\\"name\\\": \\\"frontend\\\",\\n  \\\"version\\\": \\\"1.0.0\\\",\\n  \\\"scripts\\\": {\\n    \\\"dev\\\":"
+  },
+  {
+    "step": 5,
+    "tool": "run_command",
+    "args_head": "npm run install:all"
+  },
+  {
+    "step": 6,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"const express = require('express');\\nconst cors = require('cors');\\nconst { PGlite } = "
+  },
+  {
+    "step": 7,
+    "tool": "run_background_command",
+    "args_head": "cd backend && npm start"
+  },
+  {
+    "step": 8,
+    "tool": "run_command",
+    "args_head": "curl -s http://localhost:3001/api/events?start=2023-01-01T00:00:00Z\\&end=2023-01-08T00:00:00Z"
+  },
+  {
+    "step": 9,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"<!DOCTYPE html>\\n<html lang=\\\"en\\\">\\n  <head>\\n    <meta charset=\\\"UTF-8\\\" />\\n    <met"
+  },
+  {
+    "step": 10,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"* {\\n  box-sizing: border-box;\\n}\\n\\nbody {\\n  margin: 0;\\n  font-family: sans-serif;\\n"
+  },
+  {
+    "step": 11,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"import { \\n  startOfWeek, \\n  endOfWeek, \\n  addDays, \\n  format, \\n  isSameDay, \\n  pa"
+  },
+  {
+    "step": 12,
+    "tool": "run_background_command",
+    "args_head": "cd frontend && npm run dev"
+  },
+  {
+    "step": 13,
+    "tool": "run_command",
+    "args_head": "curl -s http://localhost:3000"
+  },
+  {
+    "step": 14,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 15,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      <div class=\\\"calendar-container\\\">\\n        <div class=\\\"time-axis-col\\\">\\n      "
+  },
+  {
+    "step": 16,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \".time-axis-col {\\n  width: 60px;\\n  flex-shrink: 0;\\n  border-right: 1px solid #ccc;\\n "
+  },
+  {
+    "step": 17,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \".day-header {\\n  text-align: center;\\n  padding: 10px 0;\\n  border-bottom: 1px solid #c"
+  },
+  {
+    "step": 18,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 19,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 20,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 21,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 22,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 23,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 24,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 25,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const dayEvents = events.filter(ev => {\\n      const evStart = new Date(ev.start_at"
+  },
+  {
+    "step": 26,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"  const items = dayEvents.map(ev => {\\n    let start = new Date(ev.start_at);\\n    let "
+  },
+  {
+    "step": 27,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      const time = document.createElement('div');\\n      time.className = 'event-time';"
+  },
+  {
+    "step": 28,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    // Format for datetime-local: YYYY-MM-DDThh:mm\\n    eventStartInput.value = format("
+  },
+  {
+    "step": 29,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 30,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 31,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 32,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 33,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 34,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 35,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 36,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 37,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"\",\"s"
+  },
+  {
+    "step": 38,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Inva"
+  },
+  {
+    "step": 39,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Inva"
+  },
+  {
+    "step": 40,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Midn"
+  },
+  {
+    "step": 41,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 42,
+    "tool": "run_command",
+    "args_head": "curl -X POST http://localhost:3001/api/events -H \"Content-Type: application/json\" -d '{\"title\":\"Even"
+  },
+  {
+    "step": 43,
+    "tool": "screenshot",
+    "args_head": "{\"url\": \"http://localhost:3000\"}"
+  },
+  {
+    "step": 44,
+    "tool": "finish",
+    "args_head": "{}"
+  }
+]

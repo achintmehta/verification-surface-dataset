@@ -1,0 +1,36 @@
+
+> log-explorer@1.0.0 dev
+> concurrently "npm run server" "npm run client"
+
+[0] 
+[0] > log-explorer@1.0.0 server
+[0] > node server/server.js
+[0] 
+[1] 
+[1] > log-explorer@1.0.0 client
+[1] > vite client --port 5173
+[1] 
+[1] 
+[1]   VITE v6.4.3  ready in 572 ms
+[1] 
+[1]   ➜  Local:   http://localhost:5173/
+[1]   ➜  Network: use --host to expose
+[0] [server] Initializing database...
+[1] 11:05:10 PM [vite] http proxy error: /api/stats
+[1] Error: connect ECONNREFUSED 127.0.0.1:3001
+[1]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+[1] 11:05:10 PM [vite] http proxy error: /api/logs?offset=0&limit=1
+[1] Error: connect ECONNREFUSED 127.0.0.1:3001
+[1]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+[0] [seed] Seeding 100000 rows...
+[0] [seed] Inserted 20000 / 100000 rows (523ms elapsed)
+[0] [seed] Inserted 40000 / 100000 rows (1133ms elapsed)
+[0] [seed] Inserted 60000 / 100000 rows (1745ms elapsed)
+[0] [seed] Inserted 80000 / 100000 rows (2351ms elapsed)
+[0] [seed] Inserted 100000 / 100000 rows (2963ms elapsed)
+[0] [seed] Creating indexes...
+[0] [seed] Seeding complete in 3739ms
+[0] [server] Database ready in 14872ms
+[0] [server] Listening on http://localhost:3001
+[1] npm run client exited with code SIGTERM
+[0] npm run server exited with code SIGTERM

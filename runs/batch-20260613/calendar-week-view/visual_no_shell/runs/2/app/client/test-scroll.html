@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scroll Test</title>
+<style>
+  body { margin: 0; }
+  iframe { width: 100vw; height: 100vh; border: none; }
+</style>
+</head>
+<body>
+<iframe id="cal" src="/"></iframe>
+<script>
+  // After load, scroll the scroll-area to show 8:00–15:00 range
+  document.getElementById('cal').addEventListener('load', () => {
+    try {
+      const doc = document.getElementById('cal').contentDocument;
+      const scrollArea = doc.getElementById('scroll-area');
+      if (scrollArea) {
+        // HOUR_HEIGHT=64, HEADER_HEIGHT=48
+        // 8:00 = 8 * 64 = 512px from top of events area
+        scrollArea.scrollTop = 512;
+      }
+    } catch(e) { console.log(e); }
+  });
+</script>
+</body>
+</html>

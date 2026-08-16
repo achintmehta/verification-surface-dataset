@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking — Live</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>🎫 Live Seat Booking</h1>
+      <div class="conn">
+        <span id="conn-dot" class="dot offline"></span>
+        <span id="conn-text">connecting…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage-wrap">
+        <div class="stage">STAGE</div>
+
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch held"></i> Held</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="inventory">
+          <div class="stat"><span id="inv-available">0</span><label>Available</label></div>
+          <div class="stat"><span id="inv-held">0</span><label>Held</label></div>
+          <div class="stat"><span id="inv-booked">0</span><label>Booked</label></div>
+        </div>
+
+        <div class="selection">
+          <h2>Selection</h2>
+          <p id="selection-list" class="muted">No seats selected.</p>
+          <button id="hold-btn" disabled>Hold selected seats</button>
+        </div>
+
+        <div id="hold-box" class="hold-box hidden">
+          <h2>Active Hold</h2>
+          <p id="hold-seats"></p>
+          <p class="countdown">Expires in <b id="countdown">--</b></p>
+          <div class="actions">
+            <button id="confirm-btn">Confirm booking</button>
+            <button id="release-btn" class="secondary">Release</button>
+          </div>
+        </div>
+
+        <div id="message" class="message hidden"></div>
+
+        <p class="session muted">Session: <code id="session-id"></code></p>
+      </aside>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

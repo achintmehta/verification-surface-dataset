@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <script>
+      // Apply a remembered theme as early as possible to avoid a flash.
+      // The authoritative value is fetched from the API on load and reconciled;
+      // this only uses a non-authoritative hint cached on the document.
+      (function () {
+        try {
+          var hint = document.cookie.match(/(?:^|; )theme-hint=([^;]+)/);
+          if (hint && (hint[1] === 'dark' || hint[1] === 'light')) {
+            document.documentElement.setAttribute('data-theme', hint[1]);
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

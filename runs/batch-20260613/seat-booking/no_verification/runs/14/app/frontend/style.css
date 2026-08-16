@@ -1,0 +1,140 @@
+:root {
+  --bg: #0f1320;
+  --panel: #1a2034;
+  --text: #e8ecf5;
+  --muted: #9aa3bd;
+  --available: #2b3553;
+  --available-hover: #38446b;
+  --selected: #f0b429;
+  --held: #6b7280;
+  --myhold: #3b82f6;
+  --booked: #ef4444;
+  --green: #22c55e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--panel);
+  border-bottom: 1px solid #232a42;
+}
+
+.app-header h1 { font-size: 1.25rem; margin: 0; }
+
+.inventory { display: flex; align-items: center; gap: 10px; }
+.chip {
+  background: #232a42;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.chip b { color: var(--text); }
+.chip-available b { color: var(--green); }
+.chip-held b { color: #c9cdd9; }
+.chip-booked b { color: var(--booked); }
+
+.conn { font-size: 1.1rem; color: var(--booked); transition: color .3s; }
+.conn.online { color: var(--green); }
+
+main { max-width: 860px; margin: 0 auto; padding: 24px; }
+
+.stage {
+  text-align: center;
+  letter-spacing: 6px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 10px;
+  margin-bottom: 24px;
+  background: linear-gradient(#232a42, transparent);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.seatmap { display: grid; gap: 8px; justify-content: center; }
+
+.seat-row { display: flex; align-items: center; gap: 8px; }
+.row-label {
+  width: 22px; text-align: center; color: var(--muted); font-size: 0.8rem;
+}
+
+.seat {
+  width: 34px; height: 34px;
+  border: none; border-radius: 8px 8px 4px 4px;
+  background: var(--available);
+  color: #cbd3ea;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform .08s, background .15s;
+}
+.seat:hover:not(:disabled) { transform: translateY(-2px); }
+.seat:disabled { cursor: not-allowed; }
+
+.seat.available { background: var(--available); }
+.seat.available:hover { background: #38446b; }
+.seat.selected { background: var(--selected); color: #1a1300; font-weight: 700; }
+.seat.held { background: var(--held); color: #d7dae3; }
+.seat.myhold { background: var(--myhold); color: #fff; }
+.seat.booked { background: var(--booked); color: #fff; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  justify-content: center; margin: 24px 0;
+  font-size: 0.82rem; color: var(--muted);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.swatch { width: 16px; height: 16px; border-radius: 4px; display: inline-block; }
+.s-available { background: var(--available); }
+.s-selected { background: var(--selected); }
+.s-held { background: var(--held); }
+.s-myhold { background: var(--myhold); }
+.s-booked { background: var(--booked); }
+
+.controls {
+  background: var(--panel);
+  border: 1px solid #232a42;
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+}
+.selection-info { color: var(--muted); margin-bottom: 12px; min-height: 1.2em; }
+.buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+button {
+  background: #2b3553; color: var(--text);
+  border: none; border-radius: 8px;
+  padding: 10px 16px; font-size: 0.9rem; cursor: pointer;
+  transition: background .15s, opacity .15s;
+}
+button:hover:not(:disabled) { background: #38446b; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button.primary { background: var(--green); color: #04210f; font-weight: 700; }
+button.primary:hover:not(:disabled) { background: #2ee06a; }
+button.danger { background: #7f1d1d; }
+button.danger:hover:not(:disabled) { background: #a52828; }
+
+.countdown {
+  margin-top: 14px; font-size: 1.05rem; font-weight: 600; color: var(--selected);
+}
+.countdown.urgent { color: var(--booked); }
+.hidden { display: none; }
+
+.message { margin-top: 12px; min-height: 1.2em; font-size: 0.9rem; }
+.message.error { color: #fca5a5; }
+.message.success { color: #86efac; }
+.message.info { color: var(--muted); }
+
+.session-info { text-align: center; color: var(--muted); margin-top: 20px; font-size: 0.8rem; }
+code { background: #232a42; padding: 2px 6px; border-radius: 4px; }

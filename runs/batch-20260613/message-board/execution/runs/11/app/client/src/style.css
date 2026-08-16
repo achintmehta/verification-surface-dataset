@@ -1,0 +1,171 @@
+:root {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel-2: #334155;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-2: #0ea5e9;
+  --ok: #22c55e;
+  --err: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  width: 100%;
+  max-width: 640px;
+  margin: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 4rem);
+}
+
+.board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--panel-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.board__header h1 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.status {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: lowercase;
+}
+
+.status--connecting {
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--muted);
+}
+
+.status--live {
+  background: rgba(34, 197, 94, 0.18);
+  color: var(--ok);
+}
+
+.status--offline {
+  background: rgba(239, 68, 68, 0.18);
+  color: var(--err);
+}
+
+.messages {
+  list-style: none;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message {
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  animation: pop 0.18s ease-out;
+}
+
+.message__text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message__time {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 1rem;
+  margin: 0;
+}
+
+.empty[hidden] {
+  display: none;
+}
+
+.composer {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.9rem 1.25rem;
+  background: var(--panel-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.composer__input {
+  flex: 1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.composer__input:focus {
+  border-color: var(--accent);
+}
+
+.composer__button {
+  border: none;
+  background: var(--accent-2);
+  color: #03263a;
+  font-weight: 700;
+  padding: 0 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.composer__button:hover {
+  background: var(--accent);
+}
+
+.composer__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,251 @@
+/* ── Reset & base ─────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f4f5f7;
+  --color-surface:     #ffffff;
+  --color-border:      #e1e4e8;
+  --color-primary:     #0969da;
+  --color-primary-h:   #0550ae;
+  --color-text:        #24292f;
+  --color-text-muted:  #57606a;
+  --color-success:     #1a7f37;
+  --color-warning:     #9a6700;
+  --color-error:       #cf222e;
+  --color-bubble-own:  #dbeafe;
+  --radius:            8px;
+  --shadow-sm:         0 1px 3px rgba(0,0,0,.08);
+  --shadow-md:         0 4px 12px rgba(0,0,0,.10);
+  --font:              system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --transition:        150ms ease;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* ── Screen-reader only utility ──────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── App shell ───────────────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;          /* dynamic viewport height */
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -.3px;
+}
+
+/* ── Status indicator ────────────────────────────────────────────────── */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .78rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background var(--transition), color var(--transition);
+}
+
+.status__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* States */
+.status--connecting {
+  background: #fff8c5;
+  color: var(--color-warning);
+  border-color: #e3b341;
+}
+.status--connecting .status__dot {
+  background: var(--color-warning);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.status--connected {
+  background: #dafbe1;
+  color: var(--color-success);
+  border-color: #82cfaa;
+}
+.status--connected .status__dot {
+  background: var(--color-success);
+}
+
+.status--error {
+  background: #ffebe9;
+  color: var(--color-error);
+  border-color: #ff8182;
+}
+.status--error .status__dot {
+  background: var(--color-error);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .3; }
+}
+
+/* ── Feed ────────────────────────────────────────────────────────────── */
+.feed-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  scroll-behavior: smooth;
+}
+
+.message-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Individual message bubble ───────────────────────────────────────── */
+.message-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: slide-in var(--transition) both;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.message-item__bubble {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: .95rem;
+  word-break: break-word;
+  white-space: pre-wrap;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+
+.message-item__bubble:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.message-item__meta {
+  font-size: .72rem;
+  color: var(--color-text-muted);
+  padding-left: 4px;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: .9rem;
+  margin-top: 60px;
+}
+
+/* ── Compose bar ─────────────────────────────────────────────────────── */
+.compose-bar {
+  border-top: 1px solid var(--color-border);
+  padding: 12px 16px;
+  background: var(--color-surface);
+}
+
+.compose-form {
+  display: flex;
+  gap: 8px;
+}
+
+.compose-form__input {
+  flex: 1;
+  padding: 9px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: .95rem;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.compose-form__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(9,105,218,.15);
+  background: var(--color-surface);
+}
+
+.compose-form__btn {
+  padding: 9px 18px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  white-space: nowrap;
+}
+
+.compose-form__btn:hover {
+  background: var(--color-primary-h);
+}
+
+.compose-form__btn:active {
+  transform: scale(.97);
+}
+
+.compose-form__btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* ── Responsive tweaks ───────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .app-header h1 { font-size: 1rem; }
+  .compose-form__btn { padding: 9px 12px; font-size: .82rem; }
+}

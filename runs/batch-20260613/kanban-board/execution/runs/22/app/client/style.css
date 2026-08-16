@@ -1,0 +1,233 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: #0079bf;
+  min-height: 100vh;
+  color: #172b4d;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff;
+}
+
+header h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.status.connected {
+  background: #61bd4f;
+  color: #fff;
+}
+
+.status.disconnected {
+  background: #eb5a46;
+  color: #fff;
+}
+
+#board {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 56px);
+}
+
+.column {
+  background: #ebecf0;
+  border-radius: 8px;
+  min-width: 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 88px);
+}
+
+.column-header {
+  padding: 12px 12px 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #172b4d;
+}
+
+.card-list {
+  padding: 0 8px 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 8px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  transition: box-shadow 0.15s, transform 0.15s;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: rotate(3deg);
+  cursor: grabbing;
+}
+
+.card.drop-target-above::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+}
+
+.card.drop-target-below::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+}
+
+.card-list.drop-target-empty {
+  background: rgba(0, 121, 191, 0.1);
+  border: 2px dashed #0079bf;
+  border-radius: 6px;
+  min-height: 40px;
+}
+
+.card-delete {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+  padding: 2px 4px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.card:hover .card-delete {
+  opacity: 1;
+}
+
+.card-delete:hover {
+  background: #eb5a46;
+  color: #fff;
+}
+
+.add-card-form {
+  padding: 0 8px 8px;
+}
+
+.add-card-btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #5e6c84;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.add-card-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #172b4d;
+}
+
+.add-card-input-area {
+  display: none;
+}
+
+.add-card-input-area.active {
+  display: block;
+}
+
+.add-card-input-area textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #0079bf;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  min-height: 54px;
+}
+
+.add-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.add-card-submit {
+  padding: 6px 16px;
+  background: #0079bf;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.add-card-submit:hover {
+  background: #026aa7;
+}
+
+.add-card-cancel {
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #5e6c84;
+}
+
+.add-card-cancel:hover {
+  color: #172b4d;
+}
+
+.card-text {
+  padding-right: 18px;
+}

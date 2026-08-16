@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <script type="module">
+    // Apply persisted theme before first paint to avoid flash
+    (async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const { theme } = await res.json();
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {
+        // Default to light if server unavailable
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <h1 class="brand-title">Metrics Dashboard</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+          <span class="theme-icon theme-icon--light" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </span>
+          <span class="theme-icon theme-icon--dark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <div id="error-banner" class="error-banner" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="error-message">Unable to connect to the server. Please ensure the backend is running.</span>
+      </div>
+
+      <!-- Stat Cards -->
+      <section class="section" aria-label="Summary statistics">
+        <div class="stat-cards" id="stat-cards">
+          <div class="stat-card skeleton" aria-busy="true">
+            <div class="stat-card__label skeleton-line"></div>
+            <div class="stat-card__value skeleton-line skeleton-line--wide"></div>
+            <div class="stat-card__trend skeleton-line skeleton-line--narrow"></div>
+          </div>
+          <div class="stat-card skeleton" aria-busy="true">
+            <div class="stat-card__label skeleton-line"></div>
+            <div class="stat-card__value skeleton-line skeleton-line--wide"></div>
+            <div class="stat-card__trend skeleton-line skeleton-line--narrow"></div>
+          </div>
+          <div class="stat-card skeleton" aria-busy="true">
+            <div class="stat-card__label skeleton-line"></div>
+            <div class="stat-card__value skeleton-line skeleton-line--wide"></div>
+            <div class="stat-card__trend skeleton-line skeleton-line--narrow"></div>
+          </div>
+          <div class="stat-card skeleton" aria-busy="true">
+            <div class="stat-card__label skeleton-line"></div>
+            <div class="stat-card__value skeleton-line skeleton-line--wide"></div>
+            <div class="stat-card__trend skeleton-line skeleton-line--narrow"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Body: Chart + Categories -->
+      <section class="section" aria-label="Charts">
+        <div class="body-grid">
+          <!-- Time-series chart -->
+          <div class="panel chart-panel" aria-label="30-day revenue time series">
+            <div class="panel__header">
+              <h2 class="panel__title">Revenue Over Time</h2>
+              <div class="chart-legend">
+                <span class="legend-dot legend-dot--revenue"></span>
+                <span class="legend-label">Daily Revenue</span>
+              </div>
+            </div>
+            <div class="chart-container" id="chart-container">
+              <canvas id="timeseries-chart" role="img" aria-label="Line chart of daily revenue over 30 days"></canvas>
+            </div>
+          </div>
+
+          <!-- Category breakdown -->
+          <div class="panel categories-panel" aria-label="Category breakdown">
+            <div class="panel__header">
+              <h2 class="panel__title">Category Breakdown</h2>
+            </div>
+            <div class="categories-list" id="categories-list">
+              <div class="category-skeleton">
+                <div class="skeleton-line skeleton-line--label"></div>
+                <div class="skeleton-bar"></div>
+              </div>
+              <div class="category-skeleton">
+                <div class="skeleton-line skeleton-line--label"></div>
+                <div class="skeleton-bar"></div>
+              </div>
+              <div class="category-skeleton">
+                <div class="skeleton-line skeleton-line--label"></div>
+                <div class="skeleton-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Items Table -->
+      <section class="section" aria-label="Recent items">
+        <div class="panel table-panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Recent Items</h2>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="text-right">Value</th>
+                  <th scope="col" class="text-right">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <tr class="skeleton-row">
+                  <td colspan="4"><div class="skeleton-line"></div></td>
+                </tr>
+                <tr class="skeleton-row">
+                  <td colspan="4"><div class="skeleton-line"></div></td>
+                </tr>
+                <tr class="skeleton-row">
+                  <td colspan="4"><div class="skeleton-line"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Metrics Dashboard &mdash; Data refreshes on page reload</p>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

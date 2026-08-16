@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎫 Seat Booking</h1>
+      <div id="inventory" class="inventory"></div>
+    </header>
+
+    <main>
+      <div id="stage" class="stage">STAGE</div>
+      <div id="seat-map" class="seat-map"></div>
+    </main>
+
+    <aside id="panel" class="panel">
+      <div id="selection-info" class="selection-info">
+        <h3>Selected Seats</h3>
+        <p id="selected-list">None</p>
+      </div>
+      <div id="hold-info" class="hold-info" style="display:none">
+        <h3>Your Hold</h3>
+        <p>Hold ID: <span id="hold-id"></span></p>
+        <p>Seats: <span id="hold-seats"></span></p>
+        <p>Expires in: <span id="hold-timer"></span></p>
+        <button id="btn-confirm" class="btn btn-confirm">Confirm Booking</button>
+        <button id="btn-release" class="btn btn-release">Release Hold</button>
+      </div>
+      <div id="booking-info" class="booking-info" style="display:none">
+        <h3>✅ Booking Confirmed!</h3>
+        <p>Seats: <span id="booked-seats"></span></p>
+      </div>
+      <button id="btn-hold" class="btn btn-hold" disabled>Hold Selected Seats</button>
+      <div id="error-msg" class="error-msg" style="display:none"></div>
+    </aside>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

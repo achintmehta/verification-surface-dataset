@@ -1,0 +1,580 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-2: #22263a;
+  --color-border: #2e3250;
+  --color-text: #e8eaf6;
+  --color-text-muted: #8892b0;
+
+  --color-available: #1e3a5f;
+  --color-available-hover: #2563a8;
+  --color-available-border: #3b82f6;
+
+  --color-selected: #1a4731;
+  --color-selected-hover: #166534;
+  --color-selected-border: #22c55e;
+
+  --color-held-mine: #4a2c00;
+  --color-held-mine-border: #f59e0b;
+
+  --color-held-other: #3b1f1f;
+  --color-held-other-border: #ef4444;
+
+  --color-booked: #1f1f2e;
+  --color-booked-border: #6366f1;
+
+  --color-primary: #3b82f6;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+
+  --radius: 8px;
+  --radius-sm: 4px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ===== Layout ===== */
+#app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+#session-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+#session-info code {
+  background: var(--color-surface-2);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--color-primary);
+}
+
+/* ===== SSE Status Dot ===== */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-dot.connected {
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+.status-dot.disconnected {
+  background: var(--color-danger);
+}
+.status-dot.connecting {
+  background: var(--color-warning);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ===== Stage Label ===== */
+.stage-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 2rem;
+  width: fit-content;
+  margin: 0 auto 1.5rem;
+}
+
+/* ===== Seat Map ===== */
+#seat-map-container {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.seats-in-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* ===== Individual Seat ===== */
+.seat {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Available */
+.seat.available {
+  background: var(--color-available);
+  border-color: var(--color-available-border);
+  color: #93c5fd;
+}
+.seat.available:hover {
+  background: var(--color-available-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+}
+
+/* Selected (pre-hold) */
+.seat.selected {
+  background: var(--color-selected);
+  border-color: var(--color-selected-border);
+  color: #86efac;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34,197,94,0.4);
+}
+.seat.selected:hover {
+  background: var(--color-selected-hover);
+}
+
+/* Held by current session */
+.seat.held-mine {
+  background: var(--color-held-mine);
+  border-color: var(--color-held-mine-border);
+  color: #fcd34d;
+  cursor: default;
+}
+
+/* Held by another session */
+.seat.held-other {
+  background: var(--color-held-other);
+  border-color: var(--color-held-other-border);
+  color: #fca5a5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Booked */
+.seat.booked {
+  background: var(--color-booked);
+  border-color: var(--color-booked-border);
+  color: #a5b4fc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ===== Loading Overlay ===== */
+#loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,17,23,0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border-radius: var(--radius);
+  z-index: 10;
+}
+
+#loading-overlay.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Legend ===== */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.seat-demo {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 2px solid transparent;
+}
+
+.seat-demo.available {
+  background: var(--color-available);
+  border-color: var(--color-available-border);
+}
+.seat-demo.selected {
+  background: var(--color-selected);
+  border-color: var(--color-selected-border);
+}
+.seat-demo.held-mine {
+  background: var(--color-held-mine);
+  border-color: var(--color-held-mine-border);
+}
+.seat-demo.held-other {
+  background: var(--color-held-other);
+  border-color: var(--color-held-other-border);
+}
+.seat-demo.booked {
+  background: var(--color-booked);
+  border-color: var(--color-booked-border);
+}
+
+/* ===== Inventory ===== */
+#inventory {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.inv-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+  min-width: 80px;
+}
+
+.inv-count {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.inv-label {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===== Action Panel ===== */
+#action-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.phase {
+  display: none;
+}
+
+.phase.active {
+  display: block;
+}
+
+/* Phase: Select */
+#selection-hint {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+#selected-seats-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  min-height: 2rem;
+}
+
+.seat-tag {
+  background: var(--color-selected);
+  border: 1px solid var(--color-selected-border);
+  color: #86efac;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Phase: Hold */
+#hold-info {
+  margin-bottom: 1rem;
+}
+
+#hold-info p {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+#hold-info strong {
+  color: var(--color-text);
+}
+
+#hold-countdown {
+  color: var(--color-warning);
+  font-size: 1.1rem;
+}
+
+#hold-countdown.urgent {
+  color: var(--color-danger);
+  animation: pulse 0.5s infinite;
+}
+
+.hold-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Phase: Booked */
+.booking-success {
+  text-align: center;
+}
+
+.booking-success h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.booking-success p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.booking-success strong {
+  color: var(--color-text);
+}
+
+/* ===== Buttons ===== */
+button {
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+#btn-hold {
+  background: var(--color-primary);
+  color: white;
+  width: 100%;
+}
+
+.btn-primary {
+  background: var(--color-success);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: white;
+}
+
+#btn-new-booking {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ===== Notifications ===== */
+#notifications {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 100;
+  max-width: 360px;
+}
+
+.notification {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.notification.error {
+  border-color: var(--color-danger);
+  background: #1f0a0a;
+}
+
+.notification.success {
+  border-color: var(--color-success);
+  background: #0a1f0f;
+}
+
+.notification.warning {
+  border-color: var(--color-warning);
+  background: #1f1200;
+}
+
+.notification.info {
+  border-color: var(--color-primary);
+  background: #0a0f1f;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.notification-body {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.notification-msg {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(8px); }
+}
+
+.notification.removing {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .seat {
+    width: 30px;
+    height: 30px;
+    font-size: 0.6rem;
+  }
+
+  #inventory {
+    flex-wrap: wrap;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

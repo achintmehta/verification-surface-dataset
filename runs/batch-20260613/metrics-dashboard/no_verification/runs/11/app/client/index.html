@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1 class="header__title">Metrics Dashboard</h1>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+          <span class="theme-toggle__label">Theme</span>
+        </button>
+      </header>
+
+      <main id="main" class="main">
+        <div id="status" class="status" hidden></div>
+
+        <section id="stats" class="stats" aria-label="Summary statistics"></section>
+
+        <section class="grid-body">
+          <article class="card card--chart">
+            <h2 class="card__title">Visitors — Last 30 Days</h2>
+            <div id="chart-container" class="chart-container">
+              <canvas id="chart" class="chart-canvas"></canvas>
+            </div>
+          </article>
+
+          <article class="card card--breakdown">
+            <h2 class="card__title">Revenue by Category</h2>
+            <div id="breakdown" class="breakdown"></div>
+          </article>
+
+          <article class="card card--table">
+            <h2 class="card__title">Recent Items</h2>
+            <div id="recent" class="table-wrap"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

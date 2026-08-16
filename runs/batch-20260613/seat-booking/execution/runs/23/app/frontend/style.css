@@ -1,0 +1,304 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+#connection-status {
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.status-connected {
+  background: #2d6a4f;
+  color: #b7e4c7;
+}
+
+.status-disconnected {
+  background: #6a2d2d;
+  color: #e4b7b7;
+}
+
+#inventory-bar {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #16213e;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+#inventory-bar span {
+  padding: 4px 8px;
+}
+
+#seat-map-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.seat {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.seat:hover {
+  transform: scale(1.1);
+}
+
+.seat.available {
+  background: #2d6a4f;
+  color: #b7e4c7;
+}
+
+.seat.held {
+  background: #e76f51;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.seat.held-mine {
+  background: #f4a261;
+  color: #000;
+  cursor: default;
+}
+
+.seat.booked {
+  background: #6c757d;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background: #4361ee;
+  color: #fff;
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+#legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.legend-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.legend-swatch.available {
+  background: #2d6a4f;
+}
+
+.legend-swatch.held {
+  background: #e76f51;
+}
+
+.legend-swatch.held-mine {
+  background: #f4a261;
+}
+
+.legend-swatch.booked {
+  background: #6c757d;
+}
+
+.legend-swatch.selected {
+  background: #4361ee;
+}
+
+#actions-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #16213e;
+  border-radius: 8px;
+}
+
+#selection-info {
+  font-size: 0.9rem;
+  color: #adb5bd;
+}
+
+#hold-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#hold-timer {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f4a261;
+  min-width: 100px;
+  text-align: center;
+}
+
+.btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-hold {
+  background: #4361ee;
+  color: #fff;
+}
+
+.btn-hold:hover:not(:disabled) {
+  background: #3a56d4;
+}
+
+.btn-confirm {
+  background: #2d6a4f;
+  color: #fff;
+}
+
+.btn-confirm:hover {
+  background: #245c43;
+}
+
+.btn-release {
+  background: #e76f51;
+  color: #fff;
+}
+
+.btn-release:hover {
+  background: #d45d3f;
+}
+
+/* Toast notifications */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.toast {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #fff;
+  animation: slideIn 0.3s ease-out;
+  max-width: 320px;
+}
+
+.toast.success {
+  background: #2d6a4f;
+}
+
+.toast.error {
+  background: #c1121f;
+}
+
+.toast.info {
+  background: #16213e;
+  border: 1px solid #4361ee;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* SCREEN stage layout */
+.stage {
+  text-align: center;
+  padding: 8px;
+  margin-bottom: 12px;
+  background: linear-gradient(to bottom, #4361ee44, transparent);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #adb5bd;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}

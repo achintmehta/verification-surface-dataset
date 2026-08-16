@@ -1,0 +1,263 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+#app {
+  max-width: 700px;
+  width: 100%;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+#stage {
+  text-align: center;
+  background: #333;
+  color: #aaa;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+}
+
+/* Seat map */
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.seat {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.seat.available {
+  background: #2d6a4f;
+  color: #a7f3d0;
+  border-color: #40916c;
+}
+
+.seat.available:hover {
+  background: #40916c;
+  transform: scale(1.1);
+}
+
+.seat.held {
+  background: #9a8c98;
+  color: #fff;
+  border-color: #c9ada7;
+  cursor: not-allowed;
+}
+
+.seat.held-mine {
+  background: #e9c46a;
+  color: #264653;
+  border-color: #f4a261;
+  cursor: default;
+}
+
+.seat.selected {
+  background: #0077b6;
+  color: #fff;
+  border-color: #00b4d8;
+  transform: scale(1.1);
+}
+
+.seat.booked {
+  background: #e63946;
+  color: #fff;
+  border-color: #d62828;
+  cursor: not-allowed;
+}
+
+.seat.booked-mine {
+  background: #06d6a0;
+  color: #264653;
+  border-color: #05c793;
+  cursor: default;
+}
+
+/* Legend */
+#legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.seat-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.seat-icon.available { background: #2d6a4f; }
+.seat-icon.held { background: #9a8c98; }
+.seat-icon.held-mine { background: #e9c46a; }
+.seat-icon.selected { background: #0077b6; }
+.seat-icon.booked { background: #e63946; }
+
+/* Actions */
+#actions {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+#selection-info {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+#action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#btn-hold {
+  background: #0077b6;
+  color: #fff;
+}
+
+#btn-hold:hover:not(:disabled) {
+  background: #0096c7;
+}
+
+#btn-confirm {
+  background: #06d6a0;
+  color: #264653;
+}
+
+#btn-confirm:hover:not(:disabled) {
+  background: #05c793;
+}
+
+#btn-release {
+  background: #e63946;
+  color: #fff;
+}
+
+#btn-release:hover:not(:disabled) {
+  background: #d62828;
+}
+
+#hold-timer {
+  margin-top: 8px;
+  color: #f4a261;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Status bar */
+#status-bar {
+  text-align: center;
+  min-height: 24px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+#status-bar.error {
+  color: #e63946;
+}
+
+#status-bar.success {
+  color: #06d6a0;
+}
+
+#status-bar.info {
+  color: #00b4d8;
+}
+
+/* Inventory */
+#inventory {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 0.85rem;
+  color: #888;
+  border-top: 1px solid #333;
+  padding-top: 12px;
+}
+
+#inventory strong {
+  color: #e0e0e0;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Virtualized log explorer with windowed query API over 100k-row PGLite corpus",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "start": "npm run start --prefix backend",
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "build": "npm run build --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>🎭 Seat Booking</h1>
+        <div id="inventory" class="inventory"></div>
+      </header>
+
+      <div id="seat-map" class="seat-map"></div>
+
+      <div id="controls" class="controls">
+        <div id="selection-info" class="selection-info">
+          Select seats to hold them.
+        </div>
+        <div id="hold-info" class="hold-info" style="display: none">
+          <div id="hold-timer" class="hold-timer"></div>
+          <button id="btn-confirm" class="btn btn-confirm">
+            ✓ Confirm Booking
+          </button>
+          <button id="btn-release" class="btn btn-release">
+            ✕ Release Hold
+          </button>
+        </div>
+        <button id="btn-hold" class="btn btn-hold" disabled>
+          Hold Selected Seats
+        </button>
+      </div>
+
+      <div id="messages" class="messages"></div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="seat-box available"></span> Available</span>
+      <span class="legend-item"><span class="seat-box selected"></span> Selected</span>
+      <span class="legend-item"><span class="seat-box held"></span> Held</span>
+      <span class="legend-item"><span class="seat-box held-mine"></span> My Hold</span>
+      <span class="legend-item"><span class="seat-box booked"></span> Booked</span>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

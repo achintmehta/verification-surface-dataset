@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar - Scroll Test</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="calendar-header">
+      <div class="nav-controls">
+        <button id="btn-prev" title="Previous week">&laquo; Prev</button>
+        <button id="btn-today" title="Go to today">Today</button>
+        <button id="btn-next" title="Next week">Next &raquo;</button>
+      </div>
+      <h1 id="week-title"></h1>
+    </header>
+    <div id="calendar-container">
+      <div id="time-gutter"></div>
+      <div id="days-container"></div>
+    </div>
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="event-modal" class="modal">
+      <h2 id="modal-title">Create Event</h2>
+      <form id="event-form">
+        <div class="form-group">
+          <label for="event-title">Title</label>
+          <input type="text" id="event-title" required placeholder="Event title" />
+        </div>
+        <div class="form-group">
+          <label for="event-start">Start</label>
+          <input type="datetime-local" id="event-start" required />
+        </div>
+        <div class="form-group">
+          <label for="event-end">End</label>
+          <input type="datetime-local" id="event-end" required />
+        </div>
+        <div id="form-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="submit" id="btn-save">Save</button>
+          <button type="button" id="btn-delete" class="btn-danger hidden">Delete</button>
+          <button type="button" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import '/src/main.js';
+    // Scroll to bottom after a short delay
+    setTimeout(() => {
+      const container = document.getElementById('calendar-container');
+      container.scrollTop = container.scrollHeight;
+    }, 1500);
+  </script>
+</body>
+</html>

@@ -1,0 +1,366 @@
+:root {
+  --bg: #f4f6fb;
+  --panel: #ffffff;
+  --panel-border: #e3e8f0;
+  --text: #1a2233;
+  --text-muted: #5b6473;
+  --accent: #2f6df6;
+  --accent-soft: #e7efff;
+  --positive: #1b9e6b;
+  --negative: #d6453b;
+  --grid: #e6eaf2;
+  --axis: #9aa3b2;
+  --series: #2f6df6;
+  --series-fill: rgba(47, 109, 246, 0.12);
+  --bar: #2f6df6;
+  --bar-track: #eef1f7;
+  --table-stripe: #f7f9fc;
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 1px 2px rgba(20, 30, 60, 0.04);
+}
+
+[data-theme='dark'] {
+  --bg: #0e131f;
+  --panel: #18202f;
+  --panel-border: #2a3447;
+  --text: #e7ecf5;
+  --text-muted: #9aa6bd;
+  --accent: #5b8cff;
+  --accent-soft: #1d2a45;
+  --positive: #36c98e;
+  --negative: #f0685e;
+  --grid: #232d3f;
+  --axis: #6b768c;
+  --series: #5b8cff;
+  --series-fill: rgba(91, 140, 255, 0.16);
+  --bar: #5b8cff;
+  --bar-track: #232d3f;
+  --table-stripe: #141b29;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+  width: 100%;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.app-title {
+  font-size: clamp(1.25rem, 4vw, 1.6rem);
+  margin: 0;
+  font-weight: 700;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--series));
+  display: inline-block;
+}
+
+/* Grid layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Panels */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.panel-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+/* Stat cards */
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-value {
+  font-size: clamp(1.25rem, 5vw, 1.7rem);
+  font-weight: 700;
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.15;
+}
+
+.stat-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 6px 0 0;
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.trend.up {
+  color: var(--positive);
+}
+
+.trend.down {
+  color: var(--negative);
+}
+
+/* Chart */
+.chart-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-grid-line {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.chart-axis-line {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+
+.chart-axis-label {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+
+.chart-series-line {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 2;
+}
+
+.chart-series-area {
+  fill: var(--series-fill);
+  stroke: none;
+}
+
+/* Category bars */
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.bar-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.bar-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.bar-value {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.bar-track {
+  background: var(--bar-track);
+  border-radius: 6px;
+  height: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--bar);
+  border-radius: 6px;
+}
+
+/* Table */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--panel-border);
+  white-space: nowrap;
+}
+
+.data-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.data-table td.cat-cell {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+.data-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Error / empty states */
+.error-banner {
+  background: var(--negative);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+
+.panel-empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 12px 0;
+}
+
+/* Breakpoints */
+@media (min-width: 640px) {
+  #app {
+    padding: 24px;
+  }
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stat-cards {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+    grid-column: 1 / -1;
+  }
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+  .panel.chart-panel {
+    grid-column: 1 / 2;
+  }
+  .panel.category-panel {
+    grid-column: 2 / 3;
+  }
+  .panel.table-panel {
+    grid-column: 1 / -1;
+  }
+}

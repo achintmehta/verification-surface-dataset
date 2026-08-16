@@ -1,0 +1,402 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 60px;       /* pixels per hour — change here only */
+  --total-height: calc(var(--hour-height) * 24);
+  --time-gutter: 56px;       /* width of the left time axis */
+  --header-height: 52px;     /* day-header row height */
+  --nav-height: 52px;
+  --event-radius: 4px;
+  --event-padding: 3px 5px;
+  --color-today-bg: #fffbea;
+  --color-today-border: #f59e0b;
+  --color-event-bg: #3b82f6;
+  --color-event-text: #fff;
+  --color-hour-line: #e5e7eb;
+  --color-half-line: #f3f4f6;
+  --color-border: #d1d5db;
+  --color-header-bg: #f9fafb;
+  --color-nav-bg: #1e3a5f;
+  --color-nav-text: #fff;
+  --font: system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  font-size: 13px;
+  background: #fff;
+  color: #111;
+}
+
+/* ── Navigation bar ───────────────────────────────────────────────────────── */
+#nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--nav-height);
+  padding: 0 16px;
+  background: var(--color-nav-bg);
+  color: var(--color-nav-text);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#week-label {
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 12px;
+  flex: 1;
+}
+
+.nav-btn {
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-nav-text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.nav-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ── Calendar container ───────────────────────────────────────────────────── */
+#calendar-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--nav-height));
+  overflow: hidden;
+}
+
+/* ── Header row (sticky, full width) ─────────────────────────────────────── */
+#header-row {
+  display: flex;
+  flex-shrink: 0;
+  height: var(--header-height);
+  border-bottom: 2px solid var(--color-border);
+  background: var(--color-header-bg);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+#header-gutter {
+  width: var(--time-gutter);
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border);
+}
+
+/* ── Day headers ──────────────────────────────────────────────────────────── */
+#day-headers {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+}
+
+.day-header {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--color-border);
+  padding: 4px 0;
+  user-select: none;
+}
+.day-header:last-child {
+  border-right: none;
+}
+.day-header .day-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  letter-spacing: 0.05em;
+}
+.day-header .day-date {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.2;
+}
+.day-header.today {
+  background: var(--color-today-bg);
+}
+.day-header.today .day-date {
+  color: var(--color-today-border);
+}
+.day-header.today .day-name {
+  color: var(--color-today-border);
+}
+
+/* ── Grid scroll area ─────────────────────────────────────────────────────── */
+#grid-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Grid body ────────────────────────────────────────────────────────────── */
+#grid-body {
+  display: flex;
+  height: var(--total-height);
+  position: relative;
+}
+
+/* ── Time axis (inside scroll) ────────────────────────────────────────────── */
+#time-axis {
+  width: var(--time-gutter);
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid var(--color-border);
+  background: #fff;
+  z-index: 10;
+}
+
+.time-label {
+  position: absolute;
+  right: 6px;
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1;
+  white-space: nowrap;
+  /* vertically center on the hour line */
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+/* 00:00 label: don't shift up (would go above the grid) */
+.time-label.first {
+  transform: none;
+  top: 2px !important;
+}
+
+/* ── Day columns ──────────────────────────────────────────────────────────── */
+#day-columns {
+  flex: 1;
+  display: flex;
+  position: relative;
+  min-width: 0;
+}
+
+/* ── Hour lines ───────────────────────────────────────────────────────────── */
+#hour-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--color-hour-line);
+}
+.hour-line.half {
+  border-top: 1px dashed var(--color-half-line);
+}
+
+.day-col {
+  flex: 1;
+  position: relative;
+  border-right: 1px solid var(--color-border);
+  cursor: crosshair;
+  min-width: 0;
+  z-index: 2;
+}
+.day-col:last-child {
+  border-right: none;
+}
+.day-col.today {
+  background: var(--color-today-bg);
+}
+
+/* drag-selection highlight */
+.drag-selection {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Event blocks ─────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: var(--event-radius);
+  background: var(--color-event-bg);
+  color: var(--color-event-text);
+  padding: var(--event-padding);
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  transition: filter 0.1s;
+  /* prevent text selection during drag */
+  user-select: none;
+  /* ensure block doesn't overflow column */
+  min-height: 4px;
+}
+.event-block:hover {
+  filter: brightness(1.1);
+  z-index: 15;
+}
+
+.event-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.event-time {
+  font-size: 10px;
+  opacity: 0.88;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px 32px;
+  width: 360px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+
+#modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #111;
+}
+
+#event-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+  margin-top: 14px;
+}
+#event-form label:first-of-type {
+  margin-top: 0;
+}
+
+#event-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+#event-form input:focus {
+  border-color: var(--color-event-bg);
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+}
+
+.form-error {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 5px;
+  color: #b91c1c;
+  font-size: 12px;
+}
+.form-error.hidden {
+  display: none;
+}
+
+#form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  padding: 8px 18px;
+  background: var(--color-event-bg);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: #2563eb; }
+
+.btn-danger {
+  padding: 8px 18px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.btn-danger:hover { background: #dc2626; }
+.btn-danger.hidden { display: none; }
+
+.btn-secondary {
+  padding: 8px 18px;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+  margin-left: auto;
+}
+.btn-secondary:hover { background: #e5e7eb; }
+
+/* ── Scrollbar styling ────────────────────────────────────────────────────── */
+#grid-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+#grid-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+#grid-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}

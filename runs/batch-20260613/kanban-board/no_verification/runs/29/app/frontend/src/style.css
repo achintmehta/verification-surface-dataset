@@ -1,0 +1,126 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0;
+  color: #1a1a2e;
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+}
+
+.column {
+  background: white;
+  border-radius: 8px;
+  width: 300px;
+  min-height: 500px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  padding: 16px;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-title {
+  font-size: 1.1em;
+  color: #333;
+}
+
+.card-count {
+  background: #eee;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  color: #666;
+}
+
+.cards {
+  flex: 1;
+  padding: 8px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card.dragging {
+  opacity: 0.5;
+}
+
+.card p {
+  margin: 0;
+  color: #333;
+  line-height: 1.4;
+}
+
+.add-card {
+  margin: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  color: #666;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.add-card:hover {
+  background: #e9ecef;
+  border-color: #999;
+}
+
+.column.drag-over {
+  background: #f8f9fa;
+}
+
+#connection-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  background: #e0e0e0;
+}
+
+#connection-status.connected {
+  background: #d4edda;
+  color: #155724;
+}

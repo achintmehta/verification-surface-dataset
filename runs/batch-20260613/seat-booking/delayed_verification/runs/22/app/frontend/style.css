@@ -1,0 +1,266 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 1.5rem;
+}
+
+#connection-status {
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: #333;
+}
+
+#connection-status.connected {
+  color: #4caf50;
+}
+
+#connection-status.disconnected {
+  color: #f44336;
+}
+
+#inventory-bar {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 10px;
+  background: #16213e;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+#inventory-bar span {
+  font-weight: 600;
+}
+
+#inv-available { color: #4caf50; }
+#inv-held { color: #ff9800; }
+#inv-booked { color: #f44336; }
+#inv-total { color: #aaa; }
+
+#legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-color.available { background: #4caf50; }
+.legend-color.held { background: #ff9800; }
+.legend-color.my-held { background: #2196f3; }
+.legend-color.booked { background: #f44336; }
+.legend-color.selected { background: #9c27b0; }
+
+/* Seat Map */
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.seat {
+  width: 44px;
+  height: 36px;
+  border-radius: 6px 6px 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.seat:hover:not(.booked):not(.held) {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.seat.available {
+  background: #4caf50;
+  color: #fff;
+}
+
+.seat.held {
+  background: #ff9800;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.seat.my-held {
+  background: #2196f3;
+  color: #fff;
+  cursor: default;
+}
+
+.seat.booked {
+  background: #f44336;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background: #9c27b0;
+  color: #fff;
+  border-color: #e1bee7;
+  transform: scale(1.05);
+}
+
+.seat.conflict {
+  animation: shake 0.4s ease-in-out;
+  border-color: #ff0;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Stage */
+.stage {
+  width: 60%;
+  padding: 8px;
+  text-align: center;
+  background: #333;
+  border-radius: 4px 4px 40px 40px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: #888;
+  letter-spacing: 2px;
+}
+
+/* Actions */
+#actions {
+  text-align: center;
+}
+
+#selection-info {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+#action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#btn-hold {
+  background: #9c27b0;
+  color: #fff;
+}
+
+#btn-hold:hover:not(:disabled) {
+  background: #7b1fa2;
+}
+
+#btn-confirm {
+  background: #4caf50;
+  color: #fff;
+}
+
+#btn-confirm:hover:not(:disabled) {
+  background: #388e3c;
+}
+
+#btn-release {
+  background: #ff9800;
+  color: #fff;
+}
+
+#btn-release:hover:not(:disabled) {
+  background: #f57c00;
+}
+
+#hold-timer {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ff9800;
+  margin-top: 8px;
+}
+
+#error-message {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: rgba(244, 67, 54, 0.15);
+  border: 1px solid #f44336;
+  border-radius: 6px;
+  color: #f44336;
+  font-size: 0.9rem;
+}

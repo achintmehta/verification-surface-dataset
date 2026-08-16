@@ -1,0 +1,80 @@
+frozen dataset: 1116 runs (1050 run-via-declared-path)
+
+== 1. SURVIVAL %: runs via any declared path (analysis-grade boot rate) ==
+task                        no_verificat        static    boot_check     execution        visual  visual_no_sh  delayed_veri    behavioral
+calendar-week-view                   88%           88%          100%           96%          100%           97%             -             -
+kanban-board                         83%           80%          100%          100%          100%             -          100%             -
+kanban-labels-brownfield             87%           90%          100%          100%          100%             -             -             -
+log-explorer-perf                    80%           83%          100%          100%           97%           97%             -             -
+message-board                       100%          100%          100%          100%          100%             -             -             -
+metrics-dashboard                    75%           62%           96%           96%          100%          100%             -             -
+seat-booking                         93%           87%          100%          100%          100%             -          100%           83%
+  pooled: no_verification=86% (26/192 fail)  static=84% (30/192 fail)  boot_check=99% (1/192 fail)  execution=98% (2/192 fail)  visual=99% (1/174 fail)  visual_no_shell=97% (2/90 fail)  delayed_verification=100% (0/60 fail)  behavioral=83% (4/24 fail)
+
+== 2. FUNCTIONAL % (ITT, machine probes) ==
+task                        no_verificat        static    boot_check     execution        visual  visual_no_sh  delayed_veri    behavioral
+kanban-board                        85.7          75.7          93.8          96.3          95.4             -          97.8             -
+kanban-labels-brownfield            90.0          97.7         100.0         100.0         100.0             -             -             -
+message-board                       95.8          91.7          98.2         100.0         100.0             -             -             -
+seat-booking                        67.0          70.2          84.5          87.3          82.3             -          85.8          71.2
+  API tasks pooled: no_verification=81.9  static=78.3  boot_check=91.7  execution=94.2  visual=92.6  delayed_verification=91.8  behavioral=71.2
+
+== 3. HUMAN INTERFACE % (ITT, all graded cards incl. log-explorer) ==
+task                        no_verificat        static    boot_check     execution        visual  visual_no_sh  delayed_veri    behavioral
+calendar-week-view                  81.4          84.8          96.6          86.4          97.3          90.7             -             -
+kanban-board                        83.2          72.0          91.0          95.0          95.0             -          98.0             -
+kanban-labels-brownfield            81.0          84.3          97.0          95.0          92.9             -             -             -
+log-explorer-perf                   78.5          80.5          84.8          93.8          91.7          91.2             -             -
+message-board                       95.8          95.3          99.5          99.5          96.9             -             -             -
+metrics-dashboard                   64.3          60.4          82.5          92.0          94.9          97.7             -             -
+seat-booking                        73.0          80.0          81.0          95.0          91.7             -          98.0          74.6
+
+== 4. HUMAN INTERFACE % conditional on running (descriptive, not causal) ==
+task                        no_verificat        static    boot_check     execution        visual  visual_no_sh  delayed_veri    behavioral
+calendar-week-view                  93.0          96.9          96.6          90.2          97.3          93.8             -             -
+kanban-board                        99.8          90.0          91.0          95.0          95.0             -          98.0             -
+kanban-labels-brownfield            93.5          93.7          97.0          95.0          92.9             -             -             -
+log-explorer-perf                   98.1          96.6          84.8          93.8          94.8          94.3             -             -
+message-board                       95.8          95.3          99.5          99.5          96.9             -             -             -
+metrics-dashboard                   85.7          96.7          86.1          96.0          94.9          97.7             -             -
+seat-booking                        78.2          92.3          81.0          95.0          91.7             -          98.0          89.5
+
+== 5. BROWNFIELD CONTRAST (execution - no_verification) ==
+  brownfield regression half (functional)      exec=100.0  no_ver=90.0  gap=10.0
+  greenfield kanban (functional)               exec=96.3  no_ver=85.7  gap=10.6
+  brownfield labels half (human)               exec=95.0  no_ver=81.0  gap=14.0
+  greenfield kanban (human)                    exec=95.0  no_ver=83.2  gap=11.8
+
+== 6. COMPLIER SPLIT: visual vs execution, per model (visual specs) ==
+  -- calendar-week-view --
+    claude-4.6-opus        visual=99.1  execution=100.0  screenshots=36  gap=-0.9
+    claude-4.6-sonnet      visual=97.3  execution=74.1  screenshots=62  gap=23.2
+    claude-4.8-opus        visual=100.0  execution=100.0  screenshots=9  gap=0.0
+    gemini-3.1-pro         visual=96.4  execution=97.3  screenshots=34  gap=-0.9
+    gpt-5.5                visual=100.0  execution=99.1  screenshots=3  gap=0.9
+    grok-4.3               visual=91.1  execution=48.2  screenshots=1  gap=42.9
+  -- metrics-dashboard --
+    claude-4.6-opus        visual=100.0  execution=100.0  screenshots=48  gap=0.0
+    claude-4.6-sonnet      visual=97.1  execution=100.0  screenshots=51  gap=-2.9
+    claude-4.8-opus        visual=100.0  execution=99.0  screenshots=21  gap=1.0
+    gemini-3.1-pro         visual=80.8  execution=100.0  screenshots=11  gap=-19.2
+    gpt-5.5                visual=100.0  execution=97.1  screenshots=22  gap=2.9
+    grok-4.3               visual=91.3  execution=55.8  screenshots=0  NON-USER: H untestable
+
+== 7. DECLARED-LAUNCH INTEGRITY: defect rates ==
+  wiring defect:
+    by condition: no_verification=1%  static=3%  boot_check=6%  execution=5%  visual=3%  visual_no_shell=4%  delayed_verification=1%  behavioral=4%
+    by model:     claude-4.6-opus=9%  claude-4.6-sonnet=3%  claude-4.8-opus=7%  gemini-3.1-pro=1%  gpt-5.5=3%  grok-4.3=0%
+  datadir bug class:
+    by condition: no_verification=21%  static=26%  boot_check=5%  execution=11%  visual=12%  visual_no_shell=11%  delayed_verification=13%  behavioral=12%
+    by model:     claude-4.6-opus=7%  claude-4.6-sonnet=41%  claude-4.8-opus=24%  gemini-3.1-pro=3%  gpt-5.5=12%  grok-4.3=0%
+
+== 8. TOKENS by condition (median; from manifests) ==
+  no_verification        n= 192  median=261,602
+  static                 n= 192  median=275,906
+  boot_check             n= 192  median=213,878
+  execution              n= 192  median=615,296
+  visual                 n= 174  median=673,978
+  visual_no_shell        n=  90  median=659,303
+  delayed_verification   n=  60  median=1,198,829
+  behavioral             n=  24  median=375,389

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="app-title">
+          <span class="title-icon">📋</span>
+          Log Explorer
+        </h1>
+        <span class="corpus-info" id="corpus-info">Loading...</span>
+      </div>
+      <div class="header-right">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="severity-select" class="filter-label">Severity</label>
+            <select id="severity-select" class="filter-select">
+              <option value="">All</option>
+              <option value="error">Error</option>
+              <option value="warn">Warn</option>
+              <option value="info">Info</option>
+              <option value="debug">Debug</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="search-input" class="filter-label">Search</label>
+            <div class="search-wrapper">
+              <input
+                type="text"
+                id="search-input"
+                class="filter-input"
+                placeholder="Filter messages..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button id="clear-search" class="clear-btn" title="Clear search" hidden>✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-badge stat-all" id="badge-all">
+        <span class="badge-label">All</span>
+        <span class="badge-count" id="count-all">—</span>
+      </div>
+      <div class="stat-badge stat-error" id="badge-error">
+        <span class="badge-label">Error</span>
+        <span class="badge-count" id="count-error">—</span>
+      </div>
+      <div class="stat-badge stat-warn" id="badge-warn">
+        <span class="badge-label">Warn</span>
+        <span class="badge-count" id="count-warn">—</span>
+      </div>
+      <div class="stat-badge stat-info" id="badge-info">
+        <span class="badge-label">Info</span>
+        <span class="badge-count" id="count-info">—</span>
+      </div>
+      <div class="stat-badge stat-debug" id="badge-debug">
+        <span class="badge-label">Debug</span>
+        <span class="badge-count" id="count-debug">—</span>
+      </div>
+      <div class="result-count" id="result-count">
+        <span id="result-text">Loading...</span>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col-ts">Timestamp</div>
+        <div class="col-severity">Severity</div>
+        <div class="col-service">Service</div>
+        <div class="col-message">Message</div>
+      </div>
+      <div class="virtual-scroll-container" id="scroll-container">
+        <div class="virtual-scroll-spacer" id="scroll-spacer"></div>
+        <div class="virtual-rows" id="virtual-rows"></div>
+      </div>
+      <div class="loading-overlay" id="loading-overlay" hidden>
+        <div class="spinner"></div>
+        <span>Loading...</span>
+      </div>
+      <div class="empty-state" id="empty-state" hidden>
+        <div class="empty-icon">🔍</div>
+        <div class="empty-title">No logs found</div>
+        <div class="empty-subtitle">Try adjusting your filters</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

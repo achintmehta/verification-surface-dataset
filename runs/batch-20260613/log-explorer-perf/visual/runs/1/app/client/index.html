@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <h1 class="logo">📋 Log Explorer</h1>
+        <div class="filter-group">
+          <label for="severity-select">Severity</label>
+          <select id="severity-select">
+            <option value="">All</option>
+            <option value="debug">Debug</option>
+            <option value="info">Info</option>
+            <option value="warn">Warn</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="search-input">Search</label>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Filter by message..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <span id="row-count" class="row-count">Loading...</span>
+        <div id="stats-badges" class="stats-badges"></div>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col-ts">Timestamp</div>
+        <div class="col-severity">Severity</div>
+        <div class="col-service">Service</div>
+        <div class="col-message">Message</div>
+      </div>
+      <div id="scroll-container" class="scroll-container">
+        <div id="scroll-spacer" class="scroll-spacer"></div>
+        <!-- Log row pool elements are injected here by VirtualScroller -->
+      </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="loading-spinner"></div>
+      <p>Loading logs...</p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

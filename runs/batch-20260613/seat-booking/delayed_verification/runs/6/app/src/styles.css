@@ -1,0 +1,167 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #eef2f7;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-height: 100vh; }
+
+button { font: inherit; }
+
+#app {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.hero, .toolbar, .content, .panel, .notice {
+  border: 1px solid rgba(38, 55, 77, 0.12);
+  box-shadow: 0 20px 45px rgba(31, 45, 61, 0.08);
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: linear-gradient(135deg, #172033, #294266);
+  color: white;
+  border-radius: 24px;
+  padding: 28px;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+h1 { font-size: clamp(2rem, 4vw, 3.4rem); margin-bottom: 6px; }
+h2 { margin-bottom: 12px; }
+h3 { margin-bottom: 8px; }
+
+.eyebrow {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9ed1ff;
+  font-weight: 800;
+  margin-bottom: 8px;
+  font-size: 0.78rem;
+}
+
+.subtle { color: #667085; }
+.hero .subtle { color: #d7e5f6; margin-bottom: 0; }
+
+.session-card {
+  min-width: 170px;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.session-card span { display: block; color: #c9d8ea; font-size: 0.85rem; }
+.session-card code { font-size: 1.2rem; color: #fff; }
+
+.toolbar {
+  margin: 20px 0;
+  background: white;
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend-box { width: 16px; height: 16px; border-radius: 5px; display: inline-block; }
+.legend-box.available { background: #ffffff; border: 2px solid #3c82f6; }
+.legend-box.selected { background: #3c82f6; }
+.legend-box.held { background: #f6b73c; }
+.legend-box.booked { background: #394150; }
+.inventory { color: #344054; font-weight: 700; }
+
+.notice {
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  background: #e8f4ff;
+}
+.notice.success { background: #e9f9ee; color: #146c2e; }
+.notice.error { background: #ffecec; color: #9a1b1b; }
+.notice.warn { background: #fff7dd; color: #7a5600; }
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.seat-grid {
+  overflow-x: auto;
+  display: grid;
+  grid-template-columns: 42px repeat(10, minmax(48px, 1fr));
+  gap: 10px;
+  align-content: start;
+  padding: 16px;
+  background: white;
+  border-radius: 18px;
+}
+
+.row-label {
+  height: 46px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: #526070;
+}
+
+.seat {
+  height: 46px;
+  border-radius: 12px 12px 18px 18px;
+  border: 2px solid #3c82f6;
+  background: #fff;
+  color: #1554bd;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.seat.available:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(60, 130, 246, 0.18); }
+.seat.selected { background: #3c82f6; color: white; }
+.seat.held { background: #f6b73c; border-color: #f6b73c; color: #4a3300; cursor: not-allowed; }
+.seat.booked { background: #394150; border-color: #394150; color: white; cursor: not-allowed; }
+
+.panel {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  align-self: start;
+}
+
+button.primary, button.success, button.secondary {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 900;
+  cursor: pointer;
+  margin-top: 10px;
+}
+button.primary { background: #2563eb; color: white; }
+button.success { background: #15803d; color: white; }
+button.secondary { background: #e4e7ec; color: #344054; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.hold-panel {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #e4e7ec;
+}
+.countdown strong { font-size: 1.3rem; color: #b45309; }
+
+@media (max-width: 860px) {
+  .hero, .toolbar { display: block; }
+  .session-card { margin-top: 18px; }
+  .content { grid-template-columns: 1fr; }
+}

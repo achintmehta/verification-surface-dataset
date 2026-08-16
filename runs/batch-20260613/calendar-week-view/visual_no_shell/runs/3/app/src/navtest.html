@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nav Test</title>
+  <style>
+    body { margin: 0; font-family: monospace; }
+    iframe { width: 100%; height: 95vh; border: none; display: block; }
+    #controls { padding: 8px; background: #1e293b; color: #fff; display: flex; gap: 8px; }
+    button { padding: 6px 14px; cursor: pointer; border-radius: 4px; border: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button onclick="clickBtn('btn-prev')">← Prev Week</button>
+    <button onclick="clickBtn('btn-today')">Today</button>
+    <button onclick="clickBtn('btn-next')">Next Week →</button>
+    <span id="info" style="margin-left:auto;line-height:2">Click buttons to navigate</span>
+  </div>
+  <iframe id="cal" src="/?scroll=7"></iframe>
+  <script>
+    function clickBtn(id) {
+      try {
+        const btn = document.getElementById('cal').contentDocument.getElementById(id);
+        if (btn) btn.click();
+        setTimeout(() => {
+          const label = document.getElementById('cal').contentDocument.getElementById('week-label');
+          document.getElementById('info').textContent = label ? label.textContent : '?';
+        }, 500);
+      } catch(e) { console.error(e); }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 60px;
+  --gutter-width: 60px;
+  --header-height: 50px;
+  --day-columns: 7;
+  --axis-height: calc(24 * var(--hour-height));
+  --border-color: #ddd;
+  --today-bg: #e8f0fe;
+  --event-bg: #4285f4;
+  --event-text: #fff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  background: #fafafa;
+}
+
+#app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+/* Header */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-controls button {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.nav-controls button:hover {
+  background: #f0f0f0;
+}
+
+.calendar-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Calendar Container */
+.calendar-container {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  position: relative;
+}
+
+/* Time gutter */
+.time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  position: relative;
+  /* Header row height */
+  padding-top: var(--header-height);
+}
+
+.time-gutter .time-label {
+  position: absolute;
+  right: 4px;
+  font-size: 11px;
+  color: #888;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+/* Week grid */
+.week-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  min-width: 0;
+}
+
+/* Day column */
+.day-column {
+  border-right: 1px solid var(--border-color);
+  position: relative;
+  min-width: 0;
+}
+
+.day-column:last-child {
+  border-right: none;
+}
+
+.day-column.today {
+  background: var(--today-bg);
+}
+
+.day-header {
+  height: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 12px;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 2;
+}
+
+.day-header .day-name {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #666;
+}
+
+.day-header .day-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.day-header.today .day-number {
+  background: var(--event-bg);
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-body {
+  position: relative;
+  height: var(--axis-height);
+}
+
+/* Hour lines */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border-color);
+  height: 0;
+}
+
+/* Clickable area for creating events */
+.day-body-clickarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  cursor: pointer;
+}
+
+/* Event block */
+.event-block {
+  position: absolute;
+  background: var(--event-bg);
+  color: var(--event-text);
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 11px;
+  line-height: 1.3;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1;
+  border-left: 3px solid #1a73e8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.event-block:hover {
+  filter: brightness(0.92);
+}
+
+.event-block .event-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-block .event-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+/* Drag selection */
+.drag-selection {
+  position: absolute;
+  background: rgba(66, 133, 244, 0.2);
+  border: 1px dashed var(--event-bg);
+  border-radius: 4px;
+  z-index: 3;
+  pointer-events: none;
+  left: 0;
+  right: 0;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#btn-save {
+  background: var(--event-bg);
+  color: #fff;
+  border-color: var(--event-bg);
+}
+
+#btn-save:hover {
+  background: #1a73e8;
+}
+
+#btn-delete {
+  background: #d32f2f;
+  color: #fff;
+  border-color: #d32f2f;
+}
+
+#btn-delete:hover {
+  background: #b71c1c;
+}
+
+#btn-cancel {
+  background: #fff;
+}
+
+#btn-cancel:hover {
+  background: #f0f0f0;
+}

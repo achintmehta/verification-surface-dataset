@@ -1,0 +1,268 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-border:       #2e3148;
+  --color-text:         #e2e8f0;
+  --color-muted:        #8892a4;
+
+  --color-available:    #22c55e;
+  --color-available-bg: #14532d;
+  --color-held-other:   #f59e0b;
+  --color-held-other-bg:#451a03;
+  --color-held-mine:    #38bdf8;
+  --color-held-mine-bg: #0c4a6e;
+  --color-booked:       #ef4444;
+  --color-booked-bg:    #450a0a;
+  --color-selected:     #a78bfa;
+  --color-selected-bg:  #2e1065;
+
+  --color-btn-primary:  #6366f1;
+  --color-btn-success:  #22c55e;
+  --color-btn-danger:   #ef4444;
+
+  --radius:             8px;
+  --seat-size:          42px;
+  --seat-gap:           6px;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 48px;
+}
+
+#app {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+header { text-align: center; }
+header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+.subtitle { color: var(--color-muted); margin-top: 4px; }
+
+/* ── Notification bar ────────────────────────────────────────────────────── */
+.notification {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.notification.hidden { display: none; }
+.notification.info    { background: #1e3a5f; border: 1px solid #3b82f6; color: #93c5fd; }
+.notification.success { background: #14532d; border: 1px solid #22c55e; color: #86efac; }
+.notification.error   { background: #450a0a; border: 1px solid #ef4444; color: #fca5a5; }
+.notification.warning { background: #451a03; border: 1px solid #f59e0b; color: #fcd34d; }
+
+/* ── Legend ──────────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: var(--color-muted);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.dot {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.dot.available    { background: var(--color-available); }
+.dot.held-other   { background: var(--color-held-other); }
+.dot.held-mine    { background: var(--color-held-mine); }
+.dot.booked       { background: var(--color-booked); }
+.dot.selected     { background: var(--color-selected); }
+
+/* ── Stage label ─────────────────────────────────────────────────────────── */
+.stage-label {
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: var(--color-muted);
+  padding: 6px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* ── Seat map ────────────────────────────────────────────────────────────── */
+.seat-map {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--seat-gap);
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--seat-gap);
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: 6px 6px 3px 3px;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:hover:not(.booked):not(.held-other) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Status colours */
+.seat.available {
+  background: var(--color-available-bg);
+  border-color: var(--color-available);
+  color: var(--color-available);
+}
+.seat.held-other {
+  background: var(--color-held-other-bg);
+  border-color: var(--color-held-other);
+  color: var(--color-held-other);
+  cursor: not-allowed;
+}
+.seat.held-mine {
+  background: var(--color-held-mine-bg);
+  border-color: var(--color-held-mine);
+  color: var(--color-held-mine);
+  cursor: default;
+}
+.seat.booked {
+  background: var(--color-booked-bg);
+  border-color: var(--color-booked);
+  color: var(--color-booked);
+  cursor: not-allowed;
+}
+.seat.selected {
+  background: var(--color-selected-bg);
+  border-color: var(--color-selected);
+  color: var(--color-selected);
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
+}
+
+/* Conflict flash animation */
+@keyframes conflict-flash {
+  0%   { background: #7f1d1d; border-color: #ef4444; }
+  50%  { background: #450a0a; border-color: #ef4444; }
+  100% { background: var(--color-booked-bg); border-color: var(--color-booked); }
+}
+.seat.conflict {
+  animation: conflict-flash 0.6s ease 3;
+}
+
+.loading {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 40px;
+}
+
+/* ── Action panel ────────────────────────────────────────────────────────── */
+.action-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.panel-section { display: flex; flex-direction: column; gap: 12px; }
+.panel-section.hidden { display: none; }
+
+.selection-info { color: var(--color-muted); font-size: 0.9rem; }
+
+.hold-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+.countdown {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-held-mine);
+  font-variant-numeric: tabular-nums;
+}
+.countdown.urgent { color: var(--color-btn-danger); }
+
+.hold-seats-info, .booked-seats-info {
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+.hold-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.booked-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.booked-icon { font-size: 2rem; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-primary { background: var(--color-btn-primary); color: #fff; }
+.btn-success { background: var(--color-btn-success); color: #fff; }
+.btn-danger  { background: var(--color-btn-danger);  color: #fff; }
+
+/* ── Inventory bar ───────────────────────────────────────────────────────── */
+.inventory {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  padding: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+.inventory strong { color: var(--color-text); }

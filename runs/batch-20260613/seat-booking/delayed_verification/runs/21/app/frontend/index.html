@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="inventory" class="inventory"></div>
+    </header>
+
+    <div id="notifications" class="notifications"></div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-color available"></span> Available</span>
+      <span class="legend-item"><span class="legend-color held"></span> Held</span>
+      <span class="legend-item"><span class="legend-color held-mine"></span> My Hold</span>
+      <span class="legend-item"><span class="legend-color booked"></span> Booked</span>
+      <span class="legend-item"><span class="legend-color selected"></span> Selected</span>
+    </div>
+
+    <div id="stage" class="stage">STAGE</div>
+
+    <div id="seat-map" class="seat-map"></div>
+
+    <div id="actions" class="actions">
+      <div id="selection-info" class="selection-info"></div>
+      <div id="hold-info" class="hold-info"></div>
+      <div class="action-buttons">
+        <button id="btn-hold" disabled>Hold Selected Seats</button>
+        <button id="btn-confirm" disabled>Confirm Booking</button>
+        <button id="btn-release" disabled>Release Hold</button>
+        <button id="btn-clear" disabled>Clear Selection</button>
+      </div>
+      <div id="countdown" class="countdown"></div>
+    </div>
+
+    <div id="connection-status" class="connection-status">
+      <span id="sse-status" class="sse-indicator disconnected"></span>
+      <span id="sse-text">Disconnected</span>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

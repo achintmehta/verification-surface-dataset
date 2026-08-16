@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Seat Booking</h1>
+      <div class="legend">
+        <span class="legend-item"><span class="swatch available"></span>Available</span>
+        <span class="legend-item"><span class="swatch selected"></span>Selected</span>
+        <span class="legend-item"><span class="swatch held"></span>Held</span>
+        <span class="legend-item"><span class="swatch booked"></span>Booked</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="screen">SCREEN</section>
+
+      <section id="seat-map" class="seat-map" aria-label="Seat map"></section>
+
+      <aside class="panel">
+        <div id="inventory" class="inventory"></div>
+
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" disabled>Confirm booking</button>
+          <button id="release-btn" disabled>Release hold</button>
+        </div>
+
+        <div id="hold-status" class="hold-status"></div>
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <div class="conn">
+          <span id="conn-dot" class="conn-dot"></span>
+          <span id="conn-text">connecting…</span>
+        </div>
+        <div class="session">session: <code id="session-id"></code></div>
+      </aside>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

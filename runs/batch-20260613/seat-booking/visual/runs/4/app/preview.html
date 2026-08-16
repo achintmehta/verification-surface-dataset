@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking — Preview</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #0f1117;
+      --color-surface: #1a1d27;
+      --color-surface-2: #22263a;
+      --color-border: #2e3350;
+      --color-text: #e8eaf6;
+      --color-text-muted: #7986cb;
+
+      --color-available: #1e3a5f;
+      --color-available-hover: #1565c0;
+      --color-available-border: #1976d2;
+
+      --color-selected: #f57f17;
+      --color-selected-hover: #ff8f00;
+      --color-selected-border: #ffa000;
+
+      --color-held: #4a148c;
+      --color-held-border: #7b1fa2;
+
+      --color-held-mine: #e65100;
+      --color-held-mine-border: #ff6d00;
+
+      --color-booked: #1b5e20;
+      --color-booked-border: #2e7d32;
+
+      --color-booked-mine: #00695c;
+      --color-booked-mine-border: #00897b;
+
+      --color-btn-primary: #1565c0;
+      --color-btn-success: #2e7d32;
+      --color-btn-danger: #c62828;
+      --color-btn-secondary: #37474f;
+
+      --radius: 8px;
+      --radius-sm: 4px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────────────── */
+    header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+
+    .session-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .session-id {
+      font-family: monospace;
+      font-size: 0.75rem;
+      background: var(--color-surface-2);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+
+    .connection-status { font-size: 1rem; }
+    .connection-status.connected { color: #4caf50; }
+    .connection-status.disconnected { color: #f44336; }
+
+    /* ── Main ────────────────────────────────────────────────────────────────── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    /* ── Stage ───────────────────────────────────────────────────────────────── */
+    .stage {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      border: 2px solid #3949ab;
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(57, 73, 171, 0.3);
+    }
+
+    .stage-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: #9fa8da;
+    }
+
+    /* ── Legend ──────────────────────────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      margin-bottom: 24px;
+      padding: 12px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .seat-demo {
+      width: 20px; height: 20px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+    }
+    .seat-demo.available  { background: var(--color-available);  border-color: var(--color-available-border); }
+    .seat-demo.selected   { background: var(--color-selected);   border-color: var(--color-selected-border); }
+    .seat-demo.held-mine  { background: var(--color-held-mine);  border-color: var(--color-held-mine-border); }
+    .seat-demo.held       { background: var(--color-held);       border-color: var(--color-held-border); }
+    .seat-demo.booked-mine{ background: var(--color-booked-mine);border-color: var(--color-booked-mine-border); }
+    .seat-demo.booked     { background: var(--color-booked);     border-color: var(--color-booked-border); }
+
+    /* ── Seat Map ────────────────────────────────────────────────────────────── */
+    .seat-map {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .seat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .row-label {
+      width: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+    }
+
+    .seats-container { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .seat {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .seat:hover:not(.seat--disabled) { transform: scale(1.1); z-index: 1; }
+
+    .seat--available   { background: var(--color-available);  border-color: var(--color-available-border);  color: #90caf9; }
+    .seat--available:hover { background: var(--color-available-hover); }
+    .seat--selected    { background: var(--color-selected);   border-color: var(--color-selected-border);   color: #fff; }
+    .seat--held-mine   { background: var(--color-held-mine);  border-color: var(--color-held-mine-border);  color: #ffe0b2; cursor: default; animation: pulse-mine 2s infinite; }
+    .seat--held        { background: var(--color-held);       border-color: var(--color-held-border);       color: #ce93d8; cursor: not-allowed; }
+    .seat--booked-mine { background: var(--color-booked-mine);border-color: var(--color-booked-mine-border);color: #b2dfdb; cursor: default; }
+    .seat--booked      { background: var(--color-booked);     border-color: var(--color-booked-border);     color: #a5d6a7; cursor: not-allowed; }
+    .seat--disabled    { opacity: 0.7; }
+
+    @keyframes pulse-mine {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 109, 0, 0.4); }
+      50%       { box-shadow: 0 0 0 6px rgba(255, 109, 0, 0); }
+    }
+
+    /* ── Inventory ───────────────────────────────────────────────────────────── */
+    .inventory { display: flex; gap: 12px; margin-bottom: 20px; }
+
+    .inv-item {
+      flex: 1;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 12px;
+      text-align: center;
+    }
+
+    .inv-count { display: block; font-size: 1.8rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .inv-label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ── Action Panel ────────────────────────────────────────────────────────── */
+    .action-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      min-height: 100px;
+    }
+
+    .panel-section { display: none; }
+    .panel-section.active { display: block; }
+
+    #panel-select {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    #panel-select.active { display: flex; }
+
+    .panel-info { font-size: 1rem; color: var(--color-text-muted); }
+    .panel-info span { font-weight: 700; color: var(--color-text); font-size: 1.2rem; }
+
+    .hold-info { margin-bottom: 16px; }
+    .hold-seats { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 8px; }
+    .hold-seats span { color: var(--color-text); font-weight: 600; }
+    .hold-timer { font-size: 0.9rem; color: var(--color-text-muted); }
+
+    .countdown { font-size: 1.4rem; font-weight: 700; font-family: monospace; color: #ff9800; }
+    .countdown.urgent { color: #f44336; animation: blink 0.5s step-end infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .hold-actions { display: flex; gap: 12px; }
+
+    .booked-info { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .booked-icon { font-size: 2.5rem; }
+    .booked-text { font-size: 1rem; line-height: 1.6; }
+
+    .error-message {
+      background: rgba(198, 40, 40, 0.15);
+      border: 1px solid #c62828;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      color: #ef9a9a;
+      line-height: 1.5;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────────── */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn:not(:disabled):hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn:not(:disabled):active { transform: translateY(0); }
+    .btn-primary   { background: var(--color-btn-primary);   color: #fff; }
+    .btn-success   { background: var(--color-btn-success);   color: #fff; }
+    .btn-danger    { background: var(--color-btn-danger);    color: #fff; }
+    .btn-secondary { background: var(--color-btn-secondary); color: #fff; }
+
+    /* ── Toast ───────────────────────────────────────────────────────────────── */
+    #toast-container {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      display: flex; flex-direction: column; gap: 8px;
+      z-index: 1000;
+    }
+    .toast {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      max-width: 320px;
+      box-shadow: var(--shadow);
+      animation: slide-in 0.2s ease;
+    }
+    .toast.toast-error   { border-color: #c62828; background: rgba(198,40,40,0.2); }
+    .toast.toast-success { border-color: #2e7d32; background: rgba(46,125,50,0.2); }
+    .toast.toast-info    { border-color: #1565c0; background: rgba(21,101,192,0.2); }
+    @keyframes slide-in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ── Responsive ──────────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .seat { width: 32px; height: 32px; font-size: 0.6rem; }
+      .inventory { flex-wrap: wrap; }
+      .inv-item { min-width: calc(50% - 6px); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-inner">
+        <h1>🎭 Seat Booking</h1>
+        <div class="session-info">
+          <span class="label">Session:</span>
+          <span id="session-id-display" class="session-id">a1b2c3d4…</span>
+          <span id="connection-status" class="connection-status connected" title="Connected">●</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="stage">
+        <div class="stage-label">STAGE</div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="seat-demo available"></div><span>Available</span></div>
+        <div class="legend-item"><div class="seat-demo selected"></div><span>Selected</span></div>
+        <div class="legend-item"><div class="seat-demo held-mine"></div><span>Your Hold</span></div>
+        <div class="legend-item"><div class="seat-demo held"></div><span>Held by Other</span></div>
+        <div class="legend-item"><div class="seat-demo booked-mine"></div><span>Your Booking</span></div>
+        <div class="legend-item"><div class="seat-demo booked"></div><span>Booked</span></div>
+      </div>
+
+      <div id="seat-map" class="seat-map"></div>
+
+      <div class="inventory">
+        <div class="inv-item"><span class="inv-count" id="inv-available">–</span><span class="inv-label">Available</span></div>
+        <div class="inv-item"><span class="inv-count" id="inv-held">–</span><span class="inv-label">Held</span></div>
+        <div class="inv-item"><span class="inv-count" id="inv-booked">–</span><span class="inv-label">Booked</span></div>
+        <div class="inv-item"><span class="inv-count" id="inv-total">–</span><span class="inv-label">Total</span></div>
+      </div>
+
+      <div id="action-panel" class="action-panel">
+        <div id="panel-select" class="panel-section active">
+          <div class="panel-info"><span id="selected-count">0</span> seat(s) selected</div>
+          <button id="btn-hold" class="btn btn-primary" disabled>Hold Selected Seats</button>
+        </div>
+        <div id="panel-hold" class="panel-section">
+          <div class="hold-info">
+            <div class="hold-seats">Holding: <span id="hold-seat-list"></span></div>
+            <div class="hold-timer">Expires in: <span id="hold-countdown" class="countdown">–</span></div>
+          </div>
+          <div class="hold-actions">
+            <button id="btn-confirm" class="btn btn-success">✓ Confirm Booking</button>
+            <button id="btn-release" class="btn btn-danger">✗ Release Hold</button>
+          </div>
+        </div>
+        <div id="panel-booked" class="panel-section">
+          <div class="booked-info">
+            <div class="booked-icon">🎉</div>
+            <div class="booked-text">Booking confirmed!<br/>Seats: <strong id="booked-seat-list"></strong></div>
+          </div>
+          <button id="btn-new-booking" class="btn btn-primary">Make Another Booking</button>
+        </div>
+        <div id="panel-error" class="panel-section">
+          <div class="error-message" id="error-message"></div>
+          <button id="btn-error-dismiss" class="btn btn-secondary">Dismiss</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    // ── Config ────────────────────────────────────────────────────────────────
+    const API_BASE = 'http://localhost:3001/api';
+
+    // ── Session ───────────────────────────────────────────────────────────────
+    function getSessionId() {
+      let id = sessionStorage.getItem('seat_booking_session');
+      if (!id) { id = crypto.randomUUID(); sessionStorage.setItem('seat_booking_session', id); }
+      return id;
+    }
+    const SESSION_ID = getSessionId();
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    const state = {
+      seats: {},
+      selectedIds: new Set(),
+      currentHold: null,
+      currentBooking: null,
+      countdownTimer: null,
+      panel: 'select',
+    };
+
+    // ── DOM ───────────────────────────────────────────────────────────────────
+    const $ = id => document.getElementById(id);
+    const els = {
+      sessionDisplay: $('session-id-display'),
+      connectionStatus: $('connection-status'),
+      seatMap: $('seat-map'),
+      invAvailable: $('inv-available'),
+      invHeld: $('inv-held'),
+      invBooked: $('inv-booked'),
+      invTotal: $('inv-total'),
+      panelSelect: $('panel-select'),
+      panelHold: $('panel-hold'),
+      panelBooked: $('panel-booked'),
+      panelError: $('panel-error'),
+      selectedCount: $('selected-count'),
+      btnHold: $('btn-hold'),
+      holdSeatList: $('hold-seat-list'),
+      holdCountdown: $('hold-countdown'),
+      btnConfirm: $('btn-confirm'),
+      btnRelease: $('btn-release'),
+      bookedSeatList: $('booked-seat-list'),
+      btnNewBooking: $('btn-new-booking'),
+      errorMessage: $('error-message'),
+      btnErrorDismiss: $('btn-error-dismiss'),
+    };
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    const toastContainer = $('toast-container');
+    function showToast(message, type = 'info', duration = 4000) {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // ── Seat rendering ────────────────────────────────────────────────────────
+    function getSeatClass(seat) {
+      const isSelected = state.selectedIds.has(seat.id);
+      const isMineHold = state.currentHold && state.currentHold.seatIds.includes(seat.id);
+      const isMineBooked = state.currentBooking && state.currentBooking.seatIds.includes(seat.id);
+      if (isSelected) return 'selected';
+      if (seat.status === 'held') return isMineHold ? 'held-mine' : 'held';
+      if (seat.status === 'booked') return isMineBooked ? 'booked-mine' : 'booked';
+      return 'available';
+    }
+
+    function isSeatClickable(seat) {
+      if (state.panel === 'hold' || state.panel === 'booked') return false;
+      if (seat.status === 'booked' || seat.status === 'held') return false;
+      return true;
+    }
+
+    function renderSeatMap() {
+      const seats = Object.values(state.seats);
+      if (!seats.length) { els.seatMap.innerHTML = '<div style="text-align:center;padding:40px;color:#7986cb">No seats found.</div>'; return; }
+
+      const rows = {};
+      for (const seat of seats) {
+        if (!rows[seat.row_label]) rows[seat.row_label] = [];
+        rows[seat.row_label].push(seat);
+      }
+
+      const fragment = document.createDocumentFragment();
+      for (const rowLabel of Object.keys(rows).sort()) {
+        const rowSeats = rows[rowLabel].sort((a, b) => a.seat_number - b.seat_number);
+        const rowEl = document.createElement('div');
+        rowEl.className = 'seat-row';
+
+        const labelEl = document.createElement('div');
+        labelEl.className = 'row-label';
+        labelEl.textContent = rowLabel;
+        rowEl.appendChild(labelEl);
+
+        const seatsEl = document.createElement('div');
+        seatsEl.className = 'seats-container';
+
+        for (const seat of rowSeats) {
+          const cls = getSeatClass(seat);
+          const clickable = isSeatClickable(seat);
+          const seatEl = document.createElement('div');
+          seatEl.className = `seat seat--${cls}${!clickable ? ' seat--disabled' : ''}`;
+          seatEl.dataset.id = seat.id;
+          seatEl.title = `${seat.id} — ${cls}`;
+          seatEl.textContent = seat.seat_number;
+          if (clickable) seatEl.addEventListener('click', () => toggleSeatSelection(seat.id));
+          seatsEl.appendChild(seatEl);
+        }
+
+        rowEl.appendChild(seatsEl);
+        fragment.appendChild(rowEl);
+      }
+
+      els.seatMap.innerHTML = '';
+      els.seatMap.appendChild(fragment);
+    }
+
+    function updateSeatElement(seatId) {
+      const seat = state.seats[seatId];
+      if (!seat) return;
+      const el = els.seatMap.querySelector(`[data-id="${seatId}"]`);
+      if (!el) return;
+      const cls = getSeatClass(seat);
+      const clickable = isSeatClickable(seat);
+      const newEl = el.cloneNode(true);
+      newEl.className = `seat seat--${cls}${!clickable ? ' seat--disabled' : ''}`;
+      newEl.title = `${seat.id} — ${cls}`;
+      if (clickable) newEl.addEventListener('click', () => toggleSeatSelection(seatId));
+      el.replaceWith(newEl);
+    }
+
+    // ── Inventory ─────────────────────────────────────────────────────────────
+    function updateInventory() {
+      const seats = Object.values(state.seats);
+      els.invAvailable.textContent = seats.filter(s => s.status === 'available').length;
+      els.invHeld.textContent      = seats.filter(s => s.status === 'held').length;
+      els.invBooked.textContent    = seats.filter(s => s.status === 'booked').length;
+      els.invTotal.textContent     = seats.length;
+    }
+
+    // ── Panel ─────────────────────────────────────────────────────────────────
+    function showPanel(name) {
+      state.panel = name;
+      const map = { select: els.panelSelect, hold: els.panelHold, booked: els.panelBooked, error: els.panelError };
+      for (const [k, el] of Object.entries(map)) el.classList.toggle('active', k === name);
+    }
+
+    // ── Selection ─────────────────────────────────────────────────────────────
+    function toggleSeatSelection(seatId) {
+      if (state.panel !== 'select') return;
+      const seat = state.seats[seatId];
+      if (!seat || seat.status !== 'available') return;
+      if (state.selectedIds.has(seatId)) state.selectedIds.delete(seatId);
+      else state.selectedIds.add(seatId);
+      updateSeatElement(seatId);
+      updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+      const count = state.selectedIds.size;
+      els.selectedCount.textContent = count;
+      els.btnHold.disabled = count === 0;
+    }
+
+    function clearSelection() {
+      const prev = [...state.selectedIds];
+      state.selectedIds.clear();
+      for (const id of prev) updateSeatElement(id);
+      updateSelectionUI();
+    }
+
+    // ── Countdown ─────────────────────────────────────────────────────────────
+    function startCountdown() {
+      if (state.countdownTimer) clearInterval(state.countdownTimer);
+      function tick() {
+        if (!state.currentHold) return;
+        const remaining = Math.max(0, Math.floor((new Date(state.currentHold.expiresAt) - Date.now()) / 1000));
+        const mins = Math.floor(remaining / 60).toString().padStart(2, '0');
+        const secs = (remaining % 60).toString().padStart(2, '0');
+        els.holdCountdown.textContent = `${mins}:${secs}`;
+        els.holdCountdown.classList.toggle('urgent', remaining <= 10);
+        if (remaining === 0) { clearInterval(state.countdownTimer); handleHoldExpired(); }
+      }
+      tick();
+      state.countdownTimer = setInterval(tick, 1000);
+    }
+
+    function stopCountdown() {
+      if (state.countdownTimer) { clearInterval(state.countdownTimer); state.countdownTimer = null; }
+    }
+
+    function handleHoldExpired() {
+      showToast('Your hold has expired. Seats are now available again.', 'error', 6000);
+      state.currentHold = null;
+      showPanel('select');
+      renderSeatMap();
+    }
+
+    // ── API ───────────────────────────────────────────────────────────────────
+    async function requestHold() {
+      const seatIds = [...state.selectedIds];
+      if (!seatIds.length) return;
+      els.btnHold.disabled = true;
+      els.btnHold.textContent = 'Holding…';
+      try {
+        const resp = await fetch(`${API_BASE}/holds`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ seatIds, sessionId: SESSION_ID }),
+        });
+        const data = await resp.json();
+        if (resp.ok) {
+          state.currentHold = { id: data.hold.id, seatIds: data.hold.seatIds, expiresAt: data.hold.expiresAt };
+          for (const id of seatIds) {
+            if (state.seats[id]) { state.seats[id].status = 'held'; state.seats[id].hold_id = data.hold.id; }
+          }
+          state.selectedIds.clear();
+          els.holdSeatList.textContent = seatIds.join(', ');
+          showPanel('hold');
+          startCountdown();
+          renderSeatMap();
+          updateInventory();
+          showToast(`Hold placed for ${seatIds.length} seat(s)!`, 'success');
+        } else if (resp.status === 409) {
+          const conflicting = data.conflictingSeats || [];
+          showPanel('error');
+          els.errorMessage.innerHTML = `<strong>Some seats are no longer available:</strong><br/>${conflicting.join(', ')}<br/><br/>Please select different seats.`;
+          await loadSeats();
+          clearSelection();
+        } else {
+          showToast(`Error: ${data.error}`, 'error');
+        }
+      } catch (err) {
+        showToast('Network error. Please try again.', 'error');
+      } finally {
+        els.btnHold.disabled = false;
+        els.btnHold.textContent = 'Hold Selected Seats';
+      }
+    }
+
+    async function confirmHold() {
+      if (!state.currentHold) return;
+      els.btnConfirm.disabled = true;
+      els.btnConfirm.textContent = 'Confirming…';
+      try {
+        const resp = await fetch(`${API_BASE}/holds/${state.currentHold.id}/confirm`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: SESSION_ID }),
+        });
+        const data = await resp.json();
+        if (resp.ok) {
+          const seatIds = data.booking.seatIds;
+          state.currentBooking = { holdId: state.currentHold.id, seatIds };
+          for (const id of seatIds) {
+            if (state.seats[id]) { state.seats[id].status = 'booked'; state.seats[id].booked_by = SESSION_ID; }
+          }
+          stopCountdown();
+          state.currentHold = null;
+          els.bookedSeatList.textContent = seatIds.join(', ');
+          showPanel('booked');
+          renderSeatMap();
+          updateInventory();
+          showToast('Booking confirmed! 🎉', 'success', 6000);
+        } else if (resp.status === 410) {
+          showToast('Hold expired before confirmation. Please try again.', 'error', 6000);
+          stopCountdown();
+          state.currentHold = null;
+          showPanel('select');
+          await loadSeats();
+        } else {
+          showToast(`Confirmation failed: ${data.error}`, 'error');
+        }
+      } catch (err) {
+        showToast('Network error. Please try again.', 'error');
+      } finally {
+        els.btnConfirm.disabled = false;
+        els.btnConfirm.textContent = '✓ Confirm Booking';
+      }
+    }
+
+    async function releaseHold() {
+      if (!state.currentHold) return;
+      els.btnRelease.disabled = true;
+      els.btnRelease.textContent = 'Releasing…';
+      try {
+        const resp = await fetch(`${API_BASE}/holds/${state.currentHold.id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: SESSION_ID }),
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          for (const id of (data.released || [])) {
+            if (state.seats[id]) { state.seats[id].status = 'available'; state.seats[id].hold_id = null; }
+          }
+          stopCountdown();
+          state.currentHold = null;
+          showPanel('select');
+          renderSeatMap();
+          updateInventory();
+          showToast('Hold released. Seats are available again.', 'info');
+        } else {
+          const data = await resp.json();
+          showToast(`Release failed: ${data.error}`, 'error');
+        }
+      } catch (err) {
+        showToast('Network error. Please try again.', 'error');
+      } finally {
+        els.btnRelease.disabled = false;
+        els.btnRelease.textContent = '✗ Release Hold';
+      }
+    }
+
+    // ── Load seats ────────────────────────────────────────────────────────────
+    async function loadSeats() {
+      try {
+        const resp = await fetch(`${API_BASE}/seats`);
+        const data = await resp.json();
+        state.seats = {};
+        for (const seat of data.seats) state.seats[seat.id] = seat;
+        renderSeatMap();
+        updateInventory();
+      } catch (err) {
+        els.seatMap.innerHTML = '<div style="text-align:center;padding:40px;color:#ef9a9a">Failed to load seats. Retrying…</div>';
+        setTimeout(loadSeats, 3000);
+      }
+    }
+
+    // ── SSE ───────────────────────────────────────────────────────────────────
+    function connectSSE() {
+      els.connectionStatus.className = 'connection-status connecting';
+      const es = new EventSource(`${API_BASE}/stream`);
+      es.addEventListener('open', () => {
+        els.connectionStatus.className = 'connection-status connected';
+        els.connectionStatus.title = 'Connected';
+      });
+      es.addEventListener('seat_update', (event) => {
+        const { seats } = JSON.parse(event.data);
+        for (const update of seats) {
+          const existing = state.seats[update.id];
+          if (!existing) continue;
+          existing.status = update.status;
+          existing.hold_id = update.hold_id ?? null;
+          existing.hold_expires_at = update.hold_expires_at ?? null;
+          existing.booked_by = update.booked_by ?? null;
+          if (state.currentHold && state.currentHold.seatIds.includes(update.id) && update.status === 'available') {
+            stopCountdown();
+            state.currentHold = null;
+            showPanel('select');
+            showToast('Your hold expired and seats were released.', 'error', 6000);
+          }
+          updateSeatElement(update.id);
+        }
+        updateInventory();
+      });
+      es.addEventListener('error', () => {
+        els.connectionStatus.className = 'connection-status disconnected';
+        els.connectionStatus.title = 'Disconnected — reconnecting…';
+        es.close();
+        setTimeout(connectSSE, 3000);
+      });
+    }
+
+    // ── Event listeners ───────────────────────────────────────────────────────
+    els.btnHold.addEventListener('click', requestHold);
+    els.btnConfirm.addEventListener('click', confirmHold);
+    els.btnRelease.addEventListener('click', releaseHold);
+    els.btnNewBooking.addEventListener('click', () => { state.currentBooking = null; showPanel('select'); renderSeatMap(); });
+    els.btnErrorDismiss.addEventListener('click', () => showPanel('select'));
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    els.sessionDisplay.textContent = SESSION_ID.slice(0, 8) + '…';
+    els.sessionDisplay.title = SESSION_ID;
+    showPanel('select');
+    loadSeats();
+    connectSSE();
+  </script>
+</body>
+</html>

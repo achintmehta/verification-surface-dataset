@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><title>Check Layout</title></head>
+<body>
+<h1>Layout Check</h1>
+<pre id="log"></pre>
+<script type="module">
+import { computeDayLayout } from '/src/layout.js';
+
+const log = document.getElementById('log');
+
+// Test 1: 3 identical overlapping events
+const test1 = computeDayLayout([
+  { id: 1, title: 'A', startMinutes: 540, endMinutes: 600 },
+  { id: 2, title: 'B', startMinutes: 540, endMinutes: 600 },
+  { id: 3, title: 'C', startMinutes: 540, endMinutes: 600 },
+]);
+log.textContent += 'Test 1 (3 identical): ' + JSON.stringify(test1, null, 2) + '\n\n';
+
+// Test 2: Non-overlapping after cluster
+const test2 = computeDayLayout([
+  { id: 1, title: 'A', startMinutes: 540, endMinutes: 600 },
+  { id: 2, title: 'B', startMinutes: 540, endMinutes: 600 },
+  { id: 3, title: 'C', startMinutes: 540, endMinutes: 600 },
+  { id: 4, title: 'Lunch', startMinutes: 720, endMinutes: 780 },
+]);
+log.textContent += 'Test 2 (3 overlap + 1 solo): ' + JSON.stringify(test2, null, 2) + '\n\n';
+
+// Test 3: Partial chain
+const test3 = computeDayLayout([
+  { id: 1, title: 'X', startMinutes: 540, endMinutes: 660 },
+  { id: 2, title: 'Y', startMinutes: 600, endMinutes: 720 },
+  { id: 3, title: 'Z', startMinutes: 690, endMinutes: 780 },
+]);
+log.textContent += 'Test 3 (partial chain): ' + JSON.stringify(test3, null, 2) + '\n\n';
+
+// Test 4: Complex overlap (Alpha/Beta/Gamma/Delta scenario)
+const test4 = computeDayLayout([
+  { id: 10, title: 'Alpha', startMinutes: 840, endMinutes: 960 },
+  { id: 11, title: 'Beta', startMinutes: 870, endMinutes: 930 },
+  { id: 12, title: 'Gamma', startMinutes: 900, endMinutes: 1020 },
+  { id: 13, title: 'Delta', startMinutes: 990, endMinutes: 1080 },
+]);
+log.textContent += 'Test 4 (Alpha/Beta/Gamma/Delta): ' + JSON.stringify(test4, null, 2) + '\n\n';
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Explorer</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="toolbar">
+        <h1 class="title">Log Explorer</h1>
+        <div class="controls">
+          <label class="control">
+            <span class="control-label">Severity</span>
+            <select id="severity-select">
+              <option value="">all</option>
+              <option value="debug">debug</option>
+              <option value="info">info</option>
+              <option value="warn">warn</option>
+              <option value="error">error</option>
+            </select>
+          </label>
+          <label class="control control-search">
+            <span class="control-label">Search</span>
+            <input
+              id="search-input"
+              type="text"
+              placeholder="substring of message…"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </label>
+          <div id="count-badge" class="count-badge">0 of 0</div>
+          <div id="status" class="status"></div>
+        </div>
+      </header>
+
+      <div class="table-head">
+        <div class="col col-ts">timestamp</div>
+        <div class="col col-sev">severity</div>
+        <div class="col col-svc">service</div>
+        <div class="col col-msg">message</div>
+      </div>
+
+      <div id="scroll-viewport" class="viewport">
+        <!-- Spacer sizes the scrollbar to the full (filtered) corpus. -->
+        <div id="scroll-spacer" class="spacer"></div>
+        <!-- Rendered rows are absolutely positioned inside this layer. -->
+        <div id="rows-layer" class="rows-layer"></div>
+        <div id="empty-state" class="empty-state" hidden>No matching log entries.</div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

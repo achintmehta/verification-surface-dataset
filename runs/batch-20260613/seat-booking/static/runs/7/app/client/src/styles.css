@@ -1,0 +1,121 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f7fb;
+  color: #14213d;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+
+.shell {
+  width: min(1100px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+h1 { margin: 0; font-size: clamp(2rem, 5vw, 4rem); line-height: 1; }
+.eyebrow { margin: 0 0 8px; color: #4361ee; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+.muted { color: #52637a; max-width: 680px; }
+
+.session-card {
+  min-width: min(420px, 100%);
+  background: white;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(20, 33, 61, .08);
+}
+.session-card span, .session-card small { display: block; color: #52637a; }
+.session-card code { display: block; margin: 7px 0; overflow-wrap: anywhere; font-size: .85rem; }
+.online { color: #16803c !important; }
+.offline { color: #b00020 !important; }
+
+.toolbar, .status-panel, .legend, .seat-map {
+  background: white;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(20, 33, 61, .06);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.inventory { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; color: #52637a; }
+.inventory b { color: #14213d; }
+.inventory .ok { color: #16803c; }
+.inventory .warn { color: #b26a00; }
+.inventory .bad { color: #b00020; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.actions button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+  background: #4361ee;
+  color: white;
+  font-weight: 700;
+}
+.actions button:disabled { cursor: not-allowed; background: #aab7cf; }
+#releaseButton { background: #65758b; }
+#confirmButton { background: #16803c; }
+
+.status-panel { padding: 16px; margin-bottom: 14px; }
+.message { min-height: 24px; font-weight: 700; }
+.hold-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  color: #52637a;
+}
+.hidden { display: none !important; }
+
+.legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 14px 16px; margin-bottom: 14px; color: #52637a; }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.swatch { width: 16px; height: 16px; border-radius: 5px; display: inline-block; border: 1px solid #c4cfdd; }
+.swatch.available { background: #e8fff0; }
+.swatch.selected { background: #4361ee; }
+.swatch.held { background: #fff4db; }
+.swatch.booked { background: #ffe5e9; }
+.swatch.conflict { background: #ff7b00; }
+
+.seat-map { padding: 20px; overflow-x: auto; }
+.seat-row { display: grid; grid-template-columns: 42px repeat(10, minmax(44px, 1fr)); gap: 10px; align-items: center; margin-bottom: 10px; min-width: 620px; }
+.seat-row:last-child { margin-bottom: 0; }
+.row-label { color: #52637a; font-weight: 800; text-align: center; }
+.seat {
+  height: 44px;
+  border-radius: 12px 12px 18px 18px;
+  border: 2px solid #c4cfdd;
+  background: #e8fff0;
+  color: #14213d;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.seat:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(67, 97, 238, .18); }
+.seat.selected { background: #4361ee; border-color: #243bba; color: white; }
+.seat.held { background: #fff4db; border-color: #f6b73c; color: #7a4a00; cursor: not-allowed; }
+.seat.booked { background: #ffe5e9; border-color: #e85d75; color: #8d1024; cursor: not-allowed; }
+.seat.conflict { outline: 4px solid rgba(255, 123, 0, .45); }
+.seat:disabled { opacity: .85; }
+
+@media (max-width: 760px) {
+  .hero, .toolbar { flex-direction: column; align-items: stretch; }
+  .session-card { min-width: 0; }
+}

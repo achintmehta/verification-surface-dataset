@@ -1,0 +1,443 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --header-height:     56px;
+  --day-header-height: 52px;
+  --hour-height:       60px;   /* px per hour */
+  --axis-height:       calc(var(--hour-height) * 24); /* 1440px */
+  --gutter-width:      56px;
+  --border-color:      #e2e8f0;
+  --hour-line-color:   #e2e8f0;
+  --half-line-color:   #f1f5f9;
+  --today-bg:          #fffbeb;
+  --event-radius:      4px;
+  --text-primary:      #1e293b;
+  --text-secondary:    #64748b;
+  --accent:            #3b82f6;
+  --accent-hover:      #2563eb;
+  --danger:            #ef4444;
+  --danger-hover:      #dc2626;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+html, body {
+  height: 100%;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Top Navigation Header ────────────────────────────────────────────────── */
+#cal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  height: var(--header-height);
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.nav-controls button {
+  padding: 6px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+.nav-controls button:hover {
+  background: #f1f5f9;
+}
+
+#week-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ── Day Headers Bar (fixed, not scrollable) ──────────────────────────────── */
+#day-headers-bar {
+  display: flex;
+  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+#gutter-spacer {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+}
+
+#day-headers {
+  display: flex;
+  flex: 1;
+}
+
+.day-header {
+  flex: 1;
+  min-width: 0;
+  height: var(--day-header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-color);
+  user-select: none;
+}
+
+.day-header:last-child {
+  border-right: none;
+}
+
+.day-header .day-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.day-header .day-date {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.day-header.today .day-date {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+/* ── Scroll Area ──────────────────────────────────────────────────────────── */
+#scroll-area {
+  display: flex;
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background: #fff;
+}
+
+/* ── Time Gutter ──────────────────────────────────────────────────────────── */
+#time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  position: relative;
+  height: var(--axis-height);
+  border-right: 1px solid var(--border-color);
+  background: #fff;
+}
+
+.gutter-label {
+  position: absolute;
+  right: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  /* Shift label up so it sits on the hour line */
+  transform: translateY(-50%);
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ── Days Grid ────────────────────────────────────────────────────────────── */
+#days-grid {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: var(--axis-height);
+}
+
+/* ── Day Column ───────────────────────────────────────────────────────────── */
+.day-col {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border-right: 1px solid var(--border-color);
+  background: #fff;
+  height: var(--axis-height);
+}
+
+.day-col:last-child {
+  border-right: none;
+}
+
+.day-col.today {
+  background: var(--today-bg);
+}
+
+/* ── Hour / Half-hour Lines ───────────────────────────────────────────────── */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hour-line-color);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.half-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--half-line-color);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Drag Selection Highlight ─────────────────────────────────────────────── */
+.drag-selection {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1.5px dashed var(--accent);
+  border-radius: var(--event-radius);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Event Blocks ─────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: var(--event-radius);
+  background: #3b82f6;
+  border-left: 3px solid #1d4ed8;
+  color: #fff;
+  padding: 3px 5px 2px;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 3;
+  transition: filter 0.1s, box-shadow 0.1s;
+  user-select: none;
+  /* Ensure text doesn't overflow the block */
+  min-height: 18px;
+}
+
+.event-block:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  z-index: 4;
+}
+
+.event-block .ev-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-block .ev-time {
+  font-size: 10px;
+  opacity: 0.88;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  width: 360px;
+  max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+#modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+#event-form label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#event-form label:first-of-type {
+  margin-top: 0;
+}
+
+#event-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #fff;
+}
+
+#event-form input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.form-error {
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: var(--danger);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+#btn-save {
+  background: var(--accent);
+  color: #fff;
+  flex: 1;
+}
+
+#btn-save:hover {
+  background: var(--accent-hover);
+}
+
+#btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#btn-delete {
+  background: var(--danger);
+  color: #fff;
+}
+
+#btn-delete:hover {
+  background: var(--danger-hover);
+}
+
+#btn-delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#btn-cancel {
+  background: #f1f5f9;
+  color: var(--text-primary);
+}
+
+#btn-cancel:hover {
+  background: #e2e8f0;
+}
+
+button.hidden {
+  display: none !important;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+#scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+#scroll-area::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+#scroll-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  :root {
+    --gutter-width: 38px;
+    --hour-height:  48px;
+  }
+  .day-header .day-date {
+    font-size: 15px;
+  }
+  .day-header .day-name {
+    font-size: 9px;
+  }
+  .day-header.today .day-date {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+}

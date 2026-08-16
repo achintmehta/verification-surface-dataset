@@ -1,0 +1,215 @@
+/* Reset & base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: #0079bf;
+  color: #172b4d;
+  min-height: 100vh;
+}
+
+header {
+  padding: 12px 24px;
+  color: #fff;
+  font-size: 14px;
+}
+
+header h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Board layout */
+.board {
+  display: flex;
+  gap: 12px;
+  padding: 0 24px 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 60px);
+}
+
+/* Column */
+.column {
+  background: #ebecf0;
+  border-radius: 8px;
+  min-width: 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 72px);
+}
+
+.column-header {
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #172b4d;
+}
+
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+  min-height: 8px;
+}
+
+/* Drop zone indicators */
+.card-list.drag-over {
+  background: rgba(0, 121, 191, 0.08);
+  border-radius: 0 0 8px 8px;
+}
+
+.drop-indicator {
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+  margin: 2px 0;
+  transition: opacity 0.1s;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.15);
+  cursor: grab;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  user-select: none;
+  position: relative;
+  transition: box-shadow 0.15s;
+}
+
+.card:hover {
+  box-shadow: 0 2px 6px rgba(9, 30, 66, 0.25);
+}
+
+.card.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.card.ghost {
+  opacity: 0.5;
+  border: 2px dashed #0079bf;
+  background: #e4f0f6;
+}
+
+.card .delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+  padding: 2px 4px;
+  border-radius: 3px;
+  display: none;
+}
+
+.card:hover .delete-btn {
+  display: block;
+}
+
+.card .delete-btn:hover {
+  background: #eee;
+  color: #e44;
+}
+
+/* Add card form */
+.add-card-form {
+  padding: 4px 8px 8px;
+}
+
+.add-card-btn {
+  width: 100%;
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #5e6c84;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.add-card-btn:hover {
+  background: rgba(9, 30, 66, 0.08);
+  color: #172b4d;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  min-height: 54px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.15);
+  outline: none;
+}
+
+.add-card-form textarea:focus {
+  box-shadow: 0 0 0 2px #0079bf;
+}
+
+.add-card-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.add-card-actions button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-card-submit {
+  background: #0079bf;
+  color: #fff;
+  font-weight: 500;
+}
+
+.add-card-submit:hover {
+  background: #026aa7;
+}
+
+.add-card-cancel {
+  background: none;
+  color: #5e6c84;
+}
+
+.add-card-cancel:hover {
+  color: #172b4d;
+}
+
+/* Scrollbar styling */
+.card-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-list::-webkit-scrollbar-thumb {
+  background: #c4c9cc;
+  border-radius: 3px;
+}
+
+.card-list::-webkit-scrollbar-thumb:hover {
+  background: #a5acb0;
+}

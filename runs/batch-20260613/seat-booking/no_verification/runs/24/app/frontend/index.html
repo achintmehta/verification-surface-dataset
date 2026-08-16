@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="inventory-bar">
+        <span id="inv-available" class="inv-badge available">Available: –</span>
+        <span id="inv-held" class="inv-badge held">Held: –</span>
+        <span id="inv-booked" class="inv-badge booked">Booked: –</span>
+        <span id="inv-total" class="inv-badge total">Total: –</span>
+      </div>
+    </header>
+
+    <div id="stage">STAGE</div>
+
+    <div id="seat-map"></div>
+
+    <div id="selection-panel" class="panel hidden">
+      <h3>Selected Seats</h3>
+      <div id="selected-seats-list"></div>
+      <div id="panel-buttons">
+        <button id="btn-hold" class="btn btn-hold">Hold Selected</button>
+        <button id="btn-clear" class="btn btn-clear">Clear Selection</button>
+      </div>
+    </div>
+
+    <div id="hold-panel" class="panel hidden">
+      <h3>Your Hold</h3>
+      <div id="hold-info"></div>
+      <div id="hold-countdown"></div>
+      <div id="hold-buttons">
+        <button id="btn-confirm" class="btn btn-confirm">Confirm Booking</button>
+        <button id="btn-release" class="btn btn-release">Release Hold</button>
+      </div>
+    </div>
+
+    <div id="booking-panel" class="panel hidden">
+      <h3>✅ Booking Confirmed!</h3>
+      <div id="booking-info"></div>
+      <button id="btn-new" class="btn btn-new">Book More Seats</button>
+    </div>
+
+    <div id="error-toast" class="toast hidden"></div>
+    <div id="success-toast" class="toast toast-success hidden"></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

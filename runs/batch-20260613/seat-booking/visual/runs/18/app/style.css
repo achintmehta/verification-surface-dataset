@@ -1,0 +1,101 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f4f4f9;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#status-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-weight: bold;
+  height: 24px;
+}
+
+#message {
+  color: #d9534f;
+}
+
+#countdown {
+  color: #f0ad4e;
+}
+
+#seat-map {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.seat {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  border: 2px solid transparent;
+}
+
+.seat.available {
+  background: #5cb85c;
+  color: white;
+}
+
+.seat.available:hover {
+  opacity: 0.8;
+}
+
+.seat.selected {
+  border-color: #0275d8;
+  box-shadow: 0 0 5px #0275d8;
+}
+
+.seat.held {
+  background: #f0ad4e;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat.held.my-hold {
+  border-color: #0275d8;
+  cursor: default;
+}
+
+.seat.booked {
+  background: #d9534f;
+  color: white;
+  cursor: not-allowed;
+}
+
+#controls {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background: #0275d8;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

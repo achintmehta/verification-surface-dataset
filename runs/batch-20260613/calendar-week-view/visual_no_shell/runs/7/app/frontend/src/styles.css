@@ -1,0 +1,364 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color: #172033;
+  background: #f5f7fb;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #d9e0ec;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 8px rgba(23, 32, 51, 0.06);
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111827;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav button,
+.form-actions button {
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #fff;
+  color: #0f172a;
+  padding: 8px 12px;
+  transition: background 120ms, border-color 120ms, transform 120ms;
+}
+
+.nav button:hover,
+.form-actions button:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.nav button:active,
+.form-actions button:active {
+  transform: translateY(1px);
+}
+
+.week-label {
+  margin-left: auto;
+  color: #475569;
+  font-weight: 650;
+}
+
+.calendar-shell {
+  padding: 18px;
+  overflow: auto;
+}
+
+.calendar {
+  min-width: 920px;
+  display: grid;
+  grid-template-columns: 72px repeat(7, minmax(118px, 1fr));
+  grid-template-rows: 66px var(--day-height);
+  align-items: stretch;
+  border: 1px solid #d8e0eb;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+.corner {
+  grid-column: 1;
+  grid-row: 1;
+  background: #f8fafc;
+  border-right: 1px solid #d8e0eb;
+  border-bottom: 1px solid #d8e0eb;
+}
+
+.day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-right: 1px solid #d8e0eb;
+  border-bottom: 1px solid #d8e0eb;
+  background: #ffffff;
+}
+
+.day-header:last-of-type {
+  border-right: 0;
+}
+
+.day-header span {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.day-header strong {
+  font-size: 18px;
+  color: #111827;
+}
+
+.day-header.today {
+  background: linear-gradient(#eff6ff, #ffffff);
+}
+
+.day-header.today strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 30px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: white;
+}
+
+.time-axis {
+  position: relative;
+  grid-column: 1;
+  grid-row: 2;
+  background: #f8fafc;
+  border-right: 1px solid #d8e0eb;
+}
+
+.time-label {
+  position: absolute;
+  right: 9px;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.time-label:first-child {
+  transform: translateY(0);
+}
+
+.time-label:last-child {
+  transform: translateY(-100%);
+}
+
+.day-column {
+  position: relative;
+  height: var(--day-height);
+  overflow: hidden;
+  background: #ffffff;
+  border-right: 1px solid #d8e0eb;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.day-column:last-child {
+  border-right: 0;
+}
+
+.day-column.today {
+  background: #fbfdff;
+}
+
+.day-column.today::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(37, 99, 235, 0.035);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e6edf5;
+  pointer-events: none;
+}
+
+.hour-line:nth-child(2n) {
+  background: #edf2f7;
+}
+
+.event-block {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 9px;
+  padding: 5px 7px;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 7px 16px rgba(15, 23, 42, 0.18);
+}
+
+.event-block:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 1px;
+}
+
+.event-title,
+.event-time {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.15;
+}
+
+.event-title {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.event-time {
+  font-size: 11px;
+  opacity: 0.92;
+  font-weight: 650;
+}
+
+.selection-preview {
+  position: absolute;
+  z-index: 3;
+  left: 4px;
+  right: 4px;
+  border: 2px dashed #2563eb;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.13);
+  pointer-events: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.45);
+  padding: 18px;
+}
+
+.event-form {
+  width: min(440px, 100%);
+  padding: 22px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.24);
+}
+
+.event-form h2 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.event-form label {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 14px;
+  font-weight: 750;
+  color: #334155;
+}
+
+.event-form input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 11px;
+  color: #0f172a;
+}
+
+.event-form input:focus {
+  outline: 3px solid rgba(37, 99, 235, 0.18);
+  border-color: #2563eb;
+}
+
+.form-error {
+  margin: 6px 0 12px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.form-actions .spacer {
+  flex: 1;
+}
+
+.form-actions .primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+
+.form-actions .primary:hover {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
+}
+
+.form-actions .danger {
+  border-color: #fecaca;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.form-actions .danger:hover {
+  border-color: #fca5a5;
+  background: #fecaca;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .week-label {
+    margin-left: 0;
+  }
+
+  .calendar-shell {
+    padding: 10px;
+  }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎟️ Seat Booking</h1>
+      <div id="connection-status" class="disconnected">Disconnected</div>
+    </header>
+
+    <div id="stage">STAGE</div>
+
+    <div id="seat-map"></div>
+
+    <div id="legend">
+      <span class="legend-item"><span class="legend-swatch available"></span> Available</span>
+      <span class="legend-item"><span class="legend-swatch held"></span> Held</span>
+      <span class="legend-item"><span class="legend-swatch held-mine"></span> My Hold</span>
+      <span class="legend-item"><span class="legend-swatch booked"></span> Booked</span>
+      <span class="legend-item"><span class="legend-swatch selected"></span> Selected</span>
+    </div>
+
+    <div id="inventory-bar">
+      <span>Available: <strong id="count-available">0</strong></span>
+      <span>Held: <strong id="count-held">0</strong></span>
+      <span>Booked: <strong id="count-booked">0</strong></span>
+      <span>Total: <strong id="count-total">0</strong></span>
+    </div>
+
+    <div id="actions">
+      <div id="selection-info">Select seats to hold them</div>
+      <div id="hold-info" style="display:none">
+        <p>You are holding <strong id="hold-seat-count">0</strong> seat(s).</p>
+        <p>Expires in: <strong id="hold-countdown">--</strong></p>
+      </div>
+      <div id="buttons">
+        <button id="btn-hold" disabled>Hold Selected Seats</button>
+        <button id="btn-confirm" disabled style="display:none">Confirm Booking</button>
+        <button id="btn-release" disabled style="display:none">Release Hold</button>
+      </div>
+      <div id="error-message" style="display:none"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

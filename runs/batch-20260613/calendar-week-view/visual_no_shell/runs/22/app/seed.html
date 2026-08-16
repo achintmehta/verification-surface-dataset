@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Events</title></head>
+<body>
+<h1>Seeding events...</h1>
+<pre id="log"></pre>
+<script>
+const log = document.getElementById('log');
+
+async function seed() {
+  // First clear existing events
+  try {
+    const existing = await fetch('/api/events?start=2020-01-01T00:00:00&end=2030-01-01T00:00:00');
+    const evts = await existing.json();
+    for (const ev of evts) {
+      await fetch(`/api/events/${ev.id}`, { method: 'DELETE' });
+    }
+    log.textContent += `Cleared ${evts.length} existing events\n`;
+  } catch(e) {
+    log.textContent += `Error clearing: ${e.message}\n`;
+  }
+
+  // All times are "wall clock" - no timezone conversion
+  const events = [
+    { title: 'Morning Meeting', start_at: '2026-06-18T09:00:00', end_at: '2026-06-18T10:30:00' },
+    { title: 'Overlap A', start_at: '2026-06-18T09:00:00', end_at: '2026-06-18T11:00:00' },
+    { title: 'Overlap B', start_at: '2026-06-18T10:00:00', end_at: '2026-06-18T12:00:00' },
+    { title: 'Lunch', start_at: '2026-06-18T12:00:00', end_at: '2026-06-18T13:00:00' },
+    { title: 'Afternoon Session', start_at: '2026-06-18T14:00:00', end_at: '2026-06-18T15:30:00' },
+    { title: 'Same Time 1', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T10:00:00' },
+    { title: 'Same Time 2', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T10:00:00' },
+    { title: 'Same Time 3', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T10:00:00' },
+    { title: 'Chain A', start_at: '2026-06-19T09:00:00', end_at: '2026-06-19T11:00:00' },
+    { title: 'Chain B', start_at: '2026-06-19T10:00:00', end_at: '2026-06-19T12:00:00' },
+    { title: 'Chain C', start_at: '2026-06-19T11:30:00', end_at: '2026-06-19T13:00:00' },
+    { title: 'Solo Event', start_at: '2026-06-19T15:00:00', end_at: '2026-06-19T16:00:00' },
+  ];
+  
+  for (const ev of events) {
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ev)
+      });
+      const data = await res.json();
+      log.textContent += `Created: ${ev.title} (${res.status}) ${ev.start_at} - ${ev.end_at}\n`;
+    } catch(e) {
+      log.textContent += `Error: ${ev.title} - ${e.message}\n`;
+    }
+  }
+  log.textContent += '\nDone! Go to / to see the calendar.';
+}
+seed();
+</script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  background: #f0f2f5;
+  color: #1a1a2e;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #fff;
+  border-bottom: 1px solid #dde1e7;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+#toolbar h1 {
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+  color: #1a1a2e;
+}
+
+#toolbar button {
+  padding: 6px 14px;
+  border: 1px solid #c8cdd5;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+#toolbar button:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* ============================================================
+   Calendar container
+   ============================================================ */
+#calendar-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ============================================================
+   Header row (day names + dates)
+   ============================================================ */
+#header-row {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 2px solid #dde1e7;
+  background: #fff;
+}
+
+.time-gutter-header {
+  width: 56px;
+  flex-shrink: 0;
+  border-right: 1px solid #dde1e7;
+}
+
+#day-headers {
+  display: flex;
+  flex: 1;
+}
+
+.day-header {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px;
+  border-right: 1px solid #dde1e7;
+  user-select: none;
+}
+
+.day-header:last-child {
+  border-right: none;
+}
+
+.day-header .day-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.day-header .day-date {
+  font-size: 20px;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.day-header.today .day-name {
+  color: #2563eb;
+}
+
+.day-header.today .day-date {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px auto 0;
+}
+
+/* ============================================================
+   Scrollable body
+   ============================================================ */
+#body-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#body-inner {
+  display: flex;
+  /* 24 hours × 64px per hour = 1536px total height */
+  min-height: 1536px;
+  position: relative;
+}
+
+/* ============================================================
+   Time gutter
+   ============================================================ */
+#time-gutter {
+  width: 56px;
+  flex-shrink: 0;
+  border-right: 1px solid #dde1e7;
+  position: relative;
+}
+
+.time-label {
+  position: absolute;
+  right: 8px;
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+  /* Shift up by half line-height so the label sits above the hour line */
+  transform: translateY(-50%);
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Day columns
+   ============================================================ */
+#day-columns {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.day-col {
+  flex: 1;
+  position: relative;
+  border-right: 1px solid #dde1e7;
+  cursor: crosshair;
+}
+
+.day-col:last-child {
+  border-right: none;
+}
+
+.day-col.today-col {
+  background: #eff6ff;
+}
+
+/* Hour lines inside each day column */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e5e7eb;
+  pointer-events: none;
+}
+
+.hour-line.midnight {
+  border-top-color: #d1d5db;
+}
+
+/* Half-hour lines */
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #f0f0f0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Event blocks
+   ============================================================ */
+.event-block {
+  position: absolute;
+  border-radius: 4px;
+  padding: 3px 6px;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  border: 1.5px solid rgba(0,0,0,.12);
+  transition: filter 0.1s, box-shadow 0.1s;
+  /* Ensure events are above grid lines */
+  z-index: 2;
+}
+
+.event-block:hover {
+  filter: brightness(0.93);
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  z-index: 10;
+}
+
+.event-block .event-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-block .event-time {
+  font-size: 10px;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+/* Colour palette — cycle through these by index */
+.event-color-0 { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+.event-color-1 { background: #dcfce7; color: #166534; border-color: #86efac; }
+.event-color-2 { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+.event-color-3 { background: #fce7f3; color: #9d174d; border-color: #f9a8d4; }
+.event-color-4 { background: #ede9fe; color: #5b21b6; border-color: #c4b5fd; }
+.event-color-5 { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+.event-color-6 { background: #cffafe; color: #155e75; border-color: #67e8f9; }
+
+/* ============================================================
+   Drag-selection ghost
+   ============================================================ */
+.drag-ghost {
+  position: absolute;
+  background: rgba(37, 99, 235, 0.15);
+  border: 2px dashed #2563eb;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ============================================================
+   Modal
+   ============================================================ */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px 32px;
+  width: 380px;
+  max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+#modal h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+#event-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  margin-top: 14px;
+}
+
+#event-form label:first-of-type {
+  margin-top: 0;
+}
+
+#event-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+#event-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+.form-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
+.form-error.hidden {
+  display: none;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+#btn-save {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+#btn-save:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+#btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+  margin-left: auto;
+}
+
+#btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.danger {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.danger:hover {
+  background: #fecaca;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ============================================================
+   Current-time indicator
+   ============================================================ */
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ef4444;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+}

@@ -1,0 +1,198 @@
+:root {
+  --row-height: 32px;
+  --bg: #0f1115;
+  --bg-alt: #161a20;
+  --border: #262b33;
+  --text: #d7dce3;
+  --muted: #8a93a0;
+  --debug: #6b7280;
+  --info: #3b82f6;
+  --warn: #f59e0b;
+  --error: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+
+.toolbar h1 {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  gap: 4px;
+}
+
+.control.search {
+  flex: 1;
+  max-width: 420px;
+}
+
+select,
+input[type="text"] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+input[type="text"] {
+  width: 100%;
+}
+
+.count {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.table-head,
+.log-row {
+  display: flex;
+  align-items: center;
+}
+
+.table-head {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  background: var(--bg-alt);
+}
+
+.col {
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-ts {
+  width: 200px;
+  flex: none;
+}
+.col-sev {
+  width: 70px;
+  flex: none;
+}
+.col-svc {
+  width: 160px;
+  flex: none;
+}
+.col-msg {
+  flex: 1;
+  min-width: 0;
+}
+
+.viewport {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.spacer {
+  width: 1px;
+}
+
+.rows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.log-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--row-height);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.log-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.sev-badge {
+  display: inline-block;
+  min-width: 46px;
+  text-align: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.sev-debug {
+  background: var(--debug);
+}
+.sev-info {
+  background: var(--info);
+}
+.sev-warn {
+  background: var(--warn);
+  color: #1a1a1a;
+}
+.sev-error {
+  background: var(--error);
+}
+
+.empty {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--muted);
+}

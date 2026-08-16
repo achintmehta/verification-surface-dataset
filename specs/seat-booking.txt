@@ -1,0 +1,100 @@
+## Context
+
+We are building a traditional client-server web application with strict correctness requirements under concurrency: a seat-booking / ticketing service for a single event with a fixed seat map. Users place temporary holds on one or more seats, then confirm those holds to book the seats. The system must guarantee that no seat is ever booked by two different users, must automatically expire abandoned holds, and must keep seat inventory exact even under many concurrent requests. To minimize external dependencies while retaining the power of PostgreSQL, we use PGLite embedded within a Node.js server, with Server-Sent Events (SSE) pushing seat-status changes to all viewers so every seat map stays live.
+
+## Goals / Non-Goals
+
+**Goals:**
+- A fixed seat map (rows × seats) persisted in PGLite.
+- Hold flow: a user requests N seats; each requested seat is placed on a hold with a TTL; held seats are unavailable to others.
+- Confirm flow: confirming an active hold books those seats permanently; confirming an expired or invalid hold fails and books nothing.
+- Auto-expiry: holds past their TTL are released and their seats become available again without manual action.
+- Exact inventory: the counts of available, held, and booked seats always reconcile with reality, even under concurrent requests.
+- Real-time: broadcast every seat status transition (available ↔ held ↔ booked) to all connected clients via SSE.
+
+**Non-Goals:**
+- Authentication, payments, or real user accounts (a client-supplied session id is sufficient to identify a holder).
+- Multiple events, pricing tiers, refunds, or cancellations after booking.
+- Visual polish beyond a functional seat grid.
+
+## Decisions
+
+**Decision 1: Server-enforced atomic seat acquisition**
+- *Rationale*: A hold request must atomically check-and-set the state of every requested seat so that two concurrent requests for the same seat cannot both succeed. Correctness under concurrency is the central requirement of this system.
+
+**Decision 2: Server-side time-based expiry**
+- *Rationale*: Each hold records an `expires_at` computed on the server. Expiry is enforced whenever seats are read and inside every hold/confirm operation, with a lazy sweep releasing stale holds. We never trust a client-side timer to free inventory.
+
+**Decision 3: Idempotent confirmation**
+- *Rationale*: Confirming the same hold twice must book the seats exactly once. Network retries and double-clicks must never double-book or produce inconsistent results.
+
+## Risks / Trade-offs
+
+- [Risk] A race condition lets two requests acquire the same seat.
+  - *Mitigation*: Acquire seats with an atomic conditional update / transaction; the losing request acquires none of its seats and receives a 409 with the conflicting seat ids.
+- [Risk] Leaked holds permanently reduce available capacity.
+  - *Mitigation*: TTL expiry enforced on read plus a periodic sweep; broadcast the releases so clients update.
+- [Risk] Confirming after expiry books a seat another user now holds or booked.
+  - *Mitigation*: Re-validate the hold's existence, ownership, and expiry inside the confirm transaction before booking.
+
+## Why
+
+The defining challenge of a booking system is correctness under concurrency: the same seat cannot be sold twice, abandoned holds must free up, and inventory must always balance. These failures are largely invisible in a static view of the UI and only surface under concurrent load, which makes this an excellent, demanding test of backend transactional logic built on embedded PGLite, with SSE keeping every client's seat map live.
+
+## What Changes
+
+- We are introducing a brand new seat-booking web application.
+- The backend is a Node.js server using embedded PGLite for raw SQL and transactions, persisting seat state to local disk.
+- Real-time synchronization of seat status is handled via Server-Sent Events (SSE).
+- The frontend is a simple, lightweight Single Page Application (Vanilla JS via Vite) rendering an interactive seat map.
+
+## Capabilities
+
+### New Capabilities
+- `seat-booking`: a fixed seat map with atomic hold-with-TTL acquisition, transactional and idempotent confirmation, automatic hold expiry, exact inventory accounting, and real-time seat-status broadcasting.
+
+### Modified Capabilities
+None (Greenfield project).
+
+## Impact
+
+This is a brand new project. It establishes the Node.js backend, the embedded PGLite seat schema, the atomic hold/confirm/expiry logic, SSE connection handling, and the seat-map frontend UI.
+
+## 1. Project Initialization
+
+- [ ] 1.1 Initialize the Node.js project and install backend dependencies (express, @electric-sql/pglite, cors)
+- [ ] 1.2 Initialize the Vanilla JS / Vite project for the frontend and install frontend dependencies
+- [ ] 1.3 Set up basic npm scripts for concurrently running backend and frontend development servers
+
+## 2. Backend Infrastructure & Database
+
+- [ ] 2.1 Set up a basic Express server with CORS and JSON body parsing
+- [ ] 2.2 Initialize embedded PGLite configured to write to the local file system
+- [ ] 2.3 Create the database initialization script: a `seats` table (`id`, `row_label`, `seat_number`, `status` one of `available`/`held`/`booked`, `hold_id` nullable, `hold_expires_at` nullable, `booked_by` nullable). Seed a fixed seat map (e.g., 5 rows × 10 seats)
+- [ ] 2.4 Create the seat map endpoint (`GET /api/seats`) returning every seat with its current effective status (a held seat whose `hold_expires_at` is in the past must be reported as available)
+
+## 3. Holds, Confirmation & Expiry
+
+- [ ] 3.1 Implement `POST /api/holds` accepting `{ seatIds, sessionId }`; atomically acquire ALL requested seats only if every one is currently available; on success create a hold with `expires_at = now + TTL`, mark those seats held, and return the hold; if any requested seat is unavailable, acquire none and return 409 with the conflicting seat ids (all-or-nothing)
+- [ ] 3.2 Implement `POST /api/holds/:holdId/confirm`; within a single transaction verify the hold exists, is not expired, and owns its seats, then mark them booked. Make it idempotent (a second confirm of the same hold returns the same booking, books nothing additional). Reject expired or unknown holds with an error and book nothing
+- [ ] 3.3 Implement `DELETE /api/holds/:holdId` to release a hold early, returning its seats to available
+- [ ] 3.4 Enforce expiry: on every seat read and before every hold/confirm operation, treat holds whose `expires_at` is in the past as released; broadcast the resulting releases. A periodic sweep may additionally release stale holds
+- [ ] 3.5 Implement the SSE endpoint (`GET /api/stream`) that maintains active connections and broadcasts every seat status transition (held, booked, released) so all seat maps stay live
+
+## 4. Frontend Implementation
+
+- [ ] 4.1 Render the seat map from `GET /api/seats` on load, with distinct visual states for available, held, and booked seats
+- [ ] 4.2 Allow selecting one or more available seats and requesting a hold; on success, show a countdown reflecting the hold's remaining TTL
+- [ ] 4.3 Allow confirming the current hold; reflect the seats as booked on success
+- [ ] 4.4 Connect to the SSE endpoint using `EventSource` and update seat statuses live as other users hold, book, or release seats
+- [ ] 4.5 Handle a failed hold (409) by indicating which seats were already taken and refreshing the seat map
+
+## Acceptance Criteria (graded)
+
+- No seat is ever in the `booked` state for two different sessions. (Under many concurrent hold requests for the same seat, exactly one succeeds.)
+- An active hold blocks other users from holding or booking those seats until it expires, is released, or is confirmed.
+- After a hold's TTL elapses, its seats become available again without any manual action.
+- Confirming an expired or unknown hold fails and books nothing.
+- Confirmation is idempotent: repeated confirms of the same hold book the seats exactly once.
+- At all times, available + held(active) + booked equals the total number of seats.
+- After a sequence of holds, confirms, releases, and expiries, all connected clients converge to the same seat statuses.

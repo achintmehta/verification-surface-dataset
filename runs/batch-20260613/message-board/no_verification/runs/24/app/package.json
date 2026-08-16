@@ -1,0 +1,16 @@
+{
+  "name": "realtime-message-board",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A real-time message board using PGLite and SSE",
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && node index.js",
+    "dev:client": "cd client && npx vite",
+    "build": "cd client && npx vite build",
+    "start": "cd server && node index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,178 @@
+:root {
+  --bg: #0f1220;
+  --panel: #1a1f33;
+  --text: #e7e9f3;
+  --muted: #9aa0b9;
+  --available: #2f6f4f;
+  --available-hover: #3c8d65;
+  --held: #b08400;
+  --held-mine: #d8a200;
+  --selected: #3f6fd8;
+  --booked: #6b2230;
+  --booked-mine: #8b3a4a;
+  --border: #2a3050;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.app-header h1 { margin: 0 0 0.5rem; font-size: 1.4rem; }
+
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.legend { display: inline-flex; align-items: center; gap: 0.4rem; }
+.swatch {
+  width: 14px; height: 14px; border-radius: 3px; display: inline-block;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.swatch.available { background: var(--available); }
+.swatch.held { background: var(--held); }
+.swatch.held-mine { background: var(--held-mine); }
+.swatch.selected { background: var(--selected); }
+.swatch.booked { background: var(--booked); }
+.swatch.booked-mine { background: var(--booked-mine); }
+
+.conn-indicator { margin-left: auto; font-size: 1.1rem; color: #888; }
+.conn-indicator.online { color: #4caf50; }
+.conn-indicator.offline { color: #e05050; }
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.screen {
+  text-align: center;
+  letter-spacing: 0.5em;
+  color: var(--muted);
+  background: linear-gradient(180deg, #2a3050, transparent);
+  border-radius: 50% 50% 0 0 / 12px 12px 0 0;
+  padding: 0.5rem 0;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.seat-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.seat {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--available);
+  color: #fff;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform 0.08s, background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.seat:hover:not(:disabled) { transform: translateY(-2px); }
+.seat.available { background: var(--available); }
+.seat.held { background: var(--held); cursor: not-allowed; }
+.seat.held-mine { background: var(--held-mine); cursor: pointer; }
+.seat.selected { background: var(--selected); outline: 2px solid #fff; }
+.seat.booked { background: var(--booked); cursor: not-allowed; }
+.seat.booked-mine { background: var(--booked-mine); cursor: not-allowed; }
+.seat.conflict { animation: flash 0.6s ease-in-out 3; }
+
+@keyframes flash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(224,80,80,0); }
+  50% { box-shadow: 0 0 0 3px rgba(224,80,80,0.9); }
+}
+
+.controls {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.inventory {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.inventory b { color: var(--text); }
+
+.actions { display: flex; flex-direction: column; gap: 0.75rem; }
+.selection-info { font-size: 0.9rem; color: var(--muted); }
+
+.hold-panel {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.75rem;
+  background: rgba(216,162,0,0.1);
+  border: 1px solid var(--held);
+  border-radius: 8px;
+}
+.countdown { font-size: 0.95rem; }
+#countdown { font-weight: 700; color: var(--held-mine); }
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--selected); color: #fff; }
+.btn-secondary { background: #444a66; color: #fff; }
+
+.message { margin-top: 0.75rem; min-height: 1.2rem; font-size: 0.9rem; }
+.message.error { color: #ff8a8a; }
+.message.success { color: #8affb0; }
+.message.info { color: var(--muted); }
+
+.hidden { display: none !important; }
+
+.app-footer {
+  text-align: center;
+  padding: 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+code { background: #00000040; padding: 0.1rem 0.3rem; border-radius: 4px; }

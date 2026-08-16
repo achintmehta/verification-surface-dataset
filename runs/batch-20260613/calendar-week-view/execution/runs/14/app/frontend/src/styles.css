@@ -1,0 +1,278 @@
+:root {
+  --hour-height: 48px; /* pixels per hour on the time axis */
+  --axis-width: 56px;
+  --header-height: 56px;
+  --border: #e2e6ea;
+  --border-strong: #cbd2d9;
+  --bg: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --today: #fef3c7;
+  --event-bg: #2563eb;
+  --event-border: #1d4ed8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #111827;
+  background: #f9fafb;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--bg);
+  flex: 0 0 auto;
+}
+
+.toolbar h1 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.toolbar .range-label {
+  font-size: 15px;
+  color: var(--muted);
+  margin-left: 8px;
+}
+
+.toolbar .spacer {
+  flex: 1;
+}
+
+button {
+  font: inherit;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+button:hover {
+  background: #f3f4f6;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+button.primary:hover {
+  background: #1d4ed8;
+}
+button.danger {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+}
+button.danger:hover {
+  background: #b91c1c;
+}
+
+/* ---- calendar grid ---- */
+
+.calendar {
+  flex: 1 1 auto;
+  overflow: auto;
+  background: var(--bg);
+}
+
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--axis-width) repeat(7, 1fr);
+}
+
+/* Sticky day headers row */
+.day-headers {
+  display: contents;
+}
+
+.corner {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-strong);
+  border-right: 1px solid var(--border);
+  height: var(--header-height);
+}
+
+.day-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  height: var(--header-height);
+  border-bottom: 1px solid var(--border-strong);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.day-header .dow {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.day-header .date {
+  font-size: 18px;
+  font-weight: 600;
+}
+.day-header.today .date {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+
+/* Time axis */
+.axis {
+  position: relative;
+  border-right: 1px solid var(--border-strong);
+  grid-column: 1;
+}
+.axis .hour-label {
+  position: absolute;
+  right: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  transform: translateY(-50%);
+}
+
+/* Day columns */
+.day-column {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+.day-column.today {
+  background: var(--today);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border);
+  pointer-events: none;
+}
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #f0f2f4;
+  pointer-events: none;
+}
+
+/* Events */
+.event {
+  position: absolute;
+  background: var(--event-bg);
+  border: 1px solid var(--event-border);
+  border-radius: 5px;
+  color: #fff;
+  padding: 2px 5px;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.2;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.event:hover {
+  filter: brightness(1.08);
+  z-index: 20 !important;
+}
+.event .ev-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event .ev-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+}
+
+/* Drag selection ghost */
+.drag-ghost {
+  position: absolute;
+  background: var(--accent-soft);
+  border: 1px dashed var(--accent);
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* ---- modal ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+.modal h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+.modal label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 10px 0 4px;
+}
+.modal input {
+  width: 100%;
+  font: inherit;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+.modal .error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 10px;
+  min-height: 16px;
+}
+.modal .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  align-items: center;
+}
+.modal .actions .spacer {
+  flex: 1;
+}

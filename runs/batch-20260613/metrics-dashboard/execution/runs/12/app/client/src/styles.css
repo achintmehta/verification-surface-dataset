@@ -1,0 +1,401 @@
+/* ===========================================================================
+   Theme tokens. The [data-theme] attribute on <html> switches palettes.
+   Defaults to light; the persisted theme is applied before first paint.
+   =========================================================================== */
+:root,
+:root[data-theme='light'] {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f8;
+  --border: #e2e6ef;
+  --text: #1b2330;
+  --text-muted: #5b6678;
+  --accent: #2f6df6;
+  --accent-soft: #e7f0ff;
+  --positive: #1a8a52;
+  --negative: #c23a3a;
+  --chart-axis: #aab2c2;
+  --chart-grid: #e6e9f1;
+  --chart-series: #2f6df6;
+  --chart-series-fill: rgba(47, 109, 246, 0.12);
+  --chart-label: #5b6678;
+  --bar-track: #eef1f7;
+  --shadow: 0 1px 3px rgba(20, 30, 50, 0.08), 0 1px 2px rgba(20, 30, 50, 0.04);
+}
+
+:root[data-theme='dark'] {
+  --bg: #11151c;
+  --surface: #1a212c;
+  --surface-2: #222b38;
+  --border: #2c3645;
+  --text: #e8edf5;
+  --text-muted: #9aa6b8;
+  --accent: #5b8bff;
+  --accent-soft: #1d2a44;
+  --positive: #46c98a;
+  --negative: #ff7b7b;
+  --chart-axis: #4a5567;
+  --chart-grid: #283142;
+  --chart-series: #5b8bff;
+  --chart-series-fill: rgba(91, 139, 255, 0.16);
+  --chart-label: #9aa6b8;
+  --bar-track: #232c39;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  line-height: 1.45;
+  /* Guard against any incidental sideways scroll. */
+  overflow-x: hidden;
+}
+
+#app {
+  /* The page never scrolls sideways: width is clamped to the viewport. */
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(12px, 3vw, 28px);
+}
+
+/* ---- Header ---------------------------------------------------------------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: clamp(16px, 3vw, 24px);
+  flex-wrap: wrap;
+}
+
+.header__title {
+  margin: 0;
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.header__subtitle {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- Grid layout ----------------------------------------------------------
+   Mobile-first: everything is a single column.
+   - >= 640px : two columns
+   - >= 1024px: four stat cards in one row; chart + breakdown side by side.
+   --------------------------------------------------------------------------- */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2.5vw, 20px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2.5vw, 20px);
+}
+
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2.5vw, 20px);
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* The recent-items table is wide; let it span both columns at every
+     multi-column breakpoint so it stays comfortably usable. */
+  .card--table {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  /* Chart and breakdown sit side by side; the table spans full width. */
+  .body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .card--table {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---- Card -------------------------------------------------------------------*/
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: clamp(14px, 2.5vw, 20px);
+  box-shadow: var(--shadow);
+  /* minmax(0,1fr) plus this keeps grid children from overflowing. */
+  min-width: 0;
+}
+
+.card__title {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ---- Stat card --------------------------------------------------------------*/
+.stat__label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat__value {
+  margin: 8px 0 0;
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  /* The 7-digit revenue value must render fully without overflowing. */
+  overflow-wrap: anywhere;
+  line-height: 1.1;
+}
+
+.stat__meta {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+.trend--up {
+  color: var(--positive);
+}
+.trend--down {
+  color: var(--negative);
+}
+
+/* ---- Chart ------------------------------------------------------------------*/
+.chart-wrap {
+  width: 100%;
+  /* The SVG fills this box; JS reads its size and redraws on resize. */
+}
+.chart-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.chart__axis-line {
+  stroke: var(--chart-axis);
+  stroke-width: 1;
+}
+.chart__grid-line {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+.chart__series {
+  fill: none;
+  stroke: var(--chart-series);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.chart__series-fill {
+  fill: var(--chart-series-fill);
+  stroke: none;
+}
+.chart__label {
+  fill: var(--chart-label);
+  font-size: 11px;
+}
+
+/* ---- Category bars ----------------------------------------------------------*/
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bar-row {
+  display: grid;
+  /* label column is flexible but can shrink to 0 (min-width:0) so the
+     ellipsis can engage; value column is sized to content. */
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 12px;
+}
+.bar-row__label {
+  min-width: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar-row__value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-align: right;
+}
+.bar-row__track {
+  grid-column: 1 / -1;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bar-track);
+  overflow: hidden;
+}
+.bar-row__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+/* ---- Table ------------------------------------------------------------------*/
+.table-scroll {
+  /* The table can scroll horizontally *within its card* without forcing the
+     whole page to scroll sideways. */
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 420px; /* keeps columns legible; card clips overflow via scroll */
+}
+thead th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+tbody tr:last-child td {
+  border-bottom: none;
+}
+.td-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.td-num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.pill {
+  display: inline-block;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* ---- States -----------------------------------------------------------------*/
+.state {
+  margin: 48px auto;
+  max-width: 480px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 24px;
+  box-shadow: var(--shadow);
+}
+.state__title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.state__msg {
+  margin: 0 0 18px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.state--error .state__title {
+  color: var(--negative);
+}
+.retry-btn {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.retry-btn:hover {
+  filter: brightness(1.05);
+}
+
+.skeleton {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 48px 0;
+}

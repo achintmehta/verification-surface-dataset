@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🎟️ Event Seat Booking</h1>
+      <div class="legend">
+        <span class="legend-item"><span class="swatch available"></span>Available</span>
+        <span class="legend-item"><span class="swatch selected"></span>Selected</span>
+        <span class="legend-item"><span class="swatch held"></span>Held</span>
+        <span class="legend-item"><span class="swatch mine"></span>Your hold</span>
+        <span class="legend-item"><span class="swatch booked"></span>Booked</span>
+      </div>
+    </header>
+
+    <main>
+      <section id="screen">SCREEN</section>
+      <section id="seat-map" aria-label="Seat map"></section>
+
+      <aside id="panel">
+        <div id="inventory" class="inventory"></div>
+
+        <div id="selection-info" class="selection-info">
+          <p>Select one or more available seats.</p>
+        </div>
+
+        <div id="hold-info" class="hold-info hidden">
+          <p>Hold active — <strong id="countdown"></strong> remaining</p>
+        </div>
+
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" class="hidden">Confirm booking</button>
+          <button id="release-btn" class="hidden secondary">Release hold</button>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="session">
+          <small>Session: <code id="session-id"></code></small>
+          <button id="new-session" class="link">New session</button>
+        </div>
+        <div id="conn-status" class="conn-status"></div>
+      </aside>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

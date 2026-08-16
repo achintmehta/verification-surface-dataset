@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <script type="module" crossorigin src="/assets/index-DY69g_F1.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-p62mTA5W.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="session-info">
+        Session: <span id="session-id-display"></span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Legend -->
+      <div class="legend">
+        <span class="legend-item"><span class="seat-demo available"></span> Available</span>
+        <span class="legend-item"><span class="seat-demo held"></span> Held</span>
+        <span class="legend-item"><span class="seat-demo held-mine"></span> Your Hold</span>
+        <span class="legend-item"><span class="seat-demo booked"></span> Booked</span>
+        <span class="legend-item"><span class="seat-demo selected"></span> Selected</span>
+      </div>
+
+      <!-- Stage indicator -->
+      <div class="stage">
+        <div class="stage-label">STAGE</div>
+      </div>
+
+      <!-- Seat map -->
+      <div id="seat-map" class="seat-map" aria-label="Seat map">
+        <div class="loading">Loading seats…</div>
+      </div>
+
+      <!-- Action panel -->
+      <div id="action-panel" class="action-panel">
+        <!-- Hold panel -->
+        <div id="hold-panel" class="panel hidden">
+          <h2>Hold Seats</h2>
+          <p id="selected-seats-info"></p>
+          <button id="btn-hold" class="btn btn-primary">Place Hold</button>
+          <button id="btn-clear-selection" class="btn btn-secondary">Clear Selection</button>
+        </div>
+
+        <!-- Active hold panel -->
+        <div id="active-hold-panel" class="panel hidden">
+          <h2>Active Hold</h2>
+          <p id="hold-seats-info"></p>
+          <div class="countdown-wrapper">
+            <span>Expires in: </span>
+            <span id="countdown" class="countdown">--</span>
+          </div>
+          <div class="hold-actions">
+            <button id="btn-confirm" class="btn btn-success">Confirm Booking</button>
+            <button id="btn-release" class="btn btn-danger">Release Hold</button>
+          </div>
+        </div>
+
+        <!-- Booking confirmed panel -->
+        <div id="booking-panel" class="panel hidden">
+          <h2>✅ Booking Confirmed!</h2>
+          <p id="booking-info"></p>
+          <button id="btn-new-booking" class="btn btn-primary">Book More Seats</button>
+        </div>
+
+        <!-- Error panel -->
+        <div id="error-panel" class="panel hidden">
+          <h2>⚠️ Error</h2>
+          <p id="error-message"></p>
+          <button id="btn-dismiss-error" class="btn btn-secondary">Dismiss</button>
+        </div>
+
+        <!-- Idle hint -->
+        <div id="idle-hint" class="panel idle-hint">
+          <p>Click available seats to select them, then place a hold.</p>
+        </div>
+      </div>
+
+      <!-- Inventory summary -->
+      <div id="inventory" class="inventory">
+        <span>Available: <strong id="inv-available">–</strong></span>
+        <span>Held: <strong id="inv-held">–</strong></span>
+        <span>Booked: <strong id="inv-booked">–</strong></span>
+        <span>Total: <strong id="inv-total">–</strong></span>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

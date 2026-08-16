@@ -1,0 +1,356 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-surface-2:    #22263a;
+  --color-border:       #2e3250;
+  --color-text:         #e2e8f0;
+  --color-text-muted:   #8892a4;
+
+  --color-available:    #2d6a4f;
+  --color-available-h:  #40916c;
+  --color-held-mine:    #e9c46a;
+  --color-held-other:   #e76f51;
+  --color-booked:       #457b9d;
+  --color-selected:     #a8dadc;
+  --color-selected-h:   #caf0f8;
+
+  --color-primary:      #4361ee;
+  --color-primary-h:    #3a56d4;
+  --color-success:      #2d6a4f;
+  --color-success-h:    #1b4332;
+  --color-danger:       #c1121f;
+  --color-danger-h:     #9d0208;
+  --color-secondary:    #4a4e69;
+  --color-secondary-h:  #3a3d55;
+
+  --radius:             8px;
+  --seat-size:          42px;
+  --seat-gap:           8px;
+  --transition:         0.15s ease;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+#session-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+#session-id-display {
+  font-family: monospace;
+  color: var(--color-text);
+}
+
+.sse-status {
+  font-size: 1.1rem;
+  transition: color var(--transition);
+}
+.sse-status.connected    { color: #40916c; }
+.sse-status.disconnected { color: #e76f51; }
+
+/* ============================================================
+   Main layout
+   ============================================================ */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  gap: 24px;
+}
+
+/* ============================================================
+   Stage label
+   ============================================================ */
+.stage-label {
+  width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  padding: 8px 0;
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   Seat map
+   ============================================================ */
+#seat-map-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  overflow-x: auto;
+  max-width: 95vw;
+}
+
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: var(--seat-gap);
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--seat-gap);
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: 6px 6px 3px 3px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.seat::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 4px;
+  right: 4px;
+  height: 4px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 0 0 3px 3px;
+}
+
+.seat.available {
+  background: var(--color-available);
+  cursor: pointer;
+}
+.seat.available:hover {
+  background: var(--color-available-h);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(64,145,108,0.4);
+}
+
+.seat.selected {
+  background: var(--color-selected);
+  color: #0f1117;
+  cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168,218,220,0.5);
+}
+.seat.selected:hover {
+  background: var(--color-selected-h);
+}
+
+.seat.held-mine {
+  background: var(--color-held-mine);
+  color: #0f1117;
+  cursor: default;
+}
+
+.seat.held-other {
+  background: var(--color-held-other);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.seat.booked {
+  background: var(--color-booked);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.seat.flash {
+  animation: flash 0.5s ease;
+}
+
+@keyframes flash {
+  0%   { filter: brightness(2); }
+  100% { filter: brightness(1); }
+}
+
+/* ============================================================
+   Legend
+   ============================================================ */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.seat-demo {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px 4px 2px 2px;
+  display: inline-block;
+}
+.seat-demo.available  { background: var(--color-available); }
+.seat-demo.held-mine  { background: var(--color-held-mine); }
+.seat-demo.held-other { background: var(--color-held-other); }
+.seat-demo.booked     { background: var(--color-booked); }
+.seat-demo.selected   { background: var(--color-selected); }
+
+/* ============================================================
+   Action panel
+   ============================================================ */
+#action-panel {
+  width: 100%;
+  max-width: 560px;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel.hidden { display: none; }
+
+.hold-info p, .booked-info p, .error-info p {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.hold-info strong, .booked-info strong {
+  color: var(--color-text);
+}
+
+.hold-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.booked-info, .error-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.booked-icon, .error-icon {
+  font-size: 1.5rem;
+}
+
+.idle-hint {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary   { background: var(--color-primary);   color: #fff; }
+.btn-primary:hover   { background: var(--color-primary-h); }
+
+.btn-success   { background: var(--color-success);   color: #fff; }
+.btn-success:hover   { background: var(--color-success-h); }
+
+.btn-danger    { background: var(--color-danger);    color: #fff; }
+.btn-danger:hover    { background: var(--color-danger-h); }
+
+.btn-secondary { background: var(--color-secondary); color: #fff; }
+.btn-secondary:hover { background: var(--color-secondary-h); }
+
+/* ============================================================
+   Countdown
+   ============================================================ */
+#hold-countdown {
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: var(--color-held-mine);
+}
+
+#hold-countdown.urgent {
+  color: var(--color-danger);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 600px) {
+  header { padding: 12px 16px; }
+  header h1 { font-size: 1.2rem; }
+  :root { --seat-size: 34px; --seat-gap: 5px; }
+  #seat-map-container { padding: 14px; }
+}

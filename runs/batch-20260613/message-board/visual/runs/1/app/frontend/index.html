@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ── Header ─────────────────────────────────────────────────────── -->
+      <header class="header">
+        <div class="header__inner">
+          <h1 class="header__title">
+            <span class="header__icon">💬</span>
+            Message Board
+          </h1>
+          <span class="header__status" id="status-badge" data-state="connecting">
+            <span class="status-dot"></span>
+            <span class="status-label">Connecting…</span>
+          </span>
+        </div>
+      </header>
+
+      <!-- ── Main content ───────────────────────────────────────────────── -->
+      <main class="main">
+        <!-- Message feed -->
+        <section class="feed-wrapper" aria-label="Message feed">
+          <ul class="feed" id="message-feed" role="list">
+            <!-- Messages are injected here by JS -->
+          </ul>
+          <div class="feed-empty" id="feed-empty" hidden>
+            <span class="feed-empty__icon">🗒️</span>
+            <p>No messages yet. Be the first to say something!</p>
+          </div>
+        </section>
+
+        <!-- Compose form -->
+        <section class="compose" aria-label="Post a message">
+          <form class="compose__form" id="compose-form" autocomplete="off">
+            <label class="sr-only" for="message-input">Your message</label>
+            <input
+              class="compose__input"
+              id="message-input"
+              type="text"
+              placeholder="Write a message…"
+              maxlength="500"
+              required
+              autofocus
+            />
+            <button class="compose__btn" type="submit" aria-label="Send message">
+              <span class="compose__btn-text">Send</span>
+              <span class="compose__btn-icon" aria-hidden="true">➤</span>
+            </button>
+          </form>
+          <p class="compose__hint" id="compose-hint" hidden></p>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f1117;
+  --bg-header: #161b22;
+  --bg-row-even: #0f1117;
+  --bg-row-odd: #161b22;
+  --bg-row-hover: #1c2333;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+
+  --sev-debug: #8b949e;
+  --sev-info: #58a6ff;
+  --sev-warn: #d29922;
+  --sev-error: #f85149;
+
+  --row-height: 36px;
+  --header-height: 60px;
+  --table-header-height: 36px;
+  --status-height: 28px;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', 'Monaco', monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ===== Header ===== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: var(--header-height);
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left h1 {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.row-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+select, input[type="text"] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+select:focus, input[type="text"]:focus {
+  border-color: var(--accent);
+}
+
+select {
+  cursor: pointer;
+}
+
+input[type="text"] {
+  width: 240px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+.badge.hidden {
+  display: none;
+}
+
+/* ===== Table Header ===== */
+.table-header {
+  display: flex;
+  align-items: center;
+  height: var(--table-header-height);
+  padding: 0 12px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* ===== Scroller ===== */
+.scroller {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.scroller::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* The spacer sets the total scroll height */
+.spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  /* height set dynamically */
+}
+
+/* Rows are positioned absolutely within the scroller */
+.rows-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* top set dynamically */
+}
+
+/* ===== Log Row ===== */
+.log-row {
+  display: flex;
+  align-items: center;
+  height: var(--row-height);
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transition: background 0.05s;
+  cursor: default;
+  user-select: text;
+}
+
+.log-row:nth-child(even) {
+  background: var(--bg-row-even);
+}
+
+.log-row:nth-child(odd) {
+  background: var(--bg-row-odd);
+}
+
+.log-row:hover {
+  background: var(--bg-row-hover);
+}
+
+/* ===== Column widths ===== */
+.col-ts {
+  width: 200px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.col-severity {
+  width: 60px;
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.col-service {
+  width: 180px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-message {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+/* ===== Severity colors ===== */
+.sev-debug { color: var(--sev-debug); }
+.sev-info  { color: var(--sev-info); }
+.sev-warn  { color: var(--sev-warn); }
+.sev-error { color: var(--sev-error); }
+
+/* ===== Status Bar ===== */
+.status-bar {
+  height: var(--status-height);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+#status-text {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ===== Loading / Empty states ===== */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ===== Highlight search match ===== */
+mark {
+  background: rgba(210, 153, 34, 0.3);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}

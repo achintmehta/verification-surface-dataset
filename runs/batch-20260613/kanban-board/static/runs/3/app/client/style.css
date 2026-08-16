@@ -1,0 +1,227 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #f0f2f5;
+  --col-bg:      #ebecf0;
+  --col-header:  #172b4d;
+  --card-bg:     #ffffff;
+  --card-shadow: 0 1px 3px rgba(0,0,0,.15);
+  --accent:      #0052cc;
+  --accent-h:    #0065ff;
+  --danger:      #de350b;
+  --radius:      6px;
+  --gap:         16px;
+  --col-width:   280px;
+  --header-h:    56px;
+  --transition:  150ms ease;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  background: var(--bg);
+  color: #172b4d;
+}
+
+/* ── App header ───────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--header-h);
+  padding: 0 var(--gap);
+  background: var(--col-header);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: .5px; }
+
+.connection-status {
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #ff5630;          /* red = disconnected */
+  transition: color var(--transition);
+}
+.connection-status.connected    { color: #36b37e; }
+.connection-status.connecting   { color: #ffab00; }
+
+/* ── Board ────────────────────────────────────────────────────────────────── */
+.board {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: var(--gap);
+  overflow-x: auto;
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ── Column ───────────────────────────────────────────────────────────────── */
+.column {
+  flex: 0 0 var(--col-width);
+  background: var(--col-bg);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-h) - var(--gap) * 2);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  font-weight: 700;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--col-header);
+  flex-shrink: 0;
+}
+
+.column-header .card-count {
+  background: #c1c7d0;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+/* ── Card list ────────────────────────────────────────────────────────────── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* Minimum height so empty columns are still drop targets */
+  min-height: 60px;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  box-shadow: var(--card-shadow);
+  cursor: grab;
+  user-select: none;
+  word-break: break-word;
+  transition: box-shadow var(--transition), opacity var(--transition), transform var(--transition);
+  position: relative;
+}
+
+.card:active { cursor: grabbing; }
+
+.card.dragging {
+  opacity: .45;
+  box-shadow: none;
+}
+
+/* Drop indicator line */
+.drop-indicator {
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 0 4px;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* ── Add-card button ──────────────────────────────────────────────────────── */
+.add-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid #c1c7d0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  color: #5e6c84;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+
+.add-card-btn:hover { background: #d5d9e0; color: var(--col-header); }
+
+.add-card-btn .icon { font-size: 1rem; line-height: 1; }
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9,30,66,.54);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-overlay.hidden { display: none; }
+
+.modal {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px;
+  width: min(420px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+}
+
+.modal h2 { font-size: 1rem; font-weight: 700; color: var(--col-header); }
+
+.modal textarea {
+  width: 100%;
+  resize: vertical;
+  border: 2px solid #dfe1e6;
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: .9rem;
+  color: var(--col-header);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.modal textarea:focus { border-color: var(--accent); }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 7px 16px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.btn-primary   { background: var(--accent);   color: #fff; }
+.btn-primary:hover  { background: var(--accent-h); }
+.btn-secondary { background: #dfe1e6; color: var(--col-header); }
+.btn-secondary:hover { background: #c1c7d0; }
+
+/* ── Scrollbar styling ────────────────────────────────────────────────────── */
+.card-list::-webkit-scrollbar { width: 5px; }
+.card-list::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 3px; }
+
+.board::-webkit-scrollbar { height: 8px; }
+.board::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 4px; }

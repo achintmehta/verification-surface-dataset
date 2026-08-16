@@ -1,0 +1,134 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+button, input { font: inherit; }
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px 18px 48px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 3rem); }
+p { color: #94a3b8; }
+.session-box {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 260px;
+}
+.session-box label { display: block; color: #cbd5e1; font-size: 0.85rem; margin-bottom: 6px; }
+.session-box input {
+  width: 100%;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.toolbar, .hold-panel, .message {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.legend-item { display: inline-flex; align-items: center; gap: 7px; color: #cbd5e1; }
+.swatch { width: 18px; height: 18px; border-radius: 5px; display: inline-block; }
+.swatch.available { background: #22c55e; }
+.swatch.held { background: #f59e0b; }
+.swatch.booked { background: #64748b; }
+.swatch.selected { background: #38bdf8; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+button {
+  border: 0;
+  border-radius: 10px;
+  color: #082f49;
+  background: #38bdf8;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+button.secondary { background: #cbd5e1; color: #0f172a; }
+button.danger { background: #fb7185; color: #450a0a; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.seat-map {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 18px;
+  overflow-x: auto;
+}
+.stage {
+  text-align: center;
+  letter-spacing: 0.28em;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  border-radius: 999px;
+  padding: 10px;
+  margin-bottom: 22px;
+}
+.row {
+  display: grid;
+  grid-template-columns: 34px repeat(10, minmax(54px, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.row-label { color: #cbd5e1; font-weight: 800; text-align: center; }
+.seat {
+  min-height: 46px;
+  border: 2px solid transparent;
+  border-radius: 12px 12px 7px 7px;
+  color: #052e16;
+  background: #22c55e;
+  font-weight: 900;
+  transition: transform 0.08s ease, filter 0.12s ease, border-color 0.12s ease;
+}
+.seat.available:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.seat.selected { background: #38bdf8; color: #082f49; border-color: #bae6fd; }
+.seat.held { background: #f59e0b; color: #451a03; }
+.seat.booked { background: #64748b; color: #e2e8f0; }
+.seat.unavailable { cursor: not-allowed; opacity: 0.82; }
+.seat.conflict { outline: 4px solid #fb7185; }
+
+.hold-panel { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; align-items: center; }
+.countdown { color: #fbbf24; font-weight: 900; }
+.message { color: #cbd5e1; }
+.message.error { border-color: #fb7185; color: #fecdd3; }
+.message.success { border-color: #22c55e; color: #bbf7d0; }
+.hidden { display: none; }
+
+@media (max-width: 720px) {
+  header { display: block; }
+  .session-box { min-width: 0; }
+  .row { grid-template-columns: 28px repeat(10, 46px); }
+  .seat { min-height: 40px; padding: 4px; }
+}

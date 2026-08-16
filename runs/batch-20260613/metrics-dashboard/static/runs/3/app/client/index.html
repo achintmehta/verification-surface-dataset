@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <!--
+    Theme is applied before first paint by the inline script below.
+    It reads the persisted theme from the server synchronously via a
+    blocking fetch is not possible, so we default to 'light' and then
+    the JS module corrects it immediately on load (before rendering).
+    To avoid FOUC we use a <script> that sets the data-theme attribute
+    as early as possible using a cached value in sessionStorage.
+  -->
+  <script>
+    (function () {
+      // Apply cached theme immediately to avoid flash of wrong theme
+      var cached = sessionStorage.getItem('theme');
+      if (cached === 'dark' || cached === 'light') {
+        document.documentElement.setAttribute('data-theme', cached);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__brand">
+          <svg class="header__logo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="12" width="4" height="10" rx="1" fill="currentColor"/>
+            <rect x="8" y="7"  width="4" height="15" rx="1" fill="currentColor"/>
+            <rect x="14" y="3" width="4" height="19" rx="1" fill="currentColor"/>
+            <rect x="20" y="9" width="2" height="13" rx="1" fill="currentColor"/>
+          </svg>
+          <span class="header__title">Metrics Dashboard</span>
+        </div>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="Toggle light/dark theme"
+          title="Toggle theme"
+        >
+          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="1"  x2="12" y2="3"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4.22" y1="4.22"   x2="5.64" y2="5.64"   stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1"  y1="12" x2="3"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"   stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"   stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Loading state -->
+      <div id="loading-state" class="state-overlay" aria-live="polite">
+        <div class="spinner" aria-label="Loading dashboard data"></div>
+        <p>Loading dashboard…</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="state-overlay state-overlay--error" aria-live="assertive" hidden>
+        <svg class="state-overlay__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="12" cy="16" r="1" fill="currentColor"/>
+        </svg>
+        <h2>Unable to load dashboard</h2>
+        <p id="error-message">Could not connect to the backend server.</p>
+        <button id="retry-btn" class="btn btn--primary">Retry</button>
+      </div>
+
+      <!-- Dashboard content (hidden until data loads) -->
+      <div id="dashboard" hidden>
+        <!-- Stat cards -->
+        <section class="section" aria-label="Summary statistics">
+          <div class="stat-grid" id="stat-grid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- Charts row -->
+        <section class="section charts-section" aria-label="Charts">
+          <div class="charts-grid">
+            <!-- Time-series chart -->
+            <div class="card chart-card" id="timeseries-card">
+              <h2 class="card__title">30-Day Revenue Trend</h2>
+              <div class="chart-container" id="timeseries-container">
+                <canvas id="timeseries-canvas" aria-label="30-day revenue time series chart"></canvas>
+              </div>
+            </div>
+
+            <!-- Category breakdown -->
+            <div class="card chart-card" id="categories-card">
+              <h2 class="card__title">Revenue by Category</h2>
+              <div class="categories-list" id="categories-list" aria-label="Category breakdown">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent items table -->
+        <section class="section" aria-label="Recent items">
+          <div class="card">
+            <h2 class="card__title">Recent Items</h2>
+            <div class="table-wrapper">
+              <table class="data-table" id="recent-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="text-right">Value</th>
+                    <th scope="col">Date</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

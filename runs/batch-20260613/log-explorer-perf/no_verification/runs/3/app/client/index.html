@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <h1 class="app-title">
+          <span class="app-icon">📋</span>
+          Log Explorer
+        </h1>
+      </div>
+      <div class="toolbar-center">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search messages…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="search-clear" class="search-clear" aria-label="Clear search" hidden>✕</button>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <div class="severity-filter" id="severity-filter">
+          <button class="sev-btn active" data-severity="">All</button>
+          <button class="sev-btn sev-debug" data-severity="debug">Debug <span class="badge" id="badge-debug">–</span></button>
+          <button class="sev-btn sev-info"  data-severity="info">Info  <span class="badge" id="badge-info">–</span></button>
+          <button class="sev-btn sev-warn"  data-severity="warn">Warn  <span class="badge" id="badge-warn">–</span></button>
+          <button class="sev-btn sev-error" data-severity="error">Error <span class="badge" id="badge-error">–</span></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="status-bar">
+      <span id="row-count-label" class="row-count">Loading…</span>
+      <span id="loading-indicator" class="loading-indicator" hidden>Fetching…</span>
+    </div>
+
+    <div class="table-container">
+      <!-- Column headers (fixed) -->
+      <div class="table-header">
+        <div class="col col-ts">Timestamp</div>
+        <div class="col col-sev">Severity</div>
+        <div class="col col-svc">Service</div>
+        <div class="col col-msg">Message</div>
+      </div>
+
+      <!-- Virtual scroll container -->
+      <div id="scroll-container" class="scroll-container">
+        <!-- Spacer that gives the scrollbar its full height -->
+        <div id="scroll-spacer" class="scroll-spacer"></div>
+        <!-- Visible rows are absolutely positioned inside scroll-container -->
+        <div id="rows-viewport" class="rows-viewport"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "metrics-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "node server/index.js",
+    "dev:client": "vite --host 0.0.0.0",
+    "start": "NODE_ENV=production node server/index.js",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "lint": "node --check server/index.js && node --check src/main.js",
+    "typecheck": "node --check server/index.js && node --check src/main.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "latest",
+    "@vitejs/plugin-basic-ssl": "latest",
+    "cors": "latest",
+    "express": "latest"
+  },
+  "devDependencies": {
+    "concurrently": "latest",
+    "vite": "latest"
+  }
+}

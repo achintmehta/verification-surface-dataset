@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Explorer</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
+    .header { background: #fff; border-bottom: 1px solid #dee2e6; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+    .header h1 { margin: 0; font-size: 20px; }
+    .filters { display: flex; gap: 12px; align-items: center; flex: 1; }
+    .filters select, .filters input { padding: 8px 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+    .filters input { flex: 1; max-width: 300px; }
+    .stats { font-size: 13px; color: #6c757d; }
+    .table-container { position: relative; height: calc(100vh - 120px); overflow: auto; background: #fff; margin: 20px; border: 1px solid #dee2e6; border-radius: 8px; }
+    .virtual-scroller { position: relative; }
+    .log-row { position: absolute; left: 0; right: 0; display: flex; border-bottom: 1px solid #f1f3f5; font-size: 13px; height: 32px; align-items: center; padding: 0 12px; box-sizing: border-box; }
+    .log-row:hover { background: #f8f9fa; }
+    .col { padding: 0 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .col-ts { width: 180px; font-family: monospace; color: #495057; }
+    .col-sev { width: 70px; font-weight: 600; }
+    .col-service { width: 110px; color: #495057; }
+    .col-msg { flex: 1; }
+    .severity-debug { color: #6c757d; }
+    .severity-info { color: #0d6efd; }
+    .severity-warn { color: #fd7e14; }
+    .severity-error { color: #dc3545; }
+    .loading { padding: 40px; text-align: center; color: #6c757d; }
+    .empty { padding: 40px; text-align: center; color: #6c757d; }
+    .row-count { margin-left: auto; font-size: 13px; color: #495057; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Log Explorer</h1>
+    <div class="filters">
+      <select id="severity-filter">
+        <option value="">All severities</option>
+        <option value="debug">Debug</option>
+        <option value="info">Info</option>
+        <option value="warn">Warn</option>
+        <option value="error">Error</option>
+      </select>
+      <input type="text" id="search-input" placeholder="Search in messages...">
+      <div class="row-count" id="row-count">0 of 0</div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="table-container" id="table-container">
+    <div class="virtual-scroller" id="scroller">
+      <!-- rows injected here -->
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

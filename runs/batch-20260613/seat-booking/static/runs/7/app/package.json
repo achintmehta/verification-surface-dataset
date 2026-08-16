@@ -1,0 +1,21 @@
+{
+  "name": "seat-booking",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "vite --host 0.0.0.0 --config client/vite.config.js",
+    "build": "vite build --config client/vite.config.js",
+    "start": "NODE_ENV=production node server/index.js",
+    "lint": "node --check server/index.js && node --check client/src/main.js && node --check client/vite.config.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "latest",
+    "concurrently": "latest",
+    "cors": "latest",
+    "express": "latest",
+    "vite": "latest"
+  }
+}

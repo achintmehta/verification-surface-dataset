@@ -1,0 +1,22 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "High-volume log explorer with virtualized scrolling and windowed queries",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "node backend/server.js",
+    "dev:frontend": "vite frontend",
+    "start": "node backend/server.js",
+    "build": "vite build frontend"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.12",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.4.0"
+  }
+}

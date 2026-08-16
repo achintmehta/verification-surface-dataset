@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Viewport Tests — Metrics Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #111827;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 24px;
+    color: #e5e7eb;
+  }
+  h1 { font-size: 1.125rem; font-weight: 700; margin-bottom: 24px; color: #f9fafb; }
+  .tests { display: flex; flex-direction: column; gap: 40px; }
+  .test-block { }
+  .test-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #9ca3af;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .test-label span.badge {
+    background: #374151;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    color: #d1d5db;
+  }
+  .frame-outer {
+    border: 1px solid #374151;
+    border-radius: 10px;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 100%;
+  }
+  iframe {
+    display: block;
+    border: none;
+    background: #fff;
+  }
+</style>
+</head>
+<body>
+<h1>📐 Responsive Viewport Tests</h1>
+<div class="tests">
+
+  <div class="test-block">
+    <div class="test-label">
+      📱 Mobile
+      <span class="badge">360 × 700px · 1-column layout</span>
+    </div>
+    <div class="frame-outer">
+      <iframe src="/" width="360" height="700"></iframe>
+    </div>
+  </div>
+
+  <div class="test-block">
+    <div class="test-label">
+      📱 Tablet
+      <span class="badge">768 × 700px · 2-column stat cards</span>
+    </div>
+    <div class="frame-outer">
+      <iframe src="/" width="768" height="700"></iframe>
+    </div>
+  </div>
+
+  <div class="test-block">
+    <div class="test-label">
+      🖥️ Desktop
+      <span class="badge">1280 × 800px · 4-column stats + 2-col body</span>
+    </div>
+    <div class="frame-outer">
+      <iframe src="/" width="1280" height="800"></iframe>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

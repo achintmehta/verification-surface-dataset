@@ -1,0 +1,375 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --header-height: 56px;
+  --day-header-height: 52px;
+  --hour-height: 64px;          /* px per hour — single source of truth */
+  --total-height: calc(var(--hour-height) * 24);
+  --gutter-width: 56px;
+  --col-gap: 1px;               /* gap between day columns */
+  --event-radius: 4px;
+  --today-bg: #fffbeb;
+  --grid-line: #e5e7eb;
+  --half-line: #f3f4f6;
+  --accent: #3b82f6;
+  --accent-dark: #1d4ed8;
+  --danger: #ef4444;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --font: system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: #f9fafb;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+#cal-header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--grid-line);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-controls button {
+  padding: 6px 12px;
+  border: 1px solid var(--grid-line);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+.nav-controls button:hover { background: #f3f4f6; }
+
+#week-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ── Calendar container ───────────────────────────────────────────────────── */
+#cal-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── Time gutter ──────────────────────────────────────────────────────────── */
+#time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  /* top padding aligns with day-header + scroll offset */
+  padding-top: var(--day-header-height);
+  overflow: hidden;
+  border-right: 1px solid var(--grid-line);
+  background: #fff;
+  z-index: 5;
+}
+
+.gutter-hour {
+  height: var(--hour-height);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  /* shift label up so it sits on the line */
+  transform: translateY(-7px);
+}
+.gutter-hour:first-child { transform: translateY(0); }
+
+/* ── Days wrapper ─────────────────────────────────────────────────────────── */
+#days-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ── Day headers ──────────────────────────────────────────────────────────── */
+#day-headers {
+  height: var(--day-header-height);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--col-gap);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--grid-line);
+  background: #fff;
+  z-index: 5;
+}
+
+.day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.day-header .day-num {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.day-header.today {
+  color: var(--accent);
+}
+.day-header.today .day-num {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Grid scroll ──────────────────────────────────────────────────────────── */
+#grid-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#grid-body {
+  position: relative;
+  height: var(--total-height);
+}
+
+/* ── Hour lines ───────────────────────────────────────────────────────────── */
+#hour-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--grid-line);
+}
+
+.half-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--half-line);
+}
+
+/* ── Day columns ──────────────────────────────────────────────────────────── */
+#day-columns {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--col-gap);
+}
+
+.day-col {
+  position: relative;
+  height: 100%;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+.day-col.today-col {
+  background: var(--today-bg);
+}
+
+/* drag selection highlight */
+.drag-selection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  pointer-events: none;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* ── Event blocks ─────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: var(--event-radius);
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 6px;
+  font-size: 11px;
+  line-height: 1.3;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transition: filter 0.1s;
+  /* prevent text selection during drag */
+  user-select: none;
+  /* ensure events are above grid lines */
+  z-index: 2;
+  /* box-sizing already border-box */
+  border-left: 3px solid var(--accent-dark);
+}
+
+.event-block:hover {
+  filter: brightness(1.1);
+  z-index: 3;
+}
+
+.event-block .ev-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-block .ev-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+  font-size: 10px;
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#modal-overlay.hidden { display: none; }
+
+#modal-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px 32px;
+  width: 380px;
+  max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+#modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+#event-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  margin-top: 14px;
+}
+#event-form label:first-of-type { margin-top: 0; }
+
+#event-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--grid-line);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s;
+}
+#event-form input:focus { border-color: var(--accent); }
+
+.form-error {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: var(--danger);
+  font-size: 13px;
+}
+.form-error.hidden { display: none; }
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#btn-save {
+  background: var(--accent);
+  color: #fff;
+  flex: 1;
+}
+#btn-save:hover { background: var(--accent-dark); }
+
+#btn-delete {
+  background: var(--danger);
+  color: #fff;
+}
+#btn-delete:hover { background: #dc2626; }
+#btn-delete.hidden { display: none; }
+
+#btn-cancel {
+  background: #f3f4f6;
+  color: var(--text-primary);
+}
+#btn-cancel:hover { background: #e5e7eb; }
+
+/* ── Scrollbar styling ────────────────────────────────────────────────────── */
+#grid-scroll::-webkit-scrollbar { width: 6px; }
+#grid-scroll::-webkit-scrollbar-track { background: transparent; }
+#grid-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }

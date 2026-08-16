@@ -1,0 +1,39 @@
+const API_BASE = 'http://localhost:3001/api';
+
+export async function fetchEvents(start, end) {
+  const url = `${API_BASE}/events?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch events: ${res.statusText}`);
+  return res.json();
+}
+
+export async function createEvent(data) {
+  const res = await fetch(`${API_BASE}/events`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Failed to create event');
+  return json;
+}
+
+export async function updateEvent(id, data) {
+  const res = await fetch(`${API_BASE}/events/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Failed to update event');
+  return json;
+}
+
+export async function deleteEvent(id) {
+  const res = await fetch(`${API_BASE}/events/${id}`, {
+    method: 'DELETE',
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Failed to delete event');
+  return json;
+}

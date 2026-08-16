@@ -1,0 +1,145 @@
+:root {
+  --bg: #0e1116;
+  --panel: #161b22;
+  --border: #2a313c;
+  --text: #c9d1d9;
+  --muted: #7d8590;
+  --row-h: 28px;
+  --debug: #8b949e;
+  --info: #4493f8;
+  --warn: #d29922;
+  --error: #f85149;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.toolbar h1 {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.controls select,
+.controls input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.controls .search { flex: 1; max-width: 380px; }
+.controls .search input { width: 100%; }
+
+.count {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.viewport {
+  position: relative;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.spacer {
+  position: relative;
+  width: 100%;
+}
+
+.rows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.log-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(42, 49, 60, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.log-row:hover { background: rgba(255, 255, 255, 0.03); }
+.log-row.loading { opacity: 0.4; }
+
+.cell { overflow: hidden; text-overflow: ellipsis; }
+.cell.idx { color: var(--muted); width: 64px; flex: 0 0 64px; text-align: right; }
+.cell.ts { color: var(--muted); width: 200px; flex: 0 0 200px; }
+.cell.sev {
+  width: 54px;
+  flex: 0 0 54px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.cell.svc { width: 170px; flex: 0 0 170px; color: #a5d6ff; }
+.cell.msg { flex: 1 1 auto; color: var(--text); }
+
+.sev-debug { color: var(--debug); }
+.sev-info { color: var(--info); }
+.sev-warn { color: var(--warn); }
+.sev-error { color: var(--error); }
+
+.empty {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--muted);
+}

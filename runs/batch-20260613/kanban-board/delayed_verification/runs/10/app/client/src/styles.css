@@ -1,0 +1,196 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(95, 111, 255, 0.18), transparent 32rem),
+    linear-gradient(135deg, #f8fbff 0%, #eef3fa 100%);
+}
+
+button, input { font: inherit; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem clamp(1rem, 4vw, 3rem) 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 .35rem;
+  color: #5a67d8;
+  font-weight: 800;
+  font-size: .75rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 3.25rem);
+  line-height: 1;
+}
+
+.connection {
+  flex: 0 0 auto;
+  border: 1px solid rgba(23, 32, 51, .12);
+  border-radius: 999px;
+  padding: .45rem .8rem;
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 8px 26px rgba(27, 39, 74, .08);
+  color: #5b6475;
+  font-weight: 700;
+}
+
+.connection[data-tone="good"] { color: #087443; border-color: rgba(8, 116, 67, .22); }
+.connection[data-tone="bad"] { color: #b42318; border-color: rgba(180, 35, 24, .22); }
+
+.board {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 1fr);
+  align-items: start;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 3rem) 2rem;
+  overflow-x: auto;
+}
+
+.column {
+  min-height: 24rem;
+  border: 1px solid rgba(23, 32, 51, .08);
+  border-radius: 1.25rem;
+  padding: 1rem;
+  background: rgba(255,255,255,.76);
+  box-shadow: 0 18px 44px rgba(28, 42, 75, .10);
+  backdrop-filter: blur(14px);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.column-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.column-header span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: #edf2ff;
+  color: #4c51bf;
+  font-weight: 800;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  min-height: 12rem;
+  border-radius: .9rem;
+  padding: .25rem;
+  transition: background .15s ease, outline-color .15s ease;
+}
+
+.cards.drag-over {
+  background: rgba(90, 103, 216, .08);
+  outline: 2px dashed rgba(90, 103, 216, .35);
+  outline-offset: .25rem;
+}
+
+.card {
+  cursor: grab;
+  user-select: none;
+  border: 1px solid rgba(23, 32, 51, .08);
+  border-radius: .9rem;
+  padding: .9rem;
+  background: white;
+  box-shadow: 0 10px 20px rgba(23, 32, 51, .08);
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+}
+
+.card:hover { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(23, 32, 51, .12); }
+.card:active { cursor: grabbing; }
+.card.dragging { opacity: .35; transform: rotate(1deg) scale(.98); }
+.card.pending { border-color: rgba(90, 103, 216, .35); }
+
+.card p {
+  margin: 0 0 .65rem;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.card small {
+  color: #7a8497;
+  font-weight: 700;
+  font-size: .72rem;
+}
+
+.add-card-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.add-card-form input {
+  width: 100%;
+  border: 1px solid rgba(23, 32, 51, .13);
+  border-radius: .75rem;
+  padding: .75rem .85rem;
+  background: rgba(255,255,255,.84);
+  outline: none;
+}
+
+.add-card-form input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, .16);
+}
+
+.add-card-form button, .fatal button {
+  border: 0;
+  border-radius: .75rem;
+  padding: .75rem .9rem;
+  background: #4c51bf;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.add-card-form button:hover, .fatal button:hover { background: #434190; }
+.add-card-form input:disabled { opacity: .65; }
+
+.loading, .fatal {
+  max-width: 36rem;
+  margin: 12vh auto;
+  border: 1px solid rgba(23, 32, 51, .08);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 18px 44px rgba(28, 42, 75, .10);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .app-header { align-items: flex-start; flex-direction: column; }
+  .board { grid-auto-columns: minmax(260px, 86vw); }
+}

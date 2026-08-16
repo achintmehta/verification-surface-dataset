@@ -1,0 +1,260 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 20px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  flex-shrink: 0;
+}
+
+.toolbar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #58a6ff;
+  white-space: nowrap;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex: 1;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  color: #8b949e;
+  white-space: nowrap;
+}
+
+#severity-filter {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#severity-filter:focus {
+  outline: none;
+  border-color: #58a6ff;
+}
+
+#search-input {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  width: 280px;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: #58a6ff;
+}
+
+#search-input::placeholder {
+  color: #484f58;
+}
+
+.severity-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.severity-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.severity-badge.debug {
+  background: rgba(139, 148, 158, 0.2);
+  color: #8b949e;
+}
+.severity-badge.info {
+  background: rgba(88, 166, 255, 0.2);
+  color: #58a6ff;
+}
+.severity-badge.warn {
+  background: rgba(210, 153, 34, 0.2);
+  color: #d29922;
+}
+.severity-badge.error {
+  background: rgba(248, 81, 73, 0.2);
+  color: #f85149;
+}
+
+.row-count {
+  font-size: 13px;
+  color: #8b949e;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ── Table ── */
+.table-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  padding: 8px 20px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.col-ts {
+  width: 200px;
+  min-width: 200px;
+}
+
+.col-severity {
+  width: 80px;
+  min-width: 80px;
+}
+
+.col-service {
+  width: 160px;
+  min-width: 160px;
+}
+
+.col-message {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ── Virtual scroll ── */
+.virtual-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.virtual-scroll-spacer {
+  width: 100%;
+  pointer-events: none;
+}
+
+.virtual-scroll-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+/* ── Log rows ── */
+.log-row {
+  display: flex;
+  padding: 6px 20px;
+  border-bottom: 1px solid #21262d;
+  font-size: 13px;
+  line-height: 20px;
+  height: 32px;
+  align-items: center;
+}
+
+.log-row:hover {
+  background: #161b22;
+}
+
+.log-row .col {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-row .col-ts {
+  color: #8b949e;
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.log-row .col-severity {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.log-row .col-service {
+  color: #bc8cff;
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.log-row .col-message {
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+/* Severity colors */
+.severity-debug { color: #8b949e; }
+.severity-info { color: #58a6ff; }
+.severity-warn { color: #d29922; }
+.severity-error { color: #f85149; }
+
+/* Loading state */
+.log-row.loading {
+  opacity: 0.3;
+}
+
+/* Scrollbar styling */
+.virtual-scroll-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 5px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}

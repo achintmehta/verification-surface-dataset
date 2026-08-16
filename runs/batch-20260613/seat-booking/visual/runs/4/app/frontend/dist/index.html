@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <script type="module" crossorigin src="/assets/index-uZyq_k8v.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DG__DDMe.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-inner">
+        <h1>🎭 Seat Booking</h1>
+        <div class="session-info">
+          <span class="label">Session:</span>
+          <span id="session-id-display" class="session-id"></span>
+          <span id="connection-status" class="connection-status disconnected">●</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Stage indicator -->
+      <div class="stage">
+        <div class="stage-label">STAGE</div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="seat-demo available"></div>
+          <span>Available</span>
+        </div>
+        <div class="legend-item">
+          <div class="seat-demo selected"></div>
+          <span>Selected</span>
+        </div>
+        <div class="legend-item">
+          <div class="seat-demo held-mine"></div>
+          <span>Your Hold</span>
+        </div>
+        <div class="legend-item">
+          <div class="seat-demo held"></div>
+          <span>Held by Other</span>
+        </div>
+        <div class="legend-item">
+          <div class="seat-demo booked-mine"></div>
+          <span>Your Booking</span>
+        </div>
+        <div class="legend-item">
+          <div class="seat-demo booked"></div>
+          <span>Booked</span>
+        </div>
+      </div>
+
+      <!-- Seat map -->
+      <div id="seat-map" class="seat-map">
+        <div class="loading">Loading seat map…</div>
+      </div>
+
+      <!-- Inventory summary -->
+      <div class="inventory">
+        <div class="inv-item">
+          <span class="inv-count" id="inv-available">–</span>
+          <span class="inv-label">Available</span>
+        </div>
+        <div class="inv-item">
+          <span class="inv-count" id="inv-held">–</span>
+          <span class="inv-label">Held</span>
+        </div>
+        <div class="inv-item">
+          <span class="inv-count" id="inv-booked">–</span>
+          <span class="inv-label">Booked</span>
+        </div>
+        <div class="inv-item">
+          <span class="inv-count" id="inv-total">–</span>
+          <span class="inv-label">Total</span>
+        </div>
+      </div>
+
+      <!-- Action panel -->
+      <div id="action-panel" class="action-panel">
+        <!-- Selection state -->
+        <div id="panel-select" class="panel-section active">
+          <div class="panel-info">
+            <span id="selected-count">0</span> seat(s) selected
+          </div>
+          <button id="btn-hold" class="btn btn-primary" disabled>
+            Hold Selected Seats
+          </button>
+        </div>
+
+        <!-- Hold state -->
+        <div id="panel-hold" class="panel-section">
+          <div class="hold-info">
+            <div class="hold-seats">
+              Holding: <span id="hold-seat-list"></span>
+            </div>
+            <div class="hold-timer">
+              Expires in: <span id="hold-countdown" class="countdown">–</span>
+            </div>
+          </div>
+          <div class="hold-actions">
+            <button id="btn-confirm" class="btn btn-success">
+              ✓ Confirm Booking
+            </button>
+            <button id="btn-release" class="btn btn-danger">
+              ✗ Release Hold
+            </button>
+          </div>
+        </div>
+
+        <!-- Booked state -->
+        <div id="panel-booked" class="panel-section">
+          <div class="booked-info">
+            <div class="booked-icon">🎉</div>
+            <div class="booked-text">
+              Booking confirmed!<br />
+              Seats: <strong id="booked-seat-list"></strong>
+            </div>
+          </div>
+          <button id="btn-new-booking" class="btn btn-primary">
+            Make Another Booking
+          </button>
+        </div>
+
+        <!-- Error state -->
+        <div id="panel-error" class="panel-section">
+          <div class="error-message" id="error-message"></div>
+          <button id="btn-error-dismiss" class="btn btn-secondary">Dismiss</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

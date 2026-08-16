@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Explorer</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Log Explorer</h1>
+        <div class="controls">
+          <select id="severity-filter">
+            <option value="">All Severities</option>
+            <option value="debug">Debug</option>
+            <option value="info">Info</option>
+            <option value="warn">Warn</option>
+            <option value="error">Error</option>
+          </select>
+          <input type="text" id="search-input" placeholder="Search messages..." />
+          <div id="stats">
+            <span id="total-count">Loading...</span>
+          </div>
+        </div>
+      </header>
+      <main>
+        <div class="table-header">
+          <div class="col-ts">Timestamp</div>
+          <div class="col-sev">Severity</div>
+          <div class="col-svc">Service</div>
+          <div class="col-msg">Message</div>
+        </div>
+        <div id="viewport">
+          <div id="spacer"></div>
+          <div id="rows-container"></div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,323 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eef2f7;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #172033, #334155);
+  color: white;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.2);
+}
+
+h1, h2, p { margin: 0; }
+
+.topbar p {
+  color: #cbd5e1;
+  margin-top: 0.35rem;
+}
+
+.status {
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #16a34a;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.status.warn { background: #f97316; }
+
+.labels-panel {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(320px, 2fr);
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 0;
+}
+
+.label-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+}
+
+.label-section h2 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-labels,
+.label-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.label-create,
+.label-edit,
+.assign-label {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.label-create {
+  margin-bottom: 0.75rem;
+}
+
+.label-edit {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.45rem;
+}
+
+.label-create input[type="text"],
+.label-edit input[type="text"],
+.assign-label select {
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  outline: none;
+  font: inherit;
+}
+
+.label-create input[type="color"],
+.label-edit input[type="color"] {
+  width: 2.4rem;
+  height: 2.3rem;
+  padding: 0.15rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+}
+
+button,
+.add-card button,
+.label-create button,
+.label-edit button,
+.assign-label button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover,
+.add-card button:hover,
+.label-create button:hover,
+.label-edit button:hover,
+.assign-label button:hover { background: #1d4ed8; }
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+button.danger:hover { background: #b91c1c; }
+
+button.ghost {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+button.ghost:hover { background: #cbd5e1; }
+
+button.small {
+  padding: 0.4rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.filter-chip {
+  --label-color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--label-color), #000 12%);
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  background: color-mix(in srgb, var(--label-color), white 82%);
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-chip input { margin: 0; }
+
+.muted {
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: start;
+}
+
+.column {
+  background: #dbe4ef;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  padding: 1rem;
+  min-height: 420px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+.column h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+  color: #0f172a;
+}
+
+.add-card {
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.add-card input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  outline: none;
+  font: inherit;
+}
+
+.add-card input:focus,
+.label-create input[type="text"]:focus,
+.label-edit input[type="text"]:focus,
+.assign-label select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.cards {
+  min-height: 300px;
+  border-radius: 12px;
+  padding: 0.25rem;
+  transition: background 120ms ease;
+}
+
+.cards.drop-target {
+  background: rgba(37, 99, 235, 0.10);
+  outline: 2px dashed rgba(37, 99, 235, 0.35);
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 0.65rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  cursor: grab;
+  overflow-wrap: anywhere;
+  user-select: none;
+}
+
+.card:active { cursor: grabbing; }
+
+.card.dragging {
+  opacity: 0.45;
+  transform: rotate(1deg);
+}
+
+.card-text {
+  margin-bottom: 0.55rem;
+}
+
+.card-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+
+.card-labels:empty { display: none; }
+
+.label-chip {
+  --label-color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 0.22rem 0.45rem 0.22rem 0.55rem;
+  background: var(--label-color);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.label-chip button {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.26);
+  color: white;
+  font-size: 0.8rem;
+}
+
+.label-chip button:hover { background: rgba(255, 255, 255, 0.4); }
+
+.assign-label {
+  margin-top: 0.25rem;
+}
+
+.assign-label select { flex: 1; }
+
+.assign-label button {
+  padding: 0.52rem 0.65rem;
+}
+
+.loading {
+  margin: 4rem auto;
+  width: fit-content;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+.loading.error { color: #b91c1c; }
+
+@media (max-width: 850px) {
+  .board, .labels-panel { grid-template-columns: 1fr; }
+  .topbar { align-items: flex-start; flex-direction: column; }
+}

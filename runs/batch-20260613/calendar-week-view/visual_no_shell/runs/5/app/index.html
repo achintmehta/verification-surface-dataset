@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- Top navigation bar -->
+    <header id="calendar-header">
+      <div class="header-nav">
+        <button id="btn-prev" class="nav-btn" title="Previous week">&#8249;</button>
+        <button id="btn-today" class="nav-btn today-btn">Today</button>
+        <button id="btn-next" class="nav-btn" title="Next week">&#8250;</button>
+      </div>
+      <h1 id="week-label"></h1>
+    </header>
+
+    <!-- Main calendar area -->
+    <div id="calendar-container">
+
+      <!-- Left gutter: blank header spacer + scrolling time labels -->
+      <div id="gutter-col">
+        <div id="gutter-header-spacer"></div>
+        <div id="gutter-scroll">
+          <div id="gutter-inner">
+            <!-- time labels injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: sticky day headers + scrollable grid -->
+      <div id="day-columns-wrapper">
+        <div id="day-headers">
+          <!-- day header cells injected by JS -->
+        </div>
+        <div id="grid-scroll">
+          <div id="grid-inner">
+            <div id="time-lines">
+              <!-- hour/half-hour lines injected by JS -->
+            </div>
+            <div id="day-columns">
+              <!-- day column divs injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#calendar-container -->
+  </div><!-- /#app -->
+
+  <!-- Event create/edit modal -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">New Event</h2>
+      <form id="event-form" novalidate>
+        <div class="form-group">
+          <label for="input-title">Title</label>
+          <input type="text" id="input-title" placeholder="Event title" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="input-start">Start</label>
+          <input type="datetime-local" id="input-start" required />
+        </div>
+        <div class="form-group">
+          <label for="input-end">End</label>
+          <input type="datetime-local" id="input-end" required />
+        </div>
+        <div id="form-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="submit" id="btn-save" class="btn-primary">Save</button>
+          <button type="button" id="btn-delete" class="btn-danger hidden">Delete</button>
+          <button type="button" id="btn-cancel" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

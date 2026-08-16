@@ -1,0 +1,333 @@
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f8;
+  --border: #e1e5ee;
+  --text: #1a2233;
+  --text-muted: #5b6678;
+  --accent: #2f6fed;
+  --accent-soft: rgba(47, 111, 237, 0.12);
+  --positive: #1a9f5a;
+  --negative: #d63b3b;
+  --grid-line: #e6e9f1;
+  --axis: #9aa4b6;
+  --series: #2f6fed;
+  --series-fill: rgba(47, 111, 237, 0.14);
+  --bar: #2f6fed;
+  --bar-track: #eceef5;
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 6px 18px rgba(20, 30, 60, 0.05);
+}
+
+:root[data-theme='dark'] {
+  --bg: #0f141f;
+  --surface: #19202e;
+  --surface-2: #222b3c;
+  --border: #2c3650;
+  --text: #eef2fb;
+  --text-muted: #9aa6bd;
+  --accent: #5b8dff;
+  --accent-soft: rgba(91, 141, 255, 0.18);
+  --positive: #3fd183;
+  --negative: #ff6b6b;
+  --grid-line: #2a3347;
+  --axis: #6b768c;
+  --series: #5b8dff;
+  --series-fill: rgba(91, 141, 255, 0.20);
+  --bar: #5b8dff;
+  --bar-track: #232c3e;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.45;
+}
+
+#app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.app-title {
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  margin: 0;
+  font-weight: 700;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+.theme-toggle__icon::before {
+  content: '\2600'; /* sun */
+}
+:root[data-theme='dark'] .theme-toggle__icon::before {
+  content: '\263D'; /* moon */
+}
+
+/* ---------- Grid ---------- */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0; /* allow children to shrink, prevents grid overflow */
+}
+
+.card__title {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Stat cards */
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.stat__value {
+  font-size: clamp(1.3rem, 4.5vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.stat__meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  width: fit-content;
+}
+.trend--up {
+  color: var(--positive);
+  background: color-mix(in srgb, var(--positive) 14%, transparent);
+}
+.trend--down {
+  color: var(--negative);
+  background: color-mix(in srgb, var(--negative) 14%, transparent);
+}
+
+/* Chart */
+.chart-card .chart-wrap {
+  width: 100%;
+  position: relative;
+}
+.chart-card svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.chart-axis-label,
+.chart-tick {
+  fill: var(--axis);
+  font-size: 11px;
+}
+.chart-grid {
+  stroke: var(--grid-line);
+  stroke-width: 1;
+}
+.chart-baseline {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+.chart-series {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 2;
+}
+.chart-fill {
+  fill: var(--series-fill);
+  stroke: none;
+}
+
+/* Category breakdown */
+.cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+.cat-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.cat-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.cat-track {
+  grid-column: 1 / -1;
+  height: 10px;
+  background: var(--bar-track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.cat-bar {
+  height: 100%;
+  background: var(--bar);
+  border-radius: 999px;
+}
+
+/* Recent table */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table.recent {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+table.recent th,
+table.recent td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table.recent th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+table.recent td.num,
+table.recent th.num {
+  text-align: right;
+}
+table.recent td.name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* States */
+.state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--text-muted);
+}
+.state--error {
+  border: 1px solid var(--negative);
+  border-radius: 14px;
+  color: var(--negative);
+  background: color-mix(in srgb, var(--negative) 8%, var(--surface));
+}
+.state__title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+  color: inherit;
+}
+
+/* ---------- Breakpoints ---------- */
+/* medium: 640px – 1023px -> 2 columns */
+@media (min-width: 640px) {
+  .dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* stat cards: 2 per row already via auto-placement */
+  .chart-card,
+  .table-card {
+    grid-column: 1 / -1;
+  }
+}
+
+/* wide: >=1024px -> four stat cards in one row, chart + breakdown side by side */
+@media (min-width: 1024px) {
+  .dashboard {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .stat-card {
+    grid-column: span 1;
+  }
+  .chart-card {
+    grid-column: span 2;
+  }
+  .cat-card {
+    grid-column: span 2;
+  }
+  .table-card {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,108 @@
+== census and survival (run-summary.csv) ==
+  [ok] 1,116 runs
+  [ok] 186 runs per model
+  [ok] 66 genuine launch failures
+  [ok] failures by condition 26/30/1/2/1 (core five)
+  [ok] 56 failures in no_verification+static
+  [ok] 13 of 66 on the log explorer
+  [ok] 11 of those 13 in the two blind conditions
+  [ok] boot_check 191 of 192 boot
+  [ok] behavioral: 24 runs, 4 failures (83%)
+== score ladders (recomputed from run-summary.csv) ==
+  [ok] functional pooled 81.9/78.3/91.7/94.2/92.6
+  [ok] behavioral 71.2 vs execution 87.3 (seat-booking)
+  [ok] human two-visual-tasks 72.8/72.6/89.5/89.2/96.1
+  [ok] Table VI calendar row
+  [ok] Table VI dashboard row
+  [ok] log-explorer human ladder
+  [ok] sight gaps +10.9 / +2.9 / -2.1
+  [ok] brownfield gaps 10.0 (functional) / 14.0 (human)
+  [ok] greenfield gaps 10.6 / 11.8
+== failure anatomy (audit files) ==
+  [ok] 35 backend corrupted-source verdicts
+  [ok] 10 frontend launch failures; 5 from static
+  [ok] 52 launch-hazard runs = 20 class A + 32 class B
+== configuration defects ==
+  [ok] 45 wiring defects (4%)
+  [ok] datadir bug 169 total (167 scanner + 2 confirmed by hand)
+  [ok] datadir per model 41/24/3, grok exactly one build
+== brownfield companion (extend-vs-rewrite.csv) ==
+  [ok] 140 of 144 extended; median 3 files touched; rewrites 3 static + 1 visual
+== architecture signatures (architecture-report.csv) ==
+  [ok] Table IX Cramér's V (eight quoted pairs)
+  [ok] TypeScript / standard-build-tool associations weak
+  [ok] gpt-5.5 launches bare in 94% of runs (src tree 77%)
+  [ok] grok-4.3 mixes manifest layouts in 82% of runs
+  [ok] code volume flat, ~715-800 mean lines
+  [ok] tool lift spans +0.0 to +36.7
+== committed statistics files (re-parse) ==
+  [ok] stats-results: P1 +12.26 [+7.04, +17.47], Holm .0006
+  [ok] stats-results: P2 +0.13 [+0.10, +0.16]
+  [ok] stats-results: P3 +0.80 [+0.73, +0.87]
+  [ok] stats-results: P4 +6.88 [+0.83, +13.41], Holm .0826
+  [ok] stats-results: P5 -0.67 [-13.67, +12.67]
+  [ok] stats-results: P6 +15.33 [+7.33, +24.00], Holm .0675
+  [ok] stats-results: S1 +2.41 [-0.38, +5.21]
+  [ok] stats-results: S2 +4.98 [-1.42, +11.75]
+  [ok] stats-results: S3 -2.17 [-12.50, +7.33]
+  [ok] stats-results: S4a -3.60 [-11.36, +3.61]
+  [ok] stats-results: S4b -0.02 [-0.07, +0.03]
+  [ok] stats-results: S5 -16.07 [-31.67, -1.70]
+  [ok] freeze-tables: token medians (8 conditions)
+  [ok] freeze-tables: no_verification median 261,602
+  [ok] freeze-tables: execution median 615,296
+  [ok] freeze-tables: delayed median 1,198,829
+  [ok] freeze-tables: spread: execution 148,922
+  [ok] freeze-tables: spread: delayed 407,777
+== wiring defects concentrate in two models (wiring_report.csv) ==
+  [ok] claude-4.6-opus has 16 of the 22 proxy-not-loaded cases
+  [ok] claude-4.8-opus has 14 of the 16 api.js collisions
+  [ok] grok-4.3 produced no wiring defects at all
+  [ok] only the data-directory scanner produced undecided cases
+== structural idioms, additional checks (architecture-report.csv) ==
+  [ok] grok-4.3 uses the positional launch in 75% of runs
+== heaviest probes: pass rates by tool group (automatic_probes_results.jsonl) ==
+  [ok] eleven probes carry weight 3 or 4
+  [ok] heaviest-probe pass rates 92.0 shell / 91.1 boot probe / 89.1 blind
+  [ok] execution leads and behavioral trails on the heaviest probes
+== log explorer, per-model gaps (Table VIII) ==
+  [ok] gemini-3.1-pro's gap is the full +100
+  [ok] none of gemini's five blind builds started, all five shell builds did
+  [ok] two models are flat and two are negative on this task
+== per-run manifests (identity + nudges; scans 1,116 files) ==
+  [ok] 1,116 manifests on disk
+  [ok] base prompt hash identical in all runs and matches the committed file
+  [ok] briefing hash identical in all runs and matches the committed file
+  [ok] the 7 committed specs hash to the 7 task_sha values
+  [ok] every run's system_prompt_sha rebuilds from published template + recorded path + briefing
+  [ok] exactly 29 runs nudged, none more than once, all finished
+  [ok] nudges by model 20/4/3/2 (gpt-5.5 / 4.6-sonnet / grok-4.3 / 4.8-opus)
+== shell-only runs vs browser tooling (scans 252 command logs) ==
+  [ok] 252 shell-only command logs
+  [ok] Puppeteer appears in exactly the 3 runs named in the paper
+  [ok] no screenshot call in any shell-only log
+== self-provisioned verification tooling (all 426 shell-holding runs) ==
+  [ok] browser tooling installed in exactly the 5 gemini runs named in the paper
+  [ok] no model installed test/lint/load tooling in any shell-holding run
+== delayed_verification: discovery after the first finish (60 runs) ==
+  [ok] all 60 delayed runs unlocked and used the shell; 45 edited code afterwards
+  [ok] unchanged re-finishes score ~7 functional points above edited ones (97.1 vs 90.1)
+== token accounting from the manifests ==
+  [ok] every run ended by calling finish, none stopped by a budget
+  [ok] the token cap was not a single fixed budget
+  [ok] failed blind builds cost less than successful ones (182k vs 263k)
+  [ok] among builds that started: 17 vs 19 steps, 195k vs 247k input
+  [ok] the behavioral arm stopped early: 369k vs 810k tokens, 22 vs 49 steps
+== screenshot channel is passive (visual + visual_no_shell traces) ==
+  [ok] 264 sight-condition runs traced
+  [ok] the screenshot tool takes only a url
+  [ok] 1,326 screenshot calls to 260 distinct URLs
+  [ok] 512 calls (39%) went beyond the application root
+  [ok] 110 runs used such a URL; 67 built a page purely to photograph
+  [ok] 21 runs stated an interaction limit in their reasoning
+== granted tools that went unused (tool_uptake) ==
+  [ok] the three Claude models used every granted tool in all 462 of their tool-granted runs
+  [ok] grok-4.3 accounts for 55 of the 100 non-use runs
+  [ok] the linter went unused in 44 of 192 static runs, screenshots in 47 of 174 visual runs
+
+88 checks, 0 discrepancies

@@ -1,0 +1,37 @@
+{
+  "_instructions": "Fill score with pass|partial|fail|skip for each item. Grade CONDITION-BLIND: do not read manifest.json first. If the app does NOT boot/run at all, score every item FAIL (criteria unmet) - do not skip; skip is only for grader-side problems (your environment, not the artifact). See the matching .rubric.md for setup steps and criteria. Then re-run grader.py to merge.",
+  "_task": "seat-booking",
+  "grader_name": "achint",
+  "items": {
+    "SB-V1": {
+      "score": "partial",
+      "criterion": "Seat map renders the seeded grid with three visually distinct states (available / held / booked), distinguishable at a glance.",
+      "weight": 2,
+      "notes": "Only few states could be observed; Needed to create data directory"
+    },
+    "SB-V2": {
+      "score": "pass",
+      "criterion": "Holding seats shows a countdown that visibly reflects the hold's remaining TTL.",
+      "weight": 2,
+      "notes": "Error seen while trying to hold seats: error: column hold_expires_at is of type timestamp with time zone but expression is of type text. Needed to create data directory"
+    },
+    "SB-V3": {
+      "score": "pass",
+      "criterion": "Realtime: holds/confirms/releases made in window A change seat colors in window B without reload.",
+      "weight": 2,
+      "notes": "Error seen while trying to hold seats: error: column hold_expires_at is of type timestamp with time zone but expression is of type text. Needed to create data directory"
+    },
+    "SB-V4": {
+      "score": "pass",
+      "criterion": "Conflict UX: when a hold fails (409), the UI indicates WHICH seats were taken and refreshes the map.",
+      "weight": 2,
+      "notes": "Error seen while trying to hold seats: error: column hold_expires_at is of type timestamp with time zone but expression is of type text. Needed to create data directory"
+    },
+    "SB-V5": {
+      "score": "pass",
+      "criterion": "Expiry: after the TTL elapses, held seats visibly return to available in both windows without any manual action.",
+      "weight": 2,
+      "notes": "Error seen while trying to hold seats: error: column hold_expires_at is of type timestamp with time zone but expression is of type text. Needed to create data directory"
+    }
+  }
+}

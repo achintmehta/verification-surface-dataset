@@ -1,0 +1,433 @@
+/* ==============================
+   CSS Custom Properties / Themes
+   ============================== */
+:root {
+  /* Light theme (default) */
+  --bg-primary: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-header: #1a1a2e;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555770;
+  --text-header: #ffffff;
+  --border-color: #e0e4ea;
+  --chart-grid: #e0e4ea;
+  --chart-axis: #555770;
+  --chart-line: #4361ee;
+  --chart-fill: rgba(67, 97, 238, 0.1);
+  --chart-dot: #4361ee;
+  --bar-fill: #4361ee;
+  --bar-bg: #e8ecf2;
+  --trend-up: #10b981;
+  --trend-down: #ef4444;
+  --table-stripe: #f8f9fb;
+  --table-hover: #eef1f6;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0f0f1a;
+  --bg-card: #1a1a2e;
+  --bg-header: #16162a;
+  --text-primary: #e8e8ed;
+  --text-secondary: #a0a0b8;
+  --text-header: #e8e8ed;
+  --border-color: #2a2a45;
+  --chart-grid: #2a2a45;
+  --chart-axis: #a0a0b8;
+  --chart-line: #6c8cff;
+  --chart-fill: rgba(108, 140, 255, 0.15);
+  --chart-dot: #6c8cff;
+  --bar-fill: #6c8cff;
+  --bar-bg: #252540;
+  --trend-up: #34d399;
+  --trend-down: #f87171;
+  --table-stripe: #16162a;
+  --table-hover: #252540;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ==============================
+   Reset & Base
+   ============================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ==============================
+   Header
+   ============================== */
+.header {
+  background: var(--bg-header);
+  color: var(--text-header);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  color: var(--text-header);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ==============================
+   Dashboard Main
+   ============================== */
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+.loading, .error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.error-state {
+  color: var(--trend-down);
+}
+
+/* ==============================
+   Card Base
+   ============================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ==============================
+   Stat Cards
+   ============================== */
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.35rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trend-up {
+  color: var(--trend-up);
+  font-weight: 600;
+}
+
+.trend-down {
+  color: var(--trend-down);
+  font-weight: 600;
+}
+
+/* ==============================
+   Charts Row
+   ============================== */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chart-container {
+  min-width: 0;
+}
+
+.chart-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+#timeseries-chart {
+  display: block;
+  width: 100%;
+}
+
+/* ==============================
+   Category Bars
+   ============================== */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.category-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.category-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ==============================
+   Table
+   ============================== */
+.table-section {
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 480px;
+}
+
+.data-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 0.75rem 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.data-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+.data-table tbody tr:hover {
+  background: var(--table-hover);
+}
+
+/* ==============================
+   Responsive Breakpoints
+   ============================== */
+
+/* >= 640px: 2 columns */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.65rem;
+  }
+}
+
+/* >= 1024px: 4-across stat cards, 2-column body */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .dashboard {
+    padding: 1.5rem;
+  }
+
+  .header {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .header-title {
+    font-size: 1.375rem;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+}
+
+/* ==============================
+   Utility
+   ============================== */
+@media (max-width: 639px) {
+  .stat-value {
+    font-size: 1.35rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .dashboard {
+    padding: 0.75rem;
+  }
+
+  .table-wrapper {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+
+  .data-table {
+    font-size: 0.8rem;
+  }
+}

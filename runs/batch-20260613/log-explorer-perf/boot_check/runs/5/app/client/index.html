@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <h1 class="app-title">📋 Log Explorer</h1>
+        <span class="row-count" id="row-count">Loading…</span>
+      </div>
+      <div class="toolbar-right">
+        <div class="filter-group">
+          <label for="severity-filter">Severity</label>
+          <select id="severity-filter">
+            <option value="">All</option>
+            <option value="debug">Debug</option>
+            <option value="info">Info</option>
+            <option value="warn">Warn</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="search-input">Search</label>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Filter by message…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="table-header">
+      <div class="col-ts">Timestamp</div>
+      <div class="col-severity">Severity</div>
+      <div class="col-service">Service</div>
+      <div class="col-message">Message</div>
+    </div>
+
+    <div class="scroller-container" id="scroller-container">
+      <div class="scroller-inner" id="scroller-inner">
+        <!-- Virtual rows rendered here -->
+        <div class="rows-viewport" id="rows-viewport"></div>
+      </div>
+    </div>
+
+    <div class="status-bar" id="status-bar">
+      <span id="status-text">Initializing…</span>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

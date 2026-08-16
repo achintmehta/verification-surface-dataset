@@ -1,0 +1,176 @@
+:root {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel-2: #273449;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-strong: #0ea5e9;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --err: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  width: 100%;
+  max-width: 720px;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app__header h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  text-transform: lowercase;
+  border: 1px solid transparent;
+}
+
+.status--connecting {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
+.status--online {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.status--offline {
+  color: var(--err);
+  border-color: var(--err);
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.messages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.message {
+  background: var(--panel-2);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  animation: pop 0.18s ease-out;
+}
+
+.message__text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message__time {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.empty.hidden {
+  display: none;
+}
+
+.composer {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.composer__input {
+  flex: 1;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--panel-2);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.composer__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.composer__send {
+  padding: 0 1.25rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-strong);
+  color: #04293a;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.composer__send:hover:not(:disabled) {
+  background: var(--accent);
+}
+
+.composer__send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

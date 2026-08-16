@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: #0f1923;
+  color: #c9d1d9;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f0f6fc;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status.connected {
+  background: #0d4429;
+  color: #3fb950;
+}
+
+.status.disconnected {
+  background: #4a1d1d;
+  color: #f85149;
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  overflow-x: auto;
+  min-height: calc(100vh - 65px);
+  align-items: flex-start;
+}
+
+.column {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  min-width: 300px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.column-header {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #f0f6fc;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.column-header .card-count {
+  background: #30363d;
+  color: #8b949e;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.card-list {
+  padding: 8px;
+  min-height: 60px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.card-list.drag-over {
+  background: rgba(56, 139, 253, 0.08);
+  border-radius: 0 0 8px 8px;
+}
+
+.card {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: grab;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.15s ease;
+  user-select: none;
+}
+
+.card:hover {
+  border-color: #58a6ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+  border-color: #58a6ff;
+}
+
+.card.optimistic {
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.drop-indicator {
+  height: 3px;
+  background: #58a6ff;
+  border-radius: 2px;
+  margin: -1px 0;
+  transition: opacity 0.1s ease;
+}
+
+.add-card-form {
+  padding: 8px;
+  border-top: 1px solid #30363d;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #c9d1d9;
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.add-card-form textarea:focus {
+  border-color: #58a6ff;
+}
+
+.add-card-form .form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+  background: #238636;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #2ea043;
+}
+
+.btn-secondary {
+  background: #21262d;
+  color: #c9d1d9;
+}
+
+.btn-secondary:hover {
+  background: #30363d;
+}
+
+.add-card-btn {
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  border: 1px dashed #30363d;
+  border-radius: 6px;
+  color: #8b949e;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin: 8px;
+  margin-top: 0;
+  width: calc(100% - 16px);
+}
+
+.add-card-btn:hover {
+  border-color: #58a6ff;
+  color: #58a6ff;
+  background: rgba(56, 139, 253, 0.05);
+}

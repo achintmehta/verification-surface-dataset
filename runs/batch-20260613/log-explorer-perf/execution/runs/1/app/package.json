@@ -1,0 +1,17 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "description": "Log explorer with PGLite backend and virtualized frontend",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "npm run install:all && concurrently --names \"backend,frontend\" --prefix-colors \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "start:backend": "npm run start --prefix backend",
+    "start:frontend": "npm run preview --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

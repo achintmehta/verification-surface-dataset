@@ -1,0 +1,270 @@
+:root {
+  --bg: #0f1115;
+  --panel: #181b22;
+  --text: #e6e8ec;
+  --muted: #9aa0ab;
+  --available: #2f9e44;
+  --selected: #4dabf7;
+  --held: #f59f00;
+  --mine: #9775fa;
+  --booked: #495057;
+  --danger: #fa5252;
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #23262e;
+}
+
+.app-header h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.conn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.dot.live {
+  background: var(--available);
+}
+.dot.down {
+  background: var(--danger);
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+.screen {
+  text-align: center;
+  letter-spacing: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  background: linear-gradient(180deg, #2a2e38, transparent);
+  padding: 8px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.seat {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: #fff;
+  background: var(--available);
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.seat:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.seat.available {
+  background: var(--available);
+}
+.seat.selected {
+  background: var(--selected);
+  outline: 2px solid #fff;
+}
+.seat.held {
+  background: var(--held);
+  cursor: not-allowed;
+}
+.seat.mine {
+  background: var(--mine);
+}
+.seat.booked {
+  background: var(--booked);
+  cursor: not-allowed;
+}
+.seat:disabled {
+  cursor: not-allowed;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin: 28px 0 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.swatch.available {
+  background: var(--available);
+}
+.swatch.selected {
+  background: var(--selected);
+}
+.swatch.held {
+  background: var(--held);
+}
+.swatch.mine {
+  background: var(--mine);
+}
+.swatch.booked {
+  background: var(--booked);
+}
+
+.counts {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.counts b {
+  color: var(--text);
+}
+
+.controls {
+  background: var(--panel);
+  border: 1px solid #23262e;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.selection-info {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  background: var(--selected);
+  color: #06243f;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+button.secondary {
+  background: #2a2e38;
+  color: var(--text);
+}
+
+.countdown {
+  margin-top: 14px;
+  font-size: 15px;
+}
+.countdown.hidden {
+  display: none;
+}
+.countdown b {
+  color: var(--held);
+  font-variant-numeric: tabular-nums;
+}
+
+.message {
+  margin-top: 12px;
+  min-height: 20px;
+  font-size: 14px;
+}
+.message.error {
+  color: var(--danger);
+}
+.message.success {
+  color: var(--available);
+}
+.message.info {
+  color: var(--muted);
+}
+
+.seat.flash {
+  animation: flash 0.8s ease;
+}
+@keyframes flash {
+  0% { box-shadow: 0 0 0 0 rgba(250, 82, 82, 0.9); }
+  100% { box-shadow: 0 0 0 12px rgba(250, 82, 82, 0); }
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--panel);
+  border-top: 1px solid #23262e;
+  text-align: center;
+}
+code {
+  color: var(--text);
+}

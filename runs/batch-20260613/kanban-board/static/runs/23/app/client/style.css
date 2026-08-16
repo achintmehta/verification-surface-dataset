@@ -1,0 +1,195 @@
+/* === Reset & Base === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: #f4f5f7;
+  color: #172b4d;
+  min-height: 100vh;
+}
+
+header {
+  background: #0079bf;
+  color: #fff;
+  padding: 12px 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* === Board Layout === */
+#board {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 56px);
+}
+
+/* === Column === */
+.column {
+  background: #ebecf0;
+  border-radius: 8px;
+  min-width: 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.column-header {
+  padding: 12px 12px 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #5e6c84;
+}
+
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+  min-height: 40px;
+}
+
+/* Drop zone indicator */
+.card-list.drag-over {
+  background: rgba(0, 121, 191, 0.08);
+  border-radius: 4px;
+}
+
+/* === Card === */
+.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.15s, opacity 0.15s;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+.card.dragging {
+  opacity: 0.4;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.card.drop-above::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+}
+
+.card.drop-below::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+}
+
+/* Placeholder for empty drop target */
+.drop-placeholder {
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+/* === Add Card Form === */
+.add-card-form {
+  padding: 8px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  border: 1px solid #cdd2d4;
+  border-radius: 4px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+  min-height: 54px;
+}
+
+.add-card-form textarea:focus {
+  outline: none;
+  border-color: #0079bf;
+  box-shadow: 0 0 0 2px rgba(0,121,191,0.25);
+}
+
+.add-card-btn {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: #5e6c84;
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.add-card-btn:hover {
+  background: rgba(0,0,0,0.06);
+  color: #172b4d;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.form-actions button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.form-actions .btn-primary {
+  background: #0079bf;
+  color: #fff;
+}
+
+.form-actions .btn-primary:hover {
+  background: #026aa7;
+}
+
+.form-actions .btn-cancel {
+  background: transparent;
+  color: #5e6c84;
+}
+
+.form-actions .btn-cancel:hover {
+  color: #172b4d;
+}

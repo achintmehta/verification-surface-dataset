@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <h1 class="app-title">
+          <span class="app-title-icon">📋</span>
+          Log Explorer
+        </h1>
+      </div>
+      <div class="toolbar-center">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search messages…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="search-clear" class="search-clear" title="Clear search" hidden>✕</button>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <div class="severity-filter" id="severity-filter">
+          <button class="sev-btn active" data-severity="">All <span class="badge" id="badge-all">—</span></button>
+          <button class="sev-btn sev-debug" data-severity="debug">Debug <span class="badge" id="badge-debug">—</span></button>
+          <button class="sev-btn sev-info"  data-severity="info">Info  <span class="badge" id="badge-info">—</span></button>
+          <button class="sev-btn sev-warn"  data-severity="warn">Warn  <span class="badge" id="badge-warn">—</span></button>
+          <button class="sev-btn sev-error" data-severity="error">Error <span class="badge" id="badge-error">—</span></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="status-bar">
+      <span id="row-count-label" class="row-count">Loading…</span>
+      <span id="loading-indicator" class="loading-indicator" hidden>Fetching…</span>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col-ts">Timestamp</div>
+        <div class="col-sev">Severity</div>
+        <div class="col-svc">Service</div>
+        <div class="col-msg">Message</div>
+      </div>
+      <div class="scroller-viewport" id="scroller-viewport">
+        <div class="scroller-spacer" id="scroller-spacer"></div>
+        <div class="rows-container" id="rows-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #f0f2f5;
+  --header-bg:    #1a1f36;
+  --header-fg:    #ffffff;
+  --col-bg:       #ebecf0;
+  --col-radius:   10px;
+  --card-bg:      #ffffff;
+  --card-radius:  6px;
+  --card-shadow:  0 1px 3px rgba(0,0,0,.12);
+  --card-drag-shadow: 0 8px 24px rgba(0,0,0,.22);
+  --accent:       #0052cc;
+  --accent-light: #deebff;
+  --danger:       #de350b;
+  --text:         #172b4d;
+  --text-muted:   #6b778c;
+  --gap:          16px;
+  --col-width:    280px;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 var(--gap);
+  height: 52px;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  flex-shrink: 0;
+}
+
+.app-header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.sse-status {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #ff5630;   /* disconnected = red */
+  transition: color .3s;
+  cursor: default;
+}
+.sse-status.connected    { color: #36b37e; }
+.sse-status.connecting   { color: #ffab00; }
+
+/* ── Board ────────────────────────────────────────────────────────────────── */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: var(--gap);
+  height: calc(100vh - 52px);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.board-loading {
+  color: var(--text-muted);
+  font-size: .95rem;
+  padding: 24px;
+}
+
+/* ── Column ───────────────────────────────────────────────────────────────── */
+.column {
+  display: flex;
+  flex-direction: column;
+  width: var(--col-width);
+  min-width: var(--col-width);
+  max-height: 100%;
+  background: var(--col-bg);
+  border-radius: var(--col-radius);
+  padding: 10px 8px 8px;
+  flex-shrink: 0;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 8px;
+}
+
+.column-title {
+  font-size: .875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.column-count {
+  font-size: .75rem;
+  background: rgba(0,0,0,.08);
+  border-radius: 10px;
+  padding: 1px 7px;
+  color: var(--text-muted);
+}
+
+/* ── Card list ────────────────────────────────────────────────────────────── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 2px 4px;
+  min-height: 40px;   /* always a drop target even when empty */
+}
+
+/* Scrollbar styling */
+.card-list::-webkit-scrollbar { width: 4px; }
+.card-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 2px; }
+
+/* ── Drop indicator ───────────────────────────────────────────────────────── */
+.drop-indicator {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  margin: 0 2px;
+  pointer-events: none;
+  display: none;
+}
+.drop-indicator.visible { display: block; }
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 10px 12px;
+  font-size: .875rem;
+  line-height: 1.45;
+  cursor: grab;
+  user-select: none;
+  word-break: break-word;
+  transition: box-shadow .15s, opacity .15s, transform .15s;
+  position: relative;
+}
+
+.card:hover { box-shadow: 0 3px 8px rgba(0,0,0,.16); }
+.card:active { cursor: grabbing; }
+
+/* State applied while this card is being dragged */
+.card.dragging {
+  opacity: .45;
+  cursor: grabbing;
+}
+
+/* Ghost element that follows the cursor */
+.card-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: var(--card-drag-shadow);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  padding: 10px 12px;
+  font-size: .875rem;
+  line-height: 1.45;
+  opacity: .92;
+  transform: rotate(2deg);
+  max-width: var(--col-width);
+  word-break: break-word;
+}
+
+/* ── Add-card form ────────────────────────────────────────────────────────── */
+.add-card-area {
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: var(--card-radius);
+  padding: 8px 10px;
+  text-align: left;
+  font-size: .875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.add-card-btn:hover { background: rgba(0,0,0,.06); color: var(--text); }
+.add-card-btn::before { content: '+'; font-size: 1.1rem; font-weight: 700; }
+
+.add-card-form {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+}
+.add-card-form.open { display: flex; }
+
+.add-card-form textarea {
+  resize: none;
+  border: 2px solid var(--accent);
+  border-radius: var(--card-radius);
+  padding: 8px 10px;
+  font-size: .875rem;
+  font-family: inherit;
+  line-height: 1.45;
+  outline: none;
+  background: var(--card-bg);
+  color: var(--text);
+  min-height: 72px;
+}
+
+.add-card-form-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-add-submit {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--card-radius);
+  padding: 7px 14px;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-add-submit:hover { background: #0747a6; }
+
+.btn-add-cancel {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background .15s;
+}
+.btn-add-cancel:hover { background: rgba(0,0,0,.08); color: var(--text); }
+
+/* ── Column drag-over highlight ───────────────────────────────────────────── */
+.column.drag-over .card-list {
+  background: var(--accent-light);
+  border-radius: 6px;
+}

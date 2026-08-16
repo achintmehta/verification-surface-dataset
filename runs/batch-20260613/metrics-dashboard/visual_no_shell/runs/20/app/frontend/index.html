@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Metrics Dashboard</h1>
+      <button id="theme-toggle">Toggle Theme</button>
+    </header>
+    <main id="dashboard" style="display: none;">
+      <section class="stat-cards">
+        <div class="card">
+          <h3>Total Visitors</h3>
+          <p id="stat-visitors" class="stat-value">--</p>
+        </div>
+        <div class="card">
+          <h3>Total Revenue</h3>
+          <p id="stat-revenue" class="stat-value">--</p>
+        </div>
+        <div class="card">
+          <h3>Best Day</h3>
+          <p id="stat-best-day" class="stat-value">--</p>
+        </div>
+        <div class="card">
+          <h3>7-Day Trend</h3>
+          <p id="stat-trend" class="stat-value">--</p>
+        </div>
+      </section>
+      <section class="charts-row">
+        <div class="card chart-container">
+          <h3>30-Day Revenue</h3>
+          <div id="chart-wrapper">
+            <canvas id="timeseries-chart"></canvas>
+          </div>
+        </div>
+        <div class="card breakdown-container">
+          <h3>Category Breakdown</h3>
+          <div id="category-breakdown"></div>
+        </div>
+      </section>
+      <section class="table-row">
+        <div class="card table-container">
+          <h3>Recent Items</h3>
+          <div class="table-responsive">
+            <table id="recent-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Value</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div id="error-state" style="display: none;">
+      <h2>Error loading dashboard</h2>
+      <p id="error-message"></p>
+    </div>
+    <div id="loading-state">
+      <h2>Loading...</h2>
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

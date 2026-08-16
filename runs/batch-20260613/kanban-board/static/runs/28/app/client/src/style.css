@@ -1,0 +1,161 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f4f5f7;
+  color: #172b4d;
+}
+
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 14px;
+  color: #5e6c84;
+}
+
+#connection-status {
+  color: #36b37e;
+}
+
+.board {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+}
+
+.column {
+  background: #ebecf0;
+  border-radius: 8px;
+  width: 280px;
+  min-height: 500px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #5e6c84;
+}
+
+.column-title {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-count {
+  background: #dfe1e6;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.cards {
+  flex: 1;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px;
+}
+
+.card {
+  background: white;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  cursor: grab;
+  font-size: 14px;
+  line-height: 1.4;
+  user-select: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.card:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 8px rgba(9, 30, 66, 0.25);
+  transform: scale(1.02);
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.card-placeholder {
+  background: #dfe1e6;
+  border: 2px dashed #a5adba;
+  border-radius: 4px;
+  height: 40px;
+  margin: 4px 0;
+}
+
+.add-card {
+  margin-top: 8px;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  color: #5e6c84;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-card:hover {
+  background: #dfe1e6;
+}
+
+.add-card::before {
+  content: '+';
+  font-size: 18px;
+  line-height: 1;
+}
+
+input.new-card-input {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #4c9aff;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.drop-zone {
+  min-height: 20px;
+  flex: 1;
+}
+
+.drop-zone.drag-over {
+  background: #dfe1e6;
+  border-radius: 4px;
+}

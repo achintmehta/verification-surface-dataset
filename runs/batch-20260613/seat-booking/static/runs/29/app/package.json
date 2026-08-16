@@ -1,0 +1,20 @@
+{
+  "name": "seat-booking",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "node server.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "@electric-sql/pglite": "^0.2.15"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <script>
+      // Apply persisted theme before first paint to avoid flash.
+      (async function () {
+        try {
+          const r = await fetch('/api/settings');
+          if (r.ok) {
+            const s = await r.json();
+            if (s && (s.theme === 'light' || s.theme === 'dark')) {
+              document.documentElement.setAttribute('data-theme', s.theme);
+            }
+          }
+        } catch (e) {
+          /* ignore; app.js will show error state */
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1 class="app-title">Metrics Dashboard</h1>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+        <span class="theme-toggle__label">Theme</span>
+      </button>
+    </header>
+
+    <main id="dashboard" class="dashboard" aria-live="polite">
+      <!-- content injected by app.js -->
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

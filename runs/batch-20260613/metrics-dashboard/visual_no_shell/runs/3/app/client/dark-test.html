@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dark Mode Test</title>
+  <script>
+    // Set dark theme via API then redirect to dashboard
+    fetch('http://localhost:3001/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'dark' })
+    }).then(() => {
+      window.location.href = '/';
+    }).catch(() => {
+      window.location.href = '/';
+    });
+  </script>
+</head>
+<body>Setting dark theme...</body>
+</html>

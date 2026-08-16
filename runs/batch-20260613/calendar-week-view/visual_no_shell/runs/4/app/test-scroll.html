@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scroll to Bottom Test</title>
+  <style>
+    body { margin: 0; }
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<iframe id="cal" src="http://localhost:5173"></iframe>
+<script>
+  const iframe = document.getElementById('cal');
+  iframe.addEventListener('load', () => {
+    try {
+      const calBody = iframe.contentDocument.querySelector('.calendar-body');
+      if (calBody) {
+        // Scroll to 21:00 to see the late night event
+        calBody.scrollTop = 21 * 60 - 30;
+      }
+    } catch(e) {
+      console.log('Cannot access iframe:', e);
+    }
+  });
+</script>
+</body>
+</html>

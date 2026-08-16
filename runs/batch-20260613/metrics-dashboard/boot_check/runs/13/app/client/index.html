@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="app-header__inner">
+          <h1 class="app-title">Metrics Dashboard</h1>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon" aria-hidden="true"></span>
+            <span class="theme-toggle__label">Theme</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard" id="dashboard">
+        <!-- Global error / loading banner -->
+        <div id="status-banner" class="status-banner" hidden></div>
+
+        <!-- Stat cards -->
+        <section class="stat-grid" id="stat-grid" aria-label="Summary statistics"></section>
+
+        <!-- Chart + breakdown body -->
+        <section class="body-grid">
+          <div class="card chart-card">
+            <div class="card__head">
+              <h2 class="card__title">Visitors — Last 30 Days</h2>
+            </div>
+            <div class="chart-host" id="chart-host">
+              <canvas id="timeseries-canvas"></canvas>
+            </div>
+          </div>
+
+          <div class="card breakdown-card">
+            <div class="card__head">
+              <h2 class="card__title">Traffic by Category</h2>
+            </div>
+            <div class="breakdown" id="breakdown"></div>
+          </div>
+        </section>
+
+        <!-- Recent items -->
+        <section class="card table-card">
+          <div class="card__head">
+            <h2 class="card__title">Recent Items</h2>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num">Value</th>
+                  <th scope="col">Created</th>
+                </tr>
+              </thead>
+              <tbody id="recent-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

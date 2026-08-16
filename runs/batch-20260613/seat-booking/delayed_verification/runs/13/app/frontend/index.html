@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Live Seat Booking</h1>
+      <div class="status-bar">
+        <span class="legend"><span class="swatch available"></span>Available</span>
+        <span class="legend"><span class="swatch held"></span>Held</span>
+        <span class="legend"><span class="swatch held-mine"></span>Your hold</span>
+        <span class="legend"><span class="swatch selected"></span>Selected</span>
+        <span class="legend"><span class="swatch booked"></span>Booked</span>
+        <span class="legend"><span class="swatch booked-mine"></span>Your booking</span>
+        <span id="connection" class="conn-indicator" title="SSE connection">●</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="screen">SCREEN</div>
+      <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+      <section class="controls">
+        <div id="inventory" class="inventory"></div>
+
+        <div class="actions">
+          <div id="selection-info" class="selection-info">
+            No seats selected.
+          </div>
+
+          <div id="hold-panel" class="hold-panel hidden">
+            <div class="countdown">
+              Hold expires in <span id="countdown">--</span>s
+            </div>
+            <button id="confirm-btn" class="btn btn-primary">Confirm booking</button>
+            <button id="release-btn" class="btn btn-secondary">Release hold</button>
+          </div>
+
+          <button id="hold-btn" class="btn btn-primary" disabled>
+            Hold selected seats
+          </button>
+        </div>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>Session: <code id="session-id"></code></span>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

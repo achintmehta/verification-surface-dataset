@@ -1,0 +1,238 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-right: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+}
+
+button:hover {
+  background: #eee;
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.calendar-header {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  background: #fafafa;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.time-axis-header {
+  width: 60px;
+  flex-shrink: 0;
+  border-right: 1px solid #ddd;
+}
+
+.days-header {
+  display: flex;
+  flex: 1;
+}
+
+.day-header {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0;
+  border-right: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.day-header:last-child {
+  border-right: none;
+}
+
+.day-header.today {
+  color: #0066cc;
+  background: #e6f2ff;
+}
+
+.calendar-body {
+  display: flex;
+  position: relative;
+}
+
+.time-axis {
+  width: 60px;
+  flex-shrink: 0;
+  border-right: 1px solid #ddd;
+  position: relative;
+}
+
+.time-label {
+  position: absolute;
+  right: 8px;
+  font-size: 12px;
+  color: #666;
+  transform: translateY(-50%);
+}
+
+.days-grid {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.day-column {
+  flex: 1;
+  border-right: 1px solid #ddd;
+  position: relative;
+}
+
+.day-column:last-child {
+  border-right: none;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #eee;
+  pointer-events: none;
+}
+
+.event-block {
+  position: absolute;
+  background: #0066cc;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #004c99;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  z-index: 5;
+}
+
+.event-block:hover {
+  background: #005bb5;
+}
+
+.event-title {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.modal-content h3 {
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+#btn-save {
+  background: #0066cc;
+  color: #fff;
+  border: none;
+}
+
+#btn-save:hover {
+  background: #005bb5;
+}
+
+#btn-delete {
+  background: #cc0000;
+  color: #fff;
+  border: none;
+}
+
+#btn-delete:hover {
+  background: #b30000;
+}

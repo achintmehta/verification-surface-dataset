@@ -1,0 +1,22 @@
+{
+  "name": "seat-booking",
+  "version": "1.0.0",
+  "description": "Seat booking service with PGLite, Express, and SSE",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "cd client && npm run dev",
+    "build:client": "cd client && npm run build"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.0.0"
+  }
+}

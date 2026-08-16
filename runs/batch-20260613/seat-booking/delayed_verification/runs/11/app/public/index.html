@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🎫 Seat Booking</h1>
+      <div id="connection" class="status-pill disconnected">connecting…</div>
+    </header>
+
+    <main>
+      <section class="stage-area">
+        <div class="stage">STAGE</div>
+      </section>
+
+      <section id="seat-map" class="seat-map" aria-label="Seat map"></section>
+
+      <section class="legend">
+        <span><span class="swatch available"></span> Available</span>
+        <span><span class="swatch held-other"></span> Held (others)</span>
+        <span><span class="swatch selected"></span> Selected</span>
+        <span><span class="swatch mine"></span> Your hold</span>
+        <span><span class="swatch booked"></span> Booked</span>
+      </section>
+
+      <section class="panel">
+        <div id="selection-info" class="selection-info">No seats selected.</div>
+        <div id="inventory" class="inventory"></div>
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" class="primary" disabled>Confirm booking</button>
+          <button id="release-btn" class="ghost" disabled>Release hold</button>
+        </div>
+        <div id="countdown" class="countdown" hidden></div>
+        <div id="message" class="message" role="status"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

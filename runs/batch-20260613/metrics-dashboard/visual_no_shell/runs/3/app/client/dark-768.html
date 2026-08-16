@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dark 768px Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: #111; }
+    .wrapper {
+      width: 768px;
+      overflow: hidden;
+      border: 2px solid #555;
+      margin: 0;
+    }
+    iframe {
+      width: 768px;
+      height: 2400px;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    fetch('http://localhost:3001/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'dark' })
+    }).then(() => {
+      document.querySelector('.wrapper').innerHTML = '<iframe src="/" width="768" scrolling="yes"></iframe>';
+    });
+  </script>
+  <div class="wrapper">Loading...</div>
+</body>
+</html>

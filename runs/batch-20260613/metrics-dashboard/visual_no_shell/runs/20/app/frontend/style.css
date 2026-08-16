@@ -1,0 +1,221 @@
+:root {
+  --bg-color: #f4f4f5;
+  --text-color: #18181b;
+  --card-bg: #ffffff;
+  --border-color: #e4e4e7;
+  --chart-line: #3b82f6;
+  --chart-grid: #e4e4e7;
+  --chart-text: #71717a;
+  --bar-color: #3b82f6;
+  --bar-bg: #f4f4f5;
+}
+
+[data-theme="dark"] {
+  --bg-color: #18181b;
+  --text-color: #f4f4f5;
+  --card-bg: #27272a;
+  --border-color: #3f3f46;
+  --chart-line: #60a5fa;
+  --chart-grid: #3f3f46;
+  --chart-text: #a1a1aa;
+  --bar-color: #60a5fa;
+  --bar-bg: #3f3f46;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+#app {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card h3 {
+  font-size: 0.875rem;
+  color: var(--chart-text);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Grid Layouts */
+main {
+  display: grid;
+  gap: 1rem;
+}
+
+.stat-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.charts-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.table-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* Breakpoint: Medium (640px - 1023px) */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Breakpoint: Large (>= 1024px) */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .charts-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Chart */
+#chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Category Breakdown */
+#category-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.category-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.category-value {
+  font-weight: 600;
+}
+
+.category-bar-bg {
+  background-color: var(--bar-bg);
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  background-color: var(--bar-color);
+  height: 100%;
+}
+
+/* Table */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+th, td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+th {
+  color: var(--chart-text);
+  font-weight: 600;
+}
+
+#error-state {
+  color: #ef4444;
+  text-align: center;
+  padding: 2rem;
+}
+
+#loading-state {
+  text-align: center;
+  padding: 2rem;
+}

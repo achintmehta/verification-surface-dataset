@@ -1,0 +1,210 @@
+:root {
+  --bg: #0f1729;
+  --panel: #1b2540;
+  --panel-2: #222e52;
+  --card: #2b3a66;
+  --card-hover: #344679;
+  --text: #e8edf9;
+  --muted: #9aa6c4;
+  --accent: #5b8cff;
+  --danger: #ff6b6b;
+  --ok: #3ddc84;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: background 0.2s ease;
+}
+
+.status.connected .dot {
+  background: var(--ok);
+}
+
+.status.disconnected .dot {
+  background: var(--danger);
+}
+
+.board {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+  padding: 22px;
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+.column {
+  background: var(--panel);
+  border-radius: 12px;
+  width: 300px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 110px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.column-header {
+  padding: 14px 16px 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.column-header .count {
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.card-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 12px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-list.drag-over {
+  background: rgba(91, 140, 255, 0.06);
+}
+
+.card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: grab;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.35;
+  transition: background 0.12s ease, transform 0.05s ease;
+}
+
+.card:hover {
+  background: var(--card-hover);
+}
+
+.card.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.card.drop-before {
+  box-shadow: 0 -3px 0 -1px var(--accent);
+}
+
+.card.drop-after {
+  box-shadow: 0 3px 0 -1px var(--accent);
+}
+
+.add-card {
+  padding: 10px 12px 14px;
+}
+
+.add-card textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 38px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 8px 10px;
+  font: inherit;
+}
+
+.add-card textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.add-card .row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  background: var(--accent);
+  color: white;
+}
+
+button.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.add-toggle {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 4px;
+}
+
+.add-toggle:hover {
+  color: var(--text);
+}

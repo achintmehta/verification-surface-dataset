@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board – Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0f172a;
+      --surface:      #1e293b;
+      --surface-2:    #273449;
+      --border:       #334155;
+      --accent:       #6366f1;
+      --accent-hover: #818cf8;
+      --accent-light: rgba(99,102,241,0.15);
+      --text:         #f1f5f9;
+      --text-muted:   #94a3b8;
+      --text-dim:     #64748b;
+      --success:      #22c55e;
+      --card-bg:      #1e293b;
+      --card-hover:   #273449;
+      --shadow-sm:    0 1px 3px rgba(0,0,0,0.4);
+      --shadow-md:    0 4px 16px rgba(0,0,0,0.5);
+      --radius-sm:    6px;
+      --radius-md:    10px;
+      --radius-lg:    14px;
+      --col-width:    300px;
+      --header-h:     60px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .app-header {
+      height: var(--header-h);
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+      border-bottom: 1px solid rgba(99,102,241,0.3);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .header-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      flex: 1;
+    }
+
+    .connection-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .badge-label { color: var(--success); }
+
+    .board-wrapper {
+      position: fixed;
+      top: var(--header-h);
+      left: 0; right: 0; bottom: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 24px;
+    }
+
+    .board {
+      display: flex;
+      gap: 20px;
+      height: 100%;
+      align-items: flex-start;
+      min-width: max-content;
+    }
+
+    .column {
+      width: var(--col-width);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - var(--header-h) - 48px);
+      flex-shrink: 0;
+    }
+
+    .column-header {
+      padding: 14px 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .column-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .column-count {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1px 8px;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .card-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 10px 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      cursor: grab;
+      user-select: none;
+      position: relative;
+      word-break: break-word;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      opacity: 0;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .add-card-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .add-card-btn:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    /* Column accent colors */
+    .column:nth-child(1) .column-title { color: #a78bfa; }
+    .column:nth-child(2) .column-title { color: #38bdf8; }
+    .column:nth-child(3) .column-title { color: #34d399; }
+
+    .column:nth-child(1) .card::before { background: #a78bfa; }
+    .column:nth-child(2) .card::before { background: #38bdf8; }
+    .column:nth-child(3) .card::before { background: #34d399; }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span style="display:flex;align-items:center">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="6" width="7" height="16" rx="2" fill="#fff" fill-opacity="0.9"/>
+          <rect x="10.5" y="6" width="7" height="10" rx="2" fill="#fff" fill-opacity="0.6"/>
+          <rect x="19" y="6" width="7" height="13" rx="2" fill="#fff" fill-opacity="0.75"/>
+        </svg>
+      </span>
+      <h1 class="header-title">Kanban Board</h1>
+      <span class="connection-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-label">Live</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="board-wrapper">
+    <div class="board">
+
+      <!-- To Do -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">To Do</span>
+          <span class="column-count">3</span>
+        </div>
+        <div class="card-list">
+          <div class="card">Design database schema</div>
+          <div class="card">Write API endpoints</div>
+          <div class="card">Add drag-and-drop support</div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add card
+        </button>
+      </div>
+
+      <!-- In Progress -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">In Progress</span>
+          <span class="column-count">2</span>
+        </div>
+        <div class="card-list">
+          <div class="card">Implement SSE broadcasting</div>
+          <div class="card">Build frontend UI</div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add card
+        </button>
+      </div>
+
+      <!-- Done -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">Done</span>
+          <span class="column-count">2</span>
+        </div>
+        <div class="card-list">
+          <div class="card">Set up Node.js project</div>
+          <div class="card">Configure PGLite</div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add card
+        </button>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

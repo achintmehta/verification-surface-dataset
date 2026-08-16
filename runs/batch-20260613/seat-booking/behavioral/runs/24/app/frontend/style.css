@@ -1,0 +1,115 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #1a1a2e; color: #eee; padding: 20px; }
+h1 { text-align: center; margin-bottom: 10px; }
+
+#inventory {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  color: #888;
+}
+
+.seat {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  border: 2px solid transparent;
+}
+
+.seat:hover { transform: scale(1.1); }
+
+.seat.available { background: #16a34a; color: #fff; }
+.seat.held { background: #eab308; color: #000; cursor: not-allowed; }
+.seat.held.mine { background: #f97316; color: #fff; border-color: #fff; }
+.seat.booked { background: #dc2626; color: #fff; cursor: not-allowed; }
+.seat.selected { border-color: #3b82f6; background: #2563eb; color: #fff; }
+
+#controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+#selection-info {
+  font-size: 14px;
+  color: #aaa;
+  min-width: 180px;
+  text-align: center;
+}
+
+button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#btn-hold { background: #2563eb; color: #fff; }
+#btn-confirm { background: #16a34a; color: #fff; }
+#btn-release { background: #dc2626; color: #fff; }
+
+#status-bar {
+  text-align: center;
+  min-height: 24px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.status-error { color: #f87171; }
+.status-success { color: #4ade80; }
+
+#countdown {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #f97316;
+  min-height: 28px;
+}
+
+/* Screen / stage label */
+.stage {
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 6px 0;
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  border-bottom: 2px solid #333;
+  width: 420px;
+}

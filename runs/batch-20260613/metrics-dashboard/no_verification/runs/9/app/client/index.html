@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Metrics Dashboard</title>
+    <script>
+      document.documentElement.style.visibility = 'hidden';
+      (async () => {
+        try {
+          const response = await fetch('/api/settings', { cache: 'no-store' });
+          if (response.ok) {
+            const settings = await response.json();
+            document.documentElement.dataset.theme = settings.theme === 'dark' ? 'dark' : 'light';
+          }
+        } catch (_) {
+          document.documentElement.dataset.theme = 'light';
+        } finally {
+          document.documentElement.style.visibility = 'visible';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

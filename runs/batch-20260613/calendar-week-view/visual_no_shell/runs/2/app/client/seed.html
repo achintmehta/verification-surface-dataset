@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Events</title></head>
+<body>
+<pre id="out">Seeding...</pre>
+<script>
+// Seed events for the current week (Mon Jun 16 2026 based on what we saw)
+// We'll use today's week. Today is Thu Jun 18 2026.
+// Monday = Jun 16, 2026
+
+const BASE = 'http://localhost:3001';
+
+async function post(data) {
+  const r = await fetch(BASE + '/api/events', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  return r.json();
+}
+
+async function seed() {
+  const out = document.getElementById('out');
+  const results = [];
+
+  // Monday Jun 16: single event (full width)
+  results.push(await post({ title: 'Solo Meeting', start_at: '2026-06-15T09:00:00', end_at: '2026-06-15T10:00:00' }));
+
+  // Tuesday Jun 16: 3 identical overlapping events (should be 3 equal columns)
+  results.push(await post({ title: 'Team Standup A', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T10:00:00' }));
+  results.push(await post({ title: 'Team Standup B', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T10:00:00' }));
+  results.push(await post({ title: 'Team Standup C', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T10:00:00' }));
+
+  // Wednesday Jun 17: chain overlap (09-11, 10-12, 11:30-13)
+  results.push(await post({ title: 'Chain A (09-11)', start_at: '2026-06-17T09:00:00', end_at: '2026-06-17T11:00:00' }));
+  results.push(await post({ title: 'Chain B (10-12)', start_at: '2026-06-17T10:00:00', end_at: '2026-06-17T12:00:00' }));
+  results.push(await post({ title: 'Chain C (11:30-13)', start_at: '2026-06-17T11:30:00', end_at: '2026-06-17T13:00:00' }));
+
+  // Thursday Jun 18 (today): two clusters - first cluster ends, then solo event
+  results.push(await post({ title: 'Morning A', start_at: '2026-06-18T08:00:00', end_at: '2026-06-18T09:30:00' }));
+  results.push(await post({ title: 'Morning B', start_at: '2026-06-18T08:30:00', end_at: '2026-06-18T10:00:00' }));
+  results.push(await post({ title: 'Afternoon Solo', start_at: '2026-06-18T14:00:00', end_at: '2026-06-18T15:30:00' }));
+
+  // Friday Jun 19: event ending at 24:00
+  results.push(await post({ title: 'Late Night', start_at: '2026-06-19T22:00:00', end_at: '2026-06-20T00:00:00' }));
+
+  // Saturday Jun 20: short 15-min event
+  results.push(await post({ title: 'Quick Check', start_at: '2026-06-20T10:00:00', end_at: '2026-06-20T10:15:00' }));
+
+  out.textContent = JSON.stringify(results, null, 2);
+}
+
+seed().catch(e => { document.getElementById('out').textContent = 'Error: ' + e.message; });
+</script>
+</body>
+</html>

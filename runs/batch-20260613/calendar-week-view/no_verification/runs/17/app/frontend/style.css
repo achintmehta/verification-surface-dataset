@@ -1,0 +1,155 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+header button {
+  margin-right: 10px;
+}
+
+.calendar-container {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.time-axis {
+  width: 60px;
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid #ccc;
+  background: #fafafa;
+}
+
+.time-label {
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  color: #666;
+  transform: translateY(-50%);
+}
+
+.week-grid {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.day-column {
+  flex: 1;
+  border-right: 1px solid #eee;
+  position: relative;
+  min-width: 100px;
+}
+
+.day-header {
+  text-align: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+  background: #f9f9f9;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 20px;
+}
+
+.day-header.today {
+  background: #e0f0ff;
+  font-weight: bold;
+}
+
+.grid-content {
+  position: relative;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #eee;
+  pointer-events: none;
+}
+
+.event-block {
+  position: absolute;
+  background: #3174ad;
+  color: white;
+  border: 1px solid #265a88;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.event-block .event-title {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-block .event-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.modal-content input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}

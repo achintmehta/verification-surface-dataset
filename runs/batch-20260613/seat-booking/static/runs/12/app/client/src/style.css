@@ -1,0 +1,206 @@
+:root {
+  --bg: #0f1419;
+  --panel: #1a2029;
+  --text: #e6e9ef;
+  --muted: #8b94a3;
+  --available: #2f80ed;
+  --available-hover: #4a93f0;
+  --held: #f2994a;
+  --booked: #5a6373;
+  --selected: #27ae60;
+  --mine: #9b51e0;
+  --danger: #eb5757;
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#app {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.app-header h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.swatch.available { background: var(--available); }
+.swatch.held { background: var(--held); }
+.swatch.selected { background: var(--selected); }
+.swatch.booked { background: var(--booked); }
+.swatch.mine { background: var(--mine); }
+
+.screen {
+  text-align: center;
+  letter-spacing: 0.5em;
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: linear-gradient(to bottom, #2b3340, transparent);
+  border-radius: 50% / 100% 100% 0 0;
+  padding: 0.5rem 0 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.seat {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.seat.available { background: var(--available); }
+.seat.available:hover:not(:disabled) {
+  background: var(--available-hover);
+  transform: translateY(-2px);
+}
+.seat.held { background: var(--held); }
+.seat.booked { background: var(--booked); }
+.seat.selected {
+  background: var(--selected);
+  box-shadow: 0 0 0 2px #fff inset;
+}
+.seat.mine {
+  background: var(--mine);
+  box-shadow: 0 0 0 2px #fff inset;
+}
+.seat.taken-flash {
+  background: var(--danger);
+  animation: shake 0.4s ease;
+}
+.seat:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.status-bar {
+  margin: 1.5rem 0 0.5rem;
+  min-height: 1.4rem;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+.status-bar.success { color: #6fcf97; }
+.status-bar.error { color: #ff8a8a; }
+.status-bar.info { color: var(--text); }
+
+.inventory {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+.inventory b { color: var(--text); }
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+button {
+  font-size: 0.95rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid #2f3947;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.primary {
+  background: var(--selected);
+  border-color: var(--selected);
+  color: #fff;
+}
+button.ghost {
+  background: transparent;
+}
+
+.countdown {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.05rem;
+  color: var(--held);
+}
+.countdown.urgent {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.app-footer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.connection.online { color: #6fcf97; }
+.connection.offline { color: var(--held); }
+code { color: var(--text); }

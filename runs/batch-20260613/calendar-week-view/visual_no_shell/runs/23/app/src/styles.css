@@ -1,0 +1,365 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --hour-height: 60px;
+  --header-height: 60px;
+  --gutter-width: 60px;
+  --day-header-height: 50px;
+  --total-hours: 24;
+  --axis-height: calc(var(--hour-height) * var(--total-hours)); /* 1440px for 24 hours */
+  --border-color: #ddd;
+  --today-bg: #e8f0fe;
+  --event-bg: #4285f4;
+  --event-text: #fff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #fafafa;
+  color: #333;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header */
+#calendar-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  height: var(--header-height);
+  flex-shrink: 0;
+  gap: 20px;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-controls button {
+  padding: 6px 14px;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s;
+}
+
+.nav-controls button:hover {
+  background: #f0f0f0;
+}
+
+#week-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Calendar container */
+#calendar-container {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Time gutter */
+#time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid var(--border-color);
+  background: #fff;
+}
+
+#time-gutter .time-label {
+  position: absolute;
+  right: 8px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: #888;
+  pointer-events: none;
+}
+
+/* Days container */
+#days-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+}
+
+/* Day column */
+.day-column {
+  position: relative;
+  border-right: 1px solid var(--border-color);
+  min-height: var(--axis-height);
+}
+
+.day-column:last-child {
+  border-right: none;
+}
+
+.day-column.today {
+  background: var(--today-bg);
+}
+
+/* Day header (sticky) */
+.day-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+  padding: 8px 4px;
+  height: var(--day-header-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.day-column.today .day-header {
+  background: var(--today-bg);
+}
+
+.day-header .day-name {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #888;
+  letter-spacing: 0.5px;
+}
+
+.day-header .day-date {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.day-column.today .day-header .day-date {
+  color: var(--event-bg);
+}
+
+/* Hour lines */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border-color);
+  height: 0;
+  pointer-events: none;
+}
+
+/* Events area within each day column */
+.events-area {
+  position: absolute;
+  top: var(--day-header-height);
+  left: 0;
+  right: 0;
+  height: var(--axis-height);
+}
+
+/* Event block */
+.event-block {
+  position: absolute;
+  background: var(--event-bg);
+  color: var(--event-text);
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 11px;
+  overflow: hidden;
+  cursor: pointer;
+  border-left: 3px solid #1a73e8;
+  transition: opacity 0.15s;
+  z-index: 5;
+}
+
+.event-block:hover {
+  opacity: 0.9;
+  z-index: 6;
+}
+
+.event-block .event-block-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-block .event-block-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+/* Click area for creating events */
+.click-area {
+  position: absolute;
+  top: var(--day-header-height);
+  left: 0;
+  right: 0;
+  height: var(--axis-height);
+  z-index: 1;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 400px;
+  max-width: 95vw;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--event-bg);
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.form-error {
+  background: #fce8e6;
+  color: #c5221f;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#btn-save {
+  background: var(--event-bg);
+  color: #fff;
+  border-color: var(--event-bg);
+}
+
+#btn-save:hover {
+  background: #3367d6;
+}
+
+#btn-cancel {
+  background: #fff;
+}
+
+#btn-cancel:hover {
+  background: #f0f0f0;
+}
+
+.btn-danger {
+  background: #ea4335 !important;
+  color: #fff !important;
+  border-color: #ea4335 !important;
+}
+
+.btn-danger:hover {
+  background: #c5221f !important;
+}
+
+/* Drag selection highlight */
+.drag-selection {
+  position: absolute;
+  background: rgba(66, 133, 244, 0.3);
+  border: 1px solid var(--event-bg);
+  border-radius: 3px;
+  z-index: 2;
+  pointer-events: none;
+  left: 0;
+  right: 0;
+}
+
+/* Current time line */
+.current-time-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ea4335;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.current-time-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ea4335;
+}

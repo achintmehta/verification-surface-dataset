@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bottom Test</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    body { margin: 0; background: #f8f9fa; }
+    .test-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .info {
+      padding: 8px 16px;
+      background: #333;
+      color: white;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="info">Testing: Late Night Work event (22:00-24:00) should end exactly at bottom edge. Scroll down to see.</div>
+<div id="app" class="test-container"></div>
+<script type="module">
+import { computeDayLayout } from '/src/layout.js';
+
+const HOUR_HEIGHT = 60;
+
+// Simulate the Thursday column with the late night event
+const events = [
+  { id: 11, title: 'Late Night Work', start_at: '2026-06-18T22:00:00', end_at: '2026-06-19T00:00:00' },
+  { id: 12, title: 'Daily Sync', start_at: '2026-06-18T14:00:00', end_at: '2026-06-18T15:00:00' },
+];
+
+const layout = computeDayLayout(events);
+console.log('Layout:', JSON.stringify(layout.map(l => ({
+  title: l.event.title,
+  colIndex: l.colIndex,
+  numCols: l.numCols
+})), null, 2));
+
+const app = document.getElementById('app');
+app.innerHTML = `
+  <div style="display:flex;flex:1;overflow:hidden;">
+    <div style="width:56px;flex-shrink:0;border-right:1px solid #e0e0e0;position:relative;height:${HOUR_HEIGHT*24}px;overflow:hidden;">
+      ${Array.from({length:24},(_,h)=>`<div style="position:absolute;right:8px;top:${h*HOUR_HEIGHT}px;font-size:10px;color:#666;transform:translateY(-50%)">${h===0?'':String(h).padStart(2,'0')+':00'}</div>`).join('')}
+    </div>
+    <div id="day-col" style="flex:1;position:relative;height:${HOUR_HEIGHT*24}px;border-right:1px solid #e0e0e0;">
+      ${Array.from({length:25},(_,h)=>`<div style="position:absolute;left:0;right:0;top:${h*HOUR_HEIGHT}px;border-top:1px solid #e0e0e0;"></div>`).join('')}
+    </div>
+  </div>
+`;
+
+const dayCol = document.getElementById('day-col');
+const dayDate = new Date('2026-06-18');
+const dayStartMs = new Date(dayDate).setHours(0,0,0,0);
+const dayEndMs = new Date(dayDate).setHours(24,0,0,0);
+
+const colors = ['#1a73e8','#0f9d58','#f4511e','#8430ce','#e37400'];
+
+layout.forEach(({event, colIndex, numCols}) => {
+  const evStartMs = new Date(event.start_at).getTime();
+  const evEndMs = new Date(event.end_at).getTime();
+  const clampedStartMs = Math.max(evStartMs, dayStartMs);
+  const clampedEndMs = Math.min(evEndMs, dayEndMs);
+  if (clampedStartMs >= clampedEndMs) return;
+  
+  const startMinutes = (clampedStartMs - dayStartMs) / 60000;
+  const endMinutes = (clampedEndMs - dayStartMs) / 60000;
+  const top = (startMinutes / 60) * HOUR_HEIGHT;
+  const height = Math.max(((endMinutes - startMinutes) / 60) * HOUR_HEIGHT, 4);
+  const widthPct = 100 / numCols;
+  const leftPct = colIndex * widthPct;
+  
+  const block = document.createElement('div');
+  block.className = 'event-block';
+  block.style.top = `${top}px`;
+  block.style.height = `${height}px`;
+  block.style.left = `calc(${leftPct}% + 1px)`;
+  block.style.width = `calc(${widthPct}% - 2px)`;
+  block.style.background = colors[event.id % colors.length];
+  block.innerHTML = `<div class="event-title">${event.title}</div><div class="event-time">${event.start_at.slice(11,16)}–${event.end_at.slice(11,16)}</div>`;
+  dayCol.appendChild(block);
+  
+  console.log(`${event.title}: top=${top}px, height=${height}px, bottom=${top+height}px (should be ${HOUR_HEIGHT*24}px for 24:00)`);
+});
+</script>
+</body>
+</html>

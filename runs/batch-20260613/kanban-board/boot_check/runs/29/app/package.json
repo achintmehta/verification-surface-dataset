@@ -1,0 +1,21 @@
+{
+  "name": "kanban-board",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Multi-user Kanban board with PGLite and SSE",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev:backend": "node backend/server.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "start": "node backend/server.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

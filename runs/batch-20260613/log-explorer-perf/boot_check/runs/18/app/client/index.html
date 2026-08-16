@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Explorer</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    .header {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .stats {
+      margin-left: auto;
+      font-size: 14px;
+      color: #555;
+    }
+    .viewport {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+    .spacer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+    }
+    .row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      border-bottom: 1px solid #eee;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .row .ts { width: 180px; flex-shrink: 0; color: #666; }
+    .row .severity { width: 60px; flex-shrink: 0; font-weight: bold; }
+    .row .service { width: 100px; flex-shrink: 0; color: #0066cc; }
+    .row .message { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+    
+    .sev-debug { color: #888; }
+    .sev-info { color: #00a; }
+    .sev-warn { color: #a80; }
+    .sev-error { color: #d00; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <select id="severity-filter">
+      <option value="">All Severities</option>
+      <option value="debug">Debug</option>
+      <option value="info">Info</option>
+      <option value="warn">Warn</option>
+      <option value="error">Error</option>
+    </select>
+    <input type="text" id="search-input" placeholder="Search messages..." />
+    <div class="stats" id="stats-display">Loading...</div>
+  </div>
+  <div class="viewport" id="viewport">
+    <div class="spacer" id="spacer"></div>
+    <div id="rows-container"></div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=360, initial-scale=1.0" />
+  <title>Metrics Dashboard – 360px Narrow</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /*
+     * Simulate a 360px-wide device for screenshot testing.
+     * Container queries fire based on the .main container width,
+     * so we constrain the entire page to 360px.
+     */
+    html, body {
+      width: 360px !important;
+      max-width: 360px !important;
+      overflow-x: hidden;
+    }
+    #app {
+      width: 360px !important;
+      max-width: 360px !important;
+      overflow-x: hidden;
+    }
+    .header-inner {
+      max-width: 360px !important;
+    }
+    .main {
+      max-width: 360px !important;
+      width: 360px !important;
+    }
+  </style>
+  <script>
+    (function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/settings', false);
+      try {
+        xhr.send();
+        if (xhr.status === 200) {
+          var d = JSON.parse(xhr.responseText);
+          if (d.theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <span class="brand-name">Metrics Dashboard</span>
+        </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle light/dark theme">
+          <span class="theme-icon theme-icon--light">&#9728;&#65039;</span>
+          <span class="theme-icon theme-icon--dark">&#127769;</span>
+          <span class="theme-label theme-label--light">Light</span>
+          <span class="theme-label theme-label--dark">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <div id="error-banner" class="error-banner" hidden></div>
+
+      <section class="section" aria-label="Summary statistics">
+        <div class="stat-grid" id="stat-grid">
+          <div class="stat-card skeleton" id="card-visitors">
+            <div class="stat-label">Total Visitors</div>
+            <div class="stat-value" id="val-visitors">&#8212;</div>
+            <div class="stat-sub" id="sub-visitors"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-revenue">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value" id="val-revenue">&#8212;</div>
+            <div class="stat-sub" id="sub-revenue"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-best">
+            <div class="stat-label">Best Day</div>
+            <div class="stat-value" id="val-best">&#8212;</div>
+            <div class="stat-sub" id="sub-best"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-trend">
+            <div class="stat-label">7-Day Trend</div>
+            <div class="stat-value" id="val-trend">&#8212;</div>
+            <div class="stat-sub" id="sub-trend">vs previous 7 days</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section body-grid" aria-label="Charts">
+        <div class="panel chart-panel">
+          <h2 class="panel-title">30-Day Visitors</h2>
+          <div class="chart-container" id="chart-container">
+            <canvas id="timeseries-canvas" aria-label="30-day visitor time series chart"></canvas>
+          </div>
+        </div>
+        <div class="panel categories-panel">
+          <h2 class="panel-title">Revenue by Category</h2>
+          <div class="categories-list" id="categories-list">
+            <div class="loading-msg">Loading&#8230;</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Recent items">
+        <div class="panel table-panel">
+          <h2 class="panel-title">Recent Items</h2>
+          <div class="table-scroll">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num-col">Value</th>
+                  <th scope="col" class="num-col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <tr><td colspan="4" class="loading-msg">Loading&#8230;</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Metrics Dashboard &middot; Data refreshes on reload</span>
+    </footer>
+  </div>
+
+  <script src="/main.js"></script>
+</body>
+</html>

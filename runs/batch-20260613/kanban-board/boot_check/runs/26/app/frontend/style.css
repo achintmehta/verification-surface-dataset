@@ -1,0 +1,101 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.board {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.column {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-height: 500px;
+}
+
+.column-header {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-title {
+  color: #333;
+}
+
+.add-card-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.cards {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  cursor: grab;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.card-placeholder {
+  background: #e0e0e0;
+  border: 2px dashed #aaa;
+  border-radius: 6px;
+  height: 50px;
+  margin: 4px 0;
+}
+
+input.new-card-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}

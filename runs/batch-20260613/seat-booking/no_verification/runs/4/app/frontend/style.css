@@ -1,0 +1,283 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --clr-bg:           #0f0f1a;
+  --clr-surface:      #1a1a2e;
+  --clr-surface2:     #16213e;
+  --clr-border:       #2a2a4a;
+  --clr-text:         #e0e0f0;
+  --clr-text-muted:   #8888aa;
+
+  --clr-available:    #2ecc71;
+  --clr-available-h:  #27ae60;
+  --clr-held-own:     #f39c12;
+  --clr-held-own-h:   #e67e22;
+  --clr-held-other:   #e74c3c;
+  --clr-held-other-h: #c0392b;
+  --clr-booked:       #7f8c8d;
+  --clr-selected:     #3498db;
+  --clr-selected-h:   #2980b9;
+
+  --seat-size: 2.6rem;
+  --seat-gap:  0.4rem;
+  --radius:    0.5rem;
+}
+
+body {
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem 3rem;
+}
+
+#app {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+header { text-align: center; }
+header h1 { font-size: 2rem; letter-spacing: 0.05em; }
+.subtitle { color: var(--clr-text-muted); margin-top: 0.25rem; }
+
+/* ── Status bar ───────────────────────────────────────────────────────────── */
+.status-bar {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.status-bar.info    { background: #1a3a5c; border: 1px solid #2980b9; color: #aad4f5; }
+.status-bar.success { background: #1a3a2a; border: 1px solid #27ae60; color: #a8e6c0; }
+.status-bar.error   { background: #3a1a1a; border: 1px solid #c0392b; color: #f5aaaa; }
+.status-bar.warning { background: #3a2e1a; border: 1px solid #e67e22; color: #f5d5aa; }
+.hidden { display: none !important; }
+
+/* ── Hold panel ───────────────────────────────────────────────────────────── */
+.hold-panel {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-held-own);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.hold-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.hold-timer {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--clr-held-own);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5rem;
+}
+.hold-timer.urgent { color: var(--clr-held-other); animation: pulse 1s infinite; }
+.hold-actions { display: flex; gap: 0.75rem; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Booking success ──────────────────────────────────────────────────────── */
+.booking-success {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-available);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+}
+.booking-success h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.booking-success p  { color: var(--clr-text-muted); margin-bottom: 1rem; }
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary  { background: var(--clr-selected);    color: #fff; }
+.btn-primary:hover  { background: var(--clr-selected-h); }
+.btn-confirm  { background: var(--clr-available);   color: #000; }
+.btn-confirm:hover  { background: var(--clr-available-h); }
+.btn-release  { background: var(--clr-held-other);  color: #fff; }
+.btn-release:hover  { background: var(--clr-held-other-h); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Legend ───────────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: var(--clr-text-muted);
+}
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.seat-demo {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+.seat-demo.available   { background: var(--clr-available); }
+.seat-demo.held-own    { background: var(--clr-held-own); }
+.seat-demo.held-other  { background: var(--clr-held-other); }
+.seat-demo.booked      { background: var(--clr-booked); }
+.seat-demo.selected    { background: var(--clr-selected); }
+
+/* ── Seat map ─────────────────────────────────────────────────────────────── */
+.seat-map {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--seat-gap);
+  overflow-x: auto;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--seat-gap);
+}
+
+.row-label {
+  width: 1.6rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--clr-text-muted);
+  flex-shrink: 0;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: 6px 6px 4px 4px;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, border-color 0.15s;
+  user-select: none;
+  position: relative;
+  flex-shrink: 0;
+}
+.seat:active { transform: scale(0.92); }
+
+/* Seat states */
+.seat.available {
+  background: var(--clr-available);
+  color: #000;
+}
+.seat.available:hover {
+  background: var(--clr-available-h);
+  transform: scale(1.08);
+}
+
+.seat.selected {
+  background: var(--clr-selected);
+  color: #fff;
+  border-color: #fff;
+  transform: scale(1.08);
+}
+.seat.selected:hover {
+  background: var(--clr-selected-h);
+}
+
+.seat.held-own {
+  background: var(--clr-held-own);
+  color: #000;
+  cursor: default;
+}
+
+.seat.held-other {
+  background: var(--clr-held-other);
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.seat.booked {
+  background: var(--clr-booked);
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Flash animation for SSE updates */
+@keyframes flash-held {
+  0%   { box-shadow: 0 0 0 0 rgba(243,156,18,0.8); }
+  70%  { box-shadow: 0 0 0 8px rgba(243,156,18,0); }
+  100% { box-shadow: 0 0 0 0 rgba(243,156,18,0); }
+}
+@keyframes flash-booked {
+  0%   { box-shadow: 0 0 0 0 rgba(127,140,141,0.8); }
+  70%  { box-shadow: 0 0 0 8px rgba(127,140,141,0); }
+  100% { box-shadow: 0 0 0 0 rgba(127,140,141,0); }
+}
+@keyframes flash-released {
+  0%   { box-shadow: 0 0 0 0 rgba(46,204,113,0.8); }
+  70%  { box-shadow: 0 0 0 8px rgba(46,204,113,0); }
+  100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+}
+.seat.flash-held     { animation: flash-held     0.6s ease-out; }
+.seat.flash-booked   { animation: flash-booked   0.6s ease-out; }
+.seat.flash-released { animation: flash-released 0.6s ease-out; }
+
+/* ── Screen label ─────────────────────────────────────────────────────────── */
+.screen-label {
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--clr-text-muted);
+  border-top: 2px solid var(--clr-border);
+  padding-top: 0.5rem;
+}
+
+/* ── Loading ──────────────────────────────────────────────────────────────── */
+.loading {
+  text-align: center;
+  color: var(--clr-text-muted);
+  padding: 2rem;
+}
+
+/* ── Conflict highlight ───────────────────────────────────────────────────── */
+.seat.conflict {
+  animation: conflict-shake 0.4s ease;
+  border-color: var(--clr-held-other) !important;
+}
+@keyframes conflict-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-4px); }
+  40%       { transform: translateX(4px); }
+  60%       { transform: translateX(-3px); }
+  80%       { transform: translateX(3px); }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  :root { --seat-size: 2.1rem; --seat-gap: 0.3rem; }
+  header h1 { font-size: 1.5rem; }
+}

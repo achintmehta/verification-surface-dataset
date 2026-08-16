@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Final Acceptance Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #1a1a2e; font-family: -apple-system, sans-serif; padding: 16px; }
+    h1 { color: #fff; font-size: 18px; margin-bottom: 16px; }
+    .grid { display: grid; grid-template-columns: 360px 768px; gap: 16px; }
+    .panel { background: #0d0d1a; border-radius: 8px; overflow: hidden; }
+    .label {
+      background: #16213e;
+      color: #a0aec0;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #2d3748;
+    }
+    .frame-wrap { overflow: hidden; }
+    iframe { border: none; display: block; }
+  </style>
+</head>
+<body>
+  <h1>Responsive Layout Test — Light Theme</h1>
+  <div class="grid">
+    <div class="panel">
+      <div class="label">360px · Mobile · 1 column</div>
+      <div class="frame-wrap" style="height:700px; overflow-y:auto;">
+        <iframe src="http://localhost:5173" style="width:360px; height:1800px;"></iframe>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="label">768px · Tablet · 2 columns</div>
+      <div class="frame-wrap" style="height:700px; overflow-y:auto;">
+        <iframe src="http://localhost:5173" style="width:768px; height:1800px;"></iframe>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

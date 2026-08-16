@@ -1,0 +1,138 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #213547;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+#status-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.row-label {
+  width: 30px;
+  font-weight: bold;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.seat.available {
+  background-color: #d4edda;
+  border-color: #28a745;
+}
+
+.seat.available:hover {
+  background-color: #c3e6cb;
+}
+
+.seat.held {
+  background-color: #fff3cd;
+  border-color: #ffc107;
+  cursor: not-allowed;
+}
+
+.seat.booked {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.seat.my-hold {
+  background-color: #cce5ff;
+  border-color: #007bff;
+}
+
+#controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#hold-info {
+  margin-left: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  min-width: 200px;
+}
+
+#messages {
+  margin-top: 20px;
+  min-height: 30px;
+}
+
+.error {
+  color: #dc3545;
+  padding: 5px;
+}
+
+.success {
+  color: #28a745;
+  padding: 5px;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Board</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f0f0f0; }
+    .board { display: flex; gap: 20px; }
+    .column { background: white; border-radius: 8px; padding: 10px; width: 300px; min-height: 400px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .column h2 { margin: 0 0 10px; font-size: 1.2em; }
+    .cards { min-height: 300px; }
+    .card { background: #fff; border: 1px solid #ddd; padding: 10px; margin-bottom: 8px; border-radius: 4px; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .card:active { cursor: grabbing; }
+    .add-card { margin-top: 10px; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; }
+    button { padding: 8px 12px; margin-top: 5px; }
+    .dragging { opacity: 0.5; }
+  </style>
+</head>
+<body>
+  <h1>Kanban Board</h1>
+  <div id="board" class="board"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

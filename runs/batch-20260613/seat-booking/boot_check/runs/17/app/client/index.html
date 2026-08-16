@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seat Booking</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .seat-map { display: flex; flex-direction: column; gap: 10px; }
+    .row { display: flex; gap: 10px; align-items: center; }
+    .row-label { width: 20px; font-weight: bold; }
+    .seat {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #ccc; border-radius: 4px;
+      cursor: pointer; user-select: none;
+    }
+    .seat.available { background-color: #fff; }
+    .seat.available:hover { background-color: #e0e0e0; }
+    .seat.selected { background-color: #b3d4ff; border-color: #0056b3; }
+    .seat.held { background-color: #ffc107; cursor: not-allowed; }
+    .seat.booked { background-color: #dc3545; color: white; cursor: not-allowed; }
+    .seat.my-held { background-color: #28a745; color: white; }
+    .controls { margin-top: 20px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #message { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Seat Booking</h1>
+  <div class="seat-map" id="seatMap"></div>
+  <div class="controls">
+    <button id="holdBtn" disabled>Hold Selected</button>
+    <button id="confirmBtn" style="display:none;">Confirm Booking</button>
+    <button id="releaseBtn" style="display:none;">Release Hold</button>
+    <span id="timer"></span>
+  </div>
+  <div id="message"></div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

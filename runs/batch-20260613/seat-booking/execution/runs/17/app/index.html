@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      .seat-map {
+        display: grid;
+        grid-template-columns: repeat(10, 40px);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .seat {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        user-select: none;
+        font-size: 12px;
+      }
+      .seat.available { background-color: #fff; }
+      .seat.held { background-color: #ffeb3b; cursor: not-allowed; }
+      .seat.booked { background-color: #f44336; color: white; cursor: not-allowed; }
+      .seat.selected { border: 2px solid #2196f3; background-color: #e3f2fd; }
+      .seat.my-hold { background-color: #4caf50; color: white; }
+      #controls {
+        margin-top: 20px;
+      }
+      button {
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+      #countdown {
+        font-weight: bold;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Seat Booking</h1>
+    <div id="seat-map" class="seat-map"></div>
+    <div id="controls">
+      <button id="hold-btn" disabled>Hold Selected Seats</button>
+      <button id="confirm-btn" style="display: none;">Confirm Hold</button>
+      <button id="release-btn" style="display: none;">Release Hold</button>
+      <span id="countdown"></span>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

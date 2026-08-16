@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Metrics Dashboard</h1>
+        <button id="theme-toggle">Toggle Theme</button>
+      </header>
+      
+      <div id="error-state" class="hidden">
+        <p>Failed to load data from the server. Please ensure the backend is running.</p>
+      </div>
+
+      <main id="dashboard" class="hidden">
+        <section class="stat-cards">
+          <div class="card">
+            <h3>Total Visitors</h3>
+            <p id="stat-visitors" class="stat-value">--</p>
+          </div>
+          <div class="card">
+            <h3>Total Revenue</h3>
+            <p id="stat-revenue" class="stat-value">--</p>
+          </div>
+          <div class="card">
+            <h3>Best Day Revenue</h3>
+            <p id="stat-best-day" class="stat-value">--</p>
+          </div>
+          <div class="card">
+            <h3>7-Day Trend</h3>
+            <p id="stat-trend" class="stat-value">--</p>
+          </div>
+        </section>
+
+        <div class="main-content">
+          <section class="chart-section card">
+            <h2>Revenue (30 Days)</h2>
+            <div class="chart-container" id="chart-container">
+              <canvas id="timeseries-chart"></canvas>
+            </div>
+          </section>
+
+          <section class="categories-section card">
+            <h2>Category Breakdown</h2>
+            <div id="categories-container"></div>
+          </section>
+        </div>
+
+        <section class="recent-section card">
+          <h2>Recent Items</h2>
+          <div class="table-container">
+            <table id="recent-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Value</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Rows will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f7fb;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+
+#app { max-width: 1050px; margin: 0 auto; padding: 28px 18px 40px; }
+header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.05em; }
+.subtitle { margin: 8px 0 0; color: #5d687d; }
+code { background: #e8edf7; border-radius: 6px; padding: 2px 6px; }
+
+.inventory { display: grid; grid-template-columns: repeat(2, minmax(110px, 1fr)); gap: 8px; }
+.inventory span { background: white; border: 1px solid #dde4f0; border-radius: 12px; padding: 10px 12px; color: #607087; box-shadow: 0 5px 20px rgba(31, 45, 71, .06); }
+.inventory strong { display: block; color: #172033; font-size: 1.35rem; }
+
+main { display: grid; gap: 18px; }
+.panel { background: #fff; border: 1px solid #dde4f0; border-radius: 18px; padding: 18px; box-shadow: 0 12px 35px rgba(31, 45, 71, .08); }
+.controls { display: grid; gap: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.actions button { border: 0; border-radius: 999px; padding: 10px 16px; background: #2251d1; color: white; cursor: pointer; font-weight: 700; }
+.actions button:nth-child(2) { background: #16855a; }
+.actions button:nth-child(3) { background: #6c7484; }
+.actions button:disabled { background: #c7cfde; color: #738096; cursor: not-allowed; }
+
+.message { border-radius: 12px; background: #eef3ff; color: #294783; padding: 12px 14px; }
+.message.success { background: #e8f8f0; color: #116b48; }
+.message.error { background: #fff0f0; color: #a13030; }
+.hold-info { min-height: 24px; color: #46556f; font-weight: 650; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; color: #5d687d; font-size: .95rem; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 16px; height: 16px; border-radius: 5px; display: inline-block; border: 1px solid rgba(0,0,0,.12); }
+.swatch.available { background: #f9fbff; }
+.swatch.selected { background: #ffd45c; }
+.swatch.held { background: #8fa2bd; }
+.swatch.mine { background: #7c5cff; }
+.swatch.booked { background: #20293a; }
+
+.map-wrap { overflow-x: auto; }
+.seat-map { display: grid; gap: 12px; min-width: 640px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.row-label { width: 34px; text-align: center; font-size: 1.2rem; font-weight: 800; color: #53617a; }
+.row-seats { display: grid; grid-template-columns: repeat(10, 1fr); gap: 9px; flex: 1; }
+.seat { height: 50px; border-radius: 14px 14px 7px 7px; border: 2px solid #cfd8e8; background: #f9fbff; color: #1c2738; cursor: pointer; font-weight: 800; box-shadow: inset 0 -5px 0 rgba(31,45,71,.08); transition: transform .08s ease, border-color .08s ease; }
+.seat.available:hover { transform: translateY(-2px); border-color: #2251d1; }
+.seat.selected { background: #ffd45c; border-color: #d99e00; }
+.seat.held { background: #8fa2bd; color: white; border-color: #71849d; cursor: not-allowed; }
+.seat.mine { background: #7c5cff; border-color: #5f40e5; color: white; }
+.seat.booked { background: #20293a; color: white; border-color: #20293a; cursor: not-allowed; }
+
+@media (max-width: 720px) {
+  header { display: block; }
+  .inventory { margin-top: 16px; }
+}

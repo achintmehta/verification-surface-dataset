@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Geometry Verification</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: monospace; font-size: 13px; padding: 20px; background: #f8f9fa; }
+h2 { margin-bottom: 16px; font-size: 16px; color: #202124; }
+.section { margin: 16px 0 8px; font-weight: bold; color: #5f6368; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+.test { margin-bottom: 6px; padding: 7px 12px; border-radius: 4px; font-size: 12px; }
+.pass { background: #e6f4ea; color: #137333; border-left: 4px solid #34a853; }
+.fail { background: #fce8e6; color: #c5221f; border-left: 4px solid #ea4335; }
+#summary { margin-top: 20px; padding: 12px 16px; border-radius: 6px; font-size: 14px; font-weight: bold; }
+.all-pass { background: #e6f4ea; color: #137333; }
+.has-fail  { background: #fce8e6; color: #c5221f; }
+</style>
+</head>
+<body>
+<h2>📐 Calendar Geometry & Layout Verification</h2>
+<div id="results"></div>
+<div id="summary"></div>
+
+<script>
+// ── Inline layout engine (mirrors layout.js) ──────────────────────────────────
+function overlaps(a, b) {
+  return a.startMin < b.endMin && b.startMin < a.endMin;
+}
+
+function computeLayout(events) {
+  if (!events || events.length === 0) return [];
+  const sorted = [...events].sort((a, b) =>
+    a.startMin !== b.startMin ? a.startMin - b.startMin : b.endMin - a.endMin
+  );
+  const clusters = [];
+  const assigned = new Set();
+  for (let i = 0; i < sorted.length; i++) {
+    if (assigned.has(i)) continue;
+    const cluster = [i];
+    assigned.add(i);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (let j = 0; j < sorted.length; j++) {
+        if (assigned.has(j)) continue;
+        if (cluster.some(ci => overlaps(sorted[ci], sorted[j]))) {
+          cluster.push(j); assigned.add(j); changed = true;
+        }
+      }
+    }
+    clusters.push(cluster.map(ci => sorted[ci]));
+  }
+  const result = [];
+  for (const cluster of clusters) {
+    const cs = [...cluster].sort((a, b) =>
+      a.startMin !== b.startMin ? a.startMin - b.startMin : b.endMin - a.endMin
+    );
+    const colAssignments = new Array(cs.length).fill(-1);
+    const columns = [];
+    for (let i = 0; i < cs.length; i++) {
+      let placed = false;
+      for (let col = 0; col < columns.length; col++) {
+        if (!columns[col].some(j => overlaps(cs[j], cs[i]))) {
+          colAssignments[i] = col; columns[col].push(i); placed = true; break;
+        }
+      }
+      if (!placed) { colAssignments[i] = columns.length; columns.push([i]); }
+    }
+    const numCols = columns.length;
+    for (let i = 0; i < cs.length; i++) {
+      result.push({ id: cs[i].id, startMin: cs[i].startMin, endMin: cs[i].endMin,
+                    left: colAssignments[i] / numCols, width: 1 / numCols });
+    }
+  }
+  return result;
+}
+
+// ── Test harness ──────────────────────────────────────────────────────────────
+const HOUR_HEIGHT = 64;
+const TOTAL = 24 * HOUR_HEIGHT;   // 1536
+const MINUTES_PER_DAY = 1440;
+function minutesToPx(m) { return (m / MINUTES_PER_DAY) * TOTAL; }
+
+const resultsEl = document.getElementById('results');
+let passed = 0, failed = 0;
+
+function section(title) {
+  const d = document.createElement('div');
+  d.className = 'section';
+  d.textContent = title;
+  resultsEl.appendChild(d);
+}
+
+function test(name, condition, detail) {
+  const d = document.createElement('div');
+  d.className = `test ${condition ? 'pass' : 'fail'}`;
+  d.textContent = `${condition ? '✓' : '✗'} ${name}${detail ? '  →  ' + detail : ''}`;
+  resultsEl.appendChild(d);
+  condition ? passed++ : failed++;
+}
+
+// ── 1. Pixel geometry ─────────────────────────────────────────────────────────
+section('1. Pixel Geometry (HOUR_HEIGHT=64, TOTAL=1536px)');
+
+test('00:00 → 0 px',    Math.abs(minutesToPx(0)    - 0)    < 0.01, `${minutesToPx(0)}px`);
+test('06:00 → 384 px',  Math.abs(minutesToPx(360)  - 384)  < 0.01, `${minutesToPx(360)}px`);
+test('09:00 → 576 px',  Math.abs(minutesToPx(540)  - 576)  < 0.01, `${minutesToPx(540)}px`);
+test('10:30 → 672 px',  Math.abs(minutesToPx(630)  - 672)  < 0.01, `${minutesToPx(630)}px`);
+test('12:00 → 768 px',  Math.abs(minutesToPx(720)  - 768)  < 0.01, `${minutesToPx(720)}px`);
+test('22:00 → 1408 px', Math.abs(minutesToPx(1320) - 1408) < 0.01, `${minutesToPx(1320)}px`);
+test('24:00 → 1536 px (column bottom)', Math.abs(minutesToPx(1440) - 1536) < 0.01, `${minutesToPx(1440)}px`);
+
+test('09:00–10:30 height = 96px (1.5 h × 64)',
+  Math.abs((minutesToPx(630) - minutesToPx(540)) - 96) < 0.01,
+  `${minutesToPx(630) - minutesToPx(540)}px`);
+
+test('22:00–24:00 height = 128px (2 h × 64)',
+  Math.abs((minutesToPx(1440) - minutesToPx(1320)) - 128) < 0.01,
+  `${minutesToPx(1440) - minutesToPx(1320)}px`);
+
+test('Each hour = exactly 64px',
+  [0,1,2,6,9,12,18,23].every(h => Math.abs(minutesToPx((h+1)*60) - minutesToPx(h*60) - 64) < 0.01),
+  'checked hours 0,1,2,6,9,12,18,23');
+
+// ── 2. Layout: 3 identical events ────────────────────────────────────────────
+section('2. Layout: 3 Identical Events (09:00–10:00)');
+const L2 = computeLayout([
+  { id:1, startMin:540, endMin:600 },
+  { id:2, startMin:540, endMin:600 },
+  { id:3, startMin:540, endMin:600 },
+]);
+const L2byId = Object.fromEntries(L2.map(p => [p.id, p]));
+const L2lefts = L2.map(p => p.left).sort((a,b)=>a-b);
+test('All 3 width = 1/3', L2.every(p => Math.abs(p.width - 1/3) < 0.001),
+  L2.map(p=>`id${p.id}:${p.width.toFixed(4)}`).join(' '));
+test('Lefts are 0, 1/3, 2/3',
+  Math.abs(L2lefts[0]-0)<0.001 && Math.abs(L2lefts[1]-1/3)<0.001 && Math.abs(L2lefts[2]-2/3)<0.001,
+  L2lefts.map(l=>l.toFixed(4)).join(', '));
+// The rightmost event's right edge should reach 1.0; together they fill the column
+const L2maxRight = Math.max(...L2.map(p => p.left + p.width));
+test('Rightmost event right edge = 1.0 (together fill column)',
+  Math.abs(L2maxRight - 1) < 0.001,
+  `max right edge = ${L2maxRight.toFixed(4)}`);
+test('No visual overlap among 3 identical',
+  !L2.some((a,i) => L2.some((b,j) => i<j &&
+    a.startMin < b.endMin && b.startMin < a.endMin &&
+    a.left < b.left+b.width && b.left < a.left+a.width)));
+
+// ── 3. Layout: Non-overlapping events ────────────────────────────────────────
+section('3. Layout: Non-Overlapping Events (each full width)');
+const L3 = computeLayout([
+  { id:1, startMin:540, endMin:600 },   // 09–10
+  { id:2, startMin:660, endMin:720 },   // 11–12
+  { id:3, startMin:840, endMin:900 },   // 14–15
+]);
+test('All 3 width = 1 (full column)', L3.every(p => Math.abs(p.width-1)<0.001),
+  L3.map(p=>`id${p.id}:${p.width.toFixed(4)}`).join(' '));
+test('All 3 left = 0', L3.every(p => Math.abs(p.left-0)<0.001),
+  L3.map(p=>`id${p.id}:${p.left.toFixed(4)}`).join(' '));
+
+// ── 4. Layout: Partially overlapping chain ────────────────────────────────────
+section('4. Layout: Chain (09–11, 10–12, 11:30–13)');
+const L4 = computeLayout([
+  { id:1, startMin:540, endMin:660 },   // 09:00–11:00
+  { id:2, startMin:600, endMin:720 },   // 10:00–12:00
+  { id:3, startMin:690, endMin:780 },   // 11:30–13:00
+]);
+const L4byId = Object.fromEntries(L4.map(p=>[p.id,p]));
+test('All 3 in one cluster → width = 0.5',
+  L4.every(p => Math.abs(p.width-0.5)<0.001),
+  L4.map(p=>`id${p.id}:${p.width.toFixed(4)}`).join(' '));
+test('Event 1 (09–11) in col 0 (left=0)',   Math.abs(L4byId[1].left-0)<0.001, `left=${L4byId[1].left.toFixed(4)}`);
+test('Event 2 (10–12) in col 1 (left=0.5)', Math.abs(L4byId[2].left-0.5)<0.001, `left=${L4byId[2].left.toFixed(4)}`);
+test('Event 3 (11:30–13) in col 0 (left=0, no conflict with ev1)',
+  Math.abs(L4byId[3].left-0)<0.001, `left=${L4byId[3].left.toFixed(4)}`);
+test('No visual overlap in chain',
+  !L4.some((a,i) => L4.some((b,j) => i<j &&
+    a.startMin < b.endMin && b.startMin < a.endMin &&
+    a.left < b.left+b.width && b.left < a.left+a.width)));
+
+// ── 5. Layout: Solo event after cluster ───────────────────────────────────────
+section('5. Layout: Solo Event After Cluster (full width reclaimed)');
+const L5 = computeLayout([
+  { id:1, startMin:540, endMin:600 },   // 09–10 (overlaps 2)
+  { id:2, startMin:540, endMin:600 },   // 09–10 (overlaps 1)
+  { id:3, startMin:900, endMin:960 },   // 15–16 (solo)
+]);
+const L5byId = Object.fromEntries(L5.map(p=>[p.id,p]));
+test('Cluster events (1,2) width = 0.5', [1,2].every(id => Math.abs(L5byId[id].width-0.5)<0.001),
+  [1,2].map(id=>`id${id}:${L5byId[id].width.toFixed(4)}`).join(' '));
+test('Solo event (3) width = 1 (full column)', Math.abs(L5byId[3].width-1)<0.001,
+  `width=${L5byId[3].width.toFixed(4)}`);
+test('Solo event (3) left = 0', Math.abs(L5byId[3].left-0)<0.001,
+  `left=${L5byId[3].left.toFixed(4)}`);
+
+// ── 6. Layout: 4 events, 2 pairs ─────────────────────────────────────────────
+section('6. Layout: 4 Events (2 separate overlapping pairs)');
+const L6 = computeLayout([
+  { id:1, startMin:540, endMin:600 },   // 09–10 pair A
+  { id:2, startMin:540, endMin:600 },   // 09–10 pair A
+  { id:3, startMin:720, endMin:780 },   // 12–13 pair B
+  { id:4, startMin:720, endMin:780 },   // 12–13 pair B
+]);
+const L6byId = Object.fromEntries(L6.map(p=>[p.id,p]));
+test('Pair A events width = 0.5', [1,2].every(id=>Math.abs(L6byId[id].width-0.5)<0.001),
+  [1,2].map(id=>`id${id}:${L6byId[id].width.toFixed(4)}`).join(' '));
+test('Pair B events width = 0.5', [3,4].every(id=>Math.abs(L6byId[id].width-0.5)<0.001),
+  [3,4].map(id=>`id${id}:${L6byId[id].width.toFixed(4)}`).join(' '));
+test('No visual overlap in 4-event layout',
+  !L6.some((a,i) => L6.some((b,j) => i<j &&
+    a.startMin < b.endMin && b.startMin < a.endMin &&
+    a.left < b.left+b.width && b.left < a.left+a.width)));
+
+// ── 7. API validation ─────────────────────────────────────────────────────────
+section('7. API Validation (HTTP status codes)');
+
+async function apiTest(name, method, path, body, expectedStatus) {
+  try {
+    const res = await fetch(`http://localhost:3002${path}`, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const data = await res.json().catch(() => ({}));
+    test(name, res.status === expectedStatus,
+      `HTTP ${res.status} (expected ${expectedStatus})${data.error ? ' — ' + data.error : ''}`);
+  } catch (e) {
+    test(name, false, `fetch error: ${e.message}`);
+  }
+}
+
+(async () => {
+  await apiTest('Empty title → 400', 'POST', '/api/events',
+    { title: '', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' }, 400);
+  await apiTest('Whitespace-only title → 400', 'POST', '/api/events',
+    { title: '   ', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' }, 400);
+  await apiTest('end = start → 400', 'POST', '/api/events',
+    { title: 'T', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T09:00:00Z' }, 400);
+  await apiTest('end before start → 400', 'POST', '/api/events',
+    { title: 'T', start_at: '2026-06-15T10:00:00Z', end_at: '2026-06-15T09:00:00Z' }, 400);
+  await apiTest('Valid event → 201', 'POST', '/api/events',
+    { title: 'Geometry Test', start_at: '2026-06-20T10:00:00Z', end_at: '2026-06-20T11:00:00Z' }, 201);
+  await apiTest('GET events → 200', 'GET',
+    '/api/events?start=2026-06-15T00:00:00Z&end=2026-06-22T00:00:00Z', null, 200);
+  await apiTest('GET missing params → 400', 'GET', '/api/events', null, 400);
+  await apiTest('PUT non-existent → 404', 'PUT', '/api/events/99999',
+    { title: 'X', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' }, 404);
+  await apiTest('DELETE non-existent → 404', 'DELETE', '/api/events/99999', null, 404);
+
+  // Summary
+  const total = passed + failed;
+  const summary = document.getElementById('summary');
+  summary.className = failed === 0 ? 'all-pass' : 'has-fail';
+  summary.textContent = `${failed === 0 ? '✓ ALL TESTS PASSED' : `✗ ${failed} FAILED`} — ${passed}/${total} passed`;
+})();
+</script>
+</body>
+</html>

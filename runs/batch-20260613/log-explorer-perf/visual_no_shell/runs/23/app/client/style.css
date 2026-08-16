@@ -1,0 +1,270 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  background: #0d1117;
+  color: #c9d1d9;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar */
+.toolbar {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.toolbar h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #58a6ff;
+  white-space: nowrap;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-group label {
+  color: #8b949e;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+#severity-select {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#search-input {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  width: 260px;
+  outline: none;
+}
+
+#search-input:focus {
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.badge {
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.badge-debug {
+  background: rgba(139, 148, 158, 0.2);
+  color: #8b949e;
+}
+
+.badge-info {
+  background: rgba(88, 166, 255, 0.2);
+  color: #58a6ff;
+}
+
+.badge-warn {
+  background: rgba(210, 153, 34, 0.2);
+  color: #d29922;
+}
+
+.badge-error {
+  background: rgba(248, 81, 73, 0.2);
+  color: #f85149;
+}
+
+.row-count {
+  margin-left: auto;
+  color: #8b949e;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Table header */
+.table-header {
+  display: flex;
+  background: #161b22;
+  border-bottom: 2px solid #30363d;
+  padding: 6px 16px;
+  font-weight: 600;
+  color: #8b949e;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* Columns */
+.col {
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+.col-ts {
+  width: 200px;
+}
+
+.col-severity {
+  width: 80px;
+}
+
+.col-service {
+  width: 190px;
+}
+
+.col-message {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Virtual scroll container */
+.virtual-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  will-change: transform;
+}
+
+.virtual-scroll-spacer {
+  width: 100%;
+  pointer-events: none;
+}
+
+.virtual-scroll-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+}
+
+/* Log rows */
+.log-row {
+  display: flex;
+  padding: 0 16px;
+  border-bottom: 1px solid #21262d;
+  height: 32px;
+  align-items: center;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.log-row:hover {
+  background: #161b22;
+}
+
+.log-row .col {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Severity colors */
+.severity-debug { color: #8b949e; }
+.severity-info { color: #58a6ff; }
+.severity-warn { color: #d29922; }
+.severity-error { color: #f85149; font-weight: 600; }
+
+.severity-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.severity-tag-debug {
+  background: rgba(139, 148, 158, 0.15);
+  color: #8b949e;
+}
+
+.severity-tag-info {
+  background: rgba(88, 166, 255, 0.15);
+  color: #58a6ff;
+}
+
+.severity-tag-warn {
+  background: rgba(210, 153, 34, 0.15);
+  color: #d29922;
+}
+
+.severity-tag-error {
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+}
+
+.service-name {
+  color: #7ee787;
+}
+
+/* Loading state */
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #58a6ff;
+  font-size: 14px;
+}
+
+/* Scrollbar styling */
+.virtual-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}

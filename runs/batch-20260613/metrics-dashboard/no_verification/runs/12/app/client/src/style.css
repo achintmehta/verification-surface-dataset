@@ -1,0 +1,363 @@
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f7;
+  --border: #e2e6ef;
+  --text: #1a2233;
+  --text-muted: #5b667d;
+  --accent: #2563eb;
+  --accent-soft: #dbe6ff;
+  --positive: #15803d;
+  --negative: #b91c1c;
+
+  --chart-axis: #9aa4b8;
+  --chart-grid: #e7eaf1;
+  --chart-line: #2563eb;
+  --chart-area: rgba(37, 99, 235, 0.12);
+  --chart-label: #5b667d;
+
+  --bar-track: #eef1f7;
+  --bar-fill: #2563eb;
+
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 1px 2px rgba(20, 30, 60, 0.06);
+}
+
+html[data-theme='dark'] {
+  --bg: #0f1525;
+  --surface: #181f31;
+  --surface-2: #212a40;
+  --border: #2c3550;
+  --text: #e7ecf6;
+  --text-muted: #9aa6c0;
+  --accent: #60a5fa;
+  --accent-soft: #1e3055;
+  --positive: #4ade80;
+  --negative: #f87171;
+
+  --chart-axis: #5b678a;
+  --chart-grid: #28324c;
+  --chart-line: #60a5fa;
+  --chart-area: rgba(96, 165, 250, 0.16);
+  --chart-label: #9aa6c0;
+
+  --bar-track: #232c43;
+  --bar-fill: #60a5fa;
+
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Reset / base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* Guard against any accidental horizontal overflow at narrow widths. */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#app {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.app-header__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.app-header__logo {
+  font-size: 1.4rem;
+}
+
+.app-header h1 {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle__icon::before {
+  content: '☀️';
+}
+html[data-theme='dark'] .theme-toggle__icon::before {
+  content: '🌙';
+}
+
+/* ---------- Status / error state ---------- */
+.status {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+.status.status--error {
+  color: var(--negative);
+  font-weight: 600;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0; /* allow grid children to shrink instead of overflowing */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.card__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+/* ---------- Layout grids ---------- */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Stat cards: 1 col mobile, 2 col tablet, 4 col desktop */
+.stat-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.body-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  /* chart wider than breakdown on desktop */
+  .body-grid {
+    grid-template-columns: 1.6fr 1fr;
+  }
+}
+
+/* ---------- Stat cards ---------- */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-card__value {
+  font-size: clamp(1.25rem, 4.5vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.1;
+  /* Large numbers must never overflow their card. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.stat-card__sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.trend--up {
+  color: var(--positive);
+  font-weight: 600;
+}
+.trend--down {
+  color: var(--negative);
+  font-weight: 600;
+}
+
+/* ---------- Chart ---------- */
+.chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  min-width: 0;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Category breakdown ---------- */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bar-row__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bar-row__name {
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.bar-row__value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bar-row__track {
+  height: 10px;
+  width: 100%;
+  background: var(--bar-track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-row__fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* ---------- Table ---------- */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 480px; /* contained scroll inside the card, not the page */
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.data-table td {
+  color: var(--text);
+}
+
+.data-table .num {
+  text-align: right;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background: var(--surface-2);
+}

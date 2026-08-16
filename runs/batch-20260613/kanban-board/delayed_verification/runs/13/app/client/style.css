@@ -1,0 +1,117 @@
+:root {
+  --bg: #f4f5f7;
+  --col-bg: #ebecf0;
+  --card-bg: #ffffff;
+  --accent: #0079bf;
+  --text: #172b4d;
+  --muted: #5e6c84;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--accent);
+  color: #fff;
+}
+.app-header h1 { font-size: 18px; margin: 0; }
+
+.status {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.status--connected { background: #61bd4f; }
+.status--connecting { background: #f2d600; color: #172b4d; }
+.status--disconnected { background: #eb5a46; }
+
+.board {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  overflow-x: auto;
+  min-height: calc(100vh - 60px);
+}
+
+.column {
+  background: var(--col-bg);
+  border-radius: 8px;
+  width: 280px;
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.column__title {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px;
+  color: var(--muted);
+}
+
+.column__cards {
+  padding: 0 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 12px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  cursor: grab;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+}
+.card:active { cursor: grabbing; }
+.card.dragging { opacity: 0.4; }
+
+.card-placeholder {
+  background: rgba(9, 30, 66, 0.08);
+  border: 2px dashed rgba(9, 30, 66, 0.2);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  height: 38px;
+}
+
+.add-card {
+  padding: 8px;
+}
+.add-card textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 38px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: inherit;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+}
+.add-card__btn {
+  margin-top: 6px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.add-card__btn:hover { background: #026aa7; }

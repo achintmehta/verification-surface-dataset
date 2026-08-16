@@ -1,0 +1,17 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "server",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:server": "npm run start --workspace=server",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev": "concurrently -k \"npm run dev:server\" \"npm run dev:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

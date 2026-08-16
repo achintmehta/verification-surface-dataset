@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📋 Message Board</h1>
+        <p class="subtitle">Real-time updates powered by SSE &amp; PGLite</p>
+        <span id="status" class="status status--connecting">Connecting…</span>
+      </header>
+
+      <main>
+        <ul id="messages" class="message-list" aria-live="polite"></ul>
+      </main>
+
+      <footer>
+        <form id="form" class="compose" autocomplete="off">
+          <input
+            id="input"
+            type="text"
+            placeholder="Type a message…"
+            required
+            autofocus
+            aria-label="Message text"
+          />
+          <button type="submit">Send</button>
+        </form>
+      </footer>
+    </div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

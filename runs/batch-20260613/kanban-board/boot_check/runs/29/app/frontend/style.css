@@ -1,0 +1,103 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.board {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.column {
+  background: white;
+  border-radius: 8px;
+  width: 300px;
+  min-height: 500px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-header .title {
+  font-size: 1.1em;
+}
+
+.add-card {
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border: none;
+  border-top: 1px solid #eee;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.add-card:hover {
+  background: #e9ecef;
+}
+
+.cards {
+  flex: 1;
+  padding: 10px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.column.drag-over {
+  background: #f0f7ff;
+  border: 2px dashed #4a90e2;
+}
+
+.card-placeholder {
+  height: 40px;
+  background: #e3f2fd;
+  border: 2px dashed #4a90e2;
+  border-radius: 6px;
+  margin: 4px 0;
+}

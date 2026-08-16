@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Kanban Board</h1>
+    <span class="connection-status" id="connection-status" title="SSE connection status">●</span>
+  </header>
+
+  <main id="board" class="board">
+    <!-- Columns are rendered dynamically -->
+  </main>
+
+  <!-- Card creation modal -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <h2 id="modal-title">New Card</h2>
+      <textarea id="card-text" placeholder="Card text…" rows="3" autofocus></textarea>
+      <div class="modal-actions">
+        <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
+        <button id="modal-submit" class="btn btn-primary">Add Card</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

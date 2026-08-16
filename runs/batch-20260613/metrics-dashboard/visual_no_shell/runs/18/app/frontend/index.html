@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-loading">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .theme-loading { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Metrics Dashboard</h1>
+      <button id="theme-toggle">Toggle Theme</button>
+    </header>
+    
+    <div id="error-state" class="hidden">
+      <p>Failed to load data from the server. Please ensure the backend is running.</p>
+    </div>
+
+    <div id="loading-state">
+      <p>Loading dashboard...</p>
+    </div>
+
+    <main id="dashboard" class="hidden">
+      <div class="stat-cards">
+        <div class="card stat-card">
+          <h3>Total Visitors</h3>
+          <div class="value" id="stat-visitors">--</div>
+        </div>
+        <div class="card stat-card">
+          <h3>Total Revenue</h3>
+          <div class="value" id="stat-revenue">--</div>
+        </div>
+        <div class="card stat-card">
+          <h3>Best Day</h3>
+          <div class="value" id="stat-best-day">--</div>
+        </div>
+        <div class="card stat-card">
+          <h3>7-Day Trend</h3>
+          <div class="value" id="stat-trend">--</div>
+        </div>
+      </div>
+
+      <div class="dashboard-body">
+        <div class="card chart-card">
+          <h3>Revenue (30 Days)</h3>
+          <div class="chart-container" id="chart-container">
+            <canvas id="timeseries-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="card breakdown-card">
+          <h3>Category Breakdown</h3>
+          <div id="category-breakdown"></div>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <h3>Recent Items</h3>
+        <div class="table-container">
+          <table id="recent-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Value</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

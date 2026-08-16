@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <script type="module" crossorigin src="/assets/index-8UVB3q1K.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-B30QH-Vc.css">
+</head>
+<body>
+  <div id="app">
+    <h1>🎭 Seat Booking</h1>
+    
+    <div id="inventory" class="inventory">
+      <span class="inv-item"><span class="dot available"></span> Available: <strong id="count-available">0</strong></span>
+      <span class="inv-item"><span class="dot held"></span> Held: <strong id="count-held">0</strong></span>
+      <span class="inv-item"><span class="dot booked"></span> Booked: <strong id="count-booked">0</strong></span>
+      <span class="inv-item">Total: <strong id="count-total">0</strong></span>
+    </div>
+
+    <div id="seat-map" class="seat-map"></div>
+
+    <div id="selection-panel" class="selection-panel hidden">
+      <h3>Selected Seats</h3>
+      <div id="selected-seats-list"></div>
+      <button id="btn-hold" class="btn btn-hold">Hold Selected Seats</button>
+    </div>
+
+    <div id="hold-panel" class="hold-panel hidden">
+      <h3>Your Hold</h3>
+      <div id="hold-info"></div>
+      <div id="hold-countdown" class="countdown"></div>
+      <div class="hold-actions">
+        <button id="btn-confirm" class="btn btn-confirm">Confirm Booking</button>
+        <button id="btn-release" class="btn btn-release">Release Hold</button>
+      </div>
+    </div>
+
+    <div id="booking-panel" class="booking-panel hidden">
+      <h3>✅ Booking Confirmed!</h3>
+      <div id="booking-info"></div>
+      <button id="btn-new" class="btn btn-new">New Booking</button>
+    </div>
+
+    <div id="error-panel" class="error-panel hidden">
+      <div id="error-message"></div>
+      <button id="btn-dismiss-error" class="btn btn-dismiss">Dismiss</button>
+    </div>
+
+    <div id="connection-status" class="connection-status">
+      <span id="sse-status" class="sse-disconnected">● Disconnected</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <h4>Legend</h4>
+    <span><span class="dot available"></span> Available</span>
+    <span><span class="dot selected"></span> Selected</span>
+    <span><span class="dot held"></span> Held</span>
+    <span><span class="dot my-hold"></span> Your Hold</span>
+    <span><span class="dot booked"></span> Booked</span>
+  </div>
+
+</body>
+</html>

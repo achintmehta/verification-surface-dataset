@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed</title></head>
+<body>
+<pre id="out">Seeding...</pre>
+<script>
+const BASE = 'http://localhost:3001/api';
+
+async function post(event) {
+  const res = await fetch(`${BASE}/events`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(event),
+  });
+  const data = await res.json();
+  return { ok: res.ok, data };
+}
+
+const today = '2026-06-18';
+const mon = '2026-06-15';
+const tue = '2026-06-16';
+const wed = '2026-06-17';
+const fri = '2026-06-19';
+
+async function seed() {
+  const results = [];
+
+  // Monday: single event (full width)
+  results.push(await post({ title: 'Team Standup', start_at: `${mon}T09:00:00`, end_at: `${mon}T09:30:00` }));
+
+  // Monday: two overlapping events (side by side)
+  results.push(await post({ title: 'Design Review', start_at: `${mon}T10:00:00`, end_at: `${mon}T11:30:00` }));
+  results.push(await post({ title: 'Sprint Planning', start_at: `${mon}T10:00:00`, end_at: `${mon}T11:30:00` }));
+
+  // Tuesday: three overlapping events (three equal columns)
+  results.push(await post({ title: 'Meeting A', start_at: `${tue}T09:00:00`, end_at: `${tue}T10:00:00` }));
+  results.push(await post({ title: 'Meeting B', start_at: `${tue}T09:00:00`, end_at: `${tue}T10:00:00` }));
+  results.push(await post({ title: 'Meeting C', start_at: `${tue}T09:00:00`, end_at: `${tue}T10:00:00` }));
+
+  // Tuesday: after cluster ends, full-width event
+  results.push(await post({ title: 'Lunch Break', start_at: `${tue}T12:00:00`, end_at: `${tue}T13:00:00` }));
+
+  // Wednesday: partially overlapping chain: 09:00-11:00, 10:00-12:00, 11:30-13:00
+  results.push(await post({ title: 'Workshop Part 1', start_at: `${wed}T09:00:00`, end_at: `${wed}T11:00:00` }));
+  results.push(await post({ title: 'Workshop Part 2', start_at: `${wed}T10:00:00`, end_at: `${wed}T12:00:00` }));
+  results.push(await post({ title: 'Workshop Part 3', start_at: `${wed}T11:30:00`, end_at: `${wed}T13:00:00` }));
+
+  // Today (Thursday): event ending at 24:00
+  results.push(await post({ title: 'Late Night Work', start_at: `${today}T22:00:00`, end_at: `${today}T24:00:00` }));
+
+  // Today: normal event
+  results.push(await post({ title: 'Daily Sync', start_at: `${today}T14:00:00`, end_at: `${today}T15:00:00` }));
+
+  // Friday: event spanning 09:00-10:30 (1.5 hours = 90px)
+  results.push(await post({ title: 'Client Call', start_at: `${fri}T09:00:00`, end_at: `${fri}T10:30:00` }));
+
+  // Friday: two overlapping
+  results.push(await post({ title: 'Code Review', start_at: `${fri}T14:00:00`, end_at: `${fri}T15:30:00` }));
+  results.push(await post({ title: 'Pair Programming', start_at: `${fri}T14:30:00`, end_at: `${fri}T16:00:00` }));
+
+  document.getElementById('out').textContent = JSON.stringify(results, null, 2);
+}
+
+seed().catch(e => { document.getElementById('out').textContent = 'Error: ' + e.message; });
+</script>
+</body>
+</html>

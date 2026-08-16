@@ -1,0 +1,188 @@
+:root {
+  --bg: #0f1220;
+  --panel: #1a1f35;
+  --text: #e7ebf5;
+  --muted: #97a0bd;
+  --available: #2f80ed;
+  --available-hover: #2566c0;
+  --held: #c9921f;
+  --held-mine: #8e44ec;
+  --booked: #444b66;
+  --selected: #27ae60;
+  --danger: #e74c3c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--panel);
+  border-bottom: 1px solid #2a3052;
+}
+
+.topbar h1 { margin: 0; font-size: 1.25rem; }
+
+.conn {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.conn--connecting { background: #3a3f5c; color: var(--muted); }
+.conn--live { background: #1e5631; color: #8ff0b0; }
+.conn--down { background: #5c1e1e; color: #f0a0a0; }
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.swatch { width: 18px; height: 18px; border-radius: 4px; display: inline-block; }
+
+.screen {
+  text-align: center;
+  letter-spacing: 0.5em;
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(#2a3052, transparent);
+  border-radius: 50% 50% 4px 4px / 100% 100% 4px 4px;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px 6px 4px 4px;
+  border: none;
+  background: var(--booked);
+  color: #fff;
+  font-size: 0.7rem;
+  cursor: not-allowed;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+
+.seat.available {
+  background: var(--available);
+  cursor: pointer;
+}
+.seat.available:hover { background: var(--available-hover); transform: translateY(-2px); }
+.seat.held { background: var(--held); cursor: not-allowed; }
+.seat.held-mine { background: var(--held-mine); cursor: pointer; }
+.seat.booked { background: var(--booked); cursor: not-allowed; opacity: 0.65; }
+.seat.selected { background: var(--selected); outline: 2px solid #fff; }
+.seat.conflict { animation: shake 0.4s; box-shadow: 0 0 0 2px var(--danger); }
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.inventory {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.inv strong { color: var(--text); }
+
+.controls {
+  background: var(--panel);
+  border: 1px solid #2a3052;
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.selection-info { margin-bottom: 0.75rem; font-size: 0.95rem; }
+
+.buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+button {
+  background: var(--available);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+button:hover:not(:disabled) { filter: brightness(1.1); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+#confirm-btn { background: var(--selected); }
+#release-btn { background: var(--danger); }
+
+.hold-status {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(142, 68, 236, 0.15);
+  border: 1px solid var(--held-mine);
+  font-weight: 600;
+}
+.hold-status.hidden { display: none; }
+
+.message {
+  margin-top: 0.75rem;
+  min-height: 1.2rem;
+  font-size: 0.9rem;
+}
+.message.error { color: #f0a0a0; }
+.message.success { color: #8ff0b0; }
+.message.info { color: var(--muted); }
+
+.foot {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 1rem;
+}

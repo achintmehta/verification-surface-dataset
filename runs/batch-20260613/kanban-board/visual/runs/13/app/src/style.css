@@ -1,0 +1,244 @@
+:root {
+  --bg: #0f1729;
+  --surface: #1b263b;
+  --surface-2: #243049;
+  --card: #2c3a57;
+  --card-hover: #36476a;
+  --text: #e6ecf5;
+  --text-dim: #9bb0d0;
+  --accent: #4f8cff;
+  --accent-dim: #2c4a85;
+  --drop: #3a5a9c;
+  --danger: #ff6b6b;
+  --ok: #38d39f;
+  --radius: 10px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.status__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: background 0.2s;
+}
+
+.status--online .status__dot {
+  background: var(--ok);
+  box-shadow: 0 0 8px var(--ok);
+}
+
+.status--offline .status__dot {
+  background: var(--danger);
+}
+
+.board {
+  flex: 1;
+  display: flex;
+  gap: 18px;
+  padding: 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+.column {
+  background: var(--surface);
+  border-radius: var(--radius);
+  width: 300px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  box-shadow: var(--shadow);
+}
+
+.column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.column__count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 60px;
+  transition: background 0.15s;
+}
+
+.cards.drag-over {
+  background: rgba(79, 140, 255, 0.07);
+}
+
+.card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: grab;
+  border: 1px solid transparent;
+  word-break: break-word;
+  white-space: pre-wrap;
+  transition: background 0.15s, transform 0.05s, border-color 0.15s;
+}
+
+.card:hover {
+  background: var(--card-hover);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: 0.45;
+  border-color: var(--accent);
+}
+
+.card.drop-placeholder {
+  background: var(--drop);
+  border: 2px dashed var(--accent);
+  opacity: 0.6;
+  height: 38px;
+}
+
+.column__footer {
+  padding: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.add-card {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: var(--text-dim);
+  padding: 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.add-card:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-form textarea {
+  resize: vertical;
+  min-height: 56px;
+  background: var(--card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 9px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.add-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn--primary:hover {
+  background: #6aa0ff;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.btn--ghost:hover {
+  color: var(--text);
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <script>
+      // Apply the persisted theme before first paint to avoid a flash.
+      // We optimistically read a cached value; the server value is the source
+      // of truth and is re-applied once the app boots.
+      (function () {
+        try {
+          var cached = window.localStorage.getItem('theme-cache');
+          if (cached === 'dark' || cached === 'light') {
+            document.documentElement.setAttribute('data-theme', cached);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

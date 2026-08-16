@@ -1,0 +1,222 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #eef2f7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem clamp(1rem, 3vw, 2rem);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.app-header p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+}
+
+.connection {
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: #dcfce7;
+  color: #166534;
+}
+
+.connection[data-kind="warn"] {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.connection[data-kind="error"] {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.board {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 1fr);
+  gap: 1rem;
+  align-items: start;
+  overflow-x: auto;
+  padding: 0 clamp(1rem, 3vw, 2rem) 2rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 150px);
+  min-height: 260px;
+  border: 1px solid #dbe3ef;
+  border-radius: 20px;
+  background: rgba(248, 250, 252, 0.92);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem 0.5rem;
+}
+
+.column-header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.column-header span {
+  display: inline-grid;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.add-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.add-card input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  outline: none;
+  background: white;
+}
+
+.add-card input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.cards {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background 120ms ease;
+}
+
+.cards:empty::before {
+  content: "Drop cards here";
+  display: grid;
+  min-height: 90px;
+  place-items: center;
+  border: 2px dashed #cbd5e1;
+  border-radius: 14px;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.cards.drag-over {
+  background: #eff6ff;
+}
+
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: white;
+  padding: 0.85rem;
+  cursor: grab;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  transition: transform 120ms ease, opacity 120ms ease, border-color 120ms ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  border-color: #bfdbfe;
+}
+
+.card.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.card.pending {
+  border-color: #f59e0b;
+}
+
+.card p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.card small {
+  display: block;
+  margin-top: 0.7rem;
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+@media (max-width: 720px) {
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .board {
+    grid-auto-columns: minmax(260px, 88vw);
+  }
+}

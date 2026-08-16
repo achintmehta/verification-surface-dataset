@@ -1,0 +1,242 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f4f6f9;
+  --color-surface:     #ffffff;
+  --color-border:      #dde1e9;
+  --color-primary:     #4f6ef7;
+  --color-primary-h:   #3a57d4;
+  --color-text:        #1a1d23;
+  --color-text-muted:  #6b7280;
+  --color-success:     #22c55e;
+  --color-error:       #ef4444;
+  --color-warning:     #f59e0b;
+
+  --radius:            10px;
+  --shadow:            0 2px 12px rgba(0, 0, 0, 0.08);
+  --font:              system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --header-h:          60px;
+  --footer-h:          72px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* ── App shell ────────────────────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;          /* dynamic viewport height for mobile */
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+  padding: 0 1.25rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.app-header h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ── Status badge ─────────────────────────────────────────────────────────── */
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  transition: background 0.3s, color 0.3s;
+}
+
+.status-badge.connected {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-badge.disconnected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ── Feed ─────────────────────────────────────────────────────────────────── */
+.feed-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scroll-behavior: smooth;
+}
+
+/* ── Message list ─────────────────────────────────────────────────────────── */
+.message-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ── Individual message bubble ────────────────────────────────────────────── */
+.message-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  animation: slide-in 0.2s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-text {
+  font-size: 0.95rem;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.message-meta {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Hint paragraphs ──────────────────────────────────────────────────────── */
+.loading-hint,
+.empty-hint {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Compose bar ──────────────────────────────────────────────────────────── */
+.compose-bar {
+  flex-shrink: 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.compose-form {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.compose-input {
+  flex: 1;
+  height: 42px;
+  padding: 0 0.9rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: var(--font);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.compose-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+}
+
+.compose-btn {
+  height: 42px;
+  padding: 0 1.2rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.compose-btn:hover:not(:disabled) {
+  background: var(--color-primary-h);
+}
+
+.compose-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.compose-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Error hint ───────────────────────────────────────────────────────────── */
+.error-hint {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+/* ── Screen-reader only ───────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive tweaks ────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1rem;
+  }
+
+  .compose-btn {
+    padding: 0 0.8rem;
+  }
+}

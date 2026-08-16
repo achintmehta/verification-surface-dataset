@@ -1,0 +1,452 @@
+/* ========================================
+   CSS Custom Properties (Light Theme)
+   ======================================== */
+:root {
+  --bg-primary: #f0f2f5;
+  --bg-card: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555770;
+  --text-muted: #8890a4;
+  --border-color: #e0e3eb;
+  --accent: #4361ee;
+  --accent-light: #e8ecff;
+  --success: #10b981;
+  --danger: #ef4444;
+  --chart-grid: #e0e3eb;
+  --chart-axis: #555770;
+  --chart-line: #4361ee;
+  --chart-fill: rgba(67, 97, 238, 0.1);
+  --bar-bg: #e8ecff;
+  --bar-fill: #4361ee;
+  --table-stripe: #f8f9fc;
+  --table-hover: #eef0f6;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ========================================
+   Dark Theme
+   ======================================== */
+[data-theme="dark"] {
+  --bg-primary: #0f1123;
+  --bg-card: #1a1c36;
+  --text-primary: #e8eaf0;
+  --text-secondary: #b0b4c8;
+  --text-muted: #6b7194;
+  --border-color: #2a2d4a;
+  --accent: #6c8cff;
+  --accent-light: #1e2548;
+  --success: #34d399;
+  --danger: #f87171;
+  --chart-grid: #2a2d4a;
+  --chart-axis: #b0b4c8;
+  --chart-line: #6c8cff;
+  --chart-fill: rgba(108, 140, 255, 0.15);
+  --bar-bg: #1e2548;
+  --bar-fill: #6c8cff;
+  --table-stripe: #151733;
+  --table-hover: #1e2145;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ========================================
+   Reset & Base
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dashboard-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+/* ========================================
+   Dashboard Grid
+   ======================================== */
+.dashboard-grid {
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+  /* Mobile: single column */
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "stats"
+    "chart"
+    "categories"
+    "table";
+}
+
+/* Medium (640px - 1023px): 2 columns */
+@media (min-width: 640px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "stats stats"
+      "chart chart"
+      "categories categories"
+      "table table";
+  }
+}
+
+/* Wide (>=1024px): 4-col stat cards, chart+categories side by side */
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "stats stats"
+      "chart categories"
+      "table table";
+  }
+}
+
+/* ========================================
+   Stat Cards
+   ======================================== */
+.stat-cards {
+  grid-area: stats;
+  display: grid;
+  gap: 16px;
+  /* Mobile: 1 column */
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ========================================
+   Card base
+   ======================================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+/* ========================================
+   Stat Card
+   ======================================== */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.stat-sub {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.trend-indicator.positive {
+  color: var(--success);
+}
+
+.trend-indicator.negative {
+  color: var(--danger);
+}
+
+/* ========================================
+   Chart Section
+   ======================================== */
+.chart-section {
+  grid-area: chart;
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+.chart-container svg {
+  display: block;
+}
+
+/* ========================================
+   Categories Section
+   ======================================== */
+.categories-section {
+  grid-area: categories;
+}
+
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.category-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.category-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ========================================
+   Table Section
+   ======================================== */
+.table-section {
+  grid-area: table;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 400px;
+  font-size: 0.875rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+tbody tr:hover {
+  background: var(--table-hover);
+}
+
+/* ========================================
+   Error Overlay
+   ======================================== */
+.error-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.error-content {
+  text-align: center;
+  padding: 32px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  max-width: 90%;
+}
+
+.error-content p {
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.retry-btn {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.retry-btn:hover {
+  opacity: 0.9;
+}
+
+/* ========================================
+   Responsive tweaks for narrow screens
+   ======================================== */
+@media (max-width: 639px) {
+  .dashboard-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-grid {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .chart-container {
+    height: 240px;
+  }
+
+  /* Make table scroll inside its card, not the page */
+  .table-wrapper {
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+}
+
+/* Ensure no horizontal overflow ever */
+#app {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}

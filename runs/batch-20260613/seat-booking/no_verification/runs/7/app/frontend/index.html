@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <div>
+          <h1>Seat Booking</h1>
+          <p>Temporary holds expire automatically. All clients update live via SSE.</p>
+        </div>
+        <div class="session">
+          <span>Session</span>
+          <code id="sessionId"></code>
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <div class="stats" id="stats">Loading inventory…</div>
+        <div class="actions">
+          <button id="holdBtn" disabled>Hold selected seats</button>
+          <button id="confirmBtn" disabled>Confirm hold</button>
+          <button id="releaseBtn" disabled>Release hold</button>
+          <button id="refreshBtn">Refresh</button>
+        </div>
+      </section>
+
+      <section id="currentHold" class="hold-panel hidden"></section>
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <section class="legend">
+        <span><i class="swatch available"></i> Available</span>
+        <span><i class="swatch selected"></i> Selected</span>
+        <span><i class="swatch held"></i> Held</span>
+        <span><i class="swatch own-held"></i> Your hold</span>
+        <span><i class="swatch booked"></i> Booked</span>
+      </section>
+
+      <section id="seatMap" class="seat-map" aria-label="Seat map"></section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

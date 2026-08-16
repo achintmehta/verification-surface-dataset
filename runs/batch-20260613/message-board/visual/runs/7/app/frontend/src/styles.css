@@ -1,0 +1,255 @@
+:root {
+  color: #182033;
+  background: #eef2ff;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+}
+
+.board {
+  display: grid;
+  grid-template-rows: auto minmax(220px, 1fr) auto auto;
+  width: min(760px, 100%);
+  min-height: min(820px, calc(100vh - 48px));
+  overflow: hidden;
+  border: 1px solid rgba(99, 102, 241, 0.16);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 24px 80px rgba(79, 70, 229, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+.board__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: #6366f1;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.status {
+  flex: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.status--connecting {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.status--live {
+  color: #065f46;
+  background: #d1fae5;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 24px 28px;
+  overflow-y: auto;
+  list-style: none;
+  scroll-behavior: smooth;
+}
+
+.message {
+  max-width: 88%;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px 20px 20px 6px;
+  padding: 14px 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+  animation: pop-in 160ms ease-out;
+}
+
+.message__text {
+  margin: 0;
+  color: #1f2937;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.message__time {
+  display: block;
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+
+.empty-state {
+  align-self: center;
+  margin: -160px 28px 0;
+  color: #6b7280;
+  text-align: center;
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+.message-form {
+  display: grid;
+  gap: 12px;
+  padding: 20px 28px 28px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #d1d5db;
+  border-radius: 18px;
+  padding: 14px 16px;
+  color: #111827;
+  background: #ffffff;
+  outline: none;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.16);
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+#form-feedback {
+  min-height: 1.2em;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+#form-feedback.is-error {
+  color: #b91c1c;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 18px;
+  color: #ffffff;
+  background: #4f46e5;
+  font-weight: 800;
+  transition:
+    background 120ms ease,
+    transform 120ms ease,
+    opacity 120ms ease;
+}
+
+button:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 620px) {
+  .app-shell {
+    padding: 0;
+  }
+
+  .board {
+    min-height: 100vh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .board__header,
+  .messages,
+  .message-form {
+    padding-inline: 18px;
+  }
+
+  .board__header {
+    flex-direction: column;
+  }
+
+  .message {
+    max-width: 100%;
+  }
+
+  .form-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

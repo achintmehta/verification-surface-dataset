@@ -1,0 +1,231 @@
+:root {
+  --border: #d8dce3;
+  --bg: #f5f6f8;
+  --panel: #ffffff;
+  --accent: #2f6fed;
+  --today-bg: #eef4ff;
+  --text: #1c2330;
+  --muted: #6b7280;
+  --event-bg: #3b82f6;
+  --event-border: #1d4ed8;
+  --hour-line: #e7e9ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 12px;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.toolbar .nav {
+  display: flex;
+  gap: 8px;
+}
+
+.week-range {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.btn {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text);
+}
+.btn:hover { background: #eef1f6; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: #2459c9; }
+.btn.danger { color: #b91c1c; border-color: #f0c2c2; }
+.btn.danger:hover { background: #fdeaea; }
+
+.calendar {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cal-head {
+  display: grid;
+  grid-template-columns: 56px repeat(7, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.corner {
+  border-right: 1px solid var(--border);
+}
+
+.day-head {
+  text-align: center;
+  padding: 8px 4px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.day-head:last-child { border-right: none; }
+.day-head .dow { font-weight: 600; font-size: 13px; }
+.day-head .date { font-size: 12px; color: var(--muted); }
+.day-head.today { background: var(--today-bg); }
+.day-head.today .dow { color: var(--accent); }
+
+.cal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+}
+
+.time-axis {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+
+.hour-label {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.day-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-col {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+.day-col:last-child { border-right: none; }
+.day-col.today { background: var(--today-bg); }
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--hour-line);
+  pointer-events: none;
+}
+
+.event {
+  position: absolute;
+  background: var(--event-bg);
+  border: 1px solid var(--event-border);
+  border-radius: 4px;
+  color: #fff;
+  padding: 2px 5px;
+  font-size: 11px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+.event:hover { filter: brightness(1.05); }
+
+.event-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-time {
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event.ghost {
+  background: rgba(47, 111, 237, 0.35);
+  border: 1px dashed var(--accent);
+  pointer-events: none;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 20px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+.modal h2 { margin: 0; font-size: 16px; }
+.modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.modal input {
+  font: inherit;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+}
+.form-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 12px;
+  min-height: 14px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-actions > div {
+  display: flex;
+  gap: 8px;
+}

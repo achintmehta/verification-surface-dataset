@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <!-- Theme is applied before first paint via inline script -->
+  <script>
+    (function () {
+      // Apply persisted theme immediately to avoid flash
+      const stored = sessionStorage.getItem('__theme');
+      if (stored === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <span class="brand-name">MetricsDash</span>
+        </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+          <svg class="theme-icon theme-icon--light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="theme-icon theme-icon--dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <span class="theme-label">Toggle theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Error banner -->
+      <div id="error-banner" class="error-banner hidden" role="alert">
+        <strong>⚠ Unable to reach the backend.</strong>
+        The dashboard cannot load data. Please ensure the server is running.
+      </div>
+
+      <!-- Stat cards -->
+      <section class="section" aria-label="Summary statistics">
+        <div class="stat-grid" id="stat-grid">
+          <div class="stat-card skeleton" id="card-visitors">
+            <div class="stat-label">Total Visitors</div>
+            <div class="stat-value" id="val-visitors">—</div>
+            <div class="stat-sub" id="sub-visitors"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-revenue">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value" id="val-revenue">—</div>
+            <div class="stat-sub" id="sub-revenue"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-best">
+            <div class="stat-label">Best Day</div>
+            <div class="stat-value" id="val-best">—</div>
+            <div class="stat-sub" id="sub-best"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-trend">
+            <div class="stat-label">7-Day Trend</div>
+            <div class="stat-value" id="val-trend">—</div>
+            <div class="stat-sub" id="sub-trend">vs prior 7 days</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts row -->
+      <section class="section charts-section" aria-label="Charts">
+        <div class="charts-grid">
+          <!-- Time-series chart -->
+          <div class="chart-card" id="timeseries-card">
+            <div class="chart-header">
+              <h2 class="chart-title">Daily Visitors — Last 30 Days</h2>
+            </div>
+            <div class="chart-body" id="timeseries-container">
+              <canvas id="timeseries-canvas" aria-label="30-day visitor time series"></canvas>
+            </div>
+          </div>
+
+          <!-- Category breakdown -->
+          <div class="chart-card" id="categories-card">
+            <div class="chart-header">
+              <h2 class="chart-title">Revenue by Category</h2>
+            </div>
+            <div class="chart-body" id="categories-container">
+              <div id="categories-chart" class="bar-chart"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent items table -->
+      <section class="section" aria-label="Recent items">
+        <div class="table-card">
+          <div class="chart-header">
+            <h2 class="chart-title">Recent Items</h2>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th class="num-col">Value</th>
+                  <th class="num-col col-date">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <tr><td colspan="4" class="loading-cell">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>MetricsDash · Data refreshes on reload</span>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

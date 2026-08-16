@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🎟️ Event Seat Booking</h1>
+      <div id="connection" class="conn disconnected">connecting…</div>
+    </header>
+
+    <main>
+      <section class="stage-wrap">
+        <div class="stage">STAGE / SCREEN</div>
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch held-mine"></i> Your selection / hold</span>
+          <span><i class="swatch held"></i> Held by others</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <h2>Booking</h2>
+
+        <div class="counts" id="counts">
+          <div><strong id="c-available">–</strong><span>available</span></div>
+          <div><strong id="c-held">–</strong><span>held</span></div>
+          <div><strong id="c-booked">–</strong><span>booked</span></div>
+        </div>
+
+        <div id="selection-info" class="selection-info">
+          No seats selected. Click available seats to select them.
+        </div>
+
+        <div id="hold-info" class="hold-info hidden">
+          <p>Hold active for: <strong id="hold-seats"></strong></p>
+          <p class="countdown">Expires in <span id="countdown">--:--</span></p>
+        </div>
+
+        <div class="actions">
+          <button id="btn-hold" disabled>Hold selected seats</button>
+          <button id="btn-confirm" class="primary hidden">Confirm booking</button>
+          <button id="btn-release" class="ghost hidden">Release hold</button>
+        </div>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <p class="session">Session: <code id="session-id"></code></p>
+      </aside>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

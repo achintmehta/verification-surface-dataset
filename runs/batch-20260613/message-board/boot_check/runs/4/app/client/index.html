@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1>📋 Message Board</h1>
+        <span id="status-indicator" class="status status--connecting" title="Connection status">
+          ● Connecting…
+        </span>
+      </header>
+
+      <main class="board">
+        <ul id="message-list" class="message-list" aria-live="polite" aria-label="Messages">
+          <!-- Messages are injected here by main.js -->
+        </ul>
+
+        <p id="empty-state" class="empty-state" hidden>
+          No messages yet. Be the first to say something!
+        </p>
+      </main>
+
+      <footer class="compose-area">
+        <form id="compose-form" class="compose-form" autocomplete="off">
+          <label for="message-input" class="sr-only">New message</label>
+          <input
+            id="message-input"
+            class="compose-input"
+            type="text"
+            placeholder="Type a message and press Enter…"
+            maxlength="2000"
+            required
+            aria-label="New message"
+          />
+          <button class="compose-btn" type="submit" aria-label="Send message">Send</button>
+        </form>
+      </footer>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

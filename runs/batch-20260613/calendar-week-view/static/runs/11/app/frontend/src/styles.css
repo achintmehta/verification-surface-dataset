@@ -1,0 +1,325 @@
+:root {
+  --border: #d7dbe3;
+  --border-strong: #c2c8d2;
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --text: #1f2733;
+  --muted: #6b7480;
+  --accent: #2f6fed;
+  --accent-soft: #e6efff;
+  --today: #fff7e6;
+  --today-bar: #f5a623;
+  --event-bg: #3b82f6;
+  --event-bg-2: #2563eb;
+  --danger: #e23b3b;
+  --hour-height: 48px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar ----------------------------------------------------------------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.toolbar-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.toolbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.btn {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #f0f2f5;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.btn-danger {
+  background: var(--panel);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: #fdeaea;
+}
+
+/* Calendar ---------------------------------------------------------------- */
+.calendar {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--panel);
+}
+
+.cal-header {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr);
+  border-bottom: 1px solid var(--border-strong);
+  flex: 0 0 auto;
+  /* leave space for the scrollbar in the body so columns stay aligned */
+  padding-right: 0;
+}
+
+.time-gutter-head {
+  border-right: 1px solid var(--border);
+}
+
+.day-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-right: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.day-head-name {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.day-head-date {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.day-head.is-today {
+  background: var(--today);
+}
+
+.day-head.is-today .day-head-date {
+  color: var(--today-bar);
+}
+
+.cal-body {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  position: relative;
+  scrollbar-gutter: stable;
+}
+
+.cal-header {
+  scrollbar-gutter: stable;
+}
+
+.time-gutter {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+
+.hour-label {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+}
+
+.day-col {
+  position: relative;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.day-col.is-today {
+  background: var(--today);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border);
+  pointer-events: none;
+}
+
+/* Event blocks ------------------------------------------------------------ */
+.event-block {
+  position: absolute;
+  background: var(--event-bg);
+  border: 1px solid var(--event-bg-2);
+  border-radius: 5px;
+  color: #fff;
+  padding: 2px 5px;
+  font-size: 11px;
+  line-height: 1.25;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.event-block:hover {
+  background: var(--event-bg-2);
+  z-index: 5;
+}
+
+.event-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  font-size: 10px;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-ghost {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  background: rgba(47, 111, 237, 0.25);
+  border: 1px dashed var(--accent);
+  border-radius: 5px;
+  font-size: 10px;
+  color: var(--accent);
+  padding: 2px 4px;
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+}
+
+/* Modal ------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--panel);
+  border-radius: 10px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.modal-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.field-input {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.form-error {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.form-actions .btn-primary {
+  margin-right: auto;
+}

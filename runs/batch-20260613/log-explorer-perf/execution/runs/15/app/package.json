@@ -1,0 +1,16 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "High-volume log explorer: seeded PGLite corpus, windowed query API, virtualized UI",
+  "scripts": {
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev": "concurrently -n server,client -c green,cyan \"npm run dev:server\" \"npm run dev:client\"",
+    "start": "npm --prefix server start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

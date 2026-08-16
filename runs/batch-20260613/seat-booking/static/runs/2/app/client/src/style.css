@@ -1,0 +1,326 @@
+/* ============================================================
+   Global reset & base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-border:       #2e3147;
+  --color-text:         #e2e8f0;
+  --color-text-muted:   #8892a4;
+
+  --color-available:    #2d6a4f;
+  --color-available-h:  #40916c;
+  --color-selected:     #1d4e89;
+  --color-selected-h:   #2563eb;
+  --color-held-own:     #b45309;
+  --color-held-own-h:   #d97706;
+  --color-held-other:   #6b2737;
+  --color-held-other-h: #9b2c3e;
+  --color-booked:       #374151;
+  --color-booked-h:     #4b5563;
+
+  --color-primary:      #2563eb;
+  --color-success:      #16a34a;
+  --color-danger:       #dc2626;
+  --color-secondary:    #4b5563;
+
+  --radius:             6px;
+  --seat-size:          42px;
+  --seat-gap:           8px;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+header {
+  text-align: center;
+  padding: 1.5rem 0 1rem;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+}
+
+/* ============================================================
+   Status bar
+   ============================================================ */
+.status-bar {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+  margin-bottom: 1rem;
+}
+
+.status-bar.info    { background: #1e3a5f; color: #93c5fd; }
+.status-bar.success { background: #14532d; color: #86efac; }
+.status-bar.error   { background: #450a0a; color: #fca5a5; }
+.status-bar.warning { background: #451a03; color: #fdba74; }
+
+/* ============================================================
+   Legend
+   ============================================================ */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.seat-demo {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.seat-demo.available   { background: var(--color-available); }
+.seat-demo.selected    { background: var(--color-selected); }
+.seat-demo.held-own    { background: var(--color-held-own); }
+.seat-demo.held-other  { background: var(--color-held-other); }
+.seat-demo.booked      { background: var(--color-booked); }
+
+/* ============================================================
+   Seat map
+   ============================================================ */
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--seat-gap);
+  margin-bottom: 1rem;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--seat-gap);
+}
+
+.row-label {
+  width: 1.5rem;
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-right: 0.25rem;
+  flex-shrink: 0;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, filter 0.1s, border-color 0.15s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:hover:not(.seat--booked):not(.seat--held-other) {
+  transform: scale(1.08);
+  filter: brightness(1.2);
+}
+
+.seat:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* States */
+.seat--available  { background: var(--color-available); }
+.seat--selected   { background: var(--color-selected); border-color: #60a5fa; }
+.seat--held-own   { background: var(--color-held-own); border-color: #fbbf24; }
+.seat--held-other { background: var(--color-held-other); cursor: not-allowed; }
+.seat--booked     { background: var(--color-booked); cursor: not-allowed; opacity: 0.6; }
+
+/* Conflict flash */
+.seat--conflict {
+  animation: conflict-flash 0.6s ease 3;
+}
+
+@keyframes conflict-flash {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(2.5) saturate(2); }
+}
+
+/* Stage */
+.stage {
+  text-align: center;
+  margin: 0.5rem auto 1.5rem;
+  padding: 0.4rem 3rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--color-text-muted);
+  max-width: 300px;
+}
+
+/* ============================================================
+   Action panel
+   ============================================================ */
+.action-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.selection-info {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.hold-panel {
+  background: rgba(180, 83, 9, 0.12);
+  border: 1px solid rgba(180, 83, 9, 0.4);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.88rem;
+}
+
+.hold-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.countdown {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fbbf24;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown.urgent {
+  color: #f87171;
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.hold-seats {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  padding: 0.5rem 1.1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn:not(:disabled):hover  { opacity: 0.88; transform: translateY(-1px); }
+.btn:not(:disabled):active { transform: translateY(0); }
+
+.btn-primary   { background: var(--color-primary); }
+.btn-success   { background: var(--color-success); }
+.btn-danger    { background: var(--color-danger); }
+.btn-secondary { background: var(--color-secondary); }
+
+/* ============================================================
+   Inventory bar
+   ============================================================ */
+.inventory {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: 0.5rem;
+}
+
+.inventory strong {
+  color: var(--color-text);
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.hidden { display: none !important; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 520px) {
+  :root {
+    --seat-size: 34px;
+    --seat-gap:  5px;
+  }
+
+  header h1 { font-size: 1.5rem; }
+}

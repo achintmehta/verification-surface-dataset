@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <script type="module" crossorigin src="/assets/index-BA4E_rve.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CctU4gM8.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="session-info">
+        Session: <code id="session-id"></code>
+      </div>
+    </header>
+
+    <div id="legend">
+      <span class="legend-item"><span class="legend-swatch available"></span> Available</span>
+      <span class="legend-item"><span class="legend-swatch held"></span> Held (you)</span>
+      <span class="legend-item"><span class="legend-swatch held-other"></span> Held (other)</span>
+      <span class="legend-item"><span class="legend-swatch booked"></span> Booked</span>
+      <span class="legend-item"><span class="legend-swatch selected"></span> Selected</span>
+    </div>
+
+    <div id="stage">STAGE</div>
+
+    <div id="seat-map"></div>
+
+    <div id="controls">
+      <div id="selection-info">
+        <span id="selected-count">0</span> seat(s) selected
+      </div>
+      <div id="action-buttons">
+        <button id="btn-hold" disabled>Hold Selected Seats</button>
+        <button id="btn-confirm" disabled>Confirm Booking</button>
+        <button id="btn-release" disabled>Release Hold</button>
+      </div>
+    </div>
+
+    <div id="hold-info" class="hidden">
+      <div id="hold-timer">
+        Hold expires in: <span id="hold-countdown">--</span>s
+      </div>
+      <div id="hold-seats"></div>
+    </div>
+
+    <div id="inventory-bar">
+      <span>Available: <strong id="inv-available">-</strong></span>
+      <span>Held: <strong id="inv-held">-</strong></span>
+      <span>Booked: <strong id="inv-booked">-</strong></span>
+      <span>Total: <strong id="inv-total">-</strong></span>
+    </div>
+
+    <div id="toast-container"></div>
+    <div id="status-bar">
+      <span id="sse-status">⏳ Connecting...</span>
+    </div>
+  </div>
+
+</body>
+</html>

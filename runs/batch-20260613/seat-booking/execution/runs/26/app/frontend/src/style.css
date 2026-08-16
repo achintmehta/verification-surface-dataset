@@ -1,0 +1,77 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+#seat-map {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  gap: 5px;
+  margin: 20px 0;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 12px;
+  user-select: none;
+}
+
+.seat.available {
+  background-color: #90EE90;
+}
+
+.seat.available:hover {
+  background-color: #32CD32;
+}
+
+.seat.held {
+  background-color: #FFD700;
+}
+
+.seat.booked {
+  background-color: #FF6B6B;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  border: 3px solid #0066cc;
+}
+
+#inventory {
+  margin-bottom: 10px;
+}
+
+#inventory span {
+  margin-right: 20px;
+}
+
+#controls {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin-right: 10px;
+}
+
+#message {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.error {
+  background-color: #ffe6e6;
+  color: #d00;
+}
+
+.success {
+  background-color: #e6ffe6;
+  color: #0a0;
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test Midnight Event</title></head>
+<body>
+<h2>Testing midnight-ending event...</h2>
+<pre id="log"></pre>
+<script>
+const log = document.getElementById('log');
+function addLog(msg) { log.textContent += msg + '\n'; }
+
+const BASE = '/api/events';
+
+async function post(data) {
+  const res = await fetch(BASE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const body = await res.json();
+  if (!res.ok) {
+    addLog('FAIL: ' + body.error);
+  } else {
+    addLog('OK: #' + body.id + ' ' + body.title + ' ' + body.start_at + ' → ' + body.end_at);
+  }
+  return body;
+}
+
+async function testInvalid(data, expectedError) {
+  const res = await fetch(BASE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const body = await res.json();
+  if (res.status === 400) {
+    addLog('✓ Correctly rejected (400): ' + body.error);
+  } else {
+    addLog('✗ Should have been rejected: ' + JSON.stringify(body));
+  }
+}
+
+function getMonday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  const dow = d.getDay();
+  const diff = dow === 0 ? -6 : 1 - dow;
+  d.setDate(d.getDate() + diff);
+  return d;
+}
+
+function fmt(d) {
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+function dt(base, dayOffset, h, m) {
+  const d = new Date(base);
+  d.setDate(d.getDate() + dayOffset);
+  d.setHours(h, m, 0, 0);
+  return fmt(d);
+}
+
+async function run() {
+  const mon = getMonday();
+  addLog('=== Valid events ===');
+  
+  // Event ending at 23:00 (normal)
+  await post({ title: 'Evening Event', start_at: dt(mon, 0, 21, 0), end_at: dt(mon, 0, 23, 0) });
+  
+  // Event ending at 23:59
+  await post({ title: 'Near Midnight', start_at: dt(mon, 0, 23, 0), end_at: dt(mon, 0, 23, 59) });
+
+  addLog('\n=== Invalid events (should be rejected) ===');
+  
+  // Empty title
+  await testInvalid({ title: '', start_at: dt(mon, 0, 9, 0), end_at: dt(mon, 0, 10, 0) });
+  
+  // End before start
+  await testInvalid({ title: 'Bad Event', start_at: dt(mon, 0, 10, 0), end_at: dt(mon, 0, 9, 0) });
+  
+  // End equals start
+  await testInvalid({ title: 'Zero Duration', start_at: dt(mon, 0, 10, 0), end_at: dt(mon, 0, 10, 0) });
+  
+  // Missing title
+  await testInvalid({ start_at: dt(mon, 0, 9, 0), end_at: dt(mon, 0, 10, 0) });
+  
+  // Missing end
+  await testInvalid({ title: 'No End', start_at: dt(mon, 0, 9, 0) });
+
+  addLog('\nDone! Go to http://localhost:5173 to see the calendar.');
+}
+
+run().catch(e => addLog('ERROR: ' + e.message));
+</script>
+</body>
+</html>

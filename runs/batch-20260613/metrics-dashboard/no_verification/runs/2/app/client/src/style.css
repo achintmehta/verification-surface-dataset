@@ -1,0 +1,591 @@
+/* ============================================================
+   CSS Custom Properties — Light Theme (default)
+   ============================================================ */
+:root {
+  /* Surfaces */
+  --color-bg:           #f0f2f5;
+  --color-surface:      #ffffff;
+  --color-surface-alt:  #f8f9fb;
+  --color-border:       #e2e6ea;
+
+  /* Text */
+  --color-text-primary:   #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-muted:     #9ca3af;
+
+  /* Accent */
+  --color-accent:         #3b82f6;
+  --color-accent-light:   #dbeafe;
+  --color-accent-dark:    #1d4ed8;
+
+  /* Trend colours */
+  --color-positive:  #10b981;
+  --color-negative:  #ef4444;
+
+  /* Chart */
+  --color-chart-line:      #3b82f6;
+  --color-chart-fill:      rgba(59, 130, 246, 0.12);
+  --color-chart-grid:      #e2e6ea;
+  --color-chart-axis:      #9ca3af;
+  --color-chart-label:     #6b7280;
+  --color-chart-dot:       #3b82f6;
+  --color-chart-dot-bg:    #ffffff;
+
+  /* Bar chart */
+  --color-bar:             #3b82f6;
+  --color-bar-bg:          #e2e6ea;
+
+  /* Header */
+  --color-header-bg:       #1e293b;
+  --color-header-text:     #f1f5f9;
+  --color-header-border:   #334155;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,.10);
+
+  /* Spacing */
+  --gap: 1rem;
+  --radius: 0.75rem;
+  --radius-sm: 0.375rem;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* ============================================================
+   Dark Theme
+   ============================================================ */
+.theme-dark {
+  --color-bg:           #0f172a;
+  --color-surface:      #1e293b;
+  --color-surface-alt:  #162032;
+  --color-border:       #334155;
+
+  --color-text-primary:   #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted:     #64748b;
+
+  --color-accent:         #60a5fa;
+  --color-accent-light:   #1e3a5f;
+  --color-accent-dark:    #93c5fd;
+
+  --color-positive:  #34d399;
+  --color-negative:  #f87171;
+
+  --color-chart-line:      #60a5fa;
+  --color-chart-fill:      rgba(96, 165, 250, 0.12);
+  --color-chart-grid:      #334155;
+  --color-chart-axis:      #64748b;
+  --color-chart-label:     #94a3b8;
+  --color-chart-dot:       #60a5fa;
+  --color-chart-dot-bg:    #1e293b;
+
+  --color-bar:             #60a5fa;
+  --color-bar-bg:          #334155;
+
+  --color-header-bg:       #0f172a;
+  --color-header-text:     #f1f5f9;
+  --color-header-border:   #1e293b;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,.4);
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  /* Prevent horizontal overflow at the root */
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+img, svg, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.header {
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+  border-bottom: 1px solid var(--color-header-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--gap);
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-header-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.header-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   Theme Toggle Button
+   ============================================================ */
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: var(--color-header-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+  position: relative;
+}
+
+.theme-btn:hover {
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.theme-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-btn-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+.theme-btn-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  position: absolute;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.theme-btn-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Light theme: show sun, hide moon */
+.theme-light .theme-btn-sun  { opacity: 1; transform: scale(1); }
+.theme-light .theme-btn-moon { opacity: 0; transform: scale(0.6); }
+
+/* Dark theme: show moon, hide sun */
+.theme-dark .theme-btn-sun  { opacity: 0; transform: scale(0.6); }
+.theme-dark .theme-btn-moon { opacity: 1; transform: scale(1); }
+
+/* ============================================================
+   Main Layout
+   ============================================================ */
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--gap);
+}
+
+/* ============================================================
+   Error Banner
+   ============================================================ */
+.error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: var(--gap);
+}
+
+.theme-dark .error-banner {
+  background: #2d1515;
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+.error-banner svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+/* ============================================================
+   Loading State
+   ============================================================ */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  color: var(--color-text-secondary);
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Dashboard Grid
+   ============================================================ */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* ============================================================
+   Stat Cards
+   ============================================================ */
+.stat-cards {
+  display: grid;
+  gap: var(--gap);
+  /* Mobile: 1 column */
+  grid-template-columns: 1fr;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 4 columns */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0; /* prevent overflow */
+  transition: box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.stat-card-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-card-value {
+  font-size: clamp(1.375rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  /* Allow large numbers to wrap rather than overflow */
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.stat-card-sub {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.trend-up   { color: var(--color-positive); }
+.trend-down { color: var(--color-negative); }
+.trend-flat { color: var(--color-text-muted); }
+
+/* ============================================================
+   Body Grid (chart + categories)
+   ============================================================ */
+.body-grid {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .body-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* ============================================================
+   Panels
+   ============================================================ */
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   Time-Series Chart
+   ============================================================ */
+.chart-container {
+  position: relative;
+  width: 100%;
+  /* Maintain a sensible aspect ratio; chart JS will read actual px */
+  aspect-ratio: 16 / 7;
+  min-height: 180px;
+}
+
+.chart-container canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ============================================================
+   Category Bars
+   ============================================================ */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.category-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.category-value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.category-bar-track {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--color-bar-bg);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  background: var(--color-bar);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+/* ============================================================
+   Recent Items Table
+   ============================================================ */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Scrollable internally; page itself won't scroll horizontally */
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  /* Prevent table from forcing page overflow */
+  min-width: 0;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.data-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-alt);
+  white-space: nowrap;
+}
+
+.data-table td {
+  color: var(--color-text-primary);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover td {
+  background: var(--color-surface-alt);
+}
+
+/* Name column: allow wrapping on narrow screens */
+.data-table td:first-child {
+  font-weight: 500;
+  min-width: 6rem;
+}
+
+/* Category column: truncate with ellipsis */
+.data-table td:nth-child(2) {
+  max-width: 10rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-text-secondary);
+}
+
+/* Value column: right-align, tabular nums */
+.col-value,
+.data-table td.col-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Date column: right-align, muted */
+.col-date,
+.data-table td.col-date {
+  text-align: right;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  font-size: 0.8125rem;
+}
+
+/* On very narrow screens, hide the date column to keep table usable */
+@media (max-width: 479px) {
+  .col-date { display: none; }
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+[hidden] { display: none !important; }
+
+/* Smooth theme transitions */
+body,
+.header,
+.stat-card,
+.panel,
+.data-table th,
+.data-table td,
+.error-banner {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}

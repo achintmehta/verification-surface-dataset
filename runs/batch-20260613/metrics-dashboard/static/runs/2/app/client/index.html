@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <!--
+    Theme is applied before first paint by an inline script that reads
+    the persisted preference from the server. Because this is async we
+    default to light and let the JS update it immediately on load.
+  -->
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <!--
+    Fast-path theme application: read from sessionStorage so the
+    correct theme class is on <body> before CSS paints.
+    The authoritative value comes from the server (GET /api/settings);
+    this just prevents a flash of the wrong theme on reload.
+  -->
+  <script>
+    // Apply cached theme before first paint to avoid flash
+    (function () {
+      try {
+        var t = sessionStorage.getItem('dashboard-theme');
+        if (t === 'dark') {
+          // Will be overridden by JS once API responds, but prevents flash
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.remove('theme-light');
+            document.body.classList.add('theme-dark');
+          });
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body class="theme-light">
+  <div id="app">
+    <header class="header">
+      <div class="header__inner">
+        <h1 class="header__title">
+          <svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+          Metrics Dashboard
+        </h1>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="Toggle light/dark theme"
+          title="Toggle theme"
+        >
+          <span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__icon--dark"  aria-hidden="true">🌙</span>
+          <span class="theme-toggle__label">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Error banner (hidden by default) -->
+      <div id="error-banner" class="error-banner" role="alert" hidden>
+        <strong>⚠ Unable to reach the server.</strong>
+        The dashboard cannot load data. Please ensure the backend is running and refresh.
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading dashboard…</p>
+      </div>
+
+      <!-- Dashboard content (hidden until data loads) -->
+      <div id="dashboard" class="dashboard" hidden>
+
+        <!-- ── Stat cards ── -->
+        <section class="stat-cards" aria-label="Summary statistics">
+          <div class="stat-card" id="card-visitors">
+            <p class="stat-card__label">Total Visitors</p>
+            <p class="stat-card__value" id="stat-visitors">—</p>
+            <p class="stat-card__sub" id="stat-visitors-sub"></p>
+          </div>
+          <div class="stat-card" id="card-revenue">
+            <p class="stat-card__label">Total Revenue</p>
+            <p class="stat-card__value" id="stat-revenue">—</p>
+            <p class="stat-card__sub" id="stat-revenue-sub"></p>
+          </div>
+          <div class="stat-card" id="card-bestday">
+            <p class="stat-card__label">Best Day (Visitors)</p>
+            <p class="stat-card__value" id="stat-bestday">—</p>
+            <p class="stat-card__sub" id="stat-bestday-sub"></p>
+          </div>
+          <div class="stat-card" id="card-trend">
+            <p class="stat-card__label">7-Day Trend</p>
+            <p class="stat-card__value" id="stat-trend">—</p>
+            <p class="stat-card__sub" id="stat-trend-sub">vs prior 7 days</p>
+          </div>
+        </section>
+
+        <!-- ── Body: chart + breakdown ── -->
+        <div class="body-grid">
+
+          <!-- Time-series chart -->
+          <section class="panel chart-panel" aria-label="30-day visitor trend">
+            <h2 class="panel__title">Visitors – Last 30 Days</h2>
+            <div class="chart-container" id="chart-container">
+              <svg id="timeseries-chart" class="chart-svg" aria-label="Line chart of daily visitors over 30 days"></svg>
+            </div>
+          </section>
+
+          <!-- Category breakdown -->
+          <section class="panel breakdown-panel" aria-label="Category breakdown">
+            <h2 class="panel__title">Category Breakdown</h2>
+            <div class="breakdown-list" id="breakdown-list">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ── Recent items table ── -->
+        <section class="panel table-panel" aria-label="Recent items">
+          <h2 class="panel__title">Recent Items</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num-col">Value</th>
+                  <th scope="col" class="date-col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div><!-- /#dashboard -->
+    </main>
+
+    <footer class="footer">
+      <p>Metrics Dashboard · Data refreshes on page reload</p>
+    </footer>
+  </div><!-- /#app -->
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

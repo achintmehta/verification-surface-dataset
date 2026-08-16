@@ -1,0 +1,205 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #0079bf;
+  min-height: 100vh;
+  color: #172b4d;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff;
+}
+
+header h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.status.connected {
+  background: #61bd4f;
+  color: #fff;
+}
+
+.status.disconnected {
+  background: #eb5a46;
+  color: #fff;
+}
+
+#board {
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 60px);
+}
+
+.column {
+  background: #ebecf0;
+  border-radius: 12px;
+  min-width: 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.column-header {
+  padding: 12px 12px 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #172b4d;
+}
+
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+  min-height: 40px;
+}
+
+.card-list.drag-over {
+  background: rgba(0, 121, 191, 0.08);
+  border-radius: 8px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  cursor: grab;
+  user-select: none;
+  position: relative;
+  transition: box-shadow 0.15s, transform 0.15s, opacity 0.15s;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: rotate(3deg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card.optimistic {
+  opacity: 0.7;
+}
+
+.card .delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: none;
+}
+
+.card:hover .delete-btn {
+  display: block;
+}
+
+.card .delete-btn:hover {
+  background: #eb5a46;
+  color: #fff;
+}
+
+.drop-indicator {
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  transition: opacity 0.1s;
+}
+
+.add-card-form {
+  padding: 8px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  border: 2px solid #0079bf;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: none;
+  outline: none;
+  min-height: 60px;
+}
+
+.add-card-form .form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.add-card-form .btn-add {
+  background: #0079bf;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-card-form .btn-add:hover {
+  background: #026aa7;
+}
+
+.add-card-form .btn-cancel {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+}
+
+.btn-open-form {
+  background: none;
+  border: none;
+  color: #5e6c84;
+  cursor: pointer;
+  padding: 8px 12px;
+  text-align: left;
+  width: 100%;
+  font-size: 0.9rem;
+  border-radius: 0 0 12px 12px;
+}
+
+.btn-open-form:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #172b4d;
+}

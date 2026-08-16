@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Responsive Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #222; font-family: sans-serif; padding: 20px; display: flex; flex-direction: column; gap: 32px; }
+    .test-label {
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      background: #444;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .iframe-wrapper {
+      border: 2px solid #555;
+      border-radius: 4px;
+      overflow: hidden;
+      display: block;
+    }
+    iframe {
+      display: block;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="test-label">📱 360px — Mobile (1 column)</div>
+    <div class="iframe-wrapper" style="width:360px">
+      <iframe src="http://localhost:5173" width="360" height="1400"></iframe>
+    </div>
+  </div>
+
+  <div>
+    <div class="test-label">📟 768px — Tablet (2 columns)</div>
+    <div class="iframe-wrapper" style="width:768px">
+      <iframe src="http://localhost:5173" width="768" height="1600"></iframe>
+    </div>
+  </div>
+
+  <div>
+    <div class="test-label">🖥️ 1280px — Desktop (4+2 columns)</div>
+    <div class="iframe-wrapper" style="width:1280px">
+      <iframe src="http://localhost:5173" width="1280" height="1400"></iframe>
+    </div>
+  </div>
+</body>
+</html>

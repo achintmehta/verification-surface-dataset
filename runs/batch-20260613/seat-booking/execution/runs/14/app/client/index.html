@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>🎟️ Event Seat Booking</h1>
+      <div class="conn">
+        <span id="conn-dot" class="dot offline"></span>
+        <span id="conn-text">connecting…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage-wrap">
+        <div class="stage">STAGE</div>
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch held"></i> Held (other)</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="inventory" id="inventory">
+          <div><strong id="inv-available">–</strong><span>available</span></div>
+          <div><strong id="inv-held">–</strong><span>held</span></div>
+          <div><strong id="inv-booked">–</strong><span>booked</span></div>
+        </div>
+
+        <div class="selection">
+          <h2>Selection</h2>
+          <p id="selection-text">No seats selected.</p>
+          <button id="hold-btn" disabled>Hold selected seats</button>
+        </div>
+
+        <div class="hold-box hidden" id="hold-box">
+          <h2>Active hold</h2>
+          <p id="hold-seats"></p>
+          <p class="countdown">Expires in <span id="countdown">–</span></p>
+          <div class="hold-actions">
+            <button id="confirm-btn">Confirm booking</button>
+            <button id="release-btn" class="secondary">Release</button>
+          </div>
+        </div>
+
+        <div class="booked-box hidden" id="booked-box">
+          <h2>✅ Booked!</h2>
+          <p id="booked-seats"></p>
+          <button id="reset-btn" class="secondary">Book more seats</button>
+        </div>
+
+        <div id="message" class="message" role="status"></div>
+
+        <div class="session">session: <code id="session-id"></code></div>
+      </aside>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

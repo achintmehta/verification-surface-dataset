@@ -1,0 +1,178 @@
+:root {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --available: #334155;
+  --available-border: #475569;
+  --selected: #38bdf8;
+  --held: #f59e0b;
+  --mine: #a78bfa;
+  --booked: #ef4444;
+  --primary: #22c55e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.header h1 { font-size: 1.4rem; margin: 0; }
+
+.status-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.conn::before {
+  content: "●";
+  margin-right: 0.35rem;
+  color: var(--muted);
+}
+.conn.online::before { color: var(--primary); }
+.conn.offline::before { color: var(--booked); }
+
+.screen {
+  margin: 1.5rem auto 1rem;
+  max-width: 520px;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: linear-gradient(to bottom, #334155, transparent);
+  border-top: 3px solid #64748b;
+  border-radius: 50% 50% 0 0 / 18px 18px 0 0;
+  padding: 0.4rem 0 0.6rem;
+}
+
+.seatmap-wrap { display: flex; justify-content: center; }
+
+.seatmap {
+  display: inline-grid;
+  gap: 6px;
+}
+
+.seat-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row-label {
+  width: 1.4rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px 6px 3px 3px;
+  border: 1px solid var(--available-border);
+  background: var(--available);
+  color: #cbd5e1;
+  font-size: 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.08s ease, background 0.15s ease;
+  padding: 0;
+}
+.seat:hover:not(:disabled) { transform: translateY(-2px); }
+
+.seat.available { background: var(--available); }
+.seat.selected { background: var(--selected); color: #042f3f; border-color: var(--selected); }
+.seat.held { background: var(--held); color: #4a2c00; cursor: not-allowed; }
+.seat.mine { background: var(--mine); color: #25104a; cursor: not-allowed; }
+.seat.booked { background: var(--booked); color: #fff; cursor: not-allowed; }
+.seat:disabled { cursor: not-allowed; }
+
+.seat.flash {
+  animation: flash 0.6s ease;
+}
+@keyframes flash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+  30% { box-shadow: 0 0 0 4px rgba(239,68,68,0.8); }
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.25rem 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.swatch {
+  width: 14px; height: 14px; border-radius: 4px; display: inline-block;
+  border: 1px solid var(--available-border);
+}
+.swatch.available { background: var(--available); }
+.swatch.selected { background: var(--selected); }
+.swatch.held { background: var(--held); }
+.swatch.mine { background: var(--mine); }
+.swatch.booked { background: var(--booked); }
+
+.controls {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.selection-info { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem; }
+
+.hold-panel, .select-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.hold-panel.hidden, .select-panel.hidden { display: none; }
+
+.countdown { font-size: 0.9rem; color: var(--held); }
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #052e13; }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--available-border); }
+
+.message { margin-top: 0.85rem; font-size: 0.88rem; min-height: 1.2em; }
+.message.error { color: #fca5a5; }
+.message.success { color: #86efac; }
+.message.info { color: #93c5fd; }
+
+.session { margin-top: 1rem; font-size: 0.75rem; color: var(--muted); text-align: center; }
+code { color: var(--selected); }

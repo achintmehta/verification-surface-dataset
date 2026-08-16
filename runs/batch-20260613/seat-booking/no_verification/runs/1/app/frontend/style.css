@@ -1,0 +1,323 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0f0f1a;
+  color: #e8e8f0;
+  min-height: 100vh;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+#app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+#session-info {
+  font-size: 0.75rem;
+  color: #888;
+  background: #1a1a2e;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #2a2a40;
+}
+
+#session-id-display {
+  font-family: monospace;
+  color: #a0a0c0;
+}
+
+/* ── Legend ───────────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.seat-demo {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+/* ── Stage ────────────────────────────────────────────────────────────────── */
+.stage {
+  background: linear-gradient(135deg, #2a2a50, #1a1a35);
+  border: 1px solid #3a3a60;
+  border-radius: 8px;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: #6060a0;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Seat map ─────────────────────────────────────────────────────────────── */
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.row-label {
+  width: 1.4rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6060a0;
+  flex-shrink: 0;
+}
+
+.seats-in-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* ── Individual seat ──────────────────────────────────────────────────────── */
+.seat {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px 6px 4px 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+  position: relative;
+  user-select: none;
+}
+
+.seat:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.seat:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Status colours */
+.seat.available,
+.seat-demo.available {
+  background: #1e4d2b;
+  color: #4ade80;
+  border: 1px solid #2d6b3e;
+}
+
+.seat.available:hover {
+  background: #25613a;
+}
+
+.seat.selected,
+.seat-demo.selected {
+  background: #1e3a6e;
+  color: #60a5fa;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+}
+
+.seat.held-own,
+.seat-demo.held-own {
+  background: #4a3500;
+  color: #fbbf24;
+  border: 1px solid #6b4f00;
+  cursor: default;
+}
+
+.seat.held-other,
+.seat-demo.held-other {
+  background: #2a1a00;
+  color: #78716c;
+  border: 1px solid #3a2a00;
+  cursor: not-allowed;
+}
+
+.seat.booked,
+.seat-demo.booked {
+  background: #1a1a2e;
+  color: #4a4a6a;
+  border: 1px solid #2a2a40;
+  cursor: not-allowed;
+}
+
+.seat.booked-own {
+  background: #1a2e1a;
+  color: #4ade80;
+  border: 1px solid #2a4a2a;
+  cursor: not-allowed;
+}
+
+.seat:disabled {
+  cursor: not-allowed;
+}
+
+/* Pulse animation for held-own seats */
+@keyframes pulse-hold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0.4); }
+  50%       { box-shadow: 0 0 0 4px rgba(251,191,36,0); }
+}
+
+.seat.held-own {
+  animation: pulse-hold 2s ease-in-out infinite;
+}
+
+/* ── Action panel ─────────────────────────────────────────────────────────── */
+.action-panel {
+  margin-top: 1rem;
+}
+
+.panel {
+  background: #1a1a2e;
+  border: 1px solid #2a2a40;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.panel.hidden { display: none; }
+
+/* Hold info */
+.hold-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.countdown-wrap {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.countdown {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.countdown.urgent {
+  color: #f87171;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.4; }
+}
+
+.hold-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Booked info */
+.booked-info {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  color: #4ade80;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 0.5rem 1.1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn:hover { opacity: 0.88; }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-primary  { background: #3b82f6; color: #fff; }
+.btn-secondary{ background: #374151; color: #d1d5db; }
+.btn-success  { background: #16a34a; color: #fff; }
+.btn-danger   { background: #dc2626; color: #fff; }
+
+/* ── Messages ─────────────────────────────────────────────────────────────── */
+.message-area {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.message-area.hidden { display: none; }
+
+.message-area.error {
+  background: #2d1515;
+  border: 1px solid #7f1d1d;
+  color: #fca5a5;
+}
+
+.message-area.info {
+  background: #1a2535;
+  border: 1px solid #1e3a5f;
+  color: #93c5fd;
+}
+
+.message-area.success {
+  background: #14291a;
+  border: 1px solid #166534;
+  color: #86efac;
+}
+
+/* ── Loading ──────────────────────────────────────────────────────────────── */
+.loading {
+  color: #555;
+  font-size: 0.9rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .seat { width: 32px; height: 32px; font-size: 0.6rem; }
+  header h1 { font-size: 1.2rem; }
+}

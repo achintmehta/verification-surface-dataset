@@ -1,0 +1,256 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f4f6f9;
+  --color-surface:     #ffffff;
+  --color-border:      #dde1e9;
+  --color-primary:     #4f6ef7;
+  --color-primary-h:   #3a57d4;
+  --color-text:        #1a1d23;
+  --color-text-muted:  #6b7280;
+  --color-error:       #dc2626;
+  --color-success:     #16a34a;
+  --color-warning:     #d97706;
+
+  --radius:   10px;
+  --shadow:   0 2px 12px rgba(0, 0, 0, 0.08);
+  --font:     'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  min-height: 100%;
+}
+
+/* ── App shell ────────────────────────────────────────────────────────────── */
+.app {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ── SSE status badge ─────────────────────────────────────────────────────── */
+.status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.3s, color 0.3s;
+}
+
+.status--connecting {
+  background: #fef3c7;
+  color: var(--color-warning);
+}
+
+.status--connected {
+  background: #dcfce7;
+  color: var(--color-success);
+}
+
+.status--error {
+  background: #fee2e2;
+  color: var(--color-error);
+}
+
+/* ── Feed ─────────────────────────────────────────────────────────────────── */
+.feed-wrapper {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.message-list {
+  list-style: none;
+  max-height: 60vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: 0.5rem 0;
+}
+
+/* Scrollbar styling (Webkit) */
+.message-list::-webkit-scrollbar {
+  width: 6px;
+}
+.message-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.message-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+/* ── Individual message ───────────────────────────────────────────────────── */
+.message-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  animation: fadeSlideIn 0.2s ease both;
+}
+
+.message-item:last-child {
+  border-bottom: none;
+}
+
+.message-item__text {
+  font-size: 0.95rem;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.message-item__meta {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.empty-state {
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Hidden when there are messages */
+.empty-state.hidden {
+  display: none;
+}
+
+/* ── Post form ────────────────────────────────────────────────────────────── */
+.post-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.post-form__input {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  font-family: var(--font);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow);
+}
+
+.post-form__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.18);
+}
+
+.post-form__btn {
+  padding: 0.65rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font);
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+}
+
+.post-form__btn:hover:not(:disabled) {
+  background: var(--color-primary-h);
+}
+
+.post-form__btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.post-form__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Form error ───────────────────────────────────────────────────────────── */
+.form-error {
+  font-size: 0.82rem;
+  color: var(--color-error);
+  min-height: 1.2em;
+}
+
+/* ── Accessibility ────────────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  body {
+    padding: 1rem 0.75rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .post-form {
+    flex-direction: column;
+  }
+
+  .post-form__btn {
+    width: 100%;
+  }
+}

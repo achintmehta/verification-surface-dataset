@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="inventory" class="inventory">
+        <span class="inv-item available-count">Available: <strong>-</strong></span>
+        <span class="inv-item held-count">Held: <strong>-</strong></span>
+        <span class="inv-item booked-count">Booked: <strong>-</strong></span>
+        <span class="inv-item total-count">Total: <strong>-</strong></span>
+      </div>
+    </header>
+
+    <div class="legend">
+      <span class="legend-item"><span class="seat-icon available"></span> Available</span>
+      <span class="legend-item"><span class="seat-icon held"></span> Held</span>
+      <span class="legend-item"><span class="seat-icon held-mine"></span> My Hold</span>
+      <span class="legend-item"><span class="seat-icon booked"></span> Booked</span>
+      <span class="legend-item"><span class="seat-icon selected"></span> Selected</span>
+    </div>
+
+    <div class="stage">STAGE</div>
+
+    <div id="seat-map" class="seat-map"></div>
+
+    <div id="actions" class="actions">
+      <div id="selection-info" class="selection-info">Select seats to hold them</div>
+      <div class="action-buttons">
+        <button id="btn-hold" disabled>Hold Selected Seats</button>
+        <button id="btn-confirm" disabled>Confirm Booking</button>
+        <button id="btn-release" disabled>Release Hold</button>
+      </div>
+      <div id="hold-timer" class="hold-timer" style="display: none;">
+        Hold expires in: <strong id="timer-value">--</strong>s
+      </div>
+    </div>
+
+    <div id="notifications" class="notifications"></div>
+
+    <div id="sse-status" class="sse-status">
+      <span class="dot"></span> <span id="sse-text">Connecting...</span>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

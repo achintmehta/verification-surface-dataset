@@ -1,0 +1,70 @@
+
+> metrics-dashboard@1.0.0 start
+> concurrently "npm run server" "npm run client"
+
+[0] 
+[0] > metrics-dashboard@1.0.0 server
+[0] > node backend/server.js
+[0] 
+[1] 
+[1] > metrics-dashboard@1.0.0 client
+[1] > vite frontend --port 3000
+[1] 
+[0] /tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/backend/server.js:14
+[0]     const { rows: last7 } = await db.query('SELECT SUM(revenue) as rev FROM daily_metrics WHERE date >= (SELECT MAX(date) - INTERVAL \\'6 days\\' FROM daily_metrics)');
+[0]                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0] 
+[0] SyntaxError: missing ) after argument list
+[0]     at internalCompileFunction (node:internal/vm:76:18)
+[0]     at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+[0]     at Module._compile (node:internal/modules/cjs/loader:1328:27)
+[0]     at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+[0]     at Module.load (node:internal/modules/cjs/loader:1203:32)
+[0]     at Module._load (node:internal/modules/cjs/loader:1019:12)
+[0]     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+[0]     at node:internal/main/run_main_module:28:49
+[0] 
+[0] Node.js v18.20.8
+[0] npm run server exited with code 1
+[1] 
+[1]   VITE v4.5.14  ready in 141 ms
+[1] 
+[1]   ➜  Local:   http://localhost:3000/
+[1]   ➜  Network: use --host to expose
+[1] Error:   Failed to scan for dependencies from entries:
+[1]   /tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/frontend/index.html
+[1] 
+[1]   [31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mSyntax error "`"[0m
+[1] 
+[1]     frontend/main.js:9:37:
+[1] [37m      9 │     const settingsRes = await fetch(\[32m[37m`\${API_BASE}/settings\`);
+[1]         ╵                                      [32m^[0m
+[1] 
+[1] 
+[1]     at failureErrorWithLog (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:1649:15)
+[1]     at /tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:1058:25
+[1]     at runOnEndCallbacks (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:1484:45)
+[1]     at buildResponseToResult (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:1056:7)
+[1]     at /tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:1068:9
+[1]     at new Promise (<anonymous>)
+[1]     at requestCallbacks.on-end (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:1067:54)
+[1]     at handleRequest (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:729:19)
+[1]     at handleIncomingPacket (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:755:7)
+[1]     at Socket.readFromStdout (/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/esbuild/lib/main.js:679:7)
+[1] Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+[1] 7:37:40 PM [vite] Internal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+[1]   Plugin: vite:import-analysis
+[1]   File: /tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/frontend/main.js:198:9
+[1]   196|  }
+[1]   197|  
+[1]   198|  init();
+[1]      |          ^
+[1]   199|  
+[1]       at formatError (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/vite/dist/node/chunks/dep-827b23df.js:44066:46)
+[1]       at TransformContext.error (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/vite/dist/node/chunks/dep-827b23df.js:44062:19)
+[1]       at TransformContext.transform (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/vite/dist/node/chunks/dep-827b23df.js:41785:22)
+[1]       at async Object.transform (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/vite/dist/node/chunks/dep-827b23df.js:44356:30)
+[1]       at async loadAndTransform (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/vite/dist/node/chunks/dep-827b23df.js:55088:29)
+[1]       at async viteTransformMiddleware (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/node_modules/vite/dist/node/chunks/dep-827b23df.js:64699:32)
+[1] 7:38:19 PM [vite] page reload main.js
+[1] npm run client exited with code SIGTERM

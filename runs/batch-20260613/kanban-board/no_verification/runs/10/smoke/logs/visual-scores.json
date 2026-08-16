@@ -1,0 +1,37 @@
+{
+  "_instructions": "Fill score with pass|partial|fail|skip for each item. Grade CONDITION-BLIND: do not read manifest.json first. If the app does NOT boot/run at all, score every item FAIL (criteria unmet) - do not skip; skip is only for grader-side problems (your environment, not the artifact). See the matching .rubric.md for setup steps and criteria. Then re-run grader.py to merge.",
+  "_task": "kanban-board",
+  "grader_name": "achint",
+  "items": {
+    "KB-V1": {
+      "score": "pass",
+      "criterion": "Drag-and-drop works with the mouse: card can be picked up, dragged across columns, and dropped at a chosen position (not only appended).",
+      "weight": 3,
+      "notes": ""
+    },
+    "KB-V2": {
+      "score": "pass",
+      "criterion": "Optimistic UI: the dragged card lands instantly on drop (no visible wait for the server), and does not flicker or snap back when the move succeeds.",
+      "weight": 3,
+      "notes": ""
+    },
+    "KB-V3": {
+      "score": "pass",
+      "criterion": "Convergence: after moves in both windows (including moving the SAME card in both), both windows settle to the identical order; no duplicate or lost card.",
+      "weight": 2,
+      "notes": ""
+    },
+    "KB-V4": {
+      "score": "partial",
+      "criterion": "Robustness: dropping a card outside any valid target leaves the board intact (card returns; nothing disappears).",
+      "weight": 1,
+      "notes": "If a card is moved over a column and then dropped outside the collumn, it goes into the column that it was dragged over"
+    },
+    "KB-V5": {
+      "score": "pass",
+      "criterion": "Layout: columns side by side, card text readable, no overlapping or clipped elements at a normal desktop width.",
+      "weight": 1,
+      "notes": ""
+    }
+  }
+}

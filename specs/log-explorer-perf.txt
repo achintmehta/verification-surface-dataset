@@ -1,0 +1,104 @@
+## Context
+
+We are building a log explorer for a high-volume service as a traditional client-server web application. The server seeds a large, deterministic corpus of log entries (100,000 rows) into an embedded PGLite database and exposes windowed query endpoints; the client renders a virtualized, filterable log view that stays fast no matter where in the corpus the user scrolls. Correctness here is not just "the right rows come back" — it is *staying within explicit latency and resource budgets at full data volume*. A naive implementation (fetch everything, render everything) will produce identical-looking JSON and a frozen page. To minimize external dependencies while retaining the power of PostgreSQL, we use PGLite embedded within a Node.js server.
+
+## Goals / Non-Goals
+
+**Goals:**
+- Seed 100,000 deterministic log entries (timestamp, severity, service name, message) on first boot.
+- Windowed query API: any slice of the (filtered, sorted) corpus is retrievable quickly without ever materializing the whole corpus in a response.
+- Filters: severity level and case-insensitive message substring, combinable, applied server-side.
+- A virtualized log table: only the visible window of rows exists in the DOM; scrolling anywhere in 100k rows stays responsive.
+- Explicit, graded performance budgets (below) at full corpus size.
+
+**Non-Goals:**
+- Live log ingestion or streaming tail; the corpus is static after seeding.
+- Aggregations, charts, alerting, or saved searches.
+- Authentication or multi-tenant separation.
+
+## Decisions
+
+**Decision 1: Server-side windowing with total count**
+- *Rationale*: The client never receives more than one window of rows. `GET /api/logs` takes `offset`, `limit` (max 200), and filter params, returning `{ total, rows }` so the client can size its virtual scrollbar. The database, not the application layer, does the filtering and slicing — with indexes supporting it.
+
+**Decision 2: Indexes chosen for the query shapes**
+- *Rationale*: The two query shapes are (severity equality + ordering by timestamp) and (substring match + ordering by timestamp). Schema and indexes are designed for these (e.g. index on `(severity, ts)`, ordering index on `ts`), because the latency budgets below are not reachable with full-table scans per request on every keystroke.
+
+**Decision 3: Virtualized rendering with a row-window pool**
+- *Rationale*: The DOM holds only the rows intersecting the viewport (plus a small overscan). Scroll position maps to a row offset; rows are fetched window-by-window and recycled. This bounds DOM size and memory regardless of corpus size.
+
+**Decision 4: Debounced search**
+- *Rationale*: Substring search fires after a short debounce, cancels stale in-flight requests, and never blocks the input. Responsiveness under typing is part of the graded budget.
+
+## Risks / Trade-offs
+
+- [Risk] Deep offsets (e.g. offset 90,000) degrade if implemented as naive OFFSET scans.
+  - *Mitigation*: The latency budget is graded at deep offsets explicitly; keyset pagination or index-backed ordering are acceptable implementations.
+- [Risk] Seeding 100k rows on first boot is slow if done row-by-row.
+  - *Mitigation*: Batch inserts; the boot-time budget below includes seeding on first start.
+- [Risk] Virtualization bugs (blank regions while scrolling, wrong rows at extreme offsets) look fine at small scale.
+  - *Mitigation*: Criteria are stated at full corpus size and at the extremes (top, middle, bottom).
+
+## Why
+
+Performance work is the purest case where code that *reads* correct is not *behaviorally* correct: budgets can only be met — or shown to be missed — by measurement at realistic volume. This task makes the budgets part of the specification, so meeting them is a requirement, not an optimization afterthought.
+
+## What Changes
+
+- A brand new client-server web application.
+- Backend: Node.js + Express + embedded PGLite with a deterministic 100k-row seed, windowed/filterable query endpoints, and supporting indexes.
+- Frontend: a Vanilla JS / Vite virtualized log table with severity and text filters.
+
+## Capabilities
+
+### New Capabilities
+- `log-explorer`: seeded corpus, windowed query API with filters, virtualized scrolling UI, performance budgets.
+
+### Modified Capabilities
+None (greenfield project).
+
+## Impact
+
+New project. Establishes the Node.js backend, the PGLite schema/seed/indexes, the windowed API, and the virtualized frontend.
+
+## 1. Project Initialization
+
+- [ ] 1.1 Set up the Node.js backend project declaring its dependencies (express, @electric-sql/pglite, cors) in package.json
+- [ ] 1.2 Set up the Vanilla JS / Vite frontend project
+- [ ] 1.3 Provide npm scripts for running the backend and frontend development servers together
+
+## 2. Backend: Schema, Seed, Indexes
+
+- [ ] 2.1 Express server with CORS and JSON body parsing
+- [ ] 2.2 Initialize embedded PGLite writing to the local file system
+- [ ] 2.3 `logs` table (`id`, `ts` timestamp, `severity` in debug/info/warn/error, `service`, `message`); deterministic seed of exactly 100,000 rows spanning 30 days across 8 services, severities distributed roughly 60/25/10/5, messages drawn from templates with variable fragments so substring search has selective and non-selective terms
+- [ ] 2.4 Seed in batches on first boot only (subsequent boots detect the populated table and skip)
+- [ ] 2.5 Indexes supporting the graded query shapes (ordering by `ts`, severity + ordering, substring search strategy of your choice)
+
+## 3. Backend: Query API
+
+- [ ] 3.1 `GET /api/logs?offset=&limit=&severity=&q=` returning `{ total, rows }` ordered by `ts` descending; `limit` capped at 200; rows contain all columns
+- [ ] 3.2 `severity` filters exactly; `q` matches message substrings case-insensitively; both combine
+- [ ] 3.3 Invalid parameters (negative offset, limit over cap, unknown severity) are rejected with 400
+- [ ] 3.4 `GET /api/stats` returning total row count and per-severity counts (for the filter bar badges)
+
+## 4. Frontend: Virtualized Explorer
+
+- [ ] 4.1 Log table with a virtual scroller: total scroll height reflects the filtered `total`; only visible rows (plus small overscan) exist in the DOM; rows are recycled while scrolling
+- [ ] 4.2 Scrolling to any position (top, middle, deepest offset) shows the correct rows for that offset with no permanently blank regions
+- [ ] 4.3 Severity dropdown and debounced search box; changing filters resets scroll, updates `total`, and re-renders; stale responses never overwrite newer ones
+- [ ] 4.4 Severity is color-coded; a visible row count ("N of <total>") reflects the active filter
+
+## Acceptance Criteria (graded)
+
+**Performance budgets (measured against the full 100,000-row corpus on the development machine):**
+- Windowed queries are fast at any depth: `GET /api/logs` with `limit=100` returns in under 150 ms at offset 0, offset 50,000, and offset 99,900 (p95 over repeated calls).
+- Filtered queries stay within 300 ms (p95): severity-only, a selective substring, and a non-selective substring each combined with deep offsets.
+- First boot, including the full seed, completes and begins serving within 60 seconds; subsequent boots within 10 seconds (no reseeding).
+- No endpoint response ever contains more than 200 rows, regardless of parameters.
+
+**Functional at full volume:**
+- `total` is exact for every filter combination, and the row at any scrolled position is the correct row for that offset and filter (spot-checkable: the API's row at offset K equals what the UI shows at scroll position K).
+- The DOM never holds more than ~100 log rows regardless of scroll position; scrolling from top to bottom of 100k rows never freezes the page and leaves no permanently blank viewport.
+- Typing in the search box remains responsive (input is never blocked on queries); out-of-order responses never overwrite newer results.
+- The corpus and its query behavior survive a full server restart without reseeding or data loss.

@@ -1,0 +1,396 @@
+/* ============================================================
+   Log Explorer — Styles
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:          #0f1117;
+  --bg-surface:  #1a1d27;
+  --bg-row-even: #1a1d27;
+  --bg-row-odd:  #1e2130;
+  --bg-row-hover:#252840;
+  --border:      #2e3148;
+  --text:        #e2e4f0;
+  --text-muted:  #7b7f9e;
+  --text-dim:    #4a4e6a;
+  --accent:      #5b6af0;
+
+  --sev-debug:   #6b7db3;
+  --sev-info:    #4ade80;
+  --sev-warn:    #facc15;
+  --sev-error:   #f87171;
+
+  --sev-debug-bg: rgba(107,125,179,0.12);
+  --sev-info-bg:  rgba(74,222,128,0.12);
+  --sev-warn-bg:  rgba(250,204,21,0.12);
+  --sev-error-bg: rgba(248,113,113,0.12);
+
+  --row-height:  36px;
+  --header-h:    56px;
+  --table-hdr-h: 36px;
+  --status-h:    28px;
+  --font-mono:   'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --font-ui:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---- Toolbar ---- */
+.toolbar {
+  height: var(--header-h);
+  min-height: var(--header-h);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.app-icon {
+  font-size: 18px;
+}
+
+.row-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: rgba(91,106,240,0.15);
+  border: 1px solid rgba(91,106,240,0.3);
+  border-radius: 12px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.filter-select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.filter-select:focus {
+  border-color: var(--accent);
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 28px 5px 10px;
+  font-size: 13px;
+  width: 240px;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: var(--font-ui);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+.search-input::placeholder {
+  color: var(--text-dim);
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 11px;
+  display: none;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.search-clear:hover {
+  color: var(--text-muted);
+}
+
+.search-clear.visible {
+  display: block;
+}
+
+/* Severity badges */
+.severity-badges {
+  display: flex;
+  gap: 4px;
+}
+
+.sev-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.sev-badge.debug { color: var(--sev-debug); background: var(--sev-debug-bg); }
+.sev-badge.info  { color: var(--sev-info);  background: var(--sev-info-bg);  }
+.sev-badge.warn  { color: var(--sev-warn);  background: var(--sev-warn-bg);  }
+.sev-badge.error { color: var(--sev-error); background: var(--sev-error-bg); }
+
+/* ---- Table header ---- */
+.table-header {
+  height: var(--table-hdr-h);
+  min-height: var(--table-hdr-h);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.col-ts       { width: 200px; min-width: 200px; }
+.col-severity { width: 80px;  min-width: 80px;  }
+.col-service  { width: 160px; min-width: 160px; }
+.col-message  { flex: 1; min-width: 0; }
+
+/* ---- Scroller ---- */
+.scroller-container {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.scroller-container::-webkit-scrollbar {
+  width: 8px;
+}
+.scroller-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroller-container::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.scroller-container::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+/* The tall inner div that creates the scroll height */
+.scroller-inner {
+  position: relative;
+  width: 100%;
+  /* height set dynamically by JS */
+}
+
+/* The absolutely-positioned viewport that holds visible rows */
+.rows-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* top and height set dynamically by JS */
+}
+
+/* ---- Log rows ---- */
+.log-row {
+  display: flex;
+  align-items: center;
+  height: var(--row-height);
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(46,49,72,0.5);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transition: background 0.08s;
+  cursor: default;
+  overflow: hidden;
+}
+
+.log-row:nth-child(even) { background: var(--bg-row-even); }
+.log-row:nth-child(odd)  { background: var(--bg-row-odd);  }
+.log-row:hover           { background: var(--bg-row-hover); }
+
+.log-row .col-ts {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.log-row .col-severity {
+  display: flex;
+  align-items: center;
+}
+
+.severity-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.severity-pill.debug { color: var(--sev-debug); background: var(--sev-debug-bg); }
+.severity-pill.info  { color: var(--sev-info);  background: var(--sev-info-bg);  }
+.severity-pill.warn  { color: var(--sev-warn);  background: var(--sev-warn-bg);  }
+.severity-pill.error { color: var(--sev-error); background: var(--sev-error-bg); }
+
+.log-row .col-service {
+  color: var(--accent);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+
+.log-row .col-message {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Highlight search matches */
+.match-highlight {
+  background: rgba(250,204,21,0.25);
+  color: var(--sev-warn);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* ---- Status bar ---- */
+.status-bar {
+  height: var(--status-h);
+  min-height: var(--status-h);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+#status-text {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---- Loading / empty states ---- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-dim);
+  font-size: 14px;
+  gap: 8px;
+}
+
+.empty-state-icon {
+  font-size: 32px;
+  opacity: 0.4;
+}
+
+/* ---- Skeleton rows (loading placeholder) ---- */
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  height: var(--row-height);
+  padding: 0 12px;
+  gap: 12px;
+  border-bottom: 1px solid rgba(46,49,72,0.5);
+}
+
+.skeleton-block {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--border) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .col-service { display: none; }
+  .search-input { width: 160px; }
+  .severity-badges { display: none; }
+}

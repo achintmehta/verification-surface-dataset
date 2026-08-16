@@ -1,0 +1,361 @@
+/* === Reset & Base === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 60px;
+  --total-hours: 24;
+  --axis-height: calc(var(--hour-height) * var(--total-hours)); /* 1440px */
+  --gutter-width: 60px;
+  --header-height: 50px;
+  --toolbar-height: 56px;
+  --day-column-count: 7;
+
+  --color-bg: #fff;
+  --color-grid-line: #e0e0e0;
+  --color-grid-line-dark: #ccc;
+  --color-today-bg: #e3f2fd;
+  --color-primary: #1976d2;
+  --color-primary-dark: #1565c0;
+  --color-event-bg: #1976d2;
+  --color-event-text: #fff;
+  --color-event-border: #1565c0;
+  --color-danger: #d32f2f;
+  --color-overlay: rgba(0, 0, 0, 0.4);
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: var(--color-bg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* === Toolbar === */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  height: var(--toolbar-height);
+  border-bottom: 1px solid var(--color-grid-line);
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 4px;
+}
+
+.toolbar button {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.toolbar button:hover {
+  background: #f0f0f0;
+}
+
+.toolbar h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* === Calendar Container === */
+.calendar-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* === Calendar Grid === */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: var(--gutter-width) repeat(var(--day-column-count), 1fr);
+  grid-template-rows: var(--header-height) var(--axis-height);
+  min-width: 600px;
+}
+
+/* === Day Headers === */
+.day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--color-grid-line);
+  border-left: 1px solid var(--color-grid-line);
+  padding: 4px;
+  font-size: 12px;
+  position: sticky;
+  top: 0;
+  background: #fafafa;
+  z-index: 10;
+}
+
+.day-header.today {
+  background: var(--color-today-bg);
+}
+
+.day-header .day-name {
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #666;
+  font-size: 11px;
+}
+
+.day-header .day-number {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.day-header.today .day-number {
+  color: var(--color-primary);
+}
+
+.gutter-header {
+  border-bottom: 1px solid var(--color-grid-line);
+  position: sticky;
+  top: 0;
+  background: #fafafa;
+  z-index: 11;
+}
+
+/* === Time Gutter === */
+.time-gutter {
+  position: relative;
+  border-right: 1px solid var(--color-grid-line);
+}
+
+.time-label {
+  position: absolute;
+  right: 8px;
+  font-size: 11px;
+  color: #999;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* === Day Columns === */
+.day-column {
+  position: relative;
+  border-left: 1px solid var(--color-grid-line);
+  cursor: crosshair;
+}
+
+.day-column.today {
+  background: var(--color-today-bg);
+}
+
+/* Hour lines */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--color-grid-line);
+  pointer-events: none;
+}
+
+.hour-line.half {
+  border-top: 1px dashed #f0f0f0;
+}
+
+/* === Events === */
+.event-block {
+  position: absolute;
+  border-radius: 4px;
+  padding: 2px 4px;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.3;
+  border-left: 3px solid var(--color-event-border);
+  background: var(--color-event-bg);
+  color: var(--color-event-text);
+  z-index: 5;
+  transition: opacity 0.1s;
+}
+
+.event-block:hover {
+  opacity: 0.9;
+  z-index: 6;
+}
+
+.event-block .event-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-block .event-time {
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+}
+
+/* Drag selection on day column */
+.drag-selection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(25, 118, 210, 0.15);
+  border: 1px dashed var(--color-primary);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* === Modal === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  min-width: 340px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-error {
+  color: var(--color-danger);
+  font-size: 13px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: #fce4e4;
+  border-radius: 4px;
+}
+
+.form-error[hidden] {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  padding: 8px 20px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  padding: 8px 20px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+}
+
+.btn-danger {
+  padding: 8px 20px;
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: auto;
+}
+
+.btn-danger:hover {
+  background: #b71c1c;
+}
+
+.btn-danger[hidden] {
+  display: none;
+}

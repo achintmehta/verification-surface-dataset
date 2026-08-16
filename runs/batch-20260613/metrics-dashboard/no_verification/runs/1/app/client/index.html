@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <script type="module">
+    // Apply persisted theme before first paint to avoid flash
+    (async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const { theme } = await res.json();
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (_) {
+        // server unavailable — default light theme is fine
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="site-header">
+      <div class="header-inner">
+        <h1 class="site-title">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="12" width="4" height="10" rx="1" fill="currentColor"/>
+            <rect x="8" y="7"  width="4" height="15" rx="1" fill="currentColor"/>
+            <rect x="14" y="3" width="4" height="19" rx="1" fill="currentColor"/>
+            <rect x="20" y="9" width="2" height="13" rx="1" fill="currentColor"/>
+          </svg>
+          Metrics Dashboard
+        </h1>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="Toggle light/dark theme"
+          title="Toggle theme"
+        >
+          <span class="theme-icon theme-icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon--dark"  aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="dashboard" id="dashboard">
+      <!-- Stat cards -->
+      <section class="stat-cards" aria-label="Summary statistics">
+        <div class="stat-card" id="card-visitors">
+          <div class="stat-card__label">Total Visitors</div>
+          <div class="stat-card__value" id="stat-visitors">—</div>
+          <div class="stat-card__sub" id="stat-visitors-sub"></div>
+        </div>
+        <div class="stat-card" id="card-revenue">
+          <div class="stat-card__label">Total Revenue</div>
+          <div class="stat-card__value" id="stat-revenue">—</div>
+          <div class="stat-card__sub" id="stat-revenue-sub"></div>
+        </div>
+        <div class="stat-card" id="card-bestday">
+          <div class="stat-card__label">Best Day</div>
+          <div class="stat-card__value" id="stat-bestday">—</div>
+          <div class="stat-card__sub" id="stat-bestday-sub"></div>
+        </div>
+        <div class="stat-card" id="card-trend">
+          <div class="stat-card__label">7-Day Trend</div>
+          <div class="stat-card__value" id="stat-trend">—</div>
+          <div class="stat-card__sub" id="stat-trend-sub">vs prior 7 days</div>
+        </div>
+      </section>
+
+      <!-- Body: chart + categories -->
+      <section class="dashboard-body">
+        <!-- Time-series chart -->
+        <div class="panel chart-panel" aria-label="30-day visitor trend">
+          <h2 class="panel__title">30-Day Visitor Trend</h2>
+          <div class="chart-container" id="chart-container">
+            <canvas id="timeseries-chart" aria-label="Line chart of daily visitors over 30 days"></canvas>
+          </div>
+        </div>
+
+        <!-- Category breakdown -->
+        <div class="panel categories-panel" aria-label="Category breakdown">
+          <h2 class="panel__title">Category Breakdown</h2>
+          <div class="categories-list" id="categories-list">
+            <div class="loading-state">Loading…</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent items table -->
+      <section class="panel table-panel" aria-label="Recent items">
+        <h2 class="panel__title">Recent Items</h2>
+        <div class="table-wrapper">
+          <table class="recent-table" id="recent-table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col" class="col-value">Value</th>
+                <th scope="col" class="col-date">Date</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody">
+              <tr><td colspan="4" class="loading-state">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Error state -->
+      <div class="error-banner" id="error-banner" hidden>
+        <strong>⚠ Unable to reach the server.</strong>
+        The dashboard cannot load data. Please ensure the backend is running and refresh the page.
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" class="theme-loading" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Metrics Dashboard</title>
+    <script>
+      (function () {
+        fetch('/api/settings', { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : { theme: 'light' }; })
+          .then(function (s) { document.documentElement.dataset.theme = s.theme === 'dark' ? 'dark' : 'light'; })
+          .catch(function () { document.documentElement.dataset.theme = 'light'; })
+          .finally(function () { document.documentElement.classList.remove('theme-loading'); });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

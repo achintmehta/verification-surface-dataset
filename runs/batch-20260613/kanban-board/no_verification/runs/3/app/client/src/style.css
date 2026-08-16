@@ -1,0 +1,337 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f0f2f5;
+  --color-header-bg:   #1a1f36;
+  --color-header-text: #ffffff;
+  --color-col-bg:      #ebecf0;
+  --color-col-header:  #172b4d;
+  --color-card-bg:     #ffffff;
+  --color-card-border: #dfe1e6;
+  --color-card-hover:  #f4f5f7;
+  --color-accent:      #0052cc;
+  --color-accent-hover:#0065ff;
+  --color-danger:      #de350b;
+  --color-text:        #172b4d;
+  --color-text-muted:  #6b778c;
+  --color-drop-target: #c1d5f5;
+  --color-dragging:    #e6edff;
+  --radius-col:        10px;
+  --radius-card:       6px;
+  --shadow-card:       0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+  --shadow-dragging:   0 8px 24px rgba(0,0,0,.18);
+  --transition:        150ms ease;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+               Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 52px;
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.app-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+/* ── Connection status badge ── */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  opacity: .85;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffc400;
+  transition: background var(--transition);
+}
+
+.connection-status.connected .status-dot    { background: #36b37e; }
+.connection-status.disconnected .status-dot { background: #de350b; }
+
+/* ============================================================
+   Board layout
+   ============================================================ */
+.board {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  min-height: calc(100vh - 52px);
+  overflow-x: auto;
+}
+
+.board-loading {
+  color: var(--color-text-muted);
+  font-size: 15px;
+  padding: 40px;
+}
+
+/* ============================================================
+   Column
+   ============================================================ */
+.column {
+  flex: 0 0 272px;
+  width: 272px;
+  background: var(--color-col-bg);
+  border-radius: var(--radius-col);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 8px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-col-header);
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.column-card-count {
+  background: rgba(9,30,66,.12);
+  color: var(--color-text-muted);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Card list ── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Scrollbar styling */
+.card-list::-webkit-scrollbar { width: 6px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb {
+  background: rgba(9,30,66,.2);
+  border-radius: 3px;
+}
+
+/* ── Drop zone indicator ── */
+.card-list.drag-over {
+  background: rgba(0,82,204,.06);
+  border-radius: 6px;
+}
+
+.drop-placeholder {
+  height: 4px;
+  background: var(--color-accent);
+  border-radius: 2px;
+  margin: 2px 0;
+  pointer-events: none;
+  transition: height var(--transition);
+}
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  padding: 10px 12px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition), opacity var(--transition),
+              transform var(--transition);
+  word-break: break-word;
+  line-height: 1.45;
+  position: relative;
+}
+
+.card:hover {
+  background: var(--color-card-hover);
+  box-shadow: 0 3px 8px rgba(0,0,0,.14);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+/* Card being dragged (source element) */
+.card.dragging {
+  opacity: .35;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Ghost card shown under the cursor */
+.card-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-card);
+  padding: 10px 12px;
+  box-shadow: var(--shadow-dragging);
+  opacity: .92;
+  transform: rotate(2deg);
+  max-width: 260px;
+  word-break: break-word;
+  line-height: 1.45;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+/* Optimistic card (before server confirmation) */
+.card.optimistic {
+  opacity: .75;
+  border-style: dashed;
+}
+
+/* ============================================================
+   Add-card form
+   ============================================================ */
+.add-card-area {
+  padding: 6px 8px 10px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-card);
+  padding: 8px 10px;
+  text-align: left;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.add-card-btn:hover {
+  background: rgba(9,30,66,.08);
+  color: var(--color-text);
+}
+
+.add-card-btn .icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.add-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-card);
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  min-height: 64px;
+  color: var(--color-text);
+  background: var(--color-card-bg);
+  box-shadow: 0 0 0 2px rgba(0,82,204,.15);
+}
+
+.add-card-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-confirm {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.btn-add-confirm:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-add-cancel {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.btn-add-cancel:hover {
+  background: rgba(9,30,66,.08);
+  color: var(--color-danger);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 600px) {
+  .board {
+    padding: 12px;
+    gap: 12px;
+  }
+  .column {
+    flex: 0 0 240px;
+    width: 240px;
+  }
+}

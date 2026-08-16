@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realtime Message Board</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 0;
+      color: #333;
+    }
+    #messages {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 20px;
+      background: #fafafa;
+    }
+    .message {
+      padding: 10px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 4px;
+      border-left: 3px solid #4a90e2;
+    }
+    .message-time {
+      font-size: 0.75em;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .message-text {
+      color: #333;
+    }
+    form {
+      display: flex;
+      gap: 10px;
+    }
+    #message-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #357abd;
+    }
+    .status {
+      font-size: 0.8em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Message Board</h1>
+    <div class="status" id="status">Connecting...</div>
+    <div id="messages"></div>
+    <form id="message-form">
+      <input type="text" id="message-input" placeholder="Type your message..." required>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script type="module">
+    const API_BASE = '';
+    const messagesContainer = document.getElementById('messages');
+    const form = document.getElementById('message-form');
+    const input = document.getElementById('message-input');
+    const statusEl = document.getElementById('status');
+
+    // Format timestamp
+    function formatTime(timestamp) {
+      return new Date(timestamp).toLocaleTimeString();
+    }
+
+    // Render a single message
+    function renderMessage(message) {
+      const div = document.createElement('div');
+      div.className = 'message';
+      div.innerHTML = `
+        <div class="message-time">${formatTime(message.created_at)}</div>
+        <div class="message-text">${escapeHtml(message.text)}</div>
+      `;
+      return div;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Fetch historical messages
+    async function fetchMessages() {
+      try {
+        const response = await fetch(`${API_BASE}/api/messages`);
+        const messages = await response.json();
+        messagesContainer.innerHTML = '';
+        messages.forEach(msg => {
+          messagesContainer.appendChild(renderMessage(msg));
+        });
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      } catch (error) {
+        console.error('Failed to fetch messages:', error);
+        statusEl.textContent = 'Failed to load messages';
+      }
+    }
+
+    // Connect to SSE
+    function connectSSE() {
+      const eventSource = new EventSource(`${API_BASE}/api/stream`);
+
+      eventSource.onopen = () => {
+        statusEl.textContent = 'Connected - listening for updates';
+        statusEl.style.color = '#4a90e2';
+      };
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'new_message' && data.message) {
+          const msgEl = renderMessage(data.message);
+          messagesContainer.appendChild(msgEl);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+      };
+
+      eventSource.onerror = () => {
+        statusEl.textContent = 'Connection lost - reconnecting...';
+        statusEl.style.color = '#e74c3c';
+        // EventSource will auto-reconnect
+      };
+
+      return eventSource;
+    }
+
+    // Handle form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      
+      if (!text) return;
+
+      try {
+        const response = await fetch(`${API_BASE}/api/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text }),
+        });
+
+        if (response.ok) {
+          input.value = '';
+        } else {
+          const error = await response.json();
+          alert('Error: ' + (error.error || 'Failed to send message'));
+        }
+      } catch (error) {
+        console.error('Failed to send message:', error);
+        alert('Failed to send message. Is the server running?');
+      }
+    });
+
+    // Initialize app
+    async function init() {
+      await fetchMessages();
+      connectSSE();
+    }
+
+    init();
+  </script>
+</body>
+</html>

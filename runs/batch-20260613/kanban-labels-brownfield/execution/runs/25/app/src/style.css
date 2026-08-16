@@ -1,0 +1,507 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eef2f7;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #172033, #334155);
+  color: white;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.2);
+}
+
+h1, h2, p { margin: 0; }
+
+.topbar p {
+  color: #cbd5e1;
+  margin-top: 0.35rem;
+}
+
+.status {
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #16a34a;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.status.warn { background: #f97316; }
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: start;
+}
+
+.column {
+  background: #dbe4ef;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  padding: 1rem;
+  min-height: 420px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+.column h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+  color: #0f172a;
+}
+
+.add-card {
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.add-card input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  outline: none;
+  font: inherit;
+}
+
+.add-card input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.add-card button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.add-card button:hover { background: #1d4ed8; }
+
+.cards {
+  min-height: 300px;
+  border-radius: 12px;
+  padding: 0.25rem;
+  transition: background 120ms ease;
+}
+
+.cards.drop-target {
+  background: rgba(37, 99, 235, 0.10);
+  outline: 2px dashed rgba(37, 99, 235, 0.35);
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 0.65rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  cursor: grab;
+  overflow-wrap: anywhere;
+  user-select: none;
+}
+
+.card:active { cursor: grabbing; }
+
+.card.dragging {
+  opacity: 0.45;
+  transform: rotate(1deg);
+}
+
+.loading {
+  margin: 4rem auto;
+  width: fit-content;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+.loading.error { color: #b91c1c; }
+
+/* ─── Card labels ─── */
+
+.card {
+  position: relative;
+}
+
+.card-text {
+  margin-bottom: 0.3rem;
+}
+
+.card-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
+.label-chip {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.card-label-btn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.35;
+  padding: 0.15rem;
+  line-height: 1;
+  transition: opacity 120ms;
+}
+
+.card-label-btn:hover {
+  opacity: 1;
+}
+
+.card-hidden {
+  display: none;
+}
+
+/* ─── Filter bar ─── */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.filter-bar-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-right: 0.25rem;
+}
+
+.filter-chip {
+  border: 2px solid;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 120ms;
+}
+
+.filter-chip:hover {
+  opacity: 0.85;
+}
+
+.filter-chip.active {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.filter-clear {
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.35rem;
+}
+
+.filter-clear:hover {
+  background: #dc2626;
+}
+
+/* ─── Label manager ─── */
+
+.label-manager {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+}
+
+.label-manager-toggle {
+  background: #334155;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2);
+}
+
+.label-manager-toggle:hover {
+  background: #1e293b;
+}
+
+.label-manager-panel {
+  position: absolute;
+  bottom: 3rem;
+  right: 0;
+  width: 310px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.15);
+  padding: 1rem;
+}
+
+.label-manager-panel.hidden {
+  display: none;
+}
+
+.label-manager-panel h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.create-label-form {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.create-label-form input[name="name"] {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.create-label-form input[name="color"] {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.create-label-form button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.create-label-form button:hover {
+  background: #1d4ed8;
+}
+
+.label-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.label-item .label-chip {
+  flex: 1;
+}
+
+.label-edit-btn, .label-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  padding: 0.15rem;
+}
+
+.label-edit-btn:hover, .label-delete-btn:hover {
+  opacity: 1;
+}
+
+/* ─── Label edit dialog ─── */
+
+.label-edit-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label-edit-dialog-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.label-edit-dialog-content {
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  padding: 1.25rem;
+  width: 300px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.2);
+}
+
+.label-edit-dialog-content h4 {
+  margin: 0 0 0.75rem;
+}
+
+.label-edit-dialog-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label-edit-dialog-content input[name="name"] {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem;
+  font: inherit;
+}
+
+.label-edit-dialog-content input[name="color"] {
+  width: 48px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.label-edit-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.label-edit-actions button[type="submit"] {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.label-edit-actions .cancel-btn {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  background: white;
+  cursor: pointer;
+}
+
+/* ─── Card label popover ─── */
+
+.card-label-popover {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-label-popover-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.card-label-popover-content {
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  padding: 1rem;
+  width: 280px;
+  max-height: 350px;
+  overflow-y: auto;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.2);
+}
+
+.card-label-popover-content h4 {
+  margin: 0 0 0.65rem;
+}
+
+.card-label-option {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0;
+  cursor: pointer;
+}
+
+.card-label-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.no-labels-msg {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.popover-close-btn {
+  display: block;
+  margin-top: 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  width: 100%;
+  text-align: center;
+}
+
+.popover-close-btn:hover {
+  background: #f1f5f9;
+}
+
+@media (max-width: 850px) {
+  .board { grid-template-columns: 1fr; }
+  .topbar { align-items: flex-start; flex-direction: column; }
+}

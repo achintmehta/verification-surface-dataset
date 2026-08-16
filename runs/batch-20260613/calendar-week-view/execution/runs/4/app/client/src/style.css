@@ -1,0 +1,513 @@
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 60px;          /* px per hour — change here only */
+  --total-height: calc(var(--hour-height) * 24);
+  --gutter-width: 56px;
+  --header-height: 64px;
+  --day-header-height: 56px;
+  --event-border-radius: 4px;
+  --today-color: #1a73e8;
+  --grid-line-color: #e5e7eb;
+  --half-line-color: #f3f4f6;
+  --bg: #ffffff;
+  --surface: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --event-default-bg: #3b82f6;
+  --event-default-border: #2563eb;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ============================================================
+   App Header
+   ============================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding: 0 20px;
+  border-bottom: 1px solid var(--grid-line-color);
+  background: var(--bg);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn {
+  background: none;
+  border: 1px solid var(--grid-line-color);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+.nav-btn:hover {
+  background: var(--surface);
+}
+
+.today-btn {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+}
+
+.week-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-left: 8px;
+  min-width: 200px;
+}
+
+.header-left, .header-right {
+  min-width: 120px;
+}
+
+/* ============================================================
+   Calendar Layout
+   ============================================================ */
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sticky day-header row */
+.calendar-header-row {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--grid-line-color);
+  background: var(--bg);
+  z-index: 5;
+}
+
+.time-gutter-header {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  border-right: 1px solid var(--grid-line-color);
+}
+
+.day-headers {
+  display: flex;
+  flex: 1;
+}
+
+.day-header {
+  flex: 1;
+  height: var(--day-header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--grid-line-color);
+  cursor: default;
+  user-select: none;
+}
+
+.day-header:last-child {
+  border-right: none;
+}
+
+.day-header .day-name {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.day-header .day-number {
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-top: 2px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.day-header.today .day-name {
+  color: var(--today-color);
+}
+
+.day-header.today .day-number {
+  background: var(--today-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Scrollable body */
+.calendar-body-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.calendar-body {
+  display: flex;
+  height: var(--total-height);
+  position: relative;
+}
+
+/* ============================================================
+   Time Gutter
+   ============================================================ */
+.time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid var(--grid-line-color);
+}
+
+.time-label {
+  position: absolute;
+  right: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1;
+  /* Vertically center the label on the hour line */
+  transform: translateY(-50%);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* ============================================================
+   Day Columns
+   ============================================================ */
+.day-columns {
+  display: flex;
+  flex: 1;
+}
+
+.day-col {
+  flex: 1;
+  position: relative;
+  border-right: 1px solid var(--grid-line-color);
+  overflow: hidden;
+}
+
+.day-col:last-child {
+  border-right: none;
+}
+
+/* Hour grid lines inside each day column */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--grid-line-color);
+  pointer-events: none;
+}
+
+.half-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--half-line-color);
+  pointer-events: none;
+}
+
+/* Today column highlight */
+.day-col.today {
+  background: #f0f7ff;
+}
+
+/* Drag-selection highlight */
+.drag-selection {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 2px solid rgba(59, 130, 246, 0.6);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ============================================================
+   Event Blocks
+   ============================================================ */
+.event-block {
+  position: absolute;
+  border-radius: var(--event-border-radius);
+  padding: 3px 6px;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+  transition: filter 0.1s, box-shadow 0.1s;
+  z-index: 2;
+  /* Prevent text from overflowing */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.event-block:hover {
+  filter: brightness(0.92);
+  box-shadow: var(--shadow-md);
+  z-index: 3;
+}
+
+.event-block .event-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-block .event-time {
+  font-size: 11px;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+/* Color palette for events — cycle by index */
+.event-color-0 { background: #3b82f6; border-left: 3px solid #1d4ed8; color: #fff; }
+.event-color-1 { background: #10b981; border-left: 3px solid #047857; color: #fff; }
+.event-color-2 { background: #f59e0b; border-left: 3px solid #b45309; color: #fff; }
+.event-color-3 { background: #ef4444; border-left: 3px solid #b91c1c; color: #fff; }
+.event-color-4 { background: #8b5cf6; border-left: 3px solid #6d28d9; color: #fff; }
+.event-color-5 { background: #ec4899; border-left: 3px solid #be185d; color: #fff; }
+.event-color-6 { background: #06b6d4; border-left: 3px solid #0e7490; color: #fff; }
+.event-color-7 { background: #84cc16; border-left: 3px solid #4d7c0f; color: #fff; }
+
+/* ============================================================
+   Modal
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal {
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  width: 420px;
+  max-width: 95vw;
+  padding: 24px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.modal-close:hover {
+  background: var(--surface);
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-group input {
+  border: 1px solid var(--grid-line-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.form-group input:focus {
+  border-color: var(--today-color);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+}
+
+.form-error {
+  color: #dc2626;
+  font-size: 13px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.form-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-delete {
+  background: none;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.btn-delete:hover {
+  background: #fef2f2;
+}
+
+.btn-delete.hidden {
+  display: none;
+}
+
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--grid-line-color);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.btn-cancel:hover {
+  background: var(--surface);
+}
+
+.btn-save {
+  background: var(--today-color);
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: filter 0.15s;
+}
+
+.btn-save:hover {
+  filter: brightness(0.9);
+}
+
+/* ============================================================
+   Current time indicator
+   ============================================================ */
+.current-time-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ef4444;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.current-time-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+}

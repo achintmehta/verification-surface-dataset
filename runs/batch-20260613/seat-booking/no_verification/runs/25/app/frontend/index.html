@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="session-info">
+        Session: <span id="session-id-display"></span>
+        <span id="connection-status" class="status-dot disconnected" title="SSE disconnected"></span>
+      </div>
+    </header>
+
+    <main>
+      <div id="stage">STAGE</div>
+
+      <div id="seat-map-container">
+        <div id="seat-map"></div>
+      </div>
+
+      <div id="legend">
+        <div class="legend-item"><span class="legend-color available"></span> Available</div>
+        <div class="legend-item"><span class="legend-color held"></span> Held (others)</div>
+        <div class="legend-item"><span class="legend-color held-mine"></span> Your hold</div>
+        <div class="legend-item"><span class="legend-color selected"></span> Selected</div>
+        <div class="legend-item"><span class="legend-color booked"></span> Booked</div>
+        <div class="legend-item"><span class="legend-color booked-mine"></span> Your booking</div>
+      </div>
+
+      <div id="actions-panel">
+        <div id="selection-info">
+          <span id="selected-count">0</span> seat(s) selected
+        </div>
+
+        <div id="hold-info" class="hidden">
+          <p>Hold active — expires in <span id="hold-countdown">--</span>s</p>
+          <button id="btn-confirm" class="btn btn-confirm">Confirm Booking</button>
+          <button id="btn-release" class="btn btn-release">Release Hold</button>
+        </div>
+
+        <button id="btn-hold" class="btn btn-hold" disabled>Hold Selected Seats</button>
+
+        <div id="booking-success" class="hidden">
+          <p>✅ Booking confirmed!</p>
+        </div>
+
+        <div id="error-message" class="hidden"></div>
+      </div>
+
+      <div id="inventory-bar">
+        <span>Available: <strong id="inv-available">0</strong></span>
+        <span>Held: <strong id="inv-held">0</strong></span>
+        <span>Booked: <strong id="inv-booked">0</strong></span>
+        <span>Total: <strong id="inv-total">0</strong></span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

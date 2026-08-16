@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="4" width="7" height="20" rx="2" fill="currentColor" opacity="0.9"/>
+          <rect x="10.5" y="4" width="7" height="14" rx="2" fill="currentColor" opacity="0.7"/>
+          <rect x="19" y="4" width="7" height="9" rx="2" fill="currentColor" opacity="0.5"/>
+        </svg>
+      </span>
+      <h1 class="header-title">Kanban Board</h1>
+      <span class="connection-badge" id="connection-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-label">Connecting…</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="board-wrapper">
+    <div class="board" id="board">
+      <!-- columns rendered by JS -->
+    </div>
+  </main>
+
+  <!-- Card creation modal -->
+  <div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 class="modal-title" id="modal-title">Add a card</h2>
+      <textarea
+        id="card-text-input"
+        class="modal-textarea"
+        placeholder="What needs to be done?"
+        rows="3"
+        maxlength="500"
+      ></textarea>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modal-confirm">Add Card</button>
+        <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

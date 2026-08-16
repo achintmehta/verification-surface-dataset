@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <div>
+          <h1>Seat Booking</h1>
+          <p>Atomic holds, idempotent confirmation, expiry, and live SSE updates.</p>
+        </div>
+        <div class="session-card">
+          <span>Session</span>
+          <code id="sessionId"></code>
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <div id="inventory" class="inventory"></div>
+        <div class="actions">
+          <button id="holdBtn" disabled>Hold selected seats</button>
+          <button id="confirmBtn" disabled>Confirm hold</button>
+          <button id="releaseBtn" disabled>Release hold</button>
+          <button id="refreshBtn">Refresh</button>
+        </div>
+      </section>
+
+      <section id="holdPanel" class="hold-panel hidden">
+        <strong>Current hold:</strong>
+        <span id="holdDetails"></span>
+      </section>
+
+      <section id="message" class="message" role="status"></section>
+
+      <section class="stage">STAGE</section>
+      <section id="seatGrid" class="seat-grid" aria-label="Seat map"></section>
+
+      <footer class="legend">
+        <span><i class="swatch available"></i>Available</span>
+        <span><i class="swatch selected"></i>Selected</span>
+        <span><i class="swatch held"></i>Held</span>
+        <span><i class="swatch mine"></i>My hold</span>
+        <span><i class="swatch booked"></i>Booked</span>
+      </footer>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

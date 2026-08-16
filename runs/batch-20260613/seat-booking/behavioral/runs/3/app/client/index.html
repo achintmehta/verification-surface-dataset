@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="connection-status" class="status-dot disconnected" title="SSE connection"></div>
+    </header>
+
+    <main>
+      <section id="seat-map-section">
+        <div id="legend">
+          <span class="legend-item available">Available</span>
+          <span class="legend-item held">Held</span>
+          <span class="legend-item booked">Booked</span>
+          <span class="legend-item selected">Selected</span>
+        </div>
+
+        <div id="stage">STAGE</div>
+        <div id="seat-map" aria-label="Seat map"></div>
+      </section>
+
+      <aside id="panel">
+        <div id="inventory">
+          <h2>Inventory</h2>
+          <div class="inv-row"><span>Available</span><span id="inv-available">–</span></div>
+          <div class="inv-row"><span>Held</span><span id="inv-held">–</span></div>
+          <div class="inv-row"><span>Booked</span><span id="inv-booked">–</span></div>
+          <div class="inv-row total"><span>Total</span><span id="inv-total">–</span></div>
+        </div>
+
+        <div id="action-panel">
+          <h2>Your Selection</h2>
+          <p id="selection-info">Click available seats to select them.</p>
+
+          <div id="hold-section" class="hidden">
+            <p id="selected-seats-label"></p>
+            <button id="btn-hold">Hold Selected Seats</button>
+          </div>
+
+          <div id="confirm-section" class="hidden">
+            <p id="hold-info"></p>
+            <div id="countdown-bar">
+              <div id="countdown-fill"></div>
+            </div>
+            <p id="countdown-label"></p>
+            <div class="btn-row">
+              <button id="btn-confirm" class="primary">Confirm Booking</button>
+              <button id="btn-release" class="secondary">Release Hold</button>
+            </div>
+          </div>
+
+          <div id="booked-section" class="hidden">
+            <p id="booked-info"></p>
+            <button id="btn-new-booking">Start New Booking</button>
+          </div>
+
+          <div id="error-section" class="hidden">
+            <p id="error-msg" class="error-text"></p>
+            <button id="btn-dismiss-error">Dismiss</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

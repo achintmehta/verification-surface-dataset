@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week Calendar</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="toolbar">
+        <div class="nav">
+          <button id="prev" type="button">&larr; Prev</button>
+          <button id="today" type="button">Today</button>
+          <button id="next" type="button">Next &rarr;</button>
+        </div>
+        <h1 id="range-label" class="range-label"></h1>
+      </header>
+
+      <div class="calendar" id="calendar">
+        <div class="corner"></div>
+        <div class="day-headers" id="day-headers"></div>
+
+        <div class="time-axis" id="time-axis"></div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+
+    <!-- Event form modal -->
+    <div class="modal-backdrop" id="modal-backdrop" hidden>
+      <form class="modal" id="event-form">
+        <h2 id="form-title">New event</h2>
+        <label>
+          Title
+          <input type="text" id="field-title" autocomplete="off" />
+        </label>
+        <label>
+          Start
+          <input type="datetime-local" id="field-start" />
+        </label>
+        <label>
+          End
+          <input type="datetime-local" id="field-end" />
+        </label>
+        <p class="form-error" id="form-error"></p>
+        <div class="modal-actions">
+          <button type="button" id="form-delete" class="danger" hidden>Delete</button>
+          <span class="spacer"></span>
+          <button type="button" id="form-cancel">Cancel</button>
+          <button type="submit" id="form-save" class="primary">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

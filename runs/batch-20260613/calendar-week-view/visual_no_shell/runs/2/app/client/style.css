@@ -1,0 +1,433 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  overflow: hidden;
+}
+
+/* ── App shell ────────────────────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Top nav header ───────────────────────────────────────────────────────── */
+#cal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: #fff;
+  border-bottom: 1px solid #dde1e7;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  z-index: 30;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-controls button {
+  padding: 6px 14px;
+  border: 1px solid #c8cdd5;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  transition: background .15s, border-color .15s;
+}
+
+.nav-controls button:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+#week-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ── Sticky header row (day names + dates) ────────────────────────────────── */
+#header-row {
+  display: flex;
+  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 2px solid #dde1e7;
+  z-index: 20;
+}
+
+#header-gutter {
+  width: 52px;
+  flex-shrink: 0;
+  border-right: 1px solid #dde1e7;
+}
+
+#header-days {
+  display: flex;
+  flex: 1;
+}
+
+.day-header {
+  flex: 1;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #e5e7eb;
+  cursor: default;
+  user-select: none;
+  background: #fff;
+}
+
+.day-header:last-child {
+  border-right: none;
+}
+
+.day-header .day-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.day-header .day-date {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.2;
+}
+
+/* Today highlight */
+.day-header.today {
+  background: #eff6ff;
+}
+
+.day-header.today .day-name {
+  color: #2563eb;
+}
+
+.day-header.today .day-date {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* ── Scrollable body ──────────────────────────────────────────────────────── */
+#scroll-area {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+}
+
+#scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+#scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+#scroll-area::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+/* ── Time gutter ──────────────────────────────────────────────────────────── */
+#time-gutter {
+  width: 52px;
+  flex-shrink: 0;
+  border-right: 1px solid #dde1e7;
+  position: relative;
+  background: #fff;
+  /* height set by JS */
+}
+
+.time-label {
+  position: absolute;
+  right: 6px;
+  font-size: 10px;
+  color: #6b7280;
+  line-height: 1;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ── Days grid ────────────────────────────────────────────────────────────── */
+#days-grid {
+  display: flex;
+  flex: 1;
+  /* height set by JS */
+}
+
+/* ── Day column ───────────────────────────────────────────────────────────── */
+.day-col {
+  flex: 1;
+  border-right: 1px solid #e5e7eb;
+  position: relative;
+  min-width: 0;
+}
+
+.day-col:last-child {
+  border-right: none;
+}
+
+/* Events area */
+.day-events-area {
+  position: relative;
+  /* height set by JS */
+}
+
+/* Hour lines */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e5e7eb;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hour-line.midnight {
+  border-top-color: #d1d5db;
+}
+
+/* Half-hour lines */
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #f0f0f0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Drag-selection ghost */
+.drag-ghost {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  background: rgba(37, 99, 235, .15);
+  border: 1.5px dashed #2563eb;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Current time indicator ───────────────────────────────────────────────── */
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px solid #ef4444;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.now-dot {
+  position: absolute;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ── Event blocks ─────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: 5px;
+  padding: 3px 5px;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 2;
+  border: 1.5px solid rgba(0,0,0,.12);
+  transition: filter .1s, box-shadow .1s;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  user-select: none;
+}
+
+.event-block:hover {
+  filter: brightness(.93);
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  z-index: 3;
+}
+
+.event-block .ev-title {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-block .ev-time {
+  font-size: 10px;
+  opacity: .85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+/* Colour palette – assigned by event id mod 8 */
+.ev-color-0 { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+.ev-color-1 { background: #dcfce7; color: #166534; border-color: #86efac; }
+.ev-color-2 { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+.ev-color-3 { background: #fce7f3; color: #9d174d; border-color: #f9a8d4; }
+.ev-color-4 { background: #ede9fe; color: #5b21b6; border-color: #c4b5fd; }
+.ev-color-5 { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+.ev-color-6 { background: #cffafe; color: #155e75; border-color: #67e8f9; }
+.ev-color-7 { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  width: 360px;
+  max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+#modal h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+#event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#event-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+}
+
+#event-form input {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #111827;
+  outline: none;
+  transition: border-color .15s;
+}
+
+#event-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.15);
+}
+
+#form-error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+#form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.form-actions button {
+  flex: 1;
+  padding: 9px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+#btn-save {
+  background: #2563eb;
+  color: #fff;
+}
+
+#btn-save:hover {
+  background: #1d4ed8;
+}
+
+#btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+#btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+#btn-delete {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+#btn-delete:hover {
+  background: #fecaca;
+}
+
+#btn-delete.hidden {
+  display: none;
+}

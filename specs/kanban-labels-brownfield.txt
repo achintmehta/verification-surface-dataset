@@ -1,0 +1,100 @@
+## Context
+
+We have a working multi-user Kanban board already in production: a Node.js + Express backend with an embedded PGLite database, Server-Sent Events broadcasting every mutation to connected clients, and a Vanilla JS / Vite frontend with drag-and-drop. **Its complete source code is already present in your workspace** (backend in `server/`, frontend in `src/` and `index.html`). It is not a prototype to be replaced: it has live users and persisted data.
+
+This change request adds **labels** to the board: named, colored tags that can be created, assigned to cards, and used to filter the board. The existing application's behavior, API, and stored data must be preserved — this is an extension of a running system, not a rewrite.
+
+## Goals / Non-Goals
+
+**Goals:**
+- Create, rename, recolor, and delete labels (a label has a name and a color).
+- Assign any number of labels to a card and remove them; labels render on cards as colored chips.
+- Filter the board by one or more labels; filtering is per-client view state and hides non-matching cards.
+- Persist labels and their card assignments in the existing PGLite database, preserving all existing data (columns, cards, ordering) through the schema change.
+- Broadcast label mutations over the existing SSE channel so all connected clients converge, exactly as card mutations already do.
+
+**Non-Goals:**
+- Rewriting, restructuring, or reformatting the existing application beyond what the feature requires.
+- Changing existing endpoint paths, request shapes, or response shapes (additive response fields are acceptable).
+- Label-based permissions, label descriptions, or per-board label sets.
+
+## Decisions
+
+**Decision 1: Extend, don't rewrite**
+- *Rationale*: The codebase is healthy and in production. The cheapest reliable change is additive: new tables, new endpoints, new render code — with minimal edits to existing functions. Every existing behavior is regression-tested by the acceptance criteria below.
+
+**Decision 2: Many-to-many schema, additive migration**
+- *Rationale*: A `labels` table plus a `card_labels` join table model the relationship without touching the existing `cards` and `columns` tables. The migration runs at startup with IF NOT EXISTS semantics so an existing database upgrades in place — and existing rows survive.
+
+**Decision 3: Labels ride the existing board payload and SSE channel**
+- *Rationale*: `GET /api/board` already returns columns with their cards; each card additionally carries its labels (an added field — existing fields unchanged). Label mutations broadcast on the same SSE stream cards already use, so clients need no second connection.
+
+**Decision 4: Filtering is client-side view state**
+- *Rationale*: The board is small; hiding non-matching cards client-side avoids new query parameters on existing endpoints and keeps multi-select filtering instant. The filter affects only what the filtering client sees.
+
+## Risks / Trade-offs
+
+- [Risk] The schema migration corrupts or drops existing data.
+  - *Mitigation*: Additive-only DDL; acceptance criteria require pre-existing columns, cards, and ordering to be intact after upgrade and restart.
+- [Risk] Edits to the board payload or SSE events break existing clients.
+  - *Mitigation*: Existing fields and event semantics are frozen; labels are added as new fields/events. The original acceptance criteria of the board remain graded.
+- [Risk] Deleting a label that is still assigned leaves dangling references.
+  - *Mitigation*: Deleting a label removes its assignments (cascade or explicit cleanup) and broadcasts the change.
+
+## Why
+
+Real engineering is mostly modification of existing systems under a do-no-harm constraint. This task measures exactly that: understanding code you did not write, extending its schema and API without breaking its contracts, and proving the old behavior still holds alongside the new.
+
+## What Changes
+
+- New `labels` and `card_labels` tables in the existing PGLite database, migrated additively at startup.
+- New label CRUD and assignment endpoints; card data in `GET /api/board` additionally carries labels.
+- Label mutations broadcast over the existing SSE stream.
+- Frontend: label management UI, label chips on cards, and a multi-select label filter.
+
+## Capabilities
+
+### New Capabilities
+- `card-labels`: label CRUD, card assignment, chips on cards, label filtering, label SSE events.
+
+### Modified Capabilities
+- `kanban-board`: board payload extended (additively) with per-card labels; all existing behavior preserved.
+
+## Impact
+
+Touches the existing server (schema init, board query, new routes, SSE broadcast) and the existing frontend (card rendering, new filter bar and label manager). No changes to existing endpoint contracts.
+
+## 1. Schema & Migration
+
+- [ ] 1.1 Add `labels` (`id`, `name` unique non-empty, `color` as a hex value) and `card_labels` (`card_id`, `label_id`, unique pair) via additive startup migration
+- [ ] 1.2 Verify an existing database upgrades in place: pre-existing columns, cards, and their ordering remain intact after the migration
+
+## 2. API
+
+- [ ] 2.1 `GET /api/labels`; `POST /api/labels` (validate name non-empty + unique, color is a valid hex value; 400/409 otherwise); `PUT /api/labels/:id`; `DELETE /api/labels/:id` (also removes its card assignments)
+- [ ] 2.2 `POST /api/cards/:id/labels` `{ labelId }` and `DELETE /api/cards/:id/labels/:labelId` to assign/unassign
+- [ ] 2.3 Extend `GET /api/board` so each card carries its labels — existing fields and shapes unchanged
+- [ ] 2.4 Broadcast every label mutation (create/update/delete/assign/unassign) on the existing SSE stream
+
+## 3. Frontend
+
+- [ ] 3.1 Label manager UI: list, create (name + color picker), rename, recolor, delete
+- [ ] 3.2 Cards render their labels as colored chips; assign/remove labels from a card's UI
+- [ ] 3.3 Filter bar with multi-select of labels: the board shows only cards carrying at least one selected label; clearing the filter restores all cards
+- [ ] 3.4 Live updates: label changes made by one client appear on all connected clients without reload
+
+## Acceptance Criteria (graded)
+
+**Regression — the original board's criteria still hold:**
+- A newly created card appears on every connected client.
+- Moving a card across columns updates all clients; the card exists in exactly one column on every client.
+- Card ordering within each column remains total and stable; reloading any client reproduces the server's exact board state.
+- All pre-existing data (columns, cards, ordering) survives the upgrade and a full server restart.
+- Existing endpoints respond with their original shapes (added fields permitted, removals/renames not).
+
+**New — labels:**
+- Labels can be created, renamed, recolored, and deleted; duplicate or empty names are rejected and persist nothing.
+- Assigning and unassigning labels updates the card's chips on every connected client in real time.
+- Deleting a label removes its chips from all cards on all clients and leaves no dangling assignments.
+- Filtering by one or more labels hides exactly the non-matching cards for the filtering client only, and does not mutate any server state.
+- Labels and assignments survive a full server restart.

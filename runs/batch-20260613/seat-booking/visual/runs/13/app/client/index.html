@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <h1>🎫 Live Seat Booking</h1>
+        <div class="legend">
+          <span class="legend-item"><i class="swatch available"></i> Available</span>
+          <span class="legend-item"><i class="swatch selected"></i> Selected</span>
+          <span class="legend-item"><i class="swatch held"></i> Held</span>
+          <span class="legend-item"><i class="swatch mine"></i> Your hold</span>
+          <span class="legend-item"><i class="swatch booked"></i> Booked</span>
+        </div>
+      </header>
+
+      <main>
+        <div class="screen">STAGE</div>
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="inventory">
+          <span>Available: <b id="inv-available">–</b></span>
+          <span>Held: <b id="inv-held">–</b></span>
+          <span>Booked: <b id="inv-booked">–</b></span>
+        </div>
+      </main>
+
+      <aside class="panel">
+        <div class="session">
+          Session: <code id="session-id"></code>
+        </div>
+
+        <div id="selection-info">
+          <p class="muted">Select available seats, then place a hold.</p>
+          <p>Selected: <b id="selected-count">0</b></p>
+        </div>
+
+        <div id="hold-info" class="hold-info hidden">
+          <p>Hold active on <b id="held-count">0</b> seat(s).</p>
+          <p class="countdown">Expires in <b id="countdown">--</b>s</p>
+        </div>
+
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" class="primary hidden">Confirm booking</button>
+          <button id="release-btn" class="danger hidden">Release hold</button>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </aside>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

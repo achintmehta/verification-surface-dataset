@@ -1,0 +1,151 @@
+/* ------------------------------------------------------------------
+   Global reset & variables
+   ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --text: #1e1e2e;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --radius: 8px;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------
+   Layout – full-height flex column
+   ------------------------------------------------------------------ */
+#app {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+  height: 100vh;
+  margin: 0 auto;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+/* ------------------------------------------------------------------
+   Header
+   ------------------------------------------------------------------ */
+header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header h1 {
+  font-size: 1.25rem;
+}
+
+.status {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.status.connected {
+  color: #16a34a;
+}
+
+.status.error {
+  color: #dc2626;
+}
+
+/* ------------------------------------------------------------------
+   Message list
+   ------------------------------------------------------------------ */
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 20px;
+}
+
+#messages {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#messages li {
+  background: var(--bg);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  word-wrap: break-word;
+  line-height: 1.45;
+}
+
+#messages li .meta {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ------------------------------------------------------------------
+   Footer / form
+   ------------------------------------------------------------------ */
+footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+
+#message-form {
+  display: flex;
+  gap: 8px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#message-input:focus {
+  border-color: var(--primary);
+}
+
+#message-form button {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#message-form button:hover {
+  background: var(--primary-hover);
+}
+
+#message-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,0 +1,342 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --hour-height: 60px;
+  --gutter-width: 60px;
+  --header-height: 50px;
+  --day-header-height: 50px;
+  --total-hours: 24;
+  --axis-height: calc(var(--hour-height) * var(--total-hours)); /* 1440px */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  height: var(--header-height);
+  flex-shrink: 0;
+  gap: 20px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-buttons button {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.nav-buttons button:hover {
+  background: #e8e8e8;
+}
+
+.toolbar h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Calendar Container */
+.calendar-container {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Time Gutter */
+.time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.time-gutter .hour-label {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: right;
+  padding-right: 8px;
+  font-size: 11px;
+  color: #888;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Days Container */
+.days-container {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.day-column {
+  flex: 1;
+  position: relative;
+  border-right: 1px solid #eee;
+  min-width: 0;
+}
+
+.day-column:last-child {
+  border-right: none;
+}
+
+.day-header {
+  height: var(--day-header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #ddd;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  font-size: 12px;
+  color: #666;
+}
+
+.day-header .day-name {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.day-header .day-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.day-column.today .day-header {
+  background: #e3f2fd;
+}
+
+.day-column.today .day-header .day-number {
+  background: #1a73e8;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-body {
+  position: relative;
+  height: var(--axis-height);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid #eee;
+}
+
+.hour-line.major {
+  border-top: 1px solid #ddd;
+}
+
+/* Event block */
+.event-block {
+  position: absolute;
+  border-radius: 4px;
+  padding: 2px 4px;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.3;
+  border-left: 3px solid;
+  transition: box-shadow 0.15s;
+  z-index: 5;
+}
+
+.event-block:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 6;
+}
+
+.event-block .event-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-block .event-time {
+  font-size: 10px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Event colors */
+.event-block {
+  background: #d4e5ff;
+  border-left-color: #1a73e8;
+  color: #1a4b8e;
+}
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+}
+
+.form-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-bottom: 8px;
+  min-height: 18px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  background: #fff;
+}
+
+.form-actions button[type="submit"] {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+}
+
+.form-actions button[type="submit"]:hover {
+  background: #1557b0;
+}
+
+.form-actions .btn-danger {
+  background: #d32f2f;
+  color: #fff;
+  border-color: #d32f2f;
+}
+
+.form-actions .btn-danger:hover {
+  background: #b71c1c;
+}
+
+.form-actions button:last-child {
+  background: #f5f5f5;
+}
+
+/* Click-to-create overlay */
+.day-body {
+  cursor: crosshair;
+}
+
+/* Selection highlight during drag */
+.selection-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(26, 115, 232, 0.15);
+  border: 1px dashed #1a73e8;
+  border-radius: 4px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Time gutter header spacer */
+.time-gutter-header {
+  height: var(--day-header-height);
+  border-bottom: 2px solid #ddd;
+  background: #fafafa;
+  position: sticky;
+  top: 0;
+  z-index: 11;
+}

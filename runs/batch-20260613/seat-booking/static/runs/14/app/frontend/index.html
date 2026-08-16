@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <h1>Live Seat Booking</h1>
+        <div class="status">
+          <span id="connection" class="conn disconnected">connecting…</span>
+          <span id="inventory" class="inventory"></span>
+        </div>
+      </header>
+
+      <main>
+        <section class="stage">STAGE</section>
+
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <section class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch held"></i> Held (by others)</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </section>
+
+        <section class="controls">
+          <div id="message" class="message" role="status"></div>
+          <div class="buttons">
+            <button id="holdBtn" disabled>Hold selected seats</button>
+            <button id="confirmBtn" disabled>Confirm booking</button>
+            <button id="releaseBtn" disabled>Release hold</button>
+          </div>
+          <div id="countdown" class="countdown"></div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

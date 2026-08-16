@@ -1,0 +1,132 @@
+:root {
+  --bg: #1d2125;
+  --col-bg: #22272b;
+  --card-bg: #2c333a;
+  --card-hover: #343c44;
+  --text: #dee4ea;
+  --muted: #8a96a3;
+  --accent: #4f9cf9;
+  --drop: #3a4754;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #0d1114;
+}
+
+.app-header h1 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.conn {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.conn--on { background: #1f3a2a; color: #6ee7a0; }
+.conn--off { background: #3a1f1f; color: #f0a0a0; }
+
+.board {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  min-height: calc(100vh - 60px);
+}
+
+.column {
+  background: var(--col-bg);
+  border-radius: 10px;
+  width: 290px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 110px);
+}
+
+.column__title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.85rem 1rem 0.5rem;
+}
+
+.column__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0.6rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 24px;
+}
+
+.column__cards.drag-over {
+  background: var(--drop);
+  border-radius: 8px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 7px;
+  padding: 0.65rem 0.75rem;
+  margin: 0.4rem 0;
+  font-size: 0.875rem;
+  cursor: grab;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.card:hover { background: var(--card-hover); }
+.card.dragging { opacity: 0.4; }
+
+.card--placeholder {
+  border: 2px dashed var(--accent);
+  background: transparent;
+  height: 38px;
+  margin: 0.4rem 0;
+  border-radius: 7px;
+}
+
+.add-card {
+  padding: 0.5rem 0.85rem 0.85rem;
+}
+
+.add-card textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 36px;
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid #3a444d;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.add-card button {
+  margin-top: 0.4rem;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.add-card button:hover { filter: brightness(1.08); }

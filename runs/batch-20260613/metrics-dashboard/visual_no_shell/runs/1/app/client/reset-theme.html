@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reset Theme</title>
+  <script>
+    (async () => {
+      await fetch('http://localhost:3001/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ theme: 'light' })
+      });
+      window.location.href = '/';
+    })();
+  </script>
+</head>
+<body><p style="font-family:sans-serif;padding:2rem">Resetting theme…</p></body>
+</html>

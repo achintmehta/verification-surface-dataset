@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test Validation</title></head>
+<body>
+<h2>Testing API Validation</h2>
+<pre id="log"></pre>
+<script>
+async function test() {
+  const log = document.getElementById('log');
+
+  // Test 1: Empty title
+  try {
+    const res = await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: '', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' })
+    });
+    const data = await res.json();
+    log.textContent += `Test 1 (empty title): ${res.status} - ${JSON.stringify(data)}\n`;
+  } catch(e) { log.textContent += `Test 1 error: ${e.message}\n`; }
+
+  // Test 2: end before start
+  try {
+    const res = await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Bad Event', start_at: '2026-06-15T10:00:00Z', end_at: '2026-06-15T09:00:00Z' })
+    });
+    const data = await res.json();
+    log.textContent += `Test 2 (end < start): ${res.status} - ${JSON.stringify(data)}\n`;
+  } catch(e) { log.textContent += `Test 2 error: ${e.message}\n`; }
+
+  // Test 3: end equals start
+  try {
+    const res = await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Equal', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T09:00:00Z' })
+    });
+    const data = await res.json();
+    log.textContent += `Test 3 (end == start): ${res.status} - ${JSON.stringify(data)}\n`;
+  } catch(e) { log.textContent += `Test 3 error: ${e.message}\n`; }
+
+  // Test 4: whitespace-only title
+  try {
+    const res = await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: '   ', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' })
+    });
+    const data = await res.json();
+    log.textContent += `Test 4 (whitespace title): ${res.status} - ${JSON.stringify(data)}\n`;
+  } catch(e) { log.textContent += `Test 4 error: ${e.message}\n`; }
+
+  // Test 5: Valid event (should succeed)
+  try {
+    const res = await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Valid Event', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' })
+    });
+    const data = await res.json();
+    log.textContent += `Test 5 (valid): ${res.status} - ${JSON.stringify(data)}\n`;
+
+    // Clean up: delete the valid event
+    if (data.id) {
+      await fetch('/api/events/' + data.id, { method: 'DELETE' });
+      log.textContent += `Cleaned up test event\n`;
+    }
+  } catch(e) { log.textContent += `Test 5 error: ${e.message}\n`; }
+
+  log.textContent += '\nDone!';
+}
+
+test();
+</script>
+</body>
+</html>

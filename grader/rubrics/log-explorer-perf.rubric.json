@@ -1,0 +1,32 @@
+{
+  "task": "log-explorer-perf",
+  "title": "Log Explorer (Performance) \u2014 visual/manual rubric",
+  "setup": "npm install; npm run dev; wait for first-boot seeding. Use DevTools (Elements panel) for the DOM item.",
+  "items": [
+    {
+      "id": "LE-V1",
+      "weight": 3,
+      "criterion": "Scrolling through the 100k-row list is smooth: no page freeze, no permanently blank viewport regions, at top/middle/bottom."
+    },
+    {
+      "id": "LE-V2",
+      "weight": 2,
+      "criterion": "The scrollbar reflects the filtered total; dragging it to the middle or end shows plausible, correctly-ordered rows for that position."
+    },
+    {
+      "id": "LE-V3",
+      "weight": 2,
+      "criterion": "Typing in the search box stays responsive while results update; rapid query changes never leave stale results on screen."
+    },
+    {
+      "id": "LE-V4",
+      "weight": 1,
+      "criterion": "Severity color-coding is visible and the 'N of <total>' indicator updates with each filter change."
+    },
+    {
+      "id": "LE-V5",
+      "weight": 2,
+      "criterion": "DevTools check: the number of rendered row elements stays bounded (~100 or fewer) regardless of scroll position."
+    }
+  ]
+}

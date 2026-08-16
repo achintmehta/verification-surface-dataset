@@ -1,0 +1,37 @@
+:root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; background: #0b1020; color: #e8edf7; }
+* { box-sizing: border-box; }
+body { margin: 0; height: 100vh; overflow: hidden; }
+#app { height: 100vh; display: flex; flex-direction: column; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 24px 12px; border-bottom: 1px solid #263044; background: linear-gradient(180deg,#111936,#0d1429); }
+h1 { font-size: 22px; margin: 0; letter-spacing: .3px; }
+p { margin: 4px 0 0; color: #9aa8c7; font-size: 13px; }
+.stats { text-align: right; color: #b8c3dc; font-size: 13px; }
+.pill { display: inline-block; margin-left: 6px; padding: 3px 7px; border-radius: 999px; background: #19233b; border: 1px solid #2e3b5a; }
+.toolbar { display: flex; align-items: center; gap: 18px; padding: 12px 24px; border-bottom: 1px solid #263044; background: #0e162b; }
+label { display: flex; align-items: center; gap: 8px; color: #9aa8c7; font-size: 13px; }
+.search { flex: 1; }
+select, input { background: #101a33; color: #eff4ff; border: 1px solid #34415f; border-radius: 7px; padding: 8px 10px; outline: none; }
+input { width: min(520px, 100%); }
+select:focus, input:focus { border-color: #6aa6ff; box-shadow: 0 0 0 2px #2c5d9c55; }
+#count { margin-left: auto; color: #d6e2ff; min-width: 120px; text-align: right; }
+.tableHead, .row { display: grid; grid-template-columns: 210px 95px 115px minmax(500px,1fr); align-items: center; }
+.tableHead { height: 32px; padding: 0 24px; color: #7f8dad; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; background: #0b1224; border-bottom: 1px solid #263044; }
+.scroller { position: relative; flex: 1; overflow: auto; contain: strict; background: #080d1a; }
+.spacer { width: 1px; opacity: 0; }
+.rows { position: absolute; left: 0; top: 0; width: 100%; will-change: transform; }
+.row { height: 34px; padding: 0 24px; border-bottom: 1px solid #172038; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; background: #0b1020; }
+.row:nth-child(2n) { background: #0d1426; }
+.ts { color: #b9c5df; }
+.service { color: #8fb5ff; }
+.msg { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #d7def0; }
+.sev { display: inline-block; min-width: 56px; text-align: center; border-radius: 5px; padding: 3px 6px; text-transform: uppercase; font-size: 11px; }
+.debug { color: #9fb0ca; background: #273044; border-color: #3a455f; }
+.info { color: #8bc6ff; background: #103051; }
+.warn { color: #ffd37a; background: #4b3410; }
+.error { color: #ff9c9c; background: #4b171d; }
+.empty { padding: 40px; color: #96a4c0; }
+@media (max-width: 850px) {
+  header { align-items: flex-start; flex-direction: column; }
+  .toolbar { flex-wrap: wrap; }
+  .tableHead, .row { grid-template-columns: 170px 80px 80px minmax(300px,1fr); }
+}

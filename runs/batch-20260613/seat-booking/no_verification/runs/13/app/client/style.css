@@ -1,0 +1,166 @@
+:root {
+  --bg: #0f1220;
+  --panel: #1a1f33;
+  --available: #2e7d49;
+  --available-hover: #3aa05e;
+  --held: #b9892b;
+  --booked: #6b7280;
+  --mine: #4f7cff;
+  --text: #e8ebf5;
+  --muted: #9aa3bd;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px solid #262c44;
+}
+.app-header h1 { font-size: 1.25rem; margin: 0; }
+
+.conn { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-on { background: #36d399; box-shadow: 0 0 8px #36d399; }
+.dot-off { background: #ef5350; }
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.stage {
+  text-align: center;
+  letter-spacing: 6px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: linear-gradient(180deg, #20253c, #14172700);
+  border-radius: 50% 50% 6px 6px / 100% 100% 6px 6px;
+  padding: 12px 0 22px;
+  margin-bottom: 26px;
+  border-top: 2px solid #3a416b;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-label {
+  width: 22px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px 8px 4px 4px;
+  border: none;
+  font-size: 0.7rem;
+  color: #0b0d16;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.08s ease, filter 0.1s ease;
+  background: var(--available);
+}
+.seat:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); }
+
+.seat.available { background: var(--available); }
+.seat.held { background: var(--held); cursor: not-allowed; color: #1a1303; }
+.seat.booked { background: var(--booked); cursor: not-allowed; color: #14161f; }
+.seat.selected { background: var(--mine); outline: 2px solid #aac0ff; color: #fff; }
+.seat.mine { background: var(--mine); color: #fff; }
+.seat.conflict { animation: flash 0.6s ease 2; }
+
+@keyframes flash {
+  0%, 100% { box-shadow: 0 0 0 0 #ef5350; }
+  50% { box-shadow: 0 0 0 4px #ef5350; }
+}
+
+.seat:disabled { cursor: not-allowed; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin: 26px 0 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.swatch { width: 14px; height: 14px; border-radius: 4px; display: inline-block; vertical-align: -2px; margin-right: 4px; }
+.swatch.available { background: var(--available); }
+.swatch.held { background: var(--held); }
+.swatch.booked { background: var(--booked); }
+.swatch.mine { background: var(--mine); }
+
+.inventory {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.inventory b { color: var(--text); }
+
+.controls {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+}
+
+.selection-info { color: var(--muted); margin-bottom: 12px; }
+
+.hold-panel { margin-bottom: 12px; }
+.countdown { font-size: 1rem; }
+.countdown strong { color: var(--held); font-variant-numeric: tabular-nums; }
+
+.buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+button {
+  background: #2b3252;
+  color: var(--text);
+  border: 1px solid #3a416b;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+button:hover:not(:disabled) { background: #353d63; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button.primary { background: var(--mine); border-color: #6f95ff; }
+button.primary:hover:not(:disabled) { background: #6f95ff; }
+button.danger { background: #7a2c33; border-color: #a3434c; }
+button.danger:hover:not(:disabled) { background: #97373f; }
+
+.message { margin-top: 14px; min-height: 20px; font-size: 0.9rem; }
+.message.error { color: #ff8a8a; }
+.message.success { color: #58e0a3; }
+.message.info { color: var(--muted); }
+
+.session { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 20px; }
+.session code { color: var(--text); }
+
+.hidden { display: none !important; }

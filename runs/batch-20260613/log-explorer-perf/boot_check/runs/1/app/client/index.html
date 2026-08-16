@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-title">
+        <span class="logo">📋</span>
+        <h1>Log Explorer</h1>
+        <span id="corpus-badge" class="corpus-badge">Loading…</span>
+      </div>
+      <div class="filters">
+        <div class="filter-group">
+          <label for="severity-select">Severity</label>
+          <select id="severity-select">
+            <option value="">All</option>
+            <option value="error">Error</option>
+            <option value="warn">Warn</option>
+            <option value="info">Info</option>
+            <option value="debug">Debug</option>
+          </select>
+        </div>
+        <div class="filter-group search-group">
+          <label for="search-input">Search</label>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Filter by message…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="clear-search" class="clear-btn" title="Clear search">✕</button>
+        </div>
+        <div class="filter-group">
+          <span id="result-count" class="result-count">—</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col col-ts">Timestamp</div>
+        <div class="col col-severity">Severity</div>
+        <div class="col col-service">Service</div>
+        <div class="col col-message">Message</div>
+      </div>
+      <div id="scroll-container" class="scroll-container">
+        <div id="scroll-spacer" class="scroll-spacer"></div>
+        <div id="rows-container" class="rows-container"></div>
+      </div>
+      <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <span>Loading…</span>
+      </div>
+    </div>
+
+    <div id="status-bar" class="status-bar">
+      <span id="status-text">Initializing…</span>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

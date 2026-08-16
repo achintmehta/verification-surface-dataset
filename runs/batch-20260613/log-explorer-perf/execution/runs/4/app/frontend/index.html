@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-title">
+        <span class="header-icon">📋</span>
+        <h1>Log Explorer</h1>
+      </div>
+      <div class="header-stats" id="header-stats">
+        <span class="stat-badge" id="stat-total">Loading...</span>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="filter-group">
+        <label for="severity-select">Severity</label>
+        <select id="severity-select">
+          <option value="">All</option>
+          <option value="error">Error</option>
+          <option value="warn">Warn</option>
+          <option value="info">Info</option>
+          <option value="debug">Debug</option>
+        </select>
+        <div class="severity-badges" id="severity-badges"></div>
+      </div>
+
+      <div class="filter-group search-group">
+        <label for="search-input">Search</label>
+        <div class="search-wrapper">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Filter by message..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="search-clear" class="search-clear" title="Clear search" hidden>✕</button>
+        </div>
+      </div>
+
+      <div class="result-count" id="result-count">
+        <span id="count-display">—</span>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col-ts">Timestamp</div>
+        <div class="col-severity">Severity</div>
+        <div class="col-service">Service</div>
+        <div class="col-message">Message</div>
+      </div>
+
+      <div class="virtual-scroll-container" id="scroll-container">
+        <div class="virtual-scroll-spacer" id="scroll-spacer"></div>
+        <div class="virtual-rows" id="virtual-rows"></div>
+      </div>
+    </div>
+
+    <div class="status-bar" id="status-bar">
+      <span id="status-text">Initializing...</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

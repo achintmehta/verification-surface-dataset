@@ -1,0 +1,204 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f9f9f9;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+header button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+header h1 {
+  margin: 0 20px;
+  font-size: 1.2rem;
+}
+
+.calendar-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+}
+
+.time-axis-header {
+  width: 60px;
+  border-right: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.day-header {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  border-right: 1px solid #ddd;
+}
+
+.day-header.today {
+  background: #e6f7ff;
+  font-weight: bold;
+}
+
+.calendar-body {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  position: relative;
+  background: #fff;
+}
+
+.time-axis {
+  width: 60px;
+  position: relative;
+  border-right: 1px solid #ddd;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.time-label {
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  color: #666;
+  transform: translateY(-50%);
+}
+
+.day-columns {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.day-column {
+  flex: 1;
+  position: relative;
+  border-right: 1px solid #ddd;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #eee;
+  pointer-events: none;
+}
+
+.event {
+  position: absolute;
+  background: #1890ff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #096dd9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.event-title {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.modal h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions button {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background: #1890ff;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}

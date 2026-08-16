@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calendar Bottom Test</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #f8f9fa; }
+    h2 { padding: 10px 16px; margin: 0; background: #fff; border-bottom: 1px solid #e0e0e0; }
+    #frame-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 50px);
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 1440px; /* 24 hours * 60px */
+      border: none;
+      position: absolute;
+      /* Show the bottom portion: 23:00 = 23*60px = 1380px from top */
+      top: calc(-1380px + 56px + 44px); /* offset to show 23:00 area */
+    }
+  </style>
+</head>
+<body>
+<h2>Bottom of calendar (23:00–24:00 area) — verifying midnight clamp</h2>
+<div id="frame-container">
+  <iframe src="http://localhost:5173" id="cal-frame"></iframe>
+</div>
+<script>
+  const iframe = document.getElementById('cal-frame');
+  iframe.addEventListener('load', () => {
+    try {
+      // Scroll the iframe's scroll area to the bottom
+      const scrollArea = iframe.contentDocument.getElementById('scroll-area');
+      if (scrollArea) {
+        scrollArea.scrollTop = 23 * 60 - 100; // show 23:00 area
+      }
+    } catch(e) {
+      console.log('Cannot access iframe content (CORS):', e);
+    }
+  });
+</script>
+</body>
+</html>

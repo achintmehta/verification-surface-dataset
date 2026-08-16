@@ -1,0 +1,719 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Design tokens — light theme (default)
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Surfaces */
+  --color-bg:          #f0f2f5;
+  --color-surface:     #ffffff;
+  --color-surface-alt: #f8f9fb;
+  --color-border:      #e2e6ea;
+
+  /* Text */
+  --color-text-primary:   #1a1d23;
+  --color-text-secondary: #5a6270;
+  --color-text-muted:     #8a93a0;
+
+  /* Accent / brand */
+  --color-accent:       #4f6ef7;
+  --color-accent-light: #eef1fe;
+
+  /* Semantic */
+  --color-positive: #22c55e;
+  --color-negative: #ef4444;
+  --color-warning:  #f59e0b;
+
+  /* Chart */
+  --color-chart-line:      #4f6ef7;
+  --color-chart-area:      rgba(79, 110, 247, 0.12);
+  --color-chart-grid:      #e2e6ea;
+  --color-chart-axis:      #8a93a0;
+  --color-chart-label:     #5a6270;
+  --color-chart-dot:       #4f6ef7;
+  --color-chart-dot-fill:  #ffffff;
+
+  /* Bar chart */
+  --color-bar-fill:    #4f6ef7;
+  --color-bar-bg:      #e8ecfd;
+
+  /* Table */
+  --color-table-header-bg:  #f0f2f5;
+  --color-table-row-hover:  #f5f7ff;
+  --color-table-stripe:     #fafbfc;
+
+  /* Header */
+  --color-header-bg:     #ffffff;
+  --color-header-border: #e2e6ea;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,.08);
+
+  /* Spacing */
+  --gap: 1rem;
+  --card-radius: 0.75rem;
+  --card-padding: 1.25rem;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* ── Dark theme ─────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:          #0f1117;
+  --color-surface:     #1a1d27;
+  --color-surface-alt: #1f2230;
+  --color-border:      #2a2d3a;
+
+  --color-text-primary:   #e8eaf0;
+  --color-text-secondary: #9aa0b0;
+  --color-text-muted:     #5a6070;
+
+  --color-accent:       #6b84f8;
+  --color-accent-light: #1e2340;
+
+  --color-positive: #34d399;
+  --color-negative: #f87171;
+  --color-warning:  #fbbf24;
+
+  --color-chart-line:      #6b84f8;
+  --color-chart-area:      rgba(107, 132, 248, 0.15);
+  --color-chart-grid:      #2a2d3a;
+  --color-chart-axis:      #5a6070;
+  --color-chart-label:     #9aa0b0;
+  --color-chart-dot:       #6b84f8;
+  --color-chart-dot-fill:  #1a1d27;
+
+  --color-bar-fill:    #6b84f8;
+  --color-bar-bg:      #1e2340;
+
+  --color-table-header-bg:  #1f2230;
+  --color-table-row-hover:  #1e2340;
+  --color-table-stripe:     #1c1f2e;
+
+  --color-header-bg:     #1a1d27;
+  --color-header-border: #2a2d3a;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Reset & base
+   ═══════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  /* Prevent horizontal overflow at the root */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  /* Hard stop on horizontal overflow */
+  overflow-x: hidden;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Header
+   ═══════════════════════════════════════════════════════════════════════════ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-header-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--gap);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logo-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* Theme toggle button */
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-btn:hover {
+  background: var(--color-accent-light);
+  border-color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+.theme-icon {
+  position: absolute;
+  transition: opacity 0.2s, transform 0.2s;
+  line-height: 1;
+}
+
+/* Light theme: show sun, hide moon */
+:root .theme-icon--light  { opacity: 1; transform: scale(1); }
+:root .theme-icon--dark   { opacity: 0; transform: scale(0.5); }
+
+/* Dark theme: show moon, hide sun */
+[data-theme="dark"] .theme-icon--light { opacity: 0; transform: scale(0.5); }
+[data-theme="dark"] .theme-icon--dark  { opacity: 1; transform: scale(1); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Dashboard layout — CSS Grid with named breakpoints
+   ═══════════════════════════════════════════════════════════════════════════
+
+   Breakpoints:
+     < 640px   → 1 column
+     640–1023px → 2 columns
+     ≥ 1024px  → 4-column stat row + 2-column body
+   ═══════════════════════════════════════════════════════════════════════════ */
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--gap);
+  /* Prevent any child from causing horizontal scroll */
+  overflow-x: hidden;
+}
+
+/* ── Stat cards row ─────────────────────────────────────────────────────── */
+.stat-cards {
+  display: grid;
+  gap: var(--gap);
+  /* 1 column default */
+  grid-template-columns: 1fr;
+  margin-bottom: var(--gap);
+}
+
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Body grid (chart + breakdown) ─────────────────────────────────────── */
+.body-grid {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--gap);
+}
+
+@media (min-width: 1024px) {
+  .body-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* ── Recent table (full width) ──────────────────────────────────────────── */
+.recent-section {
+  /* full width, no special grid needed */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Card base
+   ═══════════════════════════════════════════════════════════════════════════ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  box-shadow: var(--shadow-card);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  /* Prevent card content from overflowing */
+  overflow: hidden;
+  min-width: 0; /* critical for grid children */
+}
+
+.card-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Stat cards
+   ═══════════════════════════════════════════════════════════════════════════ */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  /* Prevent 7-digit numbers from overflowing */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.stat-trend--positive { color: var(--color-positive); }
+.stat-trend--negative { color: var(--color-negative); }
+.stat-trend--neutral  { color: var(--color-text-muted); }
+
+.stat-trend-arrow {
+  font-size: 0.75rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Section headings inside cards
+   ═══════════════════════════════════════════════════════════════════════════ */
+.section-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Time-series chart
+   ═══════════════════════════════════════════════════════════════════════════ */
+.chart-card {
+  /* Let the card grow to fill its grid cell */
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.chart-metric-btn {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chart-metric-btn.active,
+.chart-metric-btn:hover {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.chart-wrapper {
+  /* The SVG fills this wrapper; ResizeObserver watches it */
+  flex: 1;
+  min-height: 200px;
+  position: relative;
+  width: 100%;
+  /* Clip anything the SVG draws outside its bounds */
+  overflow: hidden;
+}
+
+.chart-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* labels near edges need this */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Category breakdown
+   ═══════════════════════════════════════════════════════════════════════════ */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.category-item {
+  display: grid;
+  /* label | bar | value — label gets remaining space, bar is fixed-ish, value is auto */
+  grid-template-columns: minmax(0, 1fr) minmax(80px, 2fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.category-bar-track {
+  height: 8px;
+  background: var(--color-bar-bg);
+  border-radius: 999px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.category-bar-fill {
+  height: 100%;
+  background: var(--color-bar-fill);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.category-value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Recent items table
+   ═══════════════════════════════════════════════════════════════════════════ */
+.table-scroll {
+  /* Horizontal scroll is scoped to the table container, not the page */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Ensure the scrollbar doesn't cause page-level overflow */
+  max-width: 100%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  /* Table must not force the page wider */
+  min-width: 480px; /* below this we scroll within .table-scroll */
+}
+
+.data-table th {
+  background: var(--color-table-header-bg);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.data-table td {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  transition: background 0.2s ease;
+}
+
+.data-table tbody tr:nth-child(even) td {
+  background: var(--color-table-stripe);
+}
+
+.data-table tbody tr:hover td {
+  background: var(--color-table-row-hover);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Specific column styles */
+.col-name {
+  font-weight: 500;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-category {
+  color: var(--color-text-secondary);
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.col-date {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+/* Category badge */
+.badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Loading / error states
+   ═══════════════════════════════════════════════════════════════════════════ */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  color: var(--color-text-secondary);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.error-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-negative);
+}
+
+.error-message {
+  color: var(--color-text-secondary);
+  max-width: 480px;
+  font-size: 0.9375rem;
+}
+
+.error-retry-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.error-retry-btn:hover { opacity: 0.85; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Chart SVG internals (set via JS attributes, styled here)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.chart-gridline {
+  stroke: var(--color-chart-grid);
+  stroke-width: 1;
+}
+
+.chart-axis-line {
+  stroke: var(--color-chart-axis);
+  stroke-width: 1.5;
+}
+
+.chart-tick-label {
+  fill: var(--color-chart-label);
+  font-family: var(--font-sans);
+  font-size: 11px;
+}
+
+.chart-series-line {
+  stroke: var(--color-chart-line);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-series-area {
+  fill: var(--color-chart-area);
+}
+
+.chart-dot {
+  fill: var(--color-chart-dot-fill);
+  stroke: var(--color-chart-dot);
+  stroke-width: 2;
+}
+
+.chart-tooltip-line {
+  stroke: var(--color-chart-axis);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tooltip
+   ═══════════════════════════════════════════════════════════════════════════ */
+.chart-tooltip {
+  position: absolute;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  pointer-events: none;
+  box-shadow: var(--shadow-card-hover);
+  white-space: nowrap;
+  z-index: 10;
+  transition: opacity 0.1s;
+  color: var(--color-text-primary);
+}
+
+.chart-tooltip.hidden { opacity: 0; }
+
+.tooltip-date {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+.tooltip-value {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Utility
+   ═══════════════════════════════════════════════════════════════════════════ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* Ensure no element causes horizontal overflow */
+.dashboard * {
+  max-width: 100%;
+}
+
+/* Override for table (it has its own scroll container) */
+.table-scroll .data-table {
+  max-width: none;
+}

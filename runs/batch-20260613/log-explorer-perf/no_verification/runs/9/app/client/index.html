@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Explorer</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="toolbar">
+        <div>
+          <h1>Log Explorer</h1>
+          <p>100k deterministic logs, server-windowed and virtualized.</p>
+        </div>
+        <div class="filters">
+          <label>Severity
+            <select id="severity">
+              <option value="">All</option>
+              <option value="debug">Debug</option>
+              <option value="info">Info</option>
+              <option value="warn">Warn</option>
+              <option value="error">Error</option>
+            </select>
+          </label>
+          <label>Message search
+            <input id="search" type="search" placeholder="e.g. timeout, cache, trace" autocomplete="off" />
+          </label>
+        </div>
+      </header>
+      <section class="statusbar">
+        <div id="badges" class="badges"></div>
+        <div id="rowCount">Loading…</div>
+      </section>
+      <main class="tableShell">
+        <div class="tableHead" role="row">
+          <div>Time</div><div>Severity</div><div>Service</div><div>Message</div>
+        </div>
+        <div id="scroller" class="scroller" tabindex="0">
+          <div id="spacer" class="spacer"></div>
+          <div id="rows" class="rows"></div>
+          <div id="empty" class="empty hidden">No logs match the active filters.</div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

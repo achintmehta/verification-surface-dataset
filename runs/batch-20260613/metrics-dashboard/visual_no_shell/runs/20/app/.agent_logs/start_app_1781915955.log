@@ -1,0 +1,37 @@
+
+> metrics-dashboard@1.0.0 start
+> concurrently "npm run server" "npm run client"
+
+[0] 
+[0] > metrics-dashboard@1.0.0 server
+[0] > node backend/server.js
+[0] 
+[1] 
+[1] > metrics-dashboard@1.0.0 client
+[1] > vite frontend --port 3000
+[1] 
+[0] /tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/20/app/backend/server.js:14
+[0]     const { rows: last7 } = await db.query('SELECT SUM(revenue) as rev FROM daily_metrics WHERE date >= (SELECT MAX(date) - INTERVAL \\'6 days\\' FROM daily_metrics)');
+[0]                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0] 
+[0] SyntaxError: missing ) after argument list
+[0]     at internalCompileFunction (node:internal/vm:76:18)
+[0]     at wrapSafe (node:internal/modules/cjs/loader:1283:20)
+[0]     at Module._compile (node:internal/modules/cjs/loader:1328:27)
+[0]     at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+[0]     at Module.load (node:internal/modules/cjs/loader:1203:32)
+[0]     at Module._load (node:internal/modules/cjs/loader:1019:12)
+[0]     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+[0]     at node:internal/main/run_main_module:28:49
+[0] 
+[0] Node.js v18.20.8
+[0] npm run server exited with code 1
+[1] 
+[1]   VITE v4.5.14  ready in 142 ms
+[1] 
+[1]   ➜  Local:   http://localhost:3000/
+[1]   ➜  Network: use --host to expose
+[1] 7:39:20 PM [vite] http proxy error at /api/settings:
+[1] Error: connect ECONNREFUSED 127.0.0.1:3001
+[1]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+[1] npm run client exited with code SIGTERM

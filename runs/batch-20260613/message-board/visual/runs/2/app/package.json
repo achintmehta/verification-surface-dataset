@@ -1,0 +1,22 @@
+{
+  "name": "message-board",
+  "version": "1.0.0",
+  "description": "A real-time message board using PGLite and SSE",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "node --watch server/index.js",
+    "dev:frontend": "vite frontend --port 5173",
+    "start": "node server/index.js",
+    "build": "vite build frontend"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "vite": "^5.4.19"
+  }
+}

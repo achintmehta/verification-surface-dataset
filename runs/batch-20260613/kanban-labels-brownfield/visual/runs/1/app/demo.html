@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collaborative Kanban — Labels Demo</title>
+    <style>
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eef2f7;
+  color: #172033;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #172033, #334155);
+  color: white;
+  box-shadow: 0 2px 16px rgba(15,23,42,0.2);
+}
+h1,h2,p { margin: 0; }
+.topbar p { color: #cbd5e1; margin-top: 0.35rem; }
+.status {
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #16a34a;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* Label bar */
+.label-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  flex-wrap: wrap;
+}
+.label-bar-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.label-bar-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-right: 0.2rem;
+}
+.filter-chip {
+  border: 2px solid var(--chip-color, #94a3b8);
+  background: transparent;
+  color: #172033;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.filter-chip.active {
+  background: var(--chip-color, #94a3b8);
+  color: white;
+}
+.filter-chip:hover { opacity: 0.85; }
+.filter-clear {
+  border: none;
+  background: #e2e8f0;
+  color: #475569;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.filter-clear:hover { background: #cbd5e1; }
+.manage-labels-btn {
+  border: 1px solid #94a3b8;
+  background: white;
+  color: #334155;
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.manage-labels-btn:hover { background: #f8fafc; border-color: #64748b; }
+
+/* Board */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: start;
+}
+.column {
+  background: #dbe4ef;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  padding: 1rem;
+  min-height: 420px;
+  box-shadow: 0 12px 35px rgba(15,23,42,0.08);
+}
+.column h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+  color: #0f172a;
+}
+.add-card {
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+.add-card input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  outline: none;
+  font: inherit;
+}
+.add-card input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.add-card button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+.add-card button:hover { background: #1d4ed8; }
+.cards {
+  min-height: 300px;
+  border-radius: 12px;
+  padding: 0.25rem;
+}
+
+/* Card */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem 0.55rem;
+  margin-bottom: 0.65rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+  cursor: grab;
+  overflow-wrap: anywhere;
+  user-select: none;
+  position: relative;
+}
+.card:active { cursor: grabbing; }
+.card-text { padding-right: 1.6rem; }
+.card-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+.label-chip {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+.card-label-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.1rem 0.2rem;
+  border-radius: 6px;
+  opacity: 0.6;
+}
+.card:hover .card-label-btn { opacity: 1; }
+
+/* Modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-backdrop.hidden { display: none; }
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: min(420px, 92vw);
+  box-shadow: 0 24px 60px rgba(15,23,42,0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.modal-header h2 { font-size: 1.1rem; color: #0f172a; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+}
+.modal-close:hover { background: #f1f5f9; }
+
+/* Label manager list */
+.lm-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.lm-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+.lm-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.lm-name { flex: 1; font-size: 0.9rem; font-weight: 500; }
+.lm-edit-btn, .lm-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 6px;
+  opacity: 0.6;
+}
+.lm-edit-btn:hover, .lm-delete-btn:hover { opacity: 1; background: #f1f5f9; }
+
+/* Label create form */
+.lm-create-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.lm-create-form input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+  outline: none;
+}
+.lm-create-form input[type="color"] {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 2px;
+  cursor: pointer;
+  background: none;
+}
+.lm-create-form button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font: inherit;
+}
+.lm-create-form button:hover { background: #1d4ed8; }
+
+/* Card label assignment */
+#card-label-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.cl-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.cl-row:hover { background: #f1f5f9; }
+.cl-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+@media (max-width: 850px) {
+  .board { grid-template-columns: 1fr; }
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .label-bar { flex-direction: column; align-items: flex-start; }
+}
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div>
+          <h1>Collaborative Kanban</h1>
+          <p>Drag cards between columns. Updates are broadcast in real time with SSE.</p>
+        </div>
+        <div class="status">Live</div>
+      </header>
+
+      <!-- LABEL FILTER BAR -->
+      <div class="label-bar">
+        <div class="label-bar-filters">
+          <span class="label-bar-title">Filter:</span>
+          <button class="filter-chip" style="--chip-color:#ef4444">Bug</button>
+          <button class="filter-chip active" style="--chip-color:#3b82f6">Feature</button>
+          <button class="filter-chip" style="--chip-color:#f97316">Urgent</button>
+          <button class="filter-chip" style="--chip-color:#8b5cf6">Design</button>
+          <button class="filter-clear">Clear filter</button>
+        </div>
+        <button class="manage-labels-btn" id="open-label-manager">Manage Labels</button>
+      </div>
+
+      <!-- BOARD -->
+      <main class="board">
+
+        <!-- TO DO -->
+        <section class="column" data-column-id="todo">
+          <h2>To Do</h2>
+          <form class="add-card">
+            <input name="text" type="text" maxlength="500" placeholder="Add a card…" autocomplete="off" />
+            <button type="submit">Add</button>
+          </form>
+          <div class="cards">
+
+            <article class="card" draggable="true">
+              <div class="card-text">Implement user authentication flow</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#3b82f6">Feature</span>
+                <span class="label-chip" style="background:#8b5cf6">Design</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+            <article class="card" draggable="true">
+              <div class="card-text">Fix login redirect on mobile Safari</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#ef4444">Bug</span>
+                <span class="label-chip" style="background:#f97316">Urgent</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+            <article class="card" draggable="true">
+              <div class="card-text">Write onboarding documentation</div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- IN PROGRESS -->
+        <section class="column" data-column-id="in-progress">
+          <h2>In Progress</h2>
+          <form class="add-card">
+            <input name="text" type="text" maxlength="500" placeholder="Add a card…" autocomplete="off" />
+            <button type="submit">Add</button>
+          </form>
+          <div class="cards">
+
+            <article class="card" draggable="true">
+              <div class="card-text">Redesign dashboard layout</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#3b82f6">Feature</span>
+                <span class="label-chip" style="background:#8b5cf6">Design</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+            <article class="card" draggable="true">
+              <div class="card-text">Optimise database query for reports page</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#ef4444">Bug</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+            <article class="card" draggable="true">
+              <div class="card-text">Add CSV export to analytics</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#3b82f6">Feature</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- DONE -->
+        <section class="column" data-column-id="done">
+          <h2>Done</h2>
+          <form class="add-card">
+            <input name="text" type="text" maxlength="500" placeholder="Add a card…" autocomplete="off" />
+            <button type="submit">Add</button>
+          </form>
+          <div class="cards">
+
+            <article class="card" draggable="true">
+              <div class="card-text">Set up CI/CD pipeline</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#3b82f6">Feature</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+            <article class="card" draggable="true">
+              <div class="card-text">Fix broken image uploads on Firefox</div>
+              <div class="card-labels">
+                <span class="label-chip" style="background:#ef4444">Bug</span>
+              </div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+            <article class="card" draggable="true">
+              <div class="card-text">Update dependencies to latest versions</div>
+              <button class="card-label-btn" title="Assign labels">🏷</button>
+            </article>
+
+          </div>
+        </section>
+
+      </main>
+
+      <!-- LABEL MANAGER MODAL -->
+      <div class="modal-backdrop hidden" id="label-manager-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-label="Label Manager">
+          <div class="modal-header">
+            <h2>Label Manager</h2>
+            <button class="modal-close" id="close-label-manager">✕</button>
+          </div>
+          <ul class="lm-list">
+            <li class="lm-row">
+              <span class="lm-swatch" style="background:#ef4444"></span>
+              <span class="lm-name">Bug</span>
+              <button class="lm-edit-btn" title="Edit">✏️</button>
+              <button class="lm-delete-btn" title="Delete">🗑</button>
+            </li>
+            <li class="lm-row">
+              <span class="lm-swatch" style="background:#3b82f6"></span>
+              <span class="lm-name">Feature</span>
+              <button class="lm-edit-btn" title="Edit">✏️</button>
+              <button class="lm-delete-btn" title="Delete">🗑</button>
+            </li>
+            <li class="lm-row">
+              <span class="lm-swatch" style="background:#f97316"></span>
+              <span class="lm-name">Urgent</span>
+              <button class="lm-edit-btn" title="Edit">✏️</button>
+              <button class="lm-delete-btn" title="Delete">🗑</button>
+            </li>
+            <li class="lm-row">
+              <span class="lm-swatch" style="background:#8b5cf6"></span>
+              <span class="lm-name">Design</span>
+              <button class="lm-edit-btn" title="Edit">✏️</button>
+              <button class="lm-delete-btn" title="Delete">🗑</button>
+            </li>
+          </ul>
+          <form class="lm-create-form">
+            <input name="name" type="text" maxlength="60" placeholder="Label name…" autocomplete="off" />
+            <input name="color" type="color" value="#10b981" title="Pick a color" />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

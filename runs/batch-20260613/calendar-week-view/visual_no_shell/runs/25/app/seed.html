@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Events</title></head>
+<body>
+<h1>Seeding test events...</h1>
+<pre id="log"></pre>
+<script>
+async function seed() {
+  const log = document.getElementById('log');
+  
+  // First, delete all existing events
+  const existing = await fetch('/api/events?start=2020-01-01T00:00:00Z&end=2030-01-01T00:00:00Z');
+  const existingEvents = await existing.json();
+  for (const ev of existingEvents) {
+    await fetch(`/api/events/${ev.id}`, { method: 'DELETE' });
+    log.textContent += `Deleted old event: ${ev.title}\n`;
+  }
+  log.textContent += '\n--- Creating new events ---\n\n';
+
+  // Get current week's Monday (in local time)
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(monday.getDate() + diff);
+  monday.setHours(0,0,0,0);
+
+  function dayAt(dayOffset, hour, minute) {
+    const d = new Date(monday);
+    d.setDate(d.getDate() + dayOffset);
+    d.setHours(hour, minute, 0, 0);
+    return d.toISOString();
+  }
+
+  const events = [
+    // Monday: single event (full width)
+    { title: "Monday Meeting", start_at: dayAt(0, 9, 0), end_at: dayAt(0, 10, 30) },
+    
+    // Tuesday: 3 identical overlapping events (should be 3 equal columns)
+    { title: "Team Sync A", start_at: dayAt(1, 9, 0), end_at: dayAt(1, 10, 0) },
+    { title: "Team Sync B", start_at: dayAt(1, 9, 0), end_at: dayAt(1, 10, 0) },
+    { title: "Team Sync C", start_at: dayAt(1, 9, 0), end_at: dayAt(1, 10, 0) },
+    
+    // Tuesday: later event (should be full width since cluster ended)
+    { title: "Tue Afternoon", start_at: dayAt(1, 14, 0), end_at: dayAt(1, 15, 30) },
+
+    // Wednesday: chain overlap (09-11, 10-12, 11:30-13)
+    { title: "Chain A", start_at: dayAt(2, 9, 0), end_at: dayAt(2, 11, 0) },
+    { title: "Chain B", start_at: dayAt(2, 10, 0), end_at: dayAt(2, 12, 0) },
+    { title: "Chain C", start_at: dayAt(2, 11, 30), end_at: dayAt(2, 13, 0) },
+
+    // Thursday: event ending at midnight (24:00)
+    { title: "Late Night", start_at: dayAt(3, 22, 0), end_at: dayAt(4, 0, 0) },
+
+    // Friday: minute-precision event
+    { title: "Quick Call", start_at: dayAt(4, 14, 15), end_at: dayAt(4, 14, 45) },
+  ];
+
+  for (const ev of events) {
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ev)
+      });
+      const data = await res.json();
+      log.textContent += `Created: ${ev.title} -> id=${data.id}\n`;
+    } catch (err) {
+      log.textContent += `ERROR: ${ev.title} -> ${err.message}\n`;
+    }
+  }
+  log.textContent += '\nDone! Go to /';
+}
+seed();
+</script>
+</body>
+</html>

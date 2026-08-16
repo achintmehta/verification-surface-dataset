@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>🎟️ Live Seat Booking</h1>
+      <div id="connection" class="conn offline">connecting…</div>
+    </header>
+
+    <main>
+      <section class="stage-wrap">
+        <div class="stage">STAGE / SCREEN</div>
+
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch held"></i> Held (other)</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="inventory">
+          <div class="inv-item"><span id="inv-available">0</span><label>Available</label></div>
+          <div class="inv-item"><span id="inv-held">0</span><label>Held</label></div>
+          <div class="inv-item"><span id="inv-booked">0</span><label>Booked</label></div>
+          <div class="inv-item total"><span id="inv-total">0</span><label>Total</label></div>
+        </div>
+
+        <div class="selection">
+          <h2>Selection</h2>
+          <p id="selection-list" class="muted">No seats selected.</p>
+        </div>
+
+        <div id="hold-box" class="hold-box hidden">
+          <h2>Active Hold</h2>
+          <p>Seats: <strong id="hold-seats"></strong></p>
+          <p class="countdown">Expires in <strong id="countdown">--</strong></p>
+        </div>
+
+        <div class="actions">
+          <button id="btn-hold" class="primary" disabled>Hold selected seats</button>
+          <button id="btn-confirm" class="success hidden">Confirm booking</button>
+          <button id="btn-release" class="ghost hidden">Release hold</button>
+        </div>
+
+        <div id="message" class="message" role="status"></div>
+
+        <div class="session">
+          <small>Session: <code id="session-id"></code></small>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

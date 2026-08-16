@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1>🎭 Seat Booking</h1>
+        <div class="session-info">
+          <span class="label">Your session:</span>
+          <code id="session-id-display"></code>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Stage indicator -->
+      <div class="stage-bar">
+        <div class="stage-label">STAGE</div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <span class="legend-item"><span class="seat-demo available"></span> Available</span>
+        <span class="legend-item"><span class="seat-demo held-own"></span> Your Hold</span>
+        <span class="legend-item"><span class="seat-demo held-other"></span> Held by Other</span>
+        <span class="legend-item"><span class="seat-demo selected"></span> Selected</span>
+        <span class="legend-item"><span class="seat-demo booked"></span> Booked</span>
+      </div>
+
+      <!-- Seat map -->
+      <div id="seat-map" class="seat-map">
+        <div class="loading-spinner">Loading seats…</div>
+      </div>
+
+      <!-- Inventory summary -->
+      <div class="inventory-bar" id="inventory-bar">
+        <span id="inv-available">Available: –</span>
+        <span id="inv-held">Held: –</span>
+        <span id="inv-booked">Booked: –</span>
+        <span id="inv-total">Total: –</span>
+      </div>
+
+      <!-- Action panel -->
+      <div class="action-panel" id="action-panel">
+        <!-- State: idle (no selection, no hold) -->
+        <div id="panel-idle" class="panel-state active">
+          <p class="hint">Click available seats to select them, then place a hold.</p>
+        </div>
+
+        <!-- State: seats selected, no hold yet -->
+        <div id="panel-selected" class="panel-state">
+          <p class="hint"><span id="selected-count">0</span> seat(s) selected.</p>
+          <div class="btn-row">
+            <button id="btn-hold" class="btn btn-primary">Hold Selected Seats</button>
+            <button id="btn-clear-selection" class="btn btn-ghost">Clear</button>
+          </div>
+        </div>
+
+        <!-- State: hold active -->
+        <div id="panel-hold" class="panel-state">
+          <div class="hold-info">
+            <div class="hold-seats">
+              Holding: <strong id="hold-seat-list"></strong>
+            </div>
+            <div class="hold-timer">
+              Expires in: <strong id="hold-countdown" class="countdown">–</strong>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button id="btn-confirm" class="btn btn-success">Confirm Booking</button>
+            <button id="btn-release" class="btn btn-danger">Release Hold</button>
+          </div>
+        </div>
+
+        <!-- State: booked -->
+        <div id="panel-booked" class="panel-state">
+          <div class="booked-info">
+            <span class="booked-icon">✅</span>
+            <div>
+              <strong>Booking confirmed!</strong>
+              <p>Seats: <span id="booked-seat-list"></span></p>
+            </div>
+          </div>
+          <button id="btn-new-booking" class="btn btn-primary">Book More Seats</button>
+        </div>
+
+        <!-- State: error -->
+        <div id="panel-error" class="panel-state">
+          <div class="error-box" id="error-message"></div>
+          <button id="btn-error-dismiss" class="btn btn-ghost">Dismiss</button>
+        </div>
+      </div>
+
+      <!-- SSE status indicator -->
+      <div class="sse-status" id="sse-status">
+        <span class="sse-dot" id="sse-dot"></span>
+        <span id="sse-label">Connecting…</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

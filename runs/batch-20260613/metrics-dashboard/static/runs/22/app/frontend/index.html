@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="dashboard-header">
+      <h1 class="dashboard-title">Metrics Dashboard</h1>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-icon" id="theme-icon">🌙</span>
+      </button>
+    </header>
+
+    <main class="dashboard-main">
+      <section class="stat-cards" id="stat-cards" aria-label="Summary statistics">
+        <div class="stat-card skeleton" id="card-visitors">
+          <span class="stat-label">Total Visitors</span>
+          <span class="stat-value" id="val-visitors">—</span>
+          <span class="stat-trend" id="trend-visitors"></span>
+        </div>
+        <div class="stat-card skeleton" id="card-revenue">
+          <span class="stat-label">Total Revenue</span>
+          <span class="stat-value" id="val-revenue">—</span>
+          <span class="stat-trend" id="trend-revenue"></span>
+        </div>
+        <div class="stat-card skeleton" id="card-bestday">
+          <span class="stat-label">Best Day</span>
+          <span class="stat-value" id="val-bestday">—</span>
+          <span class="stat-trend" id="trend-bestday"></span>
+        </div>
+        <div class="stat-card skeleton" id="card-trend">
+          <span class="stat-label">7-Day Trend</span>
+          <span class="stat-value" id="val-trend">—</span>
+          <span class="stat-trend" id="trend-trend"></span>
+        </div>
+      </section>
+
+      <section class="dashboard-body">
+        <div class="chart-panel" id="chart-panel">
+          <h2 class="panel-title">Daily Visitors (30 days)</h2>
+          <div class="chart-container" id="chart-container">
+            <p class="loading-msg" id="chart-loading">Loading chart…</p>
+          </div>
+        </div>
+        <div class="categories-panel" id="categories-panel">
+          <h2 class="panel-title">Category Breakdown</h2>
+          <div class="categories-container" id="categories-container">
+            <p class="loading-msg" id="cat-loading">Loading categories…</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="table-panel" id="table-panel">
+        <h2 class="panel-title">Recent Items</h2>
+        <div class="table-wrapper" id="table-wrapper">
+          <p class="loading-msg" id="table-loading">Loading table…</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="error-banner" id="error-banner" hidden>
+      <span id="error-message">Unable to load dashboard data. Is the backend running?</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

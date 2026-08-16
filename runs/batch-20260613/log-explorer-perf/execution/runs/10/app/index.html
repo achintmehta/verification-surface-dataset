@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Explorer</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="toolbar">
+        <div>
+          <h1>Log Explorer</h1>
+          <p>Virtualized browser for 100,000 deterministic log entries</p>
+        </div>
+        <div class="filters">
+          <label>
+            Severity
+            <select id="severityFilter">
+              <option value="">All</option>
+              <option value="debug">Debug</option>
+              <option value="info">Info</option>
+              <option value="warn">Warn</option>
+              <option value="error">Error</option>
+            </select>
+          </label>
+          <label>
+            Message contains
+            <input id="searchBox" type="search" placeholder="timeout, request, payment..." autocomplete="off" />
+          </label>
+        </div>
+      </header>
+
+      <section class="stats" id="statsBar">
+        <span id="visibleCount">0 of 0</span>
+        <span id="badges"></span>
+      </section>
+
+      <main class="panel">
+        <div class="tableHead">
+          <div>Timestamp</div><div>Severity</div><div>Service</div><div>Message</div>
+        </div>
+        <div id="scroller" class="scroller">
+          <div id="spacer" class="spacer"></div>
+          <div id="rows" class="rows"></div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Layout Algorithm Test</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    body { margin: 0; background: #f8f9fa; font-family: sans-serif; }
+    .wrapper { display: flex; flex-direction: column; height: 100vh; }
+    .info { padding: 8px 16px; background: #0f9d58; color: white; font-size: 12px; }
+    .cols { display: flex; flex: 1; overflow: hidden; }
+    .col-wrap { flex: 1; overflow-y: auto; border-right: 1px solid #e0e0e0; }
+    .col-inner { position: relative; height: 1440px; }
+    .col-header { padding: 4px 8px; background: #333; color: white; font-size: 11px; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="info">
+    Layout test: Mon (1 event + 2 overlap), Tue (3 identical + 1 solo), Wed (chain 09-11, 10-12, 11:30-13), Thu (2 events)
+  </div>
+  <div class="cols" id="cols"></div>
+</div>
+<script type="module">
+import { computeDayLayout } from '/src/layout.js';
+
+const HOUR_HEIGHT = 60;
+const COLORS = ['#1a73e8','#0f9d58','#f4511e','#8430ce','#e37400','#0288d1','#00897b','#c62828'];
+
+function makeDay(title, events) {
+  const wrap = document.createElement('div');
+  wrap.className = 'col-wrap';
+  
+  const header = document.createElement('div');
+  header.className = 'col-header';
+  header.textContent = title;
+  wrap.appendChild(header);
+  
+  const inner = document.createElement('div');
+  inner.className = 'col-inner';
+  
+  // Hour lines
+  for (let h = 0; h <= 24; h++) {
+    const line = document.createElement('div');
+    line.style.cssText = `position:absolute;left:0;right:0;top:${h*HOUR_HEIGHT}px;border-top:1px solid #e0e0e0;`;
+    inner.appendChild(line);
+    if (h < 24) {
+      const half = document.createElement('div');
+      half.style.cssText = `position:absolute;left:0;right:0;top:${h*HOUR_HEIGHT+30}px;border-top:1px dashed #ebebeb;`;
+      inner.appendChild(half);
+    }
+    if (h > 0 && h < 24) {
+      const lbl = document.createElement('div');
+      lbl.style.cssText = `position:absolute;left:2px;top:${h*HOUR_HEIGHT}px;font-size:9px;color:#999;transform:translateY(-50%);`;
+      lbl.textContent = `${String(h).padStart(2,'0')}:00`;
+      inner.appendChild(lbl);
+    }
+  }
+  
+  const layout = computeDayLayout(events);
+  const dayDate = new Date('2026-06-15T00:00:00');
+  const dayStartMs = dayDate.setHours(0,0,0,0);
+  const dayEndMs = new Date('2026-06-15T00:00:00').setHours(24,0,0,0);
+  
+  layout.forEach(({event, colIndex, numCols}, i) => {
+    const evStartMs = new Date(event.start_at).getTime();
+    const evEndMs = new Date(event.end_at).getTime();
+    const clampedStartMs = Math.max(evStartMs, dayStartMs);
+    const clampedEndMs = Math.min(evEndMs, dayEndMs);
+    if (clampedStartMs >= clampedEndMs) return;
+    
+    const startMin = (clampedStartMs - dayStartMs) / 60000;
+    const endMin = (clampedEndMs - dayStartMs) / 60000;
+    const top = (startMin / 60) * HOUR_HEIGHT;
+    const height = Math.max(((endMin - startMin) / 60) * HOUR_HEIGHT, 4);
+    const widthPct = 100 / numCols;
+    const leftPct = colIndex * widthPct;
+    
+    const block = document.createElement('div');
+    block.className = 'event-block';
+    block.style.top = `${top}px`;
+    block.style.height = `${height}px`;
+    block.style.left = `calc(${leftPct}% + 1px)`;
+    block.style.width = `calc(${widthPct}% - 2px)`;
+    block.style.background = COLORS[i % COLORS.length];
+    block.style.fontSize = '9px';
+    block.innerHTML = `<div style="font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${event.title}</div><div>col${colIndex}/${numCols}</div>`;
+    inner.appendChild(block);
+  });
+  
+  wrap.appendChild(inner);
+  return wrap;
+}
+
+// Test cases
+const base = '2026-06-15T';
+const cols = document.getElementById('cols');
+
+// Col 1: Monday - single + two overlapping
+cols.appendChild(makeDay('Mon: 1 solo + 2 overlap', [
+  { id:1, title:'Standup', start_at:`${base}09:00:00`, end_at:`${base}09:30:00` },
+  { id:2, title:'Design Review', start_at:`${base}10:00:00`, end_at:`${base}11:30:00` },
+  { id:3, title:'Sprint Plan', start_at:`${base}10:00:00`, end_at:`${base}11:30:00` },
+]));
+
+// Col 2: Tuesday - 3 identical + 1 solo after
+cols.appendChild(makeDay('Tue: 3 identical + 1 solo', [
+  { id:4, title:'Meeting A', start_at:`${base}09:00:00`, end_at:`${base}10:00:00` },
+  { id:5, title:'Meeting B', start_at:`${base}09:00:00`, end_at:`${base}10:00:00` },
+  { id:6, title:'Meeting C', start_at:`${base}09:00:00`, end_at:`${base}10:00:00` },
+  { id:7, title:'Lunch', start_at:`${base}12:00:00`, end_at:`${base}13:00:00` },
+]));
+
+// Col 3: Wednesday - chain 09-11, 10-12, 11:30-13
+cols.appendChild(makeDay('Wed: chain 09-11, 10-12, 11:30-13', [
+  { id:8, title:'Part 1 (09-11)', start_at:`${base}09:00:00`, end_at:`${base}11:00:00` },
+  { id:9, title:'Part 2 (10-12)', start_at:`${base}10:00:00`, end_at:`${base}12:00:00` },
+  { id:10, title:'Part 3 (11:30-13)', start_at:`${base}11:30:00`, end_at:`${base}13:00:00` },
+]));
+
+// Col 4: 4 events same time
+cols.appendChild(makeDay('4 events same time', [
+  { id:11, title:'A', start_at:`${base}10:00:00`, end_at:`${base}11:00:00` },
+  { id:12, title:'B', start_at:`${base}10:00:00`, end_at:`${base}11:00:00` },
+  { id:13, title:'C', start_at:`${base}10:00:00`, end_at:`${base}11:00:00` },
+  { id:14, title:'D', start_at:`${base}10:00:00`, end_at:`${base}11:00:00` },
+]));
+
+// Col 5: Non-overlapping events (all should be full width)
+cols.appendChild(makeDay('Non-overlapping (all full width)', [
+  { id:15, title:'9-10', start_at:`${base}09:00:00`, end_at:`${base}10:00:00` },
+  { id:16, title:'11-12', start_at:`${base}11:00:00`, end_at:`${base}12:00:00` },
+  { id:17, title:'14-15', start_at:`${base}14:00:00`, end_at:`${base}15:00:00` },
+  { id:18, title:'22-24', start_at:`${base}22:00:00`, end_at:`2026-06-16T00:00:00` },
+]));
+
+// Scroll to 8am
+document.querySelectorAll('.col-wrap').forEach(el => el.scrollTop = 8 * HOUR_HEIGHT - 10);
+</script>
+</body>
+</html>

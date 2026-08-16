@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seat Booking</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .seat-map { display: grid; grid-template-columns: repeat(10, 40px); gap: 5px; margin: 20px 0; }
+    .seat { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; cursor: pointer; font-size: 12px; }
+    .seat.available { background: #90EE90; }
+    .seat.held { background: #FFD700; }
+    .seat.booked { background: #FF6B6B; cursor: not-allowed; }
+    .seat.selected { background: #87CEEB; border-color: #000; }
+    .controls { margin: 20px 0; }
+    button { padding: 10px 20px; margin-right: 10px; }
+    .status { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+    .hold-info { color: #333; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Seat Booking - Event</h1>
+  <div class="status">
+    <div>Available: <span id="available-count">0</span> | Held: <span id="held-count">0</span> | Booked: <span id="booked-count">0</span> | Total: <span id="total-count">50</span></div>
+  </div>
+  <div id="seat-map" class="seat-map"></div>
+  <div class="controls">
+    <button id="hold-btn" disabled>Hold Selected Seats</button>
+    <button id="confirm-btn" disabled>Confirm Hold</button>
+    <button id="release-btn" disabled>Release Hold</button>
+    <button id="refresh-btn">Refresh Map</button>
+  </div>
+  <div id="hold-info" class="hold-info"></div>
+  <div id="message" class="error"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

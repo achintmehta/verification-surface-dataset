@@ -1,0 +1,57 @@
+dataset of record: /mnt/d/eval-coding-agent-runs/freeze-20260720/run-summary.csv
+stats_mixed_effects.py per stats-plan.md cross-check | statsmodels 0.14.6
+n=1116 runs | tokens present for 1116
+
+========== MIXED-EFFECTS CROSS-CHECK: PRIMARY CONTRASTS ==========
+model per contrast: y ~ treated (+ task fixed effects), random intercept per model; REML
+
+P1 depth
+  execution - no_verification on functional  (n=168)  [task fixed effects included]
+  mixed-effects estimate = +12.26  SE = 3.41  95% CI [+5.57, +18.95]  two-sided p = 0.0003
+  permutation reference  = +12.26  95% CI [+7.04, +17.47]  (stats-results.txt)
+  random intercept (model) variance = 57.11  residual variance = 489.51
+  converged = True
+
+P2 cheap signal (survival)
+  boot_check - no_verification on survival  (n=384)  [task fixed effects included]
+  mixed-effects estimate = +0.13  SE = 0.02  95% CI [+0.09, +0.17]  two-sided p = 0.0000
+  permutation reference  = +0.13  95% CI [+0.10, +0.16]  (stats-results.txt)
+  random intercept (model) variance = 0.01  residual variance = 0.05
+  converged = True
+
+P3 cost (log tokens)
+  execution - no_verification on ltok  (n=384)  [task fixed effects included]
+  mixed-effects estimate = +0.80  SE = 0.05  95% CI [+0.70, +0.91]  two-sided p = 0.0000
+  permutation reference  = +0.80  95% CI [+0.73, +0.87]  (stats-results.txt)
+  random intercept (model) variance = 0.49  residual variance = 0.27
+  converged = True
+
+P4 sight
+  visual - execution on human  (n=96)  [task fixed effects included]
+  mixed-effects estimate = +6.88  SE = 3.80  95% CI [-0.57, +14.32]  two-sided p = 0.0705
+  permutation reference  = +6.88  95% CI [+0.83, +13.41]  (stats-results.txt)
+  random intercept (model) variance = 95.67  residual variance = 346.75
+  converged = True
+
+P5 brownfield DiD
+  (bf gap) - (gf gap) on functional  (n=120)  [difference-in-differences: interaction coefficient]
+  mixed-effects estimate = -0.67  SE = 7.94  95% CI [-16.24, +14.90]  two-sided p = 0.9331
+  permutation reference  = -0.67  95% CI [-13.67, +12.67]  (stats-results.txt)
+  random intercept (model) variance = 77.22  residual variance = 473.37
+  converged = True
+
+P6 budgets
+  execution - no_verification on human  (n=60)
+  mixed-effects estimate = +15.33  SE = 6.99  95% CI [+1.63, +29.04]  two-sided p = 0.0283
+  permutation reference  = +15.33  95% CI [+7.33, +24.00]  (stats-results.txt)
+  random intercept (model) variance = 296.93  residual variance = 733.55
+  converged = True
+
+========== AGREEMENT SUMMARY ==========
+(sign agreement vs the permutation effect; two-sided p at 0.05)
+  P1: estimate +12.26 vs permutation +12.26  same direction = yes  regression p = 0.0003
+  P2: estimate +0.13 vs permutation +0.13  same direction = yes  regression p = 0.0000
+  P3: estimate +0.80 vs permutation +0.80  same direction = yes  regression p = 0.0000
+  P4: estimate +6.88 vs permutation +6.88  same direction = yes  regression p = 0.0705
+  P5: estimate -0.67 vs permutation -0.67  same direction = yes  regression p = 0.9331
+  P6: estimate +15.33 vs permutation +15.33  same direction = yes  regression p = 0.0283

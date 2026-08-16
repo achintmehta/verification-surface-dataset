@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <button id="prev-week">&lt; Prev</button>
+      <button id="today">Today</button>
+      <button id="next-week">Next &gt;</button>
+      <h2 id="current-week-label"></h2>
+    </header>
+    <div class="calendar-container">
+      <div class="time-axis" id="time-axis"></div>
+      <div class="days-grid" id="days-grid"></div>
+    </div>
+  </div>
+
+  <div id="event-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modal-title">Create Event</h3>
+      <form id="event-form">
+        <input type="hidden" id="event-id">
+        <label>
+          Title:
+          <input type="text" id="event-title" required>
+        </label>
+        <label>
+          Start:
+          <input type="datetime-local" id="event-start" required>
+        </label>
+        <label>
+          End:
+          <input type="datetime-local" id="event-end" required>
+        </label>
+        <div class="modal-actions">
+          <button type="submit" id="save-btn">Save</button>
+          <button type="button" id="delete-btn" class="hidden">Delete</button>
+          <button type="button" id="cancel-btn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

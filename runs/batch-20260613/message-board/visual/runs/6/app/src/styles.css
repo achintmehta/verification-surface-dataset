@@ -1,0 +1,225 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: #172033;
+  background: #edf2ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input { font: inherit; }
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(91, 141, 239, 0.32), transparent 34rem),
+    linear-gradient(135deg, #f8fbff 0%, #dde8ff 100%);
+}
+
+.board {
+  width: min(760px, 100%);
+  max-height: calc(100vh - 48px);
+  display: grid;
+  grid-template-rows: auto auto minmax(260px, 1fr) auto;
+  gap: 18px;
+  padding: 28px;
+  border: 1px solid rgba(91, 112, 151, 0.18);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 24px 80px rgba(32, 55, 102, 0.18);
+  backdrop-filter: blur(16px);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #4263eb;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+}
+
+.subtitle {
+  margin: 12px 0 0;
+  color: #5b6680;
+  max-width: 48rem;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status,
+.count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status--connecting {
+  color: #9a6700;
+  background: #fff5cc;
+}
+
+.status--live {
+  color: #0f7b4a;
+  background: #dffbea;
+}
+
+.count {
+  color: #596579;
+  background: #eef2f8;
+}
+
+.messages {
+  min-height: 260px;
+  margin: 0;
+  padding: 4px 4px 12px;
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+
+.message {
+  align-self: flex-start;
+  max-width: min(88%, 620px);
+  padding: 14px 16px 10px;
+  border: 1px solid rgba(66, 99, 235, 0.11);
+  border-radius: 18px 18px 18px 6px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(24, 39, 75, 0.08);
+  animation: pop-in 160ms ease-out;
+}
+
+.message__text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #182235;
+}
+
+.message__time {
+  display: block;
+  margin-top: 8px;
+  color: #7f8aa3;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.empty-state {
+  margin: auto;
+  color: #6c7690;
+  font-weight: 700;
+  text-align: center;
+}
+
+.composer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.composer input {
+  width: 100%;
+  border: 1px solid #d4dced;
+  border-radius: 16px;
+  padding: 14px 16px;
+  outline: none;
+  background: #fff;
+  color: #172033;
+  transition: border-color 140ms, box-shadow 140ms;
+}
+
+.composer input:focus {
+  border-color: #4263eb;
+  box-shadow: 0 0 0 4px rgba(66, 99, 235, 0.14);
+}
+
+.composer button {
+  border: 0;
+  border-radius: 16px;
+  padding: 0 22px;
+  color: #fff;
+  background: linear-gradient(135deg, #4263eb, #7048e8);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 22px rgba(66, 99, 235, 0.25);
+}
+
+.composer button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 620px) {
+  .app-shell { padding: 0; }
+  .board {
+    min-height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    padding: 22px 16px;
+  }
+  .composer { grid-template-columns: 1fr; }
+  .composer button { min-height: 48px; }
+  .message { max-width: 96%; }
+}

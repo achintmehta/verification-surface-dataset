@@ -1,0 +1,138 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eef2f7;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+button { font: inherit; }
+
+.shell {
+  width: min(1120px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  color: #2563eb;
+  font-weight: 800;
+  letter-spacing: .14em;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+h1 { font-size: clamp(36px, 7vw, 68px); line-height: .95; margin: 0; }
+.subtitle { margin: 12px 0 0; color: #596579; max-width: 680px; }
+
+.session-card, .panel {
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(148,163,184,.32);
+  box-shadow: 0 18px 48px rgba(31,41,55,.10);
+  border-radius: 22px;
+}
+
+.session-card {
+  min-width: 190px;
+  padding: 18px;
+  display: grid;
+  gap: 6px;
+}
+.session-card span { color: #64748b; font-size: 13px; }
+.session-card code { font-size: 18px; font-weight: 800; }
+.session-card strong { font-size: 13px; color: #d97706; }
+.session-card strong.live { color: #16a34a; }
+.session-card strong.offline { color: #dc2626; }
+
+.panel { padding: 20px; margin-bottom: 18px; }
+.controls { display: grid; gap: 16px; }
+.legend, .actions, .status-line, .inventory {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.legend span, .inventory span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #475569;
+  font-size: 14px;
+}
+.swatch { width: 16px; height: 16px; border-radius: 5px; display: inline-block; border: 1px solid rgba(15,23,42,.18); }
+.swatch.available { background: #fff; }
+.swatch.selected { background: #60a5fa; }
+.swatch.held { background: #fbbf24; }
+.swatch.mine { background: #a78bfa; }
+.swatch.booked { background: #334155; }
+
+.actions button {
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 17px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(37,99,235,.22);
+}
+.actions button.secondary { background: #e2e8f0; color: #1e293b; box-shadow: none; }
+.actions button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+
+.status-line { justify-content: space-between; min-height: 28px; color: #334155; }
+#message.success { color: #15803d; font-weight: 700; }
+#message.error { color: #dc2626; font-weight: 700; }
+#countdown { font-weight: 900; color: #7c3aed; }
+.inventory strong { color: #0f172a; }
+
+.stage { overflow-x: auto; }
+.screen {
+  width: min(620px, 82%);
+  margin: 4px auto 28px;
+  height: 42px;
+  border-radius: 50% 50% 10px 10px / 100% 100% 10px 10px;
+  background: linear-gradient(180deg, #cbd5e1, #f8fafc);
+  display: grid;
+  place-items: center;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .22em;
+}
+
+.seat-map { display: grid; gap: 12px; min-width: 680px; }
+.seat-row { display: grid; grid-template-columns: 38px repeat(10, 1fr); gap: 10px; align-items: center; }
+.row-label { font-weight: 900; color: #475569; text-align: center; }
+
+.seat {
+  height: 52px;
+  border: 2px solid #cbd5e1;
+  border-radius: 14px 14px 22px 22px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.seat:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(15,23,42,.12); border-color: #60a5fa; }
+.seat.selected { background: #60a5fa; border-color: #2563eb; color: #fff; }
+.seat.held { background: #fbbf24; border-color: #d97706; color: #422006; cursor: not-allowed; }
+.seat.held.mine, .seat.mine { background: #a78bfa; border-color: #7c3aed; color: #fff; }
+.seat.booked { background: #334155; border-color: #0f172a; color: #fff; cursor: not-allowed; }
+.seat.conflict { outline: 4px solid rgba(239,68,68,.35); }
+
+@media (max-width: 720px) {
+  .hero { align-items: stretch; flex-direction: column; }
+  .session-card { min-width: 0; }
+  .status-line { align-items: flex-start; flex-direction: column; }
+}

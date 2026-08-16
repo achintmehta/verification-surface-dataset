@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ── Header ─────────────────────────────────────────────── -->
+      <header class="app-header">
+        <h1>📋 Message Board</h1>
+        <span class="status-badge" id="status-badge" aria-live="polite">
+          Connecting…
+        </span>
+      </header>
+
+      <!-- ── Message feed ───────────────────────────────────────── -->
+      <main class="feed-wrapper">
+        <ol class="message-list" id="message-list" aria-label="Messages">
+          <!-- Messages are injected here by main.js -->
+        </ol>
+        <p class="empty-state" id="empty-state" hidden>
+          No messages yet. Be the first to say something!
+        </p>
+      </main>
+
+      <!-- ── Compose form ───────────────────────────────────────── -->
+      <footer class="compose-bar">
+        <form class="compose-form" id="compose-form" autocomplete="off">
+          <label for="message-input" class="sr-only">Write a message</label>
+          <input
+            type="text"
+            id="message-input"
+            name="text"
+            class="compose-input"
+            placeholder="Write a message…"
+            maxlength="2000"
+            required
+            aria-label="Message text"
+          />
+          <button type="submit" class="compose-btn" id="compose-btn">
+            Send
+          </button>
+        </form>
+        <p class="compose-error" id="compose-error" role="alert" hidden></p>
+      </footer>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

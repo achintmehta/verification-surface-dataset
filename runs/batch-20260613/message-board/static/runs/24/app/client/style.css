@@ -1,0 +1,145 @@
+/* ── Reset & Base ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #f4f5f7;
+  --color-surface: #ffffff;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+  height: 100vh;
+  margin: 0 auto;
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+header {
+  padding: 20px 24px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+header .subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* ── Message List ───────────────────────────────────────────────────────── */
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+}
+
+#messages {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#messages li {
+  padding: 10px 14px;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  word-wrap: break-word;
+}
+
+#messages li .message-text {
+  display: block;
+}
+
+#messages li .message-time {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+#messages:empty::after {
+  content: "No messages yet. Be the first to post!";
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* ── Form ───────────────────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--color-border);
+  padding: 12px 24px;
+}
+
+#message-form {
+  display: flex;
+  gap: 8px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#message-input:focus {
+  border-color: var(--color-primary);
+}
+
+#message-form button {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#message-form button:hover {
+  background: var(--color-primary-hover);
+}
+
+#message-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

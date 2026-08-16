@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  background: #0079bf;
+  min-height: 100vh;
+  color: #172b4d;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+header h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.status.connected {
+  background: #61bd4f;
+  color: white;
+}
+
+.status.disconnected {
+  background: #eb5a46;
+  color: white;
+}
+
+#board {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  min-height: calc(100vh - 60px);
+  align-items: flex-start;
+}
+
+.column {
+  background: #ebecf0;
+  border-radius: 8px;
+  min-width: 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 90px);
+}
+
+.column-header {
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #172b4d;
+}
+
+.card-list {
+  padding: 0 8px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 8px;
+}
+
+.card {
+  background: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  position: relative;
+}
+
+.card:hover {
+  background: #f4f5f7;
+}
+
+.card.dragging {
+  opacity: 0.5;
+  transform: rotate(3deg);
+  cursor: grabbing;
+}
+
+.card .delete-btn {
+  display: none;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #999;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.card:hover .delete-btn {
+  display: block;
+}
+
+.card .delete-btn:hover {
+  background: #eb5a46;
+  color: white;
+}
+
+.drop-indicator {
+  height: 3px;
+  background: #0079bf;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  transition: opacity 0.15s;
+}
+
+.card-list.drag-over {
+  background: rgba(0, 121, 191, 0.05);
+  border-radius: 4px;
+}
+
+.add-card-form {
+  padding: 8px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  border: 2px solid #0079bf;
+  border-radius: 6px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: none;
+  outline: none;
+  min-height: 54px;
+}
+
+.add-card-form .form-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.btn-add {
+  background: #0079bf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.btn-add:hover {
+  background: #026aa7;
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #6b778c;
+  padding: 6px 8px;
+}
+
+.btn-cancel:hover {
+  color: #172b4d;
+}
+
+.add-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: #5e6c84;
+  font-size: 0.9rem;
+  border-radius: 0 0 8px 8px;
+}
+
+.add-card-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #172b4d;
+}

@@ -1,0 +1,37 @@
+{
+  "_instructions": "Fill score with pass|partial|fail|skip for each item. Grade CONDITION-BLIND: do not read manifest.json first. If the app does NOT boot/run at all, score every item FAIL (criteria unmet) - do not skip; skip is only for grader-side problems (your environment, not the artifact). See the matching .rubric.md for setup steps and criteria. Then re-run grader.py to merge.",
+  "_task": "log-explorer-perf",
+  "grader_name": "achint",
+  "items": {
+    "LE-V1": {
+      "score": "partial",
+      "criterion": "Scrolling through the 100k-row list is smooth: no page freeze, no permanently blank viewport regions, at top/middle/bottom.",
+      "weight": 3,
+      "notes": "Scrolling the page too quickly makes the panel go blank"
+    },
+    "LE-V2": {
+      "score": "pass",
+      "criterion": "The scrollbar reflects the filtered total; dragging it to the middle or end shows plausible, correctly-ordered rows for that position.",
+      "weight": 2,
+      "notes": ""
+    },
+    "LE-V3": {
+      "score": "pass",
+      "criterion": "Typing in the search box stays responsive while results update; rapid query changes never leave stale results on screen.",
+      "weight": 2,
+      "notes": ""
+    },
+    "LE-V4": {
+      "score": "pass",
+      "criterion": "Severity color-coding is visible and the 'N of <total>' indicator updates with each filter change.",
+      "weight": 1,
+      "notes": ""
+    },
+    "LE-V5": {
+      "score": "pass",
+      "criterion": "DevTools check: the number of rendered row elements stays bounded (~100 or fewer) regardless of scroll position.",
+      "weight": 2,
+      "notes": ""
+    }
+  }
+}

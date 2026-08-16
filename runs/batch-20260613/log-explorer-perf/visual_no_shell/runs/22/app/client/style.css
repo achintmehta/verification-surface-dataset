@@ -1,0 +1,243 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --text-bright: #f0f6fc;
+  --accent: #58a6ff;
+  --debug-bg: #1f2937;
+  --debug-fg: #9ca3af;
+  --info-bg: #0c2d48;
+  --info-fg: #58a6ff;
+  --warn-bg: #3b2f04;
+  --warn-fg: #e3b341;
+  --error-bg: #3d1418;
+  --error-fg: #f85149;
+  --row-height: 36px;
+  --header-height: 36px;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', 'Menlo', monospace;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ─── Toolbar ─────────────────────────────────────────────────────── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-bright);
+  white-space: nowrap;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.filter-group label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.filter-group select,
+.filter-group input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  border-color: var(--accent);
+}
+
+.filter-group input {
+  width: 280px;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+#row-count {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.severity-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.severity-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.severity-badge.debug { background: var(--debug-bg); color: var(--debug-fg); }
+.severity-badge.info  { background: var(--info-bg);  color: var(--info-fg); }
+.severity-badge.warn  { background: var(--warn-bg);  color: var(--warn-fg); }
+.severity-badge.error { background: var(--error-bg); color: var(--error-fg); }
+
+/* ─── Table Header ────────────────────────────────────────────────── */
+
+.table-header {
+  display: flex;
+  height: var(--header-height);
+  align-items: center;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* ─── Column widths ───────────────────────────────────────────────── */
+
+.col-ts       { width: 200px; flex-shrink: 0; padding-right: 12px; }
+.col-severity { width: 80px;  flex-shrink: 0; padding-right: 12px; }
+.col-service  { width: 180px; flex-shrink: 0; padding-right: 12px; }
+.col-message  { flex: 1; min-width: 0; }
+
+/* ─── Virtual Scroller ────────────────────────────────────────────── */
+
+.virtual-scroller {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.scroll-spacer {
+  width: 1px;
+  pointer-events: none;
+}
+
+.row-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+/* ─── Log Row ─────────────────────────────────────────────────────── */
+
+.log-row {
+  display: flex;
+  align-items: center;
+  height: var(--row-height);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.log-row:hover {
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.log-row .col {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-row .col-ts {
+  color: var(--text-muted);
+}
+
+.log-row .col-severity .badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge.debug { background: var(--debug-bg); color: var(--debug-fg); }
+.badge.info  { background: var(--info-bg);  color: var(--info-fg); }
+.badge.warn  { background: var(--warn-bg);  color: var(--warn-fg); }
+.badge.error { background: var(--error-bg); color: var(--error-fg); }
+
+.log-row .col-service {
+  color: var(--accent);
+}
+
+.log-row .col-message {
+  color: var(--text);
+}
+
+/* ─── Loading state ───────────────────────────────────────────────── */
+
+.loading-indicator {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 100;
+  display: none;
+}
+
+.loading-indicator.visible {
+  display: block;
+}

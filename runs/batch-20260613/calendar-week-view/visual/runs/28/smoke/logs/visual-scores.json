@@ -1,0 +1,55 @@
+{
+  "_instructions": "Fill score with pass|partial|fail|skip for each item. Grade CONDITION-BLIND: do not read manifest.json first. If the app does NOT boot/run at all, score every item FAIL (criteria unmet) - do not skip; skip is only for grader-side problems (your environment, not the artifact). See the matching .rubric.md for setup steps and criteria. Then re-run grader.py to merge.",
+  "_task": "calendar-week-view",
+  "grader_name": "achint",
+  "items": {
+    "CW-V1": {
+      "score": "pass",
+      "criterion": "Create 3 events with the IDENTICAL time range (e.g. Tue 09:00-10:00): they render as 3 equal-width blocks side by side, together filling the day column; none hidden.",
+      "weight": 3,
+      "notes": ""
+    },
+    "CW-V2": {
+      "score": "pass",
+      "criterion": "Create a partial-overlap chain (09:00-11:00, 10:00-12:00, 11:30-13:00): every event fully visible; width is divided only while contended.",
+      "weight": 3,
+      "notes": ""
+    },
+    "CW-V3": {
+      "score": "pass",
+      "criterion": "Vertical geometry: a 09:00-10:30 event's top edge aligns with the 09:00 gridline and bottom edge halfway between 10:00 and 11:00.",
+      "weight": 2,
+      "notes": ""
+    },
+    "CW-V4": {
+      "score": "pass",
+      "criterion": "A non-overlapping event later the same day uses the FULL column width even though a cluster exists earlier that day.",
+      "weight": 2,
+      "notes": ""
+    },
+    "CW-V5": {
+      "score": "fail",
+      "criterion": "An event ending at 24:00 terminates exactly at the column's bottom edge; nothing renders outside its day column.",
+      "weight": 1,
+      "notes": "The event gets created for next day at 11:00 PM and is very small strip instead of taking over whole cell"
+    },
+    "CW-V6": {
+      "score": "pass",
+      "criterion": "Long titles truncate with ellipsis inside their block; no text spills outside.",
+      "weight": 1,
+      "notes": ""
+    },
+    "CW-V7": {
+      "score": "partial",
+      "criterion": "Click/drag on empty space opens a create form pre-filled with the selected range; editing and deleting update the rendered week immediately.",
+      "weight": 1,
+      "notes": "Click and drag works but the event is created at 5 hours offset from the time specified."
+    },
+    "CW-V8": {
+      "score": "pass",
+      "criterion": "Prev/Today/Next navigation re-renders correctly; today's column is visually indicated on the correct day.",
+      "weight": 1,
+      "notes": ""
+    }
+  }
+}

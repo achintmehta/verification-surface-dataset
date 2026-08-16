@@ -1,0 +1,351 @@
+/* ===========================================================================
+   Theme tokens. Light is the default; [data-theme="dark"] overrides.
+   The chart and bars read these via JS-resolved CSS custom properties so the
+   entire dashboard — including chart internals — restyles on toggle.
+   =========================================================================== */
+:root,
+:root[data-theme='light'] {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-alt: #f0f3f9;
+  --border: #e2e8f0;
+  --text: #1a2233;
+  --text-muted: #5b6678;
+  --accent: #2563eb;
+  --accent-soft: #dbe7ff;
+  --positive: #128a4b;
+  --negative: #c0392b;
+  --chart-line: #2563eb;
+  --chart-area: rgba(37, 99, 235, 0.12);
+  --chart-grid: #e2e8f0;
+  --chart-axis: #94a3b8;
+  --chart-axis-text: #5b6678;
+  --bar: #2563eb;
+  --bar-track: #eaeef6;
+  --shadow: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e1320;
+  --surface: #161d2e;
+  --surface-alt: #1d2638;
+  --border: #2a3348;
+  --text: #e7ecf5;
+  --text-muted: #9aa6bd;
+  --accent: #5b8cff;
+  --accent-soft: #1e2c4d;
+  --positive: #36d399;
+  --negative: #f87171;
+  --chart-line: #5b8cff;
+  --chart-area: rgba(91, 140, 255, 0.16);
+  --chart-grid: #2a3348;
+  --chart-axis: #44506b;
+  --chart-axis-text: #9aa6bd;
+  --bar: #5b8cff;
+  --bar-track: #232d42;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  line-height: 1.45;
+  /* Critical: never allow sideways scrolling at any width. */
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---- Header ---- */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-header__title {
+  font-size: 1.15rem;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+/* ---- Main layout ---- */
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+.error-banner {
+  background: var(--negative);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+
+/* ---- Stat cards grid ----
+   1 col < 640px ; 2 cols 640-1023 ; 4 cols >= 1024 */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow);
+  min-width: 0; /* allow shrink so long values can't push width out */
+}
+
+.stat-card__label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0 0 0.4rem;
+}
+
+.stat-card__value {
+  font-size: clamp(1.35rem, 4vw, 1.7rem);
+  font-weight: 700;
+  margin: 0;
+  /* large/long values wrap rather than overflow the card */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.stat-card__sub {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.trend {
+  font-weight: 600;
+}
+.trend--up {
+  color: var(--positive);
+}
+.trend--down {
+  color: var(--negative);
+}
+
+/* ---- Body grid (chart / breakdown / table) ----
+   1 col < 640 ; 2 cols 640-1023 ; >=1024 chart+breakdown side by side, table full width */
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* table spans both columns on tablet+ */
+  .card--table {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card--chart {
+    grid-column: 1 / 2;
+  }
+  .card--breakdown {
+    grid-column: 2 / 3;
+  }
+  .card--table {
+    grid-column: 1 / -1;
+  }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem 1.1rem;
+  box-shadow: var(--shadow);
+  min-width: 0; /* prevent grid blowout from wide content */
+}
+
+.card__title {
+  font-size: 0.95rem;
+  margin: 0 0 0.85rem;
+  color: var(--text);
+}
+
+/* ---- Chart ---- */
+.chart {
+  width: 100%;
+  /* Responsive height; SVG fills this box and re-renders on resize. */
+  height: clamp(200px, 38vw, 300px);
+}
+
+.chart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- Category breakdown ---- */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.bar-row__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.bar-row__name {
+  font-size: 0.85rem;
+  color: var(--text);
+  /* truncate long labels with ellipsis, never overlapping the value/bar */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.bar-row__value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.bar-row__track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bar-track);
+  overflow: hidden;
+}
+
+.bar-row__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--bar);
+  min-width: 2px;
+}
+
+/* ---- Recent table ---- */
+.table-wrap {
+  width: 100%;
+  /* If the table is wider than the card, scroll inside the card —
+     never force the whole page to scroll sideways. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.recent-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  min-width: 460px; /* keeps columns legible; contained by table-wrap scroll */
+}
+
+.recent-table th,
+.recent-table td {
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.recent-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.recent-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.recent-table tbody tr:hover {
+  background: var(--surface-alt);
+}
+
+.loading {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}

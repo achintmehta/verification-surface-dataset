@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script>
+      document.documentElement.dataset.theme = 'light';
+      window.__themeReady = fetch('/api/settings')
+        .then((r) => (r.ok ? r.json() : { theme: 'light' }))
+        .then((s) => {
+          document.documentElement.dataset.theme = s.theme === 'dark' ? 'dark' : 'light';
+          return s;
+        })
+        .catch(() => ({ theme: 'light' }));
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <main class="boot-shell" aria-live="polite">Loading dashboard…</main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

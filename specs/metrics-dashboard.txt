@@ -1,0 +1,100 @@
+## Context
+
+We are building a read-mostly analytics dashboard as a traditional client-server web application. The server seeds and serves a small metrics dataset; the client renders it as a responsive dashboard: stat cards, a time-series chart, a category breakdown, and a data table. The logic is deliberately simple — fetch JSON, render it — because the defining challenge is *presentation discipline*: the dashboard must remain correct and legible at phone, tablet, and desktop widths, with no horizontal overflow, no clipped or overlapping content, and charts that redraw to fit their container. To minimize external dependencies while retaining the power of PostgreSQL, we use PGLite embedded within a Node.js server.
+
+## Goals / Non-Goals
+
+**Goals:**
+- A dashboard page composed of: four summary stat cards, one 30-day time-series line chart, one category bar breakdown, and a recent-items table.
+- Fully responsive layout with explicit breakpoints: 1 column on narrow screens, 2 columns on medium, 4-across stat cards with a 2-column body on wide screens.
+- A light/dark theme toggle whose preference persists server-side and survives reload.
+- All data served from PGLite via a JSON API; the database is seeded deterministically on first boot.
+
+**Non-Goals:**
+- Authentication, multi-dashboard support, or user-configurable widgets.
+- Real-time updates; data changes only on reload.
+- Charting libraries — the chart is drawn by our own code (SVG or canvas) so sizing behavior is fully ours.
+
+## Decisions
+
+**Decision 1: Hand-drawn chart (SVG or canvas), no chart library**
+- *Rationale*: Library charts hide sizing bugs behind their own resize handling. Drawing the chart ourselves keeps the task's core challenge — rendering that adapts to its container — in our own code, and keeps the dependency tree minimal.
+
+**Decision 2: CSS Grid with named breakpoints**
+- *Rationale*: The layout is a grid of cards whose column count changes at 640px and 1024px. CSS Grid expresses this directly and makes the acceptance criteria below checkable against concrete widths (360px, 768px, 1280px).
+
+**Decision 3: Server-persisted theme preference**
+- *Rationale*: The theme toggle round-trips through the API (`GET/PUT /api/settings`) and persists in PGLite, exercising the full stack rather than only browser storage.
+
+**Decision 4: Deterministic seed**
+- *Rationale*: On first boot the server seeds 30 days of time-series values, 6 categories, and 20 recent items using a fixed seed, so any two correct implementations render comparable dashboards.
+
+## Risks / Trade-offs
+
+- [Risk] Layouts that look right at desktop width silently overflow or stack wrongly at 360px.
+  - *Mitigation*: Breakpoints and the no-horizontal-overflow rule are graded acceptance criteria at three concrete widths.
+- [Risk] A canvas/SVG chart drawn once at load renders blurry or overflows after resize.
+  - *Mitigation*: The chart must re-render on container resize; criteria pin its fit at all three widths.
+- [Risk] Long category names and large numbers break card layouts.
+  - *Mitigation*: Seed data includes a deliberately long category label and a 7-digit value; truncation/ellipsis behavior is specified.
+
+## Why
+
+Most rendering bugs in real dashboards are invisible to an API: the JSON is correct while the page clips a column, overflows the viewport sideways, draws an axis through a label, or loses contrast in dark mode. This task isolates that class of correctness. It is an excellent demonstration of building a presentation layer whose quality is only observable in the rendered page.
+
+## What Changes
+
+- A brand new client-server web application.
+- Backend: Node.js + Express + embedded PGLite, seeded deterministically, serving metrics and settings as JSON.
+- Frontend: a Vanilla JS / Vite single-page dashboard with hand-drawn charts and a responsive grid.
+
+## Capabilities
+
+### New Capabilities
+- `metrics-dashboard`: seeded metrics API, settings API, responsive dashboard UI with theme toggle.
+
+### Modified Capabilities
+None (greenfield project).
+
+## Impact
+
+New project. Establishes the Node.js backend, the PGLite schema and deterministic seed, the metrics/settings API, and the responsive frontend.
+
+## 1. Project Initialization
+
+- [ ] 1.1 Set up the Node.js backend project declaring its dependencies (express, @electric-sql/pglite, cors) in package.json
+- [ ] 1.2 Set up the Vanilla JS / Vite frontend project
+- [ ] 1.3 Provide npm scripts for running the backend and frontend development servers together
+
+## 2. Backend & Database
+
+- [ ] 2.1 Express server with CORS and JSON body parsing
+- [ ] 2.2 Initialize embedded PGLite writing to the local file system
+- [ ] 2.3 Schema + deterministic seed: `daily_metrics` (30 rows: date, visitors, revenue), `categories` (6 rows incl. one long label, e.g. "Enterprise Infrastructure & Compliance"; one value ≥ 1,000,000), `recent_items` (20 rows: name, category, value, created_at), `settings` (theme)
+- [ ] 2.4 `GET /api/summary` returning the four headline numbers (total visitors, total revenue, best day, 7-day trend %)
+- [ ] 2.5 `GET /api/timeseries`, `GET /api/categories`, `GET /api/recent` returning chart/table data
+- [ ] 2.6 `GET /api/settings` and `PUT /api/settings` persisting `{ "theme": "light" | "dark" }`
+
+## 3. Dashboard Layout
+
+- [ ] 3.1 Stat cards row: four cards showing the summary numbers with labels and trend indicator
+- [ ] 3.2 Time-series line chart (own SVG/canvas code): axes, gridlines, labeled ticks, the 30-day series; redraws to fit its container on resize
+- [ ] 3.3 Category breakdown as horizontal bars with value labels; long category names truncate with ellipsis, never overlapping their bars
+- [ ] 3.4 Recent-items table; on narrow screens it remains usable without forcing page-level horizontal scroll
+- [ ] 3.5 Responsive grid: 1 column below 640px; 2 columns 640–1023px; at ≥1024px the four stat cards sit in one row with chart and breakdown side by side below
+- [ ] 3.6 No horizontal overflow at any width ≥ 360px: the document never scrolls sideways and no element is clipped by the viewport
+
+## 4. Theming
+
+- [ ] 4.1 Light/dark toggle in the header applying a coherent palette to page, cards, chart (axes, gridlines, series), bars, and table
+- [ ] 4.2 Persist the choice via `PUT /api/settings`; on load apply the persisted theme before first paint
+- [ ] 4.3 Maintain legible contrast in both themes: all text, axis labels, and value labels remain readable (no dark-on-dark / light-on-light)
+
+## Acceptance Criteria (graded)
+
+- At 360px, 768px, and 1280px viewport widths the layout matches the specified column structure, with no horizontal page scroll and no clipped or overlapping elements at any of the three widths.
+- The chart fits its container at all three widths — axis labels, ticks, and the full 30-day series visible, nothing drawn outside the chart area — and redraws correctly after a viewport resize.
+- The long seeded category label truncates with an ellipsis; the ≥7-digit seeded value renders fully on its stat card without overflowing it.
+- The four summary numbers rendered on the stat cards equal the values computed from the seeded data via the API.
+- Toggling the theme restyles the entire dashboard (including chart internals) with legible contrast, and the preference survives a page reload and a full server restart.
+- The dashboard renders entirely from API data: with the backend stopped, the page shows an explicit error/empty state rather than stale hardcoded content.

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Metrics Dashboard</title>
+    <script>
+      (function () {
+        document.documentElement.dataset.theme = 'light';
+        fetch('/api/settings', { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : { theme: 'light' }; })
+          .then(function (s) { document.documentElement.dataset.theme = s.theme === 'dark' ? 'dark' : 'light'; })
+          .catch(function () {})
+          .finally(function () { document.documentElement.dataset.themeReady = 'true'; });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-Q1LgPs8G.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D5aGFQqz.css">
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="title-block">
+          <p class="eyebrow">Read-mostly analytics</p>
+          <h1>Metrics Dashboard</h1>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+          <span class="toggle-dot" aria-hidden="true"></span>
+          <span id="themeText">Light</span>
+        </button>
+      </header>
+
+      <main>
+        <section id="status" class="status" hidden></section>
+
+        <section class="stats-grid" aria-label="Summary metrics">
+          <article class="card stat-card">
+            <span class="stat-label">Total visitors</span>
+            <strong id="totalVisitors" class="stat-value">—</strong>
+            <small id="visitorNote" class="stat-note">30 day total</small>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">Total revenue</span>
+            <strong id="totalRevenue" class="stat-value">—</strong>
+            <small class="stat-note">Seeded revenue sum</small>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">Best day</span>
+            <strong id="bestDay" class="stat-value fit-value">—</strong>
+            <small id="bestDayNote" class="stat-note">Highest revenue</small>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-label">7-day trend</span>
+            <strong id="trend" class="stat-value">—</strong>
+            <small id="trendNote" class="stat-note">Visitors vs previous week</small>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="card chart-card">
+            <div class="card-header">
+              <div>
+                <h2>30-day visitors</h2>
+                <p>Hand-drawn SVG line chart</p>
+              </div>
+            </div>
+            <div id="chartWrap" class="chart-wrap" aria-label="30 day visitor line chart"></div>
+          </article>
+
+          <article class="card breakdown-card">
+            <div class="card-header">
+              <div>
+                <h2>Category breakdown</h2>
+                <p>Value by business area</p>
+              </div>
+            </div>
+            <div id="categoryBars" class="category-bars"></div>
+          </article>
+        </section>
+
+        <section class="card table-card">
+          <div class="card-header">
+            <div>
+              <h2>Recent items</h2>
+              <p>Latest seeded records</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Value</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="recentBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

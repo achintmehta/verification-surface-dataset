@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-left">
+        <h1 class="logo">
+          <span class="logo-icon">⚡</span>
+          Log Explorer
+        </h1>
+        <div class="stats-badge">
+          <span id="total-count">—</span> entries
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="severity-filter" class="filter-label">Severity</label>
+            <select id="severity-filter" class="filter-select">
+              <option value="">All</option>
+              <option value="error">Error</option>
+              <option value="warn">Warn</option>
+              <option value="info">Info</option>
+              <option value="debug">Debug</option>
+            </select>
+          </div>
+          <div class="filter-group search-group">
+            <label for="search-input" class="filter-label">Search</label>
+            <div class="search-wrapper">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Filter by message..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button id="clear-search" class="clear-btn" title="Clear search" style="display:none">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="result-info">
+        <span id="result-count-label">Loading...</span>
+      </div>
+      <div class="severity-badges" id="severity-badges"></div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col col-ts">Timestamp</div>
+        <div class="col col-severity">Severity</div>
+        <div class="col col-service">Service</div>
+        <div class="col col-message">Message</div>
+      </div>
+
+      <!--
+        Virtual scroll:
+          #scroll-viewport  — overflow-y:scroll, fixed height
+            #scroll-runway  — height = total*ROW_HEIGHT, position:relative
+              #row-pool     — position:absolute, top = firstRow*ROW_HEIGHT
+                              contains only the visible rows in normal flow
+      -->
+      <div id="scroll-viewport">
+        <div id="scroll-runway">
+          <div id="row-pool"></div>
+        </div>
+      </div>
+
+      <div class="empty-state" id="empty-state" style="display:none">
+        <div class="empty-icon">🔎</div>
+        <div class="empty-title">No logs found</div>
+        <div class="empty-sub">Try adjusting your filters</div>
+      </div>
+
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading logs...</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

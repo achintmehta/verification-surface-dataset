@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>🎭 Seat Booking</h1>
+        <p class="subtitle">Select seats, hold them, then confirm your booking.</p>
+      </header>
+
+      <div class="stage-label">STAGE</div>
+
+      <main id="seat-map" class="seat-map" aria-label="Seat map">
+        <div class="loading">Loading seats…</div>
+      </main>
+
+      <section class="legend" aria-label="Legend">
+        <span class="legend-item"><span class="dot available"></span>Available</span>
+        <span class="legend-item"><span class="dot held-own"></span>Your hold</span>
+        <span class="legend-item"><span class="dot held-other"></span>Held by other</span>
+        <span class="legend-item"><span class="dot booked"></span>Booked</span>
+        <span class="legend-item"><span class="dot selected"></span>Selected</span>
+      </section>
+
+      <section id="action-panel" class="action-panel" aria-live="polite">
+        <div id="selection-info" class="selection-info hidden">
+          <span id="selection-count">0 seats selected</span>
+          <button id="btn-hold" class="btn btn-primary">Hold Selected Seats</button>
+        </div>
+
+        <div id="hold-info" class="hold-info hidden">
+          <div class="hold-details">
+            <span class="hold-label">Active Hold</span>
+            <span id="hold-seats"></span>
+            <span class="countdown-label">Expires in: <strong id="countdown">--</strong></span>
+          </div>
+          <div class="hold-actions">
+            <button id="btn-confirm" class="btn btn-success">Confirm Booking</button>
+            <button id="btn-release" class="btn btn-danger">Release Hold</button>
+          </div>
+        </div>
+
+        <div id="booking-info" class="booking-info hidden">
+          <div class="booking-success">
+            <span class="success-icon">✅</span>
+            <span>Booking confirmed! Seats: <strong id="booked-seats"></strong></span>
+          </div>
+          <button id="btn-new-booking" class="btn btn-secondary">Book More Seats</button>
+        </div>
+
+        <div id="error-banner" class="error-banner hidden" role="alert"></div>
+        <div id="info-banner" class="info-banner hidden" role="status"></div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

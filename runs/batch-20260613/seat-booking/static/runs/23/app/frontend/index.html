@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>🎭 Seat Booking</h1>
+        <div id="status-bar">
+          <span id="inventory-count"></span>
+          <span id="connection-status" class="disconnected">● Disconnected</span>
+        </div>
+      </header>
+
+      <main>
+        <div id="stage">STAGE</div>
+        <div id="seat-map"></div>
+
+        <div id="selection-panel" class="hidden">
+          <h3>Selected Seats</h3>
+          <div id="selected-seats-list"></div>
+          <div id="hold-actions">
+            <button id="btn-hold" disabled>Hold Selected Seats</button>
+          </div>
+        </div>
+
+        <div id="hold-panel" class="hidden">
+          <h3>Your Hold</h3>
+          <div id="hold-info"></div>
+          <div id="hold-countdown"></div>
+          <div id="hold-actions-panel">
+            <button id="btn-confirm">Confirm Booking</button>
+            <button id="btn-release" class="secondary">Release Hold</button>
+          </div>
+        </div>
+
+        <div id="booking-panel" class="hidden">
+          <h3>✅ Booking Confirmed!</h3>
+          <div id="booking-info"></div>
+          <button id="btn-new-booking" class="secondary">Make Another Booking</button>
+        </div>
+
+        <div id="error-panel" class="hidden">
+          <div id="error-message"></div>
+          <button id="btn-dismiss-error" class="secondary">Dismiss</button>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

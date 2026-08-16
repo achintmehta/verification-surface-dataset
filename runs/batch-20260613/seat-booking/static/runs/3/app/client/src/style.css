@@ -1,0 +1,339 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-surface-2:    #22263a;
+  --color-border:       #2e3350;
+  --color-text:         #e2e8f0;
+  --color-text-muted:   #8892a4;
+
+  --color-available:    #2d6a4f;
+  --color-available-h:  #40916c;
+  --color-available-bg: #1b4332;
+
+  --color-held-other:   #7b5e00;
+  --color-held-other-h: #b38600;
+  --color-held-other-bg:#3d2e00;
+
+  --color-held-mine:    #1a5276;
+  --color-held-mine-h:  #2980b9;
+  --color-held-mine-bg: #0d2b3e;
+
+  --color-selected:     #6c3483;
+  --color-selected-h:   #9b59b6;
+  --color-selected-bg:  #3b1f4e;
+
+  --color-booked:       #4a4a5a;
+  --color-booked-bg:    #2a2a38;
+
+  --color-danger:       #c0392b;
+  --color-danger-h:     #e74c3c;
+  --color-success:      #1e8449;
+  --color-success-h:    #27ae60;
+  --color-primary:      #1a5276;
+  --color-primary-h:    #2980b9;
+
+  --radius:             8px;
+  --radius-sm:          4px;
+  --seat-size:          44px;
+  --seat-gap:           8px;
+  --font:               'Segoe UI', system-ui, sans-serif;
+}
+
+html { font-size: 16px; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font);
+  min-height: 100vh;
+  padding: 1.5rem 1rem 4rem;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+#app { max-width: 900px; margin: 0 auto; }
+
+.header { text-align: center; margin-bottom: 2rem; }
+.header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+.subtitle { color: var(--color-text-muted); margin-top: 0.4rem; font-size: 0.95rem; }
+
+/* ============================================================
+   Legend
+   ============================================================ */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.seat-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.seat-dot.available   { background: var(--color-available); }
+.seat-dot.held-other  { background: var(--color-held-other); }
+.seat-dot.held-mine   { background: var(--color-held-mine); }
+.seat-dot.selected    { background: var(--color-selected); }
+.seat-dot.booked      { background: var(--color-booked); }
+
+/* ============================================================
+   Stage label
+   ============================================================ */
+.stage-label {
+  text-align: center;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 2rem;
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   Seat map
+   ============================================================ */
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: var(--seat-gap);
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--seat-gap);
+}
+
+.row-label {
+  width: 24px;
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.15s, border-color 0.15s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Available */
+.seat.available {
+  background: var(--color-available-bg);
+  border-color: var(--color-available);
+  color: var(--color-available-h);
+}
+.seat.available:hover {
+  background: var(--color-available);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+/* Held by others */
+.seat.held-other {
+  background: var(--color-held-other-bg);
+  border-color: var(--color-held-other);
+  color: var(--color-held-other-h);
+  cursor: not-allowed;
+}
+
+/* Held by me */
+.seat.held-mine {
+  background: var(--color-held-mine-bg);
+  border-color: var(--color-held-mine-h);
+  color: var(--color-held-mine-h);
+  cursor: default;
+}
+
+/* Selected (before hold) */
+.seat.selected {
+  background: var(--color-selected-bg);
+  border-color: var(--color-selected-h);
+  color: var(--color-selected-h);
+  transform: scale(1.08);
+}
+.seat.selected:hover {
+  background: var(--color-selected);
+  color: #fff;
+}
+
+/* Booked */
+.seat.booked {
+  background: var(--color-booked-bg);
+  border-color: var(--color-booked);
+  color: var(--color-booked);
+  cursor: not-allowed;
+}
+
+/* Conflict highlight (briefly shown on 409) */
+.seat.conflict {
+  animation: conflict-flash 0.8s ease 3;
+}
+@keyframes conflict-flash {
+  0%, 100% { background: var(--color-held-other-bg); border-color: var(--color-held-other); }
+  50%       { background: #7b0000; border-color: #e74c3c; }
+}
+
+.loading {
+  color: var(--color-text-muted);
+  padding: 2rem;
+  font-size: 1rem;
+}
+
+/* ============================================================
+   Action panel
+   ============================================================ */
+.action-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.panel { display: none; }
+.panel.visible { display: block; }
+
+.panel-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hold-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.hold-label { color: var(--color-text-muted); }
+.hold-timer-label { color: var(--color-text-muted); }
+
+.countdown {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #f39c12;
+  min-width: 3.5ch;
+}
+.countdown.urgent { color: var(--color-danger-h); }
+
+.panel-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.booked-msg { flex: 1; font-size: 0.95rem; }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-primary  { background: var(--color-primary);  color: #fff; }
+.btn-primary:hover:not(:disabled)  { background: var(--color-primary-h); }
+
+.btn-success  { background: var(--color-success);  color: #fff; }
+.btn-success:hover:not(:disabled)  { background: var(--color-success-h); }
+
+.btn-danger   { background: var(--color-danger);   color: #fff; }
+.btn-danger:hover:not(:disabled)   { background: var(--color-danger-h); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+.btn-ghost:hover:not(:disabled) { background: var(--color-surface-2); color: var(--color-text); }
+
+/* ============================================================
+   Notification banner
+   ============================================================ */
+.notification {
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-left: 4px solid;
+}
+.notification.info    { background: #1a2a3a; border-color: #2980b9; color: #aed6f1; }
+.notification.success { background: #1a2e1a; border-color: #27ae60; color: #a9dfbf; }
+.notification.error   { background: #2e1a1a; border-color: #e74c3c; color: #f1948a; }
+.notification.warning { background: #2e2a1a; border-color: #f39c12; color: #fad7a0; }
+
+/* ============================================================
+   Inventory bar
+   ============================================================ */
+.inventory {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+.inventory strong { color: var(--color-text); }
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.hidden { display: none !important; }

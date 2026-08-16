@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaborative Kanban — Labels Preview</title>
+  <style>
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eef2f7;
+  color: #172033;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #172033, #334155);
+  color: white;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.2);
+}
+h1, h2, p { margin: 0; }
+.topbar p { color: #cbd5e1; margin-top: 0.35rem; }
+.status {
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: #16a34a;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+}
+.filter-label-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.filter-chip {
+  border: 2px solid var(--chip-color, #94a3b8);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  background: transparent;
+  color: #172033;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.filter-chip.active {
+  background: var(--chip-color, #94a3b8);
+  color: white;
+}
+.filter-clear {
+  border: none;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: start;
+}
+.column {
+  background: #dbe4ef;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  padding: 1rem;
+  min-height: 420px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+.column h2 { font-size: 1.05rem; margin-bottom: 0.8rem; color: #0f172a; }
+.add-card { display: flex; gap: 0.45rem; margin-bottom: 0.85rem; }
+.add-card input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  outline: none;
+  font: inherit;
+}
+.add-card button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.cards { min-height: 300px; border-radius: 12px; padding: 0.25rem; }
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 0.65rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  cursor: grab;
+  overflow-wrap: anywhere;
+  user-select: none;
+  position: relative;
+}
+.card-body { margin-bottom: 0.4rem; font-size: 0.95rem; }
+.card-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.4rem; }
+.label-chip {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+.card-label-btn {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.label-manager-wrap { padding: 0 1.25rem 1.25rem; }
+.label-manager {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+  overflow: hidden;
+}
+.label-manager-toggle {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+  color: #334155;
+}
+.label-manager-toggle::-webkit-details-marker { display: none; }
+.label-manager-body {
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+.label-create-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+.label-name-input {
+  flex: 1;
+  min-width: 120px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+  outline: none;
+}
+.label-color-input {
+  width: 38px;
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 2px;
+  cursor: pointer;
+  background: none;
+}
+.label-create-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+}
+.label-list { display: flex; flex-direction: column; gap: 0.4rem; }
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+.label-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.label-row-name { flex: 1; font-size: 0.88rem; font-weight: 600; }
+.label-row-actions { display: flex; gap: 0.25rem; }
+.label-edit-btn, .label-delete-btn {
+  border: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  color: #475569;
+  font-family: inherit;
+}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Collaborative Kanban</h1>
+      <p>Drag cards between columns. Updates are broadcast in real time with SSE.</p>
+    </div>
+    <div class="status">Live</div>
+  </header>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <span class="filter-label-text">Filter:</span>
+    <button class="filter-chip active" style="--chip-color:#ef4444">Bug</button>
+    <button class="filter-chip" style="--chip-color:#8b5cf6">Enhancement</button>
+    <button class="filter-chip" style="--chip-color:#f97316">Urgent</button>
+    <button class="filter-chip" style="--chip-color:#3b82f6">Feature</button>
+    <button class="filter-clear">Clear</button>
+  </div>
+
+  <!-- Board -->
+  <main class="board">
+    <!-- To Do -->
+    <section class="column">
+      <h2>To Do</h2>
+      <form class="add-card">
+        <input type="text" placeholder="Add a card…" />
+        <button type="submit">Add</button>
+      </form>
+      <div class="cards">
+        <article class="card">
+          <div class="card-body">Test card with labels</div>
+          <button class="card-label-btn">Labels</button>
+        </article>
+        <article class="card">
+          <div class="card-body">Fix login page crash</div>
+          <div class="card-chips">
+            <span class="label-chip" style="background:#ef4444">Bug</span>
+            <span class="label-chip" style="background:#f97316">Urgent</span>
+          </div>
+          <button class="card-label-btn">Labels</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- In Progress -->
+    <section class="column">
+      <h2>In Progress</h2>
+      <form class="add-card">
+        <input type="text" placeholder="Add a card…" />
+        <button type="submit">Add</button>
+      </form>
+      <div class="cards">
+        <article class="card">
+          <div class="card-body">Add dark mode support</div>
+          <div class="card-chips">
+            <span class="label-chip" style="background:#8b5cf6">Enhancement</span>
+          </div>
+          <button class="card-label-btn">Labels</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Done -->
+    <section class="column">
+      <h2>Done</h2>
+      <form class="add-card">
+        <input type="text" placeholder="Add a card…" />
+        <button type="submit">Add</button>
+      </form>
+      <div class="cards">
+        <article class="card">
+          <div class="card-body">Update dependencies</div>
+          <button class="card-label-btn">Labels</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Label Manager (open) -->
+  <div class="label-manager-wrap">
+    <details class="label-manager" open>
+      <summary class="label-manager-toggle">&#9656; Manage Labels</summary>
+      <div class="label-manager-body">
+        <form class="label-create-form">
+          <input type="text" placeholder="Label name…" class="label-name-input" />
+          <input type="color" value="#3b82f6" class="label-color-input" />
+          <button type="submit" class="label-create-btn">Add Label</button>
+        </form>
+        <div class="label-list">
+          <div class="label-row">
+            <span class="label-swatch" style="background:#ef4444"></span>
+            <span class="label-row-name">Bug</span>
+            <div class="label-row-actions">
+              <button class="label-edit-btn">Edit</button>
+              <button class="label-delete-btn">Delete</button>
+            </div>
+          </div>
+          <div class="label-row">
+            <span class="label-swatch" style="background:#8b5cf6"></span>
+            <span class="label-row-name">Enhancement</span>
+            <div class="label-row-actions">
+              <button class="label-edit-btn">Edit</button>
+              <button class="label-delete-btn">Delete</button>
+            </div>
+          </div>
+          <div class="label-row">
+            <span class="label-swatch" style="background:#3b82f6"></span>
+            <span class="label-row-name">Feature</span>
+            <div class="label-row-actions">
+              <button class="label-edit-btn">Edit</button>
+              <button class="label-delete-btn">Delete</button>
+            </div>
+          </div>
+          <div class="label-row">
+            <span class="label-swatch" style="background:#f97316"></span>
+            <span class="label-row-name">Urgent</span>
+            <div class="label-row-actions">
+              <button class="label-edit-btn">Edit</button>
+              <button class="label-delete-btn">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</body>
+</html>

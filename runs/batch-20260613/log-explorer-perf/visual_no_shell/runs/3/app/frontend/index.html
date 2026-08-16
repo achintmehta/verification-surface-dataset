@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="app-title">
+          <span class="title-icon">📋</span>
+          Log Explorer
+        </h1>
+        <div class="row-count" id="row-count">Loading...</div>
+      </div>
+      <div class="header-right">
+        <div class="filter-group">
+          <label for="severity-filter" class="filter-label">Severity</label>
+          <select id="severity-filter" class="filter-select">
+            <option value="">All</option>
+            <option value="error">Error</option>
+            <option value="warn">Warn</option>
+            <option value="info">Info</option>
+            <option value="debug">Debug</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="search-input" class="filter-label">Search</label>
+          <div class="search-wrapper">
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="Filter by message..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <span class="search-clear" id="search-clear" title="Clear search">✕</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col-ts">Timestamp</div>
+        <div class="col-severity">Severity</div>
+        <div class="col-service">Service</div>
+        <div class="col-message">Message</div>
+      </div>
+
+      <div class="virtual-scroll-container" id="scroll-container">
+        <div class="virtual-scroll-spacer" id="scroll-spacer"></div>
+        <div class="virtual-rows" id="virtual-rows"></div>
+      </div>
+    </div>
+
+    <div class="status-bar" id="status-bar">
+      <span id="status-text">Initializing...</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

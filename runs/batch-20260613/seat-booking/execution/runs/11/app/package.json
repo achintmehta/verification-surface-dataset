@@ -1,0 +1,26 @@
+{
+  "name": "seat-booking",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Concurrency-safe seat booking service with PGLite and SSE",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "node server/index.js",
+    "dev:server": "node server/index.js",
+    "dev:client": "vite",
+    "dev": "concurrently -k -n server,client -c blue,green \"npm:dev:server\" \"npm:dev:client\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node test/concurrency.test.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.12",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "vite": "^5.4.0"
+  }
+}

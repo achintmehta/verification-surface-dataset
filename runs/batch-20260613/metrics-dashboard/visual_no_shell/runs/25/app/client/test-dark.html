@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Test</title>
+  <style>
+    body { margin: 0; padding: 20px; background: #333; font-family: sans-serif; }
+    h2 { color: white; margin: 10px 0 5px; font-size: 14px; }
+    iframe { border: 2px solid #666; display: block; margin-top: 5px; }
+    .row { display: flex; gap: 20px; margin-bottom: 20px; }
+  </style>
+  <script>
+    fetch('/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'light' })
+    }).then(() => {
+      // Load light mode frames  
+      document.getElementById('f360').src = '/?t=' + Date.now();
+      document.getElementById('f768').src = '/?t=' + Date.now();
+      document.getElementById('f1280').src = '/?t=' + Date.now();
+    });
+  </script>
+</head>
+<body>
+  <div class="row">
+    <div>
+      <h2>360px (1-col)</h2>
+      <iframe id="f360" src="about:blank" width="360" height="600"></iframe>
+    </div>
+    <div>
+      <h2>768px (2-col)</h2>
+      <iframe id="f768" src="about:blank" width="768" height="600"></iframe>
+    </div>
+  </div>
+  <div>
+    <h2>1280px (4-col stat cards, 2-col body)</h2>
+    <iframe id="f1280" src="about:blank" width="1280" height="600"></iframe>
+  </div>
+</body>
+</html>

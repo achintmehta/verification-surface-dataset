@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <h1>🎟️ Event Seat Booking</h1>
+        <div id="connection" class="connection offline">connecting…</div>
+      </header>
+
+      <main>
+        <section class="screen">SCREEN</section>
+
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch held"></i> Held</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+
+        <div class="inventory" id="inventory"></div>
+      </main>
+
+      <aside class="panel">
+        <h2>Your selection</h2>
+        <div id="selection" class="selection">No seats selected.</div>
+
+        <div id="hold-status" class="hold-status hidden">
+          <p>Hold active — <strong id="countdown"></strong></p>
+          <div class="progress"><div id="progress-bar"></div></div>
+        </div>
+
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" class="primary hidden">Confirm booking</button>
+          <button id="release-btn" class="danger hidden">Release hold</button>
+        </div>
+
+        <div id="message" class="message" role="status"></div>
+
+        <div class="session">
+          <label>Session id <code id="session-id"></code></label>
+          <button id="new-session" class="link">new session</button>
+        </div>
+      </aside>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

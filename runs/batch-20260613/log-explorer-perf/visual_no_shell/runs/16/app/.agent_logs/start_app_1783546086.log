@@ -1,0 +1,53 @@
+
+> log-explorer@1.0.0 dev
+> cd client && npm install && cd .. && concurrently "npm run dev:server" "npm run dev:client"
+
+
+up to date, audited 16 packages in 555ms
+
+6 packages are looking for funding
+  run `npm fund` for details
+
+2 vulnerabilities (1 moderate, 1 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[1] 
+[1] > log-explorer@1.0.0 dev:client
+[1] > cd client && npm run dev
+[1] 
+[0] 
+[0] > log-explorer@1.0.0 dev:server
+[0] > cd server && node ../test-perf.js && node index.js
+[0] 
+[0] node:internal/errors:496
+[0]     ErrorCaptureStackTrace(err);
+[0]     ^
+[0] 
+[0] Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@electric-sql/pglite' imported from /mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/visual_no_shell/runs/16/app/test-perf.js
+[0]     at new NodeError (node:internal/errors:405:5)
+[0]     at packageResolve (node:internal/modules/esm/resolve:916:9)
+[0]     at moduleResolve (node:internal/modules/esm/resolve:973:20)
+[0]     at defaultResolve (node:internal/modules/esm/resolve:1206:11)
+[0]     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:404:12)
+[0]     at ModuleLoader.resolve (node:internal/modules/esm/loader:373:25)
+[0]     at ModuleLoader.getModuleJob (node:internal/modules/esm/loader:250:38)
+[0]     at ModuleWrap.<anonymous> (node:internal/modules/esm/module_job:76:39)
+[0]     at link (node:internal/modules/esm/module_job:75:36) {
+[0]   code: 'ERR_MODULE_NOT_FOUND'
+[0] }
+[0] 
+[0] Node.js v18.20.8
+[0] npm run dev:server exited with code 1
+[1] 
+[1] > client@1.0.0 dev
+[1] > vite --port 3000
+[1] 
+[1] 
+[1]   VITE v5.4.21  ready in 299 ms
+[1] 
+[1]   ➜  Local:   http://localhost:3000/
+[1]   ➜  Network: use --host to expose
+[1] npm run dev:client exited with code SIGTERM

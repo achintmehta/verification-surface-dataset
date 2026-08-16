@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ── Header ─────────────────────────────────────────────── -->
+      <header class="header">
+        <div class="header__inner">
+          <h1 class="header__title">
+            <span class="header__icon">💬</span>
+            Message Board
+          </h1>
+          <span class="header__badge" id="status-badge">connecting…</span>
+        </div>
+      </header>
+
+      <!-- ── Main content ───────────────────────────────────────── -->
+      <main class="main">
+        <!-- Message feed -->
+        <section class="feed-section">
+          <div class="feed" id="feed" role="log" aria-live="polite" aria-label="Message feed">
+            <!-- Messages are injected here by main.js -->
+            <div class="feed__empty" id="feed-empty">
+              No messages yet. Be the first to say something!
+            </div>
+          </div>
+        </section>
+
+        <!-- Compose form -->
+        <section class="compose-section">
+          <form class="compose" id="compose-form" novalidate>
+            <label class="compose__label" for="message-input">New message</label>
+            <div class="compose__row">
+              <textarea
+                class="compose__input"
+                id="message-input"
+                name="text"
+                placeholder="Type your message…"
+                rows="2"
+                maxlength="2000"
+                required
+                autocomplete="off"
+              ></textarea>
+              <button class="compose__btn" type="submit" id="send-btn">
+                <span class="compose__btn-text">Send</span>
+                <span class="compose__btn-icon" aria-hidden="true">➤</span>
+              </button>
+            </div>
+            <div class="compose__meta">
+              <span class="compose__error" id="compose-error" role="alert"></span>
+              <span class="compose__counter" id="char-counter">0 / 2000</span>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

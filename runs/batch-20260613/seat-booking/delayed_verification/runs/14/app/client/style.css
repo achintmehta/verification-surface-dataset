@@ -1,0 +1,189 @@
+:root {
+  --bg: #0f1221;
+  --panel: #1a1f38;
+  --available: #2e7d52;
+  --available-hover: #3fa66f;
+  --held: #b9892c;
+  --held-mine: #3b6fd4;
+  --booked: #5a2b3a;
+  --text: #e8ecf5;
+  --muted: #9aa3bd;
+  --danger: #d6455a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #2a2f4d;
+}
+
+header h1 { font-size: 1.3rem; margin: 0; }
+
+.conn {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.conn.connected { background: #16432f; color: #6fe0a3; }
+.conn.disconnected { background: #4a1d27; color: #ff97a8; }
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.stage-wrap { text-align: center; }
+
+.stage {
+  background: linear-gradient(180deg, #2a2f4d, #1a1f38);
+  border-radius: 6px;
+  padding: 10px;
+  letter-spacing: 4px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 28px;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.row-label {
+  width: 24px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px 7px 4px 4px;
+  border: none;
+  background: var(--available);
+  color: #fff;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform 0.08s, background 0.15s;
+}
+.seat:hover:not(:disabled) { transform: translateY(-2px); background: var(--available-hover); }
+
+.seat.held { background: var(--held); cursor: not-allowed; }
+.seat.held-mine { background: var(--held-mine); cursor: pointer; }
+.seat.booked { background: var(--booked); cursor: not-allowed; color: var(--muted); }
+.seat.selected { outline: 3px solid #fff; outline-offset: 1px; }
+.seat.conflict { animation: shake 0.4s; box-shadow: 0 0 0 3px var(--danger); }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.legend {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.swatch {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.swatch.available { background: var(--available); }
+.swatch.held { background: var(--held); }
+.swatch.held-mine { background: var(--held-mine); }
+.swatch.booked { background: var(--booked); }
+
+.panel {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+.panel h2 { margin-top: 0; font-size: 1.1rem; }
+
+.counts {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.counts div {
+  flex: 1;
+  background: #11152b;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+}
+.counts strong { display: block; font-size: 1.2rem; }
+.counts span { font-size: 0.7rem; color: var(--muted); }
+
+.selection-info, .hold-info {
+  background: #11152b;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+.hold-info .countdown { color: var(--held); font-weight: 600; }
+
+.actions { display: flex; flex-direction: column; gap: 10px; }
+button {
+  padding: 11px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: #2a2f4d;
+  color: var(--text);
+}
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button.primary { background: #2e7d52; }
+button.ghost { background: transparent; border: 1px solid #3a3f5d; }
+
+.message {
+  margin-top: 16px;
+  min-height: 20px;
+  font-size: 0.85rem;
+}
+.message.error { color: #ff97a8; }
+.message.success { color: #6fe0a3; }
+.message.info { color: var(--muted); }
+
+.session { margin-top: 18px; font-size: 0.7rem; color: var(--muted); }
+.session code { color: var(--text); }
+
+.hidden { display: none !important; }

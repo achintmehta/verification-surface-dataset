@@ -1,0 +1,250 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --clr-available:   #4ade80;
+  --clr-held-own:    #facc15;
+  --clr-held-other:  #f97316;
+  --clr-booked:      #ef4444;
+  --clr-selected:    #60a5fa;
+  --clr-bg:          #0f172a;
+  --clr-surface:     #1e293b;
+  --clr-border:      #334155;
+  --clr-text:        #e2e8f0;
+  --clr-muted:       #94a3b8;
+  --radius:          6px;
+  --seat-size:       42px;
+  --seat-gap:        8px;
+}
+
+body {
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 48px;
+}
+
+#app {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+header { text-align: center; }
+header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+.subtitle { color: var(--clr-muted); margin-top: 4px; }
+
+/* ── Status bar ──────────────────────────────────────────────────────────── */
+.status-bar {
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.status-bar.info    { background: #1e3a5f; border: 1px solid #3b82f6; color: #93c5fd; }
+.status-bar.success { background: #14532d; border: 1px solid #22c55e; color: #86efac; }
+.status-bar.error   { background: #450a0a; border: 1px solid #ef4444; color: #fca5a5; }
+.status-bar.warning { background: #422006; border: 1px solid #f97316; color: #fdba74; }
+.hidden { display: none !important; }
+
+/* ── Legend ──────────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: var(--clr-muted);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.seat-demo {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.seat-demo.available   { background: var(--clr-available); }
+.seat-demo.held-own    { background: var(--clr-held-own); }
+.seat-demo.held-other  { background: var(--clr-held-other); }
+.seat-demo.booked      { background: var(--clr-booked); }
+.seat-demo.selected    { background: var(--clr-selected); }
+
+/* ── Stage label ─────────────────────────────────────────────────────────── */
+#stage-label {
+  text-align: center;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: var(--clr-muted);
+  text-transform: uppercase;
+}
+
+/* ── Seat map ────────────────────────────────────────────────────────────── */
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: var(--seat-gap);
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--seat-gap);
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--clr-muted);
+  flex-shrink: 0;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:hover:not(.booked):not(.held-other) {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+}
+
+.seat.available {
+  background: var(--clr-available);
+  color: #052e16;
+}
+.seat.selected {
+  background: var(--clr-selected);
+  color: #1e3a5f;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 2px #93c5fd55;
+}
+.seat.held-own {
+  background: var(--clr-held-own);
+  color: #422006;
+  cursor: default;
+}
+.seat.held-other {
+  background: var(--clr-held-other);
+  color: #431407;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+.seat.booked {
+  background: var(--clr-booked);
+  color: #450a0a;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* Pulse animation for newly held seats */
+@keyframes pulse-hold {
+  0%   { box-shadow: 0 0 0 0 rgba(250,204,21,0.7); }
+  70%  { box-shadow: 0 0 0 8px rgba(250,204,21,0); }
+  100% { box-shadow: 0 0 0 0 rgba(250,204,21,0); }
+}
+.seat.held-own.just-held { animation: pulse-hold 0.6s ease-out; }
+
+/* ── Action panel ────────────────────────────────────────────────────────── */
+.action-panel {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 64px;
+}
+
+.selection-info {
+  font-size: 0.9rem;
+  color: var(--clr-muted);
+}
+
+.hold-info {
+  font-size: 0.9rem;
+  color: var(--clr-muted);
+}
+
+.countdown {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--clr-held-own);
+  font-variant-numeric: tabular-nums;
+}
+.countdown.urgent { color: var(--clr-booked); }
+
+.hold-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn:hover  { opacity: 0.88; }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-hold    { background: #3b82f6; color: #fff; align-self: flex-start; }
+.btn-confirm { background: #22c55e; color: #052e16; }
+.btn-release { background: #64748b; color: #fff; }
+
+/* ── Inventory bar ───────────────────────────────────────────────────────── */
+.inventory {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--clr-muted);
+  padding: 8px 0;
+  border-top: 1px solid var(--clr-border);
+}
+.inventory strong { color: var(--clr-text); }
+
+/* ── Loading ─────────────────────────────────────────────────────────────── */
+.loading {
+  color: var(--clr-muted);
+  font-size: 0.9rem;
+  padding: 24px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  :root { --seat-size: 34px; --seat-gap: 5px; }
+  header h1 { font-size: 1.5rem; }
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Test Events</title></head>
+<body>
+<h2>Seeding test events...</h2>
+<pre id="log"></pre>
+<script>
+async function seed() {
+  const log = document.getElementById('log');
+  
+  function getMonday(d) {
+    const date = new Date(d);
+    date.setHours(0,0,0,0);
+    const day = date.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    date.setDate(date.getDate() + diff);
+    return date;
+  }
+  
+  const monday = getMonday(new Date());
+  
+  function dayAt(dayOffset, hours, minutes) {
+    const d = new Date(monday);
+    d.setDate(d.getDate() + dayOffset);
+    d.setHours(hours, minutes, 0, 0);
+    return d.toISOString();
+  }
+  
+  const events = [
+    { title: "Team Standup", start_at: dayAt(0, 9, 0), end_at: dayAt(0, 9, 30) },
+    { title: "Lunch", start_at: dayAt(0, 12, 0), end_at: dayAt(0, 13, 0) },
+    { title: "Meeting A", start_at: dayAt(1, 10, 0), end_at: dayAt(1, 11, 0) },
+    { title: "Meeting B", start_at: dayAt(1, 10, 0), end_at: dayAt(1, 11, 0) },
+    { title: "Meeting C", start_at: dayAt(1, 10, 0), end_at: dayAt(1, 11, 0) },
+    { title: "Chain 1", start_at: dayAt(2, 9, 0), end_at: dayAt(2, 11, 0) },
+    { title: "Chain 2", start_at: dayAt(2, 10, 0), end_at: dayAt(2, 12, 0) },
+    { title: "Chain 3", start_at: dayAt(2, 11, 30), end_at: dayAt(2, 13, 0) },
+    { title: "Late Night", start_at: dayAt(3, 22, 0), end_at: dayAt(4, 0, 0) },
+    { title: "Morning", start_at: dayAt(3, 8, 0), end_at: dayAt(3, 9, 0) },
+    { title: "Afternoon", start_at: dayAt(3, 14, 0), end_at: dayAt(3, 15, 30) },
+    { title: "F1", start_at: dayAt(4, 9, 0), end_at: dayAt(4, 10, 0) },
+    { title: "F2", start_at: dayAt(4, 9, 0), end_at: dayAt(4, 10, 30) },
+    { title: "F3", start_at: dayAt(4, 9, 30), end_at: dayAt(4, 11, 0) },
+    { title: "F4", start_at: dayAt(4, 10, 30), end_at: dayAt(4, 12, 0) },
+  ];
+  
+  for (const ev of events) {
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ev)
+      });
+      const data = await res.json();
+      log.textContent += `Created: ${ev.title} (${res.status})\n`;
+    } catch(e) {
+      log.textContent += `Error: ${ev.title}: ${e.message}\n`;
+    }
+  }
+  
+  log.textContent += '\nDone! Go to / to see the calendar.';
+}
+
+seed();
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrics Dashboard</title>
+  <script type="module" crossorigin src="/assets/index-j47g4cX9.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DEBp5iKW.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Metrics Dashboard</h1>
+      <button id="theme-toggle">Toggle Theme</button>
+    </header>
+
+    <div class="dashboard">
+      <!-- Stat Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Visitors</div>
+          <div class="stat-value" id="total-visitors">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value" id="total-revenue">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Day</div>
+          <div class="stat-value" id="best-day">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">7-Day Trend</div>
+          <div class="stat-value" id="seven-day-trend">-</div>
+        </div>
+      </div>
+
+      <!-- Time Series Chart -->
+      <div class="chart-card">
+        <h2>30-Day Visitors Trend</h2>
+        <div id="timeseries-container">
+          <svg id="timeseries-chart" width="100%" height="300"></svg>
+        </div>
+      </div>
+
+      <!-- Category Breakdown -->
+      <div class="chart-card">
+        <h2>Category Breakdown</h2>
+        <div id="categories-container"></div>
+      </div>
+
+      <!-- Recent Items Table -->
+      <div class="table-card">
+        <h2>Recent Items</h2>
+        <div class="table-wrapper">
+          <table id="recent-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Value</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eff4ff;
+  color: #172033;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#app {
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1280px;
+  margin: 0 auto 24px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: #52617a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.95;
+}
+
+.refresh-button,
+.add-card-form button {
+  border: 0;
+  border-radius: 12px;
+  background: #2457d6;
+  color: white;
+  font-weight: 800;
+  padding: 11px 16px;
+  box-shadow: 0 12px 28px rgba(36, 87, 214, 0.22);
+}
+
+.refresh-button:hover,
+.add-card-form button:hover {
+  background: #1c46ae;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 18px;
+  align-items: start;
+  max-width: 1280px;
+  margin: 0 auto;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;
+  border: 1px solid rgba(87, 105, 139, 0.18);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 20px 55px rgba(31, 44, 71, 0.10);
+  backdrop-filter: blur(16px);
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.column.drop-target {
+  border-color: #2457d6;
+  box-shadow: 0 24px 70px rgba(36, 87, 214, 0.18);
+  transform: translateY(-2px);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 8px;
+}
+
+.column-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.count {
+  display: inline-grid;
+  min-width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: #e7edff;
+  color: #2457d6;
+  font-weight: 900;
+  font-size: 0.82rem;
+}
+
+.card-list {
+  flex: 1;
+  min-height: 320px;
+  padding: 12px;
+}
+
+.card {
+  position: relative;
+  border: 1px solid rgba(83, 103, 139, 0.16);
+  border-radius: 18px;
+  background: white;
+  padding: 15px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 12px 28px rgba(31, 44, 71, 0.09);
+  user-select: none;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 16px 36px rgba(31, 44, 71, 0.15);
+  transform: translateY(-1px);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: 0.42;
+}
+
+.card.optimistic {
+  outline: 2px dashed #94a9e8;
+}
+
+.card p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.syncing {
+  display: inline-block;
+  margin-top: 10px;
+  color: #6b7790;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  margin: 0;
+  border: 2px dashed #cbd6ed;
+  border-radius: 18px;
+  color: #6b7790;
+  font-weight: 700;
+}
+
+.add-card-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid rgba(87, 105, 139, 0.14);
+}
+
+.add-card-form input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid #d4dced;
+  border-radius: 12px;
+  padding: 11px 12px;
+  outline: none;
+}
+
+.add-card-form input:focus {
+  border-color: #2457d6;
+  box-shadow: 0 0 0 4px rgba(36, 87, 214, 0.12);
+}
+
+.load-error {
+  max-width: 680px;
+  margin: 20vh auto;
+  border-radius: 20px;
+  background: white;
+  padding: 24px;
+  box-shadow: 0 20px 55px rgba(31, 44, 71, 0.10);
+  color: #a11d2a;
+  font-weight: 800;
+}
+
+@media (max-width: 860px) {
+  #app {
+    padding: 18px;
+  }
+
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .board {
+    grid-template-columns: minmax(280px, 1fr);
+  }
+
+  .column {
+    min-height: 380px;
+  }
+}

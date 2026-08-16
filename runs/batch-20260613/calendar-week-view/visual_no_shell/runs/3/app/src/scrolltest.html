@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scroll Test</title>
+  <style>
+    body { margin: 0; }
+    iframe { width: 100%; height: 100vh; border: none; }
+  </style>
+</head>
+<body>
+  <iframe id="cal" src="/"></iframe>
+  <script>
+    // After the iframe loads, scroll its day-columns-scroll to the bottom
+    document.getElementById('cal').addEventListener('load', () => {
+      try {
+        const scrollEl = document.getElementById('cal').contentDocument.getElementById('day-columns-scroll');
+        if (scrollEl) {
+          scrollEl.scrollTop = scrollEl.scrollHeight;
+        }
+      } catch(e) { console.error(e); }
+    });
+  </script>
+</body>
+</html>

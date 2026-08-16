@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="app-header__title">
+          <span class="app-header__logo" aria-hidden="true">📊</span>
+          <h1>Metrics Dashboard</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label"></span>
+        </button>
+      </header>
+
+      <main id="main" class="dashboard">
+        <div id="status" class="status" role="status" aria-live="polite">
+          Loading dashboard…
+        </div>
+
+        <section id="content" class="content" hidden>
+          <!-- Stat cards -->
+          <section class="stat-grid" aria-label="Summary statistics">
+            <article class="card stat-card" data-stat="visitors">
+              <div class="stat-card__label">Total Visitors</div>
+              <div class="stat-card__value">—</div>
+              <div class="stat-card__sub"></div>
+            </article>
+            <article class="card stat-card" data-stat="revenue">
+              <div class="stat-card__label">Total Revenue</div>
+              <div class="stat-card__value">—</div>
+              <div class="stat-card__sub"></div>
+            </article>
+            <article class="card stat-card" data-stat="best">
+              <div class="stat-card__label">Best Day</div>
+              <div class="stat-card__value">—</div>
+              <div class="stat-card__sub"></div>
+            </article>
+            <article class="card stat-card" data-stat="trend">
+              <div class="stat-card__label">7-Day Trend</div>
+              <div class="stat-card__value">—</div>
+              <div class="stat-card__sub"></div>
+            </article>
+          </section>
+
+          <!-- Chart + breakdown body -->
+          <section class="body-grid">
+            <article class="card chart-card">
+              <h2 class="card__title">Visitors — Last 30 Days</h2>
+              <div id="chart-container" class="chart-container">
+                <svg id="chart" class="chart" preserveAspectRatio="none"></svg>
+              </div>
+            </article>
+
+            <article class="card breakdown-card">
+              <h2 class="card__title">Category Breakdown</h2>
+              <div id="breakdown" class="breakdown"></div>
+            </article>
+          </section>
+
+          <!-- Recent items -->
+          <section class="card table-card">
+            <h2 class="card__title">Recent Items</h2>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="num">Value</th>
+                    <th scope="col">Created</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

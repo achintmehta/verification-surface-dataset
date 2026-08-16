@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__brand">
+          <span class="header__icon" aria-hidden="true">📊</span>
+          <h1 class="header__title">Metrics Dashboard</h1>
+        </div>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="Toggle light/dark theme"
+          title="Toggle theme"
+        >
+          <span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__icon--dark"  aria-hidden="true">🌙</span>
+          <span class="theme-toggle__label">Toggle theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading dashboard…</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="error-state" role="alert" aria-live="assertive" hidden>
+        <div class="error-state__icon" aria-hidden="true">⚠️</div>
+        <h2 class="error-state__title">Unable to load dashboard</h2>
+        <p class="error-state__message" id="error-message">
+          The backend server is not reachable. Please start the server and reload.
+        </p>
+        <button class="btn btn--primary" id="retry-btn">Retry</button>
+      </div>
+
+      <!-- Dashboard content (hidden until data loads) -->
+      <div id="dashboard" class="dashboard" hidden>
+
+        <!-- Stat cards -->
+        <section class="section section--cards" aria-label="Summary statistics">
+          <div class="cards-grid" id="cards-grid">
+            <article class="card" id="card-visitors">
+              <p class="card__label">Total Visitors</p>
+              <p class="card__value" id="stat-visitors">—</p>
+              <p class="card__sub" id="stat-visitors-sub"></p>
+            </article>
+            <article class="card" id="card-revenue">
+              <p class="card__label">Total Revenue</p>
+              <p class="card__value" id="stat-revenue">—</p>
+              <p class="card__sub" id="stat-revenue-sub"></p>
+            </article>
+            <article class="card" id="card-best-day">
+              <p class="card__label">Best Day Revenue</p>
+              <p class="card__value" id="stat-best-day">—</p>
+              <p class="card__sub" id="stat-best-day-sub"></p>
+            </article>
+            <article class="card" id="card-trend">
+              <p class="card__label">7-Day Trend</p>
+              <p class="card__value" id="stat-trend">—</p>
+              <p class="card__sub" id="stat-trend-sub"></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Body: chart + categories -->
+        <section class="section section--body" aria-label="Charts">
+          <div class="body-grid">
+
+            <!-- Time-series chart -->
+            <div class="panel panel--chart">
+              <h2 class="panel__title">30-Day Revenue</h2>
+              <div class="chart-container" id="chart-container" role="img" aria-label="30-day revenue line chart">
+                <!-- SVG injected by JS -->
+              </div>
+            </div>
+
+            <!-- Category breakdown -->
+            <div class="panel panel--categories">
+              <h2 class="panel__title">Category Breakdown</h2>
+              <div class="categories-list" id="categories-list" role="list" aria-label="Category values">
+                <!-- Bars injected by JS -->
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Recent items table -->
+        <section class="section section--table" aria-label="Recent items">
+          <div class="panel">
+            <h2 class="panel__title">Recent Items</h2>
+            <div class="table-wrapper">
+              <table class="data-table" id="recent-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="col-value">Value</th>
+                    <th scope="col" class="col-date">Date</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-tbody">
+                  <!-- Rows injected by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /#dashboard -->
+    </main>
+
+    <footer class="footer">
+      <p>Metrics Dashboard · Data refreshes on reload</p>
+    </footer>
+  </div><!-- /#app -->
+</body>
+</html>

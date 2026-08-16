@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking — Hold State Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-bg: #0f1117; --color-surface: #1a1d27; --color-surface-2: #22263a;
+      --color-border: #2e3350; --color-text: #e8eaf6; --color-text-muted: #7986cb;
+      --color-available: #1e3a5f; --color-available-border: #1976d2;
+      --color-selected: #f57f17; --color-selected-border: #ffa000;
+      --color-held: #4a148c; --color-held-border: #7b1fa2;
+      --color-held-mine: #e65100; --color-held-mine-border: #ff6d00;
+      --color-booked: #1b5e20; --color-booked-border: #2e7d32;
+      --color-booked-mine: #00695c; --color-booked-mine-border: #00897b;
+      --radius: 8px; --radius-sm: 4px; --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+    body { background: var(--color-bg); color: var(--color-text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; line-height: 1.5; }
+    header { background: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 0 24px; box-shadow: var(--shadow); }
+    .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    h1 { font-size: 1.4rem; font-weight: 700; }
+    .session-info { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--color-text-muted); }
+    .session-id { font-family: monospace; font-size: 0.75rem; background: var(--color-surface-2); padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); }
+    .dot-connected { color: #4caf50; font-size: 1rem; }
+    main { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
+    .stage { background: linear-gradient(135deg, #1a237e, #283593); border: 2px solid #3949ab; border-radius: var(--radius); text-align: center; padding: 12px; margin-bottom: 24px; }
+    .stage-label { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.2em; color: #9fa8da; }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-bottom: 24px; padding: 12px 16px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--color-text-muted); }
+    .seat-demo { width: 20px; height: 20px; border-radius: var(--radius-sm); border: 2px solid transparent; }
+    .sd-available { background: var(--color-available); border-color: var(--color-available-border); }
+    .sd-held-mine { background: var(--color-held-mine); border-color: var(--color-held-mine-border); }
+    .sd-held { background: var(--color-held); border-color: var(--color-held-border); }
+    .sd-booked { background: var(--color-booked); border-color: var(--color-booked-border); }
+    .seat-map { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+    .seat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .row-label { width: 24px; text-align: center; font-weight: 700; font-size: 0.85rem; color: var(--color-text-muted); flex-shrink: 0; }
+    .seats-container { display: flex; gap: 6px; }
+    .seat { width: 40px; height: 40px; border-radius: var(--radius-sm); border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; user-select: none; }
+    .s-available { background: var(--color-available); border-color: var(--color-available-border); color: #90caf9; cursor: pointer; }
+    .s-held-mine { background: var(--color-held-mine); border-color: var(--color-held-mine-border); color: #ffe0b2; animation: pulse-mine 2s infinite; }
+    .s-held { background: var(--color-held); border-color: var(--color-held-border); color: #ce93d8; cursor: not-allowed; }
+    .s-booked { background: var(--color-booked); border-color: var(--color-booked-border); color: #a5d6a7; cursor: not-allowed; }
+    @keyframes pulse-mine { 0%,100%{box-shadow:0 0 0 0 rgba(255,109,0,0.4)} 50%{box-shadow:0 0 0 6px rgba(255,109,0,0)} }
+    .inventory { display: flex; gap: 12px; margin-bottom: 20px; }
+    .inv-item { flex: 1; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 12px; text-align: center; }
+    .inv-count { display: block; font-size: 1.8rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .inv-label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .action-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; }
+    .hold-info { margin-bottom: 16px; }
+    .hold-seats { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 8px; }
+    .hold-seats span { color: var(--color-text); font-weight: 600; }
+    .hold-timer { font-size: 0.9rem; color: var(--color-text-muted); }
+    .countdown { font-size: 1.4rem; font-weight: 700; font-family: monospace; color: #ff9800; }
+    .hold-actions { display: flex; gap: 12px; }
+    .btn { padding: 10px 20px; border: none; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s ease; }
+    .btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn-success { background: #2e7d32; color: #fff; }
+    .btn-danger  { background: #c62828; color: #fff; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>🎭 Seat Booking</h1>
+    <div class="session-info">
+      <span>Session:</span>
+      <span class="session-id">a1b2c3d4…</span>
+      <span class="dot-connected">●</span>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="stage"><div class="stage-label">STAGE</div></div>
+  <div class="legend">
+    <div class="legend-item"><div class="seat-demo sd-available"></div><span>Available</span></div>
+    <div class="legend-item"><div class="seat-demo sd-held-mine"></div><span>Your Hold</span></div>
+    <div class="legend-item"><div class="seat-demo sd-held"></div><span>Held by Other</span></div>
+    <div class="legend-item"><div class="seat-demo sd-booked"></div><span>Booked</span></div>
+  </div>
+  <div class="seat-map" id="seat-map"></div>
+  <div class="inventory">
+    <div class="inv-item"><span class="inv-count">42</span><span class="inv-label">Available</span></div>
+    <div class="inv-item"><span class="inv-count">5</span><span class="inv-label">Held</span></div>
+    <div class="inv-item"><span class="inv-count">3</span><span class="inv-label">Booked</span></div>
+    <div class="inv-item"><span class="inv-count">50</span><span class="inv-label">Total</span></div>
+  </div>
+  <div class="action-panel">
+    <div class="hold-info">
+      <div class="hold-seats">Holding: <span>C3, C4, C5</span></div>
+      <div class="hold-timer">Expires in: <span class="countdown">00:47</span></div>
+    </div>
+    <div class="hold-actions">
+      <button class="btn btn-success">✓ Confirm Booking</button>
+      <button class="btn btn-danger">✗ Release Hold</button>
+    </div>
+  </div>
+</main>
+<script>
+  const ROWS = ['A','B','C','D','E'];
+  const stateMap = {
+    'A1':'available','A2':'available','A3':'available','A4':'available','A5':'available','A6':'available','A7':'available','A8':'available','A9':'available','A10':'available',
+    'B1':'booked','B2':'booked','B3':'booked','B4':'available','B5':'available','B6':'available','B7':'available','B8':'available','B9':'available','B10':'available',
+    'C1':'available','C2':'available','C3':'held-mine','C4':'held-mine','C5':'held-mine','C6':'available','C7':'available','C8':'available','C9':'available','C10':'available',
+    'D1':'available','D2':'available','D3':'available','D4':'available','D5':'held','D6':'held','D7':'available','D8':'available','D9':'available','D10':'available',
+    'E1':'available','E2':'available','E3':'available','E4':'available','E5':'available','E6':'available','E7':'available','E8':'available','E9':'available','E10':'available',
+  };
+  const mapEl = document.getElementById('seat-map');
+  for (const row of ROWS) {
+    const rowEl = document.createElement('div'); rowEl.className = 'seat-row';
+    const lbl = document.createElement('div'); lbl.className = 'row-label'; lbl.textContent = row; rowEl.appendChild(lbl);
+    const cont = document.createElement('div'); cont.className = 'seats-container';
+    for (let s = 1; s <= 10; s++) {
+      const id = `${row}${s}`;
+      const el = document.createElement('div');
+      el.className = `seat s-${stateMap[id]||'available'}`;
+      el.textContent = s; el.title = id;
+      cont.appendChild(el);
+    }
+    rowEl.appendChild(cont); mapEl.appendChild(rowEl);
+  }
+</script>
+</body>
+</html>

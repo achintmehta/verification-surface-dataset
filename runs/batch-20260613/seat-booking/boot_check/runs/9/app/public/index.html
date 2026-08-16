@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Single Event</p>
+          <h1>Live Seat Booking</h1>
+          <p>Pick available seats, place a temporary hold, then confirm before the timer expires.</p>
+        </div>
+        <div class="session-card">
+          <span>Session</span>
+          <strong id="sessionId"></strong>
+        </div>
+      </section>
+
+      <section class="toolbar">
+        <div class="legend">
+          <span><i class="swatch available"></i>Available</span>
+          <span><i class="swatch selected"></i>Selected</span>
+          <span><i class="swatch held"></i>Held</span>
+          <span><i class="swatch booked"></i>Booked</span>
+        </div>
+        <div class="inventory" id="inventory">Loading inventory…</div>
+      </section>
+
+      <section class="panel">
+        <div class="controls">
+          <button id="holdBtn">Hold selected seats</button>
+          <button id="confirmBtn" disabled>Confirm hold</button>
+          <button id="releaseBtn" disabled>Release hold</button>
+          <button id="refreshBtn" class="secondary">Refresh</button>
+        </div>
+        <div id="holdInfo" class="hold-info">No active hold.</div>
+        <div id="message" class="message"></div>
+      </section>
+
+      <section class="seat-wrap">
+        <div id="seatGrid" class="seat-grid" aria-live="polite"></div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>

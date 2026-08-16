@@ -1,0 +1,375 @@
+:root {
+  --maxw: 1280px;
+  --gap: 16px;
+  --radius: 12px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+/* ---------------- Theme palettes ---------------- */
+html[data-theme='light'] {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-alt: #f0f3f9;
+  --border: #e1e6ef;
+  --text: #1b2333;
+  --text-muted: #5a6678;
+  --accent: #2f6df6;
+  --accent-soft: #e7efff;
+  --pos: #1a8f4c;
+  --neg: #c0392b;
+  --chart-axis: #9aa6b8;
+  --chart-grid: #e6eaf2;
+  --chart-series: #2f6df6;
+  --chart-fill: rgba(47, 109, 246, 0.12);
+  --bar: #2f6df6;
+  --bar-track: #eef1f7;
+  --table-stripe: #f7f9fc;
+  --shadow: 0 1px 3px rgba(20, 30, 50, 0.08), 0 1px 2px rgba(20, 30, 50, 0.04);
+}
+
+html[data-theme='dark'] {
+  --bg: #0f141c;
+  --surface: #182230;
+  --surface-alt: #1f2b3b;
+  --border: #2a3848;
+  --text: #eef2f8;
+  --text-muted: #9fb0c4;
+  --accent: #5b8cff;
+  --accent-soft: #1d2d49;
+  --pos: #43d17f;
+  --neg: #ff6b5e;
+  --chart-axis: #6b7d93;
+  --chart-grid: #283545;
+  --chart-series: #5b8cff;
+  --chart-fill: rgba(91, 140, 255, 0.18);
+  --bar: #5b8cff;
+  --bar-track: #243144;
+  --table-stripe: #1c2735;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 16px;
+  width: 100%;
+}
+
+/* ---------------- Header ---------------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.header h1 {
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.header .sub {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+/* ---------------- Theme toggle ---------------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+.theme-toggle .icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ---------------- Card primitive ---------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0; /* allow children to shrink/ellipsis inside grid */
+}
+
+.card h2 {
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
+/* ---------------- Grid layout ----------------
+   Base (mobile): single column.
+   >=640px: two columns for everything.
+   >=1024px: stat cards 4-across, body 2-across. */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .body-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .body-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------------- Stat cards ---------------- */
+.stat .stat-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.stat .stat-value {
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  /* Big numbers must never overflow their card */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.1;
+}
+.stat .stat-trend {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.stat .stat-trend.pos {
+  color: var(--pos);
+}
+.stat .stat-trend.neg {
+  color: var(--neg);
+}
+.stat .stat-sub {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* ---------------- Chart ---------------- */
+.chart-card .chart-wrap {
+  width: 100%;
+  /* fixed-ish height that scales a little with viewport */
+  height: 280px;
+}
+.chart-wrap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.chart-axis-line {
+  stroke: var(--chart-axis);
+  stroke-width: 1;
+}
+.chart-grid-line {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+.chart-tick-label {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+.chart-series-line {
+  fill: none;
+  stroke: var(--chart-series);
+  stroke-width: 2;
+}
+.chart-series-area {
+  fill: var(--chart-fill);
+  stroke: none;
+}
+
+/* ---------------- Category bars ---------------- */
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bar-row {
+  min-width: 0;
+}
+.bar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 5px;
+  min-width: 0;
+}
+.bar-name {
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.bar-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.bar-track {
+  background: var(--bar-track);
+  border-radius: 999px;
+  height: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+.bar-fill {
+  background: var(--bar);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ---------------- Recent table ---------------- */
+.table-card {
+  /* The card may scroll its own table on very narrow screens,
+     but the page never scrolls sideways. */
+}
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table.recent {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 0;
+}
+table.recent th,
+table.recent td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table.recent th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+table.recent td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+table.recent tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+table.recent td.cat {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------- States ---------------- */
+.state {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--text-muted);
+}
+.state.error {
+  color: var(--neg);
+}
+.state h2 {
+  margin: 0 0 8px;
+  color: var(--text);
+}
+.retry-btn {
+  margin-top: 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.skeleton {
+  background: var(--surface-alt);
+  border-radius: 6px;
+  height: 14px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

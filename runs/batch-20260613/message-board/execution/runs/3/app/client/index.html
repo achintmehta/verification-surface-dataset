@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1>📋 Message Board</h1>
+        <span id="status" class="status status--connecting" title="SSE connection status">
+          ● Connecting…
+        </span>
+      </header>
+
+      <main>
+        <!-- Message feed -->
+        <section class="feed-wrapper" aria-label="Message feed">
+          <ul id="message-list" class="message-list" aria-live="polite" aria-relevant="additions">
+            <!-- Messages are injected here by JavaScript -->
+          </ul>
+          <p id="empty-state" class="empty-state">
+            No messages yet. Be the first to say something!
+          </p>
+        </section>
+
+        <!-- Post form -->
+        <form id="post-form" class="post-form" novalidate>
+          <label for="message-input" class="sr-only">New message</label>
+          <input
+            id="message-input"
+            class="post-form__input"
+            type="text"
+            placeholder="Write a message…"
+            maxlength="2000"
+            autocomplete="off"
+            required
+          />
+          <button type="submit" class="post-form__btn">Send</button>
+        </form>
+        <p id="form-error" class="form-error" role="alert" aria-live="assertive"></p>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

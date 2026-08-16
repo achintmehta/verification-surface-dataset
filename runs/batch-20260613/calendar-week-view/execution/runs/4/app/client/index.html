@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="app-title">Calendar</h1>
+      </div>
+      <div class="header-center">
+        <button id="btn-prev" class="nav-btn" title="Previous week">&#8249;</button>
+        <button id="btn-today" class="nav-btn today-btn">Today</button>
+        <button id="btn-next" class="nav-btn" title="Next week">&#8250;</button>
+        <span id="week-label" class="week-label"></span>
+      </div>
+      <div class="header-right"></div>
+    </header>
+
+    <div class="calendar-container">
+      <!-- Day headers row -->
+      <div class="calendar-header-row">
+        <div class="time-gutter-header"></div>
+        <div id="day-headers" class="day-headers"></div>
+      </div>
+
+      <!-- Scrollable body -->
+      <div class="calendar-body-scroll" id="calendar-scroll">
+        <div class="calendar-body">
+          <!-- Time gutter -->
+          <div class="time-gutter" id="time-gutter"></div>
+          <!-- Day columns -->
+          <div class="day-columns" id="day-columns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">New Event</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="event-form" class="event-form">
+        <input type="hidden" id="event-id" />
+        <div class="form-group">
+          <label for="event-title">Title</label>
+          <input type="text" id="event-title" placeholder="Event title" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="event-start">Start</label>
+          <input type="datetime-local" id="event-start" required />
+        </div>
+        <div class="form-group">
+          <label for="event-end">End</label>
+          <input type="datetime-local" id="event-end" required />
+        </div>
+        <div id="form-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="button" id="btn-delete" class="btn-delete hidden">Delete</button>
+          <div class="form-actions-right">
+            <button type="button" id="btn-cancel" class="btn-cancel">Cancel</button>
+            <button type="submit" id="btn-save" class="btn-save">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "collaborative-kanban-board",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "node --watch server/index.js",
+    "server": "node server/index.js",
+    "client:dev": "vite client --host 0.0.0.0 --port 5173",
+    "build": "vite build client",
+    "preview": "vite preview client --host 0.0.0.0 --port 5173"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "vite": "^6.0.7"
+  },
+  "devDependencies": {}
+}

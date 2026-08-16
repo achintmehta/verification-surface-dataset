@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>24:00 Clamping Test</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    body { margin: 0; background: #f8f9fa; font-family: sans-serif; }
+    .wrapper {
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .info {
+      padding: 8px 16px;
+      background: #1a73e8;
+      color: white;
+      font-size: 13px;
+    }
+    .grid-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    .time-col {
+      width: 56px;
+      flex-shrink: 0;
+      position: relative;
+      border-right: 1px solid #e0e0e0;
+      background: white;
+    }
+    .day-col-wrap {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+    }
+    .day-col-inner {
+      position: relative;
+      height: 1440px; /* 24 * 60px */
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="info">
+    Test: "Late Night Work" (22:00–24:00) should end exactly at the bottom edge (1440px).
+    "Daily Sync" (14:00–15:00) should be at 840px–900px.
+    Scroll down to see the bottom.
+  </div>
+  <div class="grid-area">
+    <div class="time-col" id="time-col"></div>
+    <div class="day-col-wrap" id="scroll-area">
+      <div class="day-col-inner" id="day-col"></div>
+    </div>
+  </div>
+</div>
+<script type="module">
+import { computeDayLayout } from '/src/layout.js';
+
+const HOUR_HEIGHT = 60;
+const DAY_DATE = new Date('2026-06-18T00:00:00');
+
+// Simulate the events from the API (as they'd be returned in local time)
+// The server stores UTC, browser interprets as local
+// In this test environment (UTC-5), the events are:
+// Daily Sync: start=2026-06-18T19:00Z = 14:00 local, end=2026-06-18T20:00Z = 15:00 local
+// Late Night Work: start=2026-06-19T03:00Z = 22:00 local, end=2026-06-19T05:00Z = 00:00 local next day
+
+const events = [
+  { id: 12, title: 'Daily Sync', start_at: '2026-06-18T19:00:00.000Z', end_at: '2026-06-18T20:00:00.000Z' },
+  { id: 11, title: 'Late Night Work', start_at: '2026-06-19T03:00:00.000Z', end_at: '2026-06-19T05:00:00.000Z' },
+];
+
+// Build time gutter
+const timeCol = document.getElementById('time-col');
+timeCol.style.height = `${HOUR_HEIGHT * 24}px`;
+timeCol.style.position = 'relative';
+for (let h = 1; h < 24; h++) {
+  const label = document.createElement('div');
+  label.style.cssText = `position:absolute;right:8px;top:${h*HOUR_HEIGHT}px;font-size:10px;color:#666;transform:translateY(-50%);white-space:nowrap;`;
+  label.textContent = `${String(h).padStart(2,'0')}:00`;
+  timeCol.appendChild(label);
+}
+
+// Build day column
+const dayCol = document.getElementById('day-col');
+dayCol.style.height = `${HOUR_HEIGHT * 24}px`;
+
+// Hour lines
+for (let h = 0; h <= 24; h++) {
+  const line = document.createElement('div');
+  line.style.cssText = `position:absolute;left:0;right:0;top:${h*HOUR_HEIGHT}px;border-top:1px solid #e0e0e0;`;
+  dayCol.appendChild(line);
+  if (h < 24) {
+    const half = document.createElement('div');
+    half.style.cssText = `position:absolute;left:0;right:0;top:${h*HOUR_HEIGHT+30}px;border-top:1px dashed #ebebeb;`;
+    dayCol.appendChild(half);
+  }
+}
+
+// Filter events for this day
+function isSameDay(a, b) {
+  const da = new Date(a), db = new Date(b);
+  return da.getFullYear()===db.getFullYear() && da.getMonth()===db.getMonth() && da.getDate()===db.getDate();
+}
+
+const dayEvents = events.filter(ev => isSameDay(new Date(ev.start_at), DAY_DATE));
+console.log('Day events:', dayEvents.map(e => ({
+  title: e.title,
+  start_local: new Date(e.start_at).toLocaleString(),
+  end_local: new Date(e.end_at).toLocaleString(),
+})));
+
+const layout = computeDayLayout(dayEvents);
+
+const dayStartMs = new Date(DAY_DATE).setHours(0,0,0,0);
+const dayEndMs = new Date(DAY_DATE).setHours(24,0,0,0);
+
+const colors = { 11: '#e37400', 12: '#f4511e' };
+
+layout.forEach(({event, colIndex, numCols}) => {
+  const evStartMs = new Date(event.start_at).getTime();
+  const evEndMs = new Date(event.end_at).getTime();
+  const clampedStartMs = Math.max(evStartMs, dayStartMs);
+  const clampedEndMs = Math.min(evEndMs, dayEndMs);
+  
+  if (clampedStartMs >= clampedEndMs) {
+    console.log(`${event.title}: OUTSIDE DAY (clamped to nothing)`);
+    return;
+  }
+  
+  const startMinutes = (clampedStartMs - dayStartMs) / 60000;
+  const endMinutes = (clampedEndMs - dayStartMs) / 60000;
+  const top = (startMinutes / 60) * HOUR_HEIGHT;
+  const height = Math.max(((endMinutes - startMinutes) / 60) * HOUR_HEIGHT, 4);
+  
+  console.log(`${event.title}: top=${top}px, height=${height}px, bottom=${top+height}px (day bottom=${HOUR_HEIGHT*24}px)`);
+  
+  const block = document.createElement('div');
+  block.className = 'event-block';
+  block.style.top = `${top}px`;
+  block.style.height = `${height}px`;
+  block.style.left = `calc(${colIndex * 100/numCols}% + 1px)`;
+  block.style.width = `calc(${100/numCols}% - 2px)`;
+  block.style.background = colors[event.id] || '#1a73e8';
+  block.innerHTML = `
+    <div class="event-title">${event.title}</div>
+    <div class="event-time">top:${top}px h:${height}px bot:${top+height}px</div>
+  `;
+  dayCol.appendChild(block);
+});
+
+// Scroll to 21:00
+document.getElementById('scroll-area').scrollTop = 21 * HOUR_HEIGHT - 30;
+</script>
+</body>
+</html>

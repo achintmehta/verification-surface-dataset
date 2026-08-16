@@ -1,0 +1,153 @@
+:root {
+  --bg: #0f1420;
+  --panel: #161c2b;
+  --border: #263045;
+  --text: #d6dced;
+  --muted: #8592ab;
+  --debug: #6b7a99;
+  --info: #4da3ff;
+  --warn: #f0b429;
+  --error: #ff5c6c;
+  --row-h: 28px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.toolbar h1 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control.search { flex: 1; min-width: 220px; }
+
+select, input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font: inherit;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--info);
+}
+
+.count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.table-head, .log-row {
+  display: grid;
+  grid-template-columns: 210px 80px 150px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.table-head {
+  height: 30px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.scroller {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* The spacer establishes total scroll height for the full (filtered) corpus. */
+.spacer {
+  width: 1px;
+  visibility: hidden;
+}
+
+/* The viewport is absolutely positioned; each row is placed by transform. */
+.viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.log-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--row-h);
+  line-height: var(--row-h);
+  border-bottom: 1px solid rgba(38, 48, 69, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.log-row:hover { background: rgba(77, 163, 255, 0.06); }
+
+.col { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.col-ts { color: var(--muted); }
+.col-msg { color: var(--text); }
+
+.sev-badge {
+  display: inline-block;
+  min-width: 46px;
+  text-align: center;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.sev-debug { color: var(--debug); border: 1px solid var(--debug); }
+.sev-info  { color: var(--info);  border: 1px solid var(--info); }
+.sev-warn  { color: var(--warn);  border: 1px solid var(--warn); }
+.sev-error { color: var(--error); border: 1px solid var(--error); }
+
+.loading-row { color: var(--muted); opacity: 0.6; }

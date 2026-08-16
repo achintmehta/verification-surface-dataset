@@ -1,0 +1,125 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+  color: #333;
+}
+
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+select, input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+select {
+  background: white;
+}
+
+#search {
+  width: 280px;
+}
+
+.row-count {
+  font-size: 13px;
+  color: #666;
+  margin-left: auto;
+}
+
+.virtual-container {
+  height: 600px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.virtual-inner {
+  position: relative;
+}
+
+.log-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.log-row:hover {
+  background: #f8f9fa;
+}
+
+.log-ts {
+  width: 180px;
+  color: #666;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.log-severity {
+  width: 70px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.severity-debug { background: #e0e7ff; color: #3730a3; }
+.severity-info { background: #d1fae5; color: #065f46; }
+.severity-warn { background: #fef3c7; color: #92400e; }
+.severity-error { background: #fee2e2; color: #991b1b; }
+
+.log-service {
+  width: 120px;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.log-message {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loading {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+}

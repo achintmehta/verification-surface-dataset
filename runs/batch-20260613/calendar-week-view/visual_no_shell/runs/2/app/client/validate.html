@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head><title>Validation Tests</title>
+<style>
+  body { font-family: monospace; padding: 20px; background: #f9f9f9; }
+  .pass { color: green; }
+  .fail { color: red; font-weight: bold; }
+  pre { background: #fff; border: 1px solid #ddd; padding: 10px; margin: 4px 0; font-size: 11px; }
+  h2 { margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Calendar API Validation Tests</h1>
+<div id="results"></div>
+<script>
+const BASE = 'http://localhost:3001';
+const results = document.getElementById('results');
+
+function log(msg, pass) {
+  const div = document.createElement('div');
+  div.className = pass ? 'pass' : 'fail';
+  div.textContent = (pass ? '✓ ' : '✗ ') + msg;
+  results.appendChild(div);
+}
+
+function logJSON(data) {
+  const pre = document.createElement('pre');
+  pre.textContent = JSON.stringify(data, null, 2);
+  results.appendChild(pre);
+}
+
+async function req(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  const res = await fetch(BASE + path, opts);
+  const data = await res.json();
+  return { status: res.status, data };
+}
+
+async function run() {
+  // ── Test 1: POST with empty title → 400 ──────────────────────────────
+  {
+    const r = await req('POST', '/api/events', {
+      title: '',
+      start_at: '2026-06-18T10:00:00',
+      end_at:   '2026-06-18T11:00:00',
+    });
+    log(`POST empty title → ${r.status} (expected 400)`, r.status === 400);
+    logJSON(r.data);
+  }
+
+  // ── Test 2: POST with whitespace-only title → 400 ────────────────────
+  {
+    const r = await req('POST', '/api/events', {
+      title: '   ',
+      start_at: '2026-06-18T10:00:00',
+      end_at:   '2026-06-18T11:00:00',
+    });
+    log(`POST whitespace title → ${r.status} (expected 400)`, r.status === 400);
+    logJSON(r.data);
+  }
+
+  // ── Test 3: POST with end <= start → 400 ─────────────────────────────
+  {
+    const r = await req('POST', '/api/events', {
+      title: 'Bad Event',
+      start_at: '2026-06-18T11:00:00',
+      end_at:   '2026-06-18T10:00:00',
+    });
+    log(`POST end before start → ${r.status} (expected 400)`, r.status === 400);
+    logJSON(r.data);
+  }
+
+  // ── Test 4: POST with end == start → 400 ─────────────────────────────
+  {
+    const r = await req('POST', '/api/events', {
+      title: 'Zero Duration',
+      start_at: '2026-06-18T10:00:00',
+      end_at:   '2026-06-18T10:00:00',
+    });
+    log(`POST end == start → ${r.status} (expected 400)`, r.status === 400);
+    logJSON(r.data);
+  }
+
+  // ── Test 5: POST valid event → 201 ───────────────────────────────────
+  {
+    const r = await req('POST', '/api/events', {
+      title: 'Valid Test Event',
+      start_at: '2026-06-18T16:00:00',
+      end_at:   '2026-06-18T17:00:00',
+    });
+    log(`POST valid event → ${r.status} (expected 201)`, r.status === 201);
+    logJSON(r.data);
+
+    const newId = r.data.id;
+
+    // ── Test 6: PUT valid update ────────────────────────────────────────
+    {
+      const r2 = await req('PUT', `/api/events/${newId}`, {
+        title: 'Updated Test Event',
+        start_at: '2026-06-18T16:30:00',
+        end_at:   '2026-06-18T17:30:00',
+      });
+      log(`PUT valid update → ${r2.status} (expected 200)`, r2.status === 200);
+      logJSON(r2.data);
+    }
+
+    // ── Test 7: PUT with invalid data → 400 ────────────────────────────
+    {
+      const r2 = await req('PUT', `/api/events/${newId}`, {
+        title: '',
+        start_at: '2026-06-18T16:30:00',
+        end_at:   '2026-06-18T17:30:00',
+      });
+      log(`PUT empty title → ${r2.status} (expected 400)`, r2.status === 400);
+      logJSON(r2.data);
+    }
+
+    // ── Test 8: DELETE ──────────────────────────────────────────────────
+    {
+      const r2 = await req('DELETE', `/api/events/${newId}`);
+      log(`DELETE event → ${r2.status} (expected 200)`, r2.status === 200);
+      logJSON(r2.data);
+    }
+
+    // ── Test 9: DELETE non-existent → 404 ──────────────────────────────
+    {
+      const r2 = await req('DELETE', `/api/events/${newId}`);
+      log(`DELETE non-existent → ${r2.status} (expected 404)`, r2.status === 404);
+      logJSON(r2.data);
+    }
+  }
+
+  // ── Test 10: GET events range ─────────────────────────────────────────
+  {
+    const r = await req('GET', '/api/events?start=2026-06-15T00:00:00Z&end=2026-06-22T00:00:00Z');
+    log(`GET events → ${r.status}, count=${r.data.length} (expected 200, 12)`,
+        r.status === 200 && r.data.length === 12);
+  }
+
+  // ── Test 11: GET without params → 400 ────────────────────────────────
+  {
+    const r = await req('GET', '/api/events');
+    log(`GET without params → ${r.status} (expected 400)`, r.status === 400);
+    logJSON(r.data);
+  }
+
+  // ── Layout verification (pure JS) ────────────────────────────────────
+  document.getElementById('results').appendChild(Object.assign(document.createElement('h2'), { textContent: 'Layout Engine Tests' }));
+
+  // Simulate computeLayout inline
+  function computeLayout(events, dayStr) {
+    if (!events || events.length === 0) return [];
+    const DAY_START_MS = new Date(dayStr + 'T00:00:00').getTime();
+    const items = events.map((ev) => {
+      const startMs  = new Date(ev.start_at).getTime();
+      const endMs    = new Date(ev.end_at).getTime();
+      const startMin = Math.max(0,    Math.round((startMs - DAY_START_MS) / 60000));
+      const endMin   = Math.min(1440, Math.round((endMs   - DAY_START_MS) / 60000));
+      return { ev, startMin, endMin };
+    });
+    items.sort((a, b) => a.startMin !== b.startMin ? a.startMin - b.startMin : b.endMin - a.endMin);
+    const n = items.length;
+    const parent = Array.from({ length: n }, (_, i) => i);
+    function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }
+    function union(x, y) { const px = find(x), py = find(y); if (px !== py) parent[px] = py; }
+    function overlaps(a, b) { return a.startMin < b.endMin && b.startMin < a.endMin; }
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (overlaps(items[i], items[j])) union(i, j);
+    const clusterMap = new Map();
+    for (let i = 0; i < n; i++) { const root = find(i); if (!clusterMap.has(root)) clusterMap.set(root, []); clusterMap.get(root).push(i); }
+    const result = new Array(n);
+    for (const [, indices] of clusterMap) {
+      indices.sort((a, b) => items[a].startMin !== items[b].startMin ? items[a].startMin - items[b].startMin : items[b].endMin - items[a].endMin);
+      const colEnds = [], colAssign = new Array(indices.length);
+      for (let k = 0; k < indices.length; k++) {
+        const item = items[indices[k]]; let placed = false;
+        for (let c = 0; c < colEnds.length; c++) { if (colEnds[c] <= item.startMin) { colAssign[k] = c; colEnds[c] = item.endMin; placed = true; break; } }
+        if (!placed) { colAssign[k] = colEnds.length; colEnds.push(item.endMin); }
+      }
+      const numCols = colEnds.length;
+      for (let k = 0; k < indices.length; k++) { const idx = indices[k]; result[idx] = { event: items[idx].ev, startMin: items[idx].startMin, endMin: items[idx].endMin, colIndex: colAssign[k], numCols }; }
+    }
+    return result;
+  }
+
+  // Test: 3 identical events → 3 equal columns
+  {
+    const evs = [
+      { id:1, title:'A', start_at:'2026-06-16T09:00:00', end_at:'2026-06-16T10:00:00' },
+      { id:2, title:'B', start_at:'2026-06-16T09:00:00', end_at:'2026-06-16T10:00:00' },
+      { id:3, title:'C', start_at:'2026-06-16T09:00:00', end_at:'2026-06-16T10:00:00' },
+    ];
+    const layout = computeLayout(evs, '2026-06-16');
+    const allThreeCols = layout.every(l => l.numCols === 3);
+    const cols = layout.map(l => l.colIndex).sort().join(',');
+    log(`3 identical events → numCols=3, cols=[${cols}] (expected 0,1,2)`,
+        allThreeCols && cols === '0,1,2');
+  }
+
+  // Test: chain overlap (09-11, 10-12, 11:30-13) → all in one cluster, numCols=2
+  {
+    const evs = [
+      { id:5, title:'A', start_at:'2026-06-17T09:00:00', end_at:'2026-06-17T11:00:00' },
+      { id:6, title:'B', start_at:'2026-06-17T10:00:00', end_at:'2026-06-17T12:00:00' },
+      { id:7, title:'C', start_at:'2026-06-17T11:30:00', end_at:'2026-06-17T13:00:00' },
+    ];
+    const layout = computeLayout(evs, '2026-06-17');
+    const numCols = layout.map(l => l.numCols);
+    const cols    = layout.map(l => l.colIndex);
+    // A→col0, B→col1, C→col0 (reuses since A ends at 660 ≤ 690=C.start)
+    log(`Chain overlap → numCols=[${numCols}] (expected all 2)`, numCols.every(c => c === 2));
+    log(`Chain overlap → cols=[${cols}] (expected 0,1,0)`, cols.join(',') === '0,1,0');
+  }
+
+  // Test: solo event → numCols=1, colIndex=0
+  {
+    const evs = [
+      { id:1, title:'Solo', start_at:'2026-06-15T09:00:00', end_at:'2026-06-15T10:00:00' },
+    ];
+    const layout = computeLayout(evs, '2026-06-15');
+    log(`Solo event → numCols=${layout[0].numCols}, colIndex=${layout[0].colIndex} (expected 1, 0)`,
+        layout[0].numCols === 1 && layout[0].colIndex === 0);
+  }
+
+  // Test: two clusters in same day
+  {
+    const evs = [
+      { id:8, title:'A', start_at:'2026-06-18T08:00:00', end_at:'2026-06-18T09:30:00' },
+      { id:9, title:'B', start_at:'2026-06-18T08:30:00', end_at:'2026-06-18T10:00:00' },
+      { id:10, title:'Solo', start_at:'2026-06-18T14:00:00', end_at:'2026-06-18T15:30:00' },
+    ];
+    const layout = computeLayout(evs, '2026-06-18');
+    const soloItem = layout.find(l => l.event.id === 10);
+    const overlapItems = layout.filter(l => l.event.id !== 10);
+    log(`Two clusters: overlap pair numCols=2`, overlapItems.every(l => l.numCols === 2));
+    log(`Two clusters: solo after cluster numCols=1, colIndex=0`,
+        soloItem.numCols === 1 && soloItem.colIndex === 0);
+  }
+
+  // Test: 24:00 clamping
+  {
+    const evs = [
+      { id:11, title:'Late', start_at:'2026-06-19T22:00:00', end_at:'2026-06-20T00:00:00' },
+    ];
+    const layout = computeLayout(evs, '2026-06-19');
+    log(`24:00 clamp → endMin=${layout[0].endMin} (expected 1440)`, layout[0].endMin === 1440);
+    log(`24:00 clamp → startMin=${layout[0].startMin} (expected 1320)`, layout[0].startMin === 1320);
+  }
+
+  // Test: vertical geometry
+  {
+    const AXIS_HEIGHT = 64 * 24;
+    const evs = [
+      { id:1, title:'Test', start_at:'2026-06-15T09:00:00', end_at:'2026-06-15T10:30:00' },
+    ];
+    const layout = computeLayout(evs, '2026-06-15');
+    const { startMin, endMin } = layout[0];
+    const top    = (startMin / 1440) * AXIS_HEIGHT;
+    const height = ((endMin - startMin) / 1440) * AXIS_HEIGHT;
+    // 09:00 = 540min, 10:30 = 630min, duration = 90min = 1.5 hours
+    // top = (540/1440)*1536 = 576px
+    // height = (90/1440)*1536 = 96px = 1.5 * HOUR_HEIGHT
+    log(`09:00-10:30 top=${top}px (expected 576)`, top === 576);
+    log(`09:00-10:30 height=${height}px (expected 96 = 1.5 hours)`, height === 96);
+  }
+}
+
+run().catch(e => {
+  const div = document.createElement('div');
+  div.className = 'fail';
+  div.textContent = 'Error: ' + e.message;
+  results.appendChild(div);
+});
+</script>
+</body>
+</html>

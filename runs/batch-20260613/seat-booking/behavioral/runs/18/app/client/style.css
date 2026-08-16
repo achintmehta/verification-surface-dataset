@@ -1,0 +1,96 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#status-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+#seat-map {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.seat {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  border: 2px solid transparent;
+}
+
+.seat.available {
+  background: #e0e0e0;
+}
+
+.seat.available:hover {
+  background: #d0d0d0;
+}
+
+.seat.selected {
+  background: #2196f3;
+  color: white;
+}
+
+.seat.held {
+  background: #ff9800;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat.held.my-hold {
+  background: #4caf50;
+}
+
+.seat.booked {
+  background: #f44336;
+  color: white;
+  cursor: not-allowed;
+}
+
+#controls {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background: #2196f3;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+#error-message {
+  color: #f44336;
+  margin-top: 10px;
+  min-height: 20px;
+}

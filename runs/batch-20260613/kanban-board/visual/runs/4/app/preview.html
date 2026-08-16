@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board – Preview</title>
+  <style>
+    /* ============================================================
+       CSS Custom Properties
+       ============================================================ */
+    :root {
+      --color-bg:          #0f172a;
+      --color-surface:     #1e293b;
+      --color-surface-2:   #273549;
+      --color-border:      #334155;
+      --color-accent:      #6366f1;
+      --color-accent-h:    #818cf8;
+      --color-text:        #e2e8f0;
+      --color-text-muted:  #94a3b8;
+      --color-success:     #22c55e;
+      --color-danger:      #ef4444;
+      --color-card-bg:     #1e293b;
+      --color-card-hover:  #273549;
+      --color-header-bg:   #0f172a;
+
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  14px;
+
+      --shadow-card: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .app-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: var(--color-header-bg);
+      border-bottom: 1px solid var(--color-border);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+    }
+    .header-inner {
+      width: 100%;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo { font-size: 20px; color: var(--color-accent); }
+    .header-title {
+      font-size: 18px; font-weight: 700; letter-spacing: -0.3px;
+      color: var(--color-text); flex: 1;
+    }
+    .header-badge {
+      font-size: 12px; font-weight: 600;
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(34,197,94,0.15);
+      color: var(--color-success);
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+
+    /* Board */
+    .board-container {
+      position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+      overflow-x: auto; overflow-y: hidden;
+      padding: 24px;
+    }
+    .board {
+      display: flex; gap: 20px; height: 100%;
+      align-items: flex-start; min-width: max-content;
+    }
+
+    /* Column */
+    .column {
+      width: 300px; min-width: 300px;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      display: flex; flex-direction: column;
+      max-height: calc(100vh - 80px);
+    }
+    .column-header {
+      padding: 14px 16px 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .column-title {
+      font-size: 14px; font-weight: 700; letter-spacing: 0.4px;
+      text-transform: uppercase; color: var(--color-text-muted);
+    }
+    .column-count {
+      font-size: 12px; font-weight: 600;
+      background: var(--color-surface-2); color: var(--color-text-muted);
+      border-radius: 999px; padding: 2px 8px;
+      border: 1px solid var(--color-border);
+    }
+    .column-cards {
+      flex: 1; overflow-y: auto;
+      padding: 10px 10px 4px;
+      display: flex; flex-direction: column; gap: 8px;
+      min-height: 60px;
+    }
+    .column-cards::-webkit-scrollbar { width: 4px; }
+    .column-cards::-webkit-scrollbar-track { background: transparent; }
+    .column-cards::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+    .column-footer { padding: 8px 10px 12px; }
+
+    /* Add card button */
+    .btn-add-card {
+      width: 100%; display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px;
+      background: transparent;
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text-muted);
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background 150ms, border-color 150ms, color 150ms;
+    }
+    .btn-add-card:hover {
+      background: var(--color-surface-2);
+      border-color: var(--color-accent);
+      color: var(--color-accent-h);
+    }
+    .plus-icon { font-size: 18px; line-height: 1; font-weight: 300; }
+
+    /* Card */
+    .card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      cursor: grab;
+      user-select: none;
+      box-shadow: var(--shadow-card);
+      transition: transform 150ms, box-shadow 150ms, border-color 150ms;
+      word-break: break-word;
+    }
+    .card:hover {
+      background: var(--color-card-hover);
+      border-color: var(--color-accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .card-text { font-size: 14px; line-height: 1.5; color: var(--color-text); }
+    .card-meta { margin-top: 8px; font-size: 11px; color: var(--color-text-muted); }
+
+    /* Accent left border on first card to show active state */
+    .card.active { border-left: 3px solid var(--color-accent); }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-logo">&#9776;</span>
+      <h1 class="header-title">Kanban Board</h1>
+      <span class="header-badge">live</span>
+    </div>
+  </header>
+
+  <main class="board-container">
+    <div class="board">
+
+      <!-- To Do -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">To Do</span>
+          <span class="column-count">4</span>
+        </div>
+        <div class="column-cards">
+          <div class="card">
+            <div class="card-text">Set up project repository and CI pipeline</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+          <div class="card">
+            <div class="card-text">Write unit tests for ordering logic</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+          <div class="card">
+            <div class="card-text">Document the SSE broadcast protocol</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+          <div class="card">
+            <div class="card-text">Review accessibility of drag-and-drop interactions</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+        </div>
+        <div class="column-footer">
+          <button class="btn-add-card">
+            <span class="plus-icon">+</span> Add card
+          </button>
+        </div>
+      </div>
+
+      <!-- In Progress -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">In Progress</span>
+          <span class="column-count">3</span>
+        </div>
+        <div class="column-cards">
+          <div class="card active">
+            <div class="card-text">Build the Kanban board backend with PGLite</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+          <div class="card">
+            <div class="card-text">Implement fractional position ordering</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+          <div class="card">
+            <div class="card-text">Design the dark-mode UI with CSS variables</div>
+            <div class="card-meta">Jun 17</div>
+          </div>
+        </div>
+        <div class="column-footer">
+          <button class="btn-add-card">
+            <span class="plus-icon">+</span> Add card
+          </button>
+        </div>
+      </div>
+
+      <!-- Done -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">Done</span>
+          <span class="column-count">2</span>
+        </div>
+        <div class="column-cards">
+          <div class="card">
+            <div class="card-text">Define project architecture and tech stack</div>
+            <div class="card-meta">Jun 16</div>
+          </div>
+          <div class="card">
+            <div class="card-text">Set up Express server with CORS and JSON parsing</div>
+            <div class="card-meta">Jun 16</div>
+          </div>
+        </div>
+        <div class="column-footer">
+          <button class="btn-add-card">
+            <span class="plus-icon">+</span> Add card
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

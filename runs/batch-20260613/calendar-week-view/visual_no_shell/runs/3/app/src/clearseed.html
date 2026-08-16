@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clear + Seed (Server-side UTC)</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #0f172a; color: #e2e8f0; }
+    pre { background: #1e293b; padding: 6px 10px; margin: 3px 0; border-radius: 4px; font-size: 12px; }
+    .ok   { color: #4ade80; }
+    .err  { color: #f87171; }
+    .info { color: #93c5fd; }
+    h1 { color: #38bdf8; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <h1>🧹 Server-Side Seed (UTC times)</h1>
+  <div id="log"><pre class="info">Running…</pre></div>
+
+  <script>
+    const API = '/api';
+
+    function log(msg, cls = 'info') {
+      const div = document.getElementById('log');
+      const pre = document.createElement('pre');
+      pre.className = cls;
+      pre.textContent = msg;
+      div.appendChild(pre);
+    }
+
+    async function run() {
+      const offsetHours = -new Date().getTimezoneOffset() / 60;
+      log(`Browser timezone: UTC${offsetHours >= 0 ? '+' : ''}${offsetHours}  (${Intl.DateTimeFormat().resolvedOptions().timeZone})`);
+      log('Calling POST /api/seed (server uses UTC times)…');
+
+      try {
+        const res = await fetch(`${API}/seed`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+          log(`✅ Seeded ${data.seeded} events:`, 'ok');
+          for (const ev of data.events) {
+            const d = new Date(ev.start_at);
+            const e = new Date(ev.end_at);
+            const fmt = d2 => `${String(d2.getHours()).padStart(2,'0')}:${String(d2.getMinutes()).padStart(2,'0')}`;
+            log(`  id=${ev.id}  "${ev.title}"  LOCAL ${fmt(d)}–${fmt(e)}  UTC ${ev.start_at.slice(11,16)}–${ev.end_at.slice(11,16)}`, 'ok');
+          }
+          log('\n→ Open http://localhost:5173 to view the calendar', 'info');
+        } else {
+          log(`✗ Error: ${data.error}`, 'err');
+        }
+      } catch (err) {
+        log(`✗ Fetch error: ${err.message}`, 'err');
+      }
+    }
+
+    window.addEventListener('load', run);
+  </script>
+</body>
+</html>

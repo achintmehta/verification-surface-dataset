@@ -1,0 +1,79 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.board {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.column {
+  background: white;
+  border-radius: 8px;
+  width: 300px;
+  min-height: 500px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.column-header {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: grab;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card.dragging {
+  opacity: 0.5;
+}
+
+.add-card {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  background: #f8f9fa;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #666;
+}
+
+.add-card:hover {
+  background: #e9ecef;
+}
+
+.column-dropzone {
+  min-height: 100px;
+}

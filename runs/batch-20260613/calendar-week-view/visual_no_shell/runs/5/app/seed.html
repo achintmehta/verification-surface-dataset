@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Seed Events</title>
+</head>
+<body>
+<h2>Seeding test events (wall-clock times)...</h2>
+<pre id="log"></pre>
+<script>
+const API = '/api';
+const log = document.getElementById('log');
+
+function getMonday(d = new Date()) {
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  const mon = new Date(d);
+  mon.setDate(d.getDate() + diff);
+  mon.setHours(0, 0, 0, 0);
+  return mon;
+}
+
+const pad = n => String(n).padStart(2, '0');
+
+function wallClock(date) {
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}` +
+         `T${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
+}
+
+function dt(base, dayOffset, h, m = 0) {
+  const d = new Date(base);
+  d.setDate(d.getDate() + dayOffset);
+  d.setHours(h, m, 0, 0);
+  return wallClock(d);
+}
+
+async function deleteAll() {
+  const start = '2020-01-01T00:00:00';
+  const end   = '2030-12-31T23:59:59';
+  const res = await fetch(`${API}/events?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+  const evts = await res.json();
+  log.textContent += `Deleting ${evts.length} existing events...\n`;
+  for (const e of evts) {
+    await fetch(`${API}/events/${e.id}`, { method: 'DELETE' });
+  }
+  log.textContent += 'Cleared.\n\n';
+}
+
+async function seed() {
+  await deleteAll();
+
+  const mon = getMonday();
+  log.textContent += `Week starts: ${mon.toDateString()}\n\n`;
+
+  const events = [
+    // Monday: 3 identical-time events (3 equal columns)
+    { title: 'Standup A',         start_at: dt(mon, 0, 9, 0),   end_at: dt(mon, 0, 10, 0) },
+    { title: 'Standup B',         start_at: dt(mon, 0, 9, 0),   end_at: dt(mon, 0, 10, 0) },
+    { title: 'Standup C',         start_at: dt(mon, 0, 9, 0),   end_at: dt(mon, 0, 10, 0) },
+    // Monday: non-overlapping after cluster (full width)
+    { title: 'Lunch',             start_at: dt(mon, 0, 12, 0),  end_at: dt(mon, 0, 13, 0) },
+
+    // Tuesday: partial overlap chain
+    { title: 'Alpha 9-11',        start_at: dt(mon, 1, 9, 0),   end_at: dt(mon, 1, 11, 0) },
+    { title: 'Beta 10-12',        start_at: dt(mon, 1, 10, 0),  end_at: dt(mon, 1, 12, 0) },
+    { title: 'Gamma 11:30-13',    start_at: dt(mon, 1, 11, 30), end_at: dt(mon, 1, 13, 0) },
+
+    // Wednesday: 1.5-hour event (90px tall)
+    { title: 'Workshop 9-10:30',  start_at: dt(mon, 2, 9, 0),   end_at: dt(mon, 2, 10, 30) },
+    // Wednesday: event ending at midnight (24:00)
+    { title: 'Late Night 22-24',  start_at: dt(mon, 2, 22, 0),  end_at: dt(mon, 3, 0, 0) },
+
+    // Thursday: two overlapping events
+    { title: 'Design Review',     start_at: dt(mon, 3, 14, 0),  end_at: dt(mon, 3, 16, 0) },
+    { title: 'Code Review',       start_at: dt(mon, 3, 15, 0),  end_at: dt(mon, 3, 17, 0) },
+
+    // Friday: single full-width event
+    { title: 'Sprint Planning',   start_at: dt(mon, 4, 10, 0),  end_at: dt(mon, 4, 12, 0) },
+
+    // Saturday: event at midnight start
+    { title: 'Early Bird 0-1',    start_at: dt(mon, 5, 0, 0),   end_at: dt(mon, 5, 1, 0) },
+
+    // Sunday: evening event
+    { title: 'Evening Wind-down', start_at: dt(mon, 6, 20, 0),  end_at: dt(mon, 6, 22, 0) },
+  ];
+
+  for (const evt of events) {
+    try {
+      const res = await fetch(`${API}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(evt),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        log.textContent += `[${json.id}] ${evt.title}  ${evt.start_at} -> ${evt.end_at}\n`;
+      } else {
+        log.textContent += `FAILED: ${evt.title} -- ${json.error}\n`;
+      }
+    } catch (e) {
+      log.textContent += `ERROR: ${evt.title} -- ${e.message}\n`;
+    }
+  }
+
+  log.textContent += '\nDone! Reload http://localhost:5173 to see the calendar.';
+}
+
+seed();
+</script>
+</body>
+</html>

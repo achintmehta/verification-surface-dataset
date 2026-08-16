@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking — Static Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #0f1117;
+      --color-surface: #1a1d27;
+      --color-surface-2: #22263a;
+      --color-border: #2e3350;
+      --color-text: #e8eaf6;
+      --color-text-muted: #7986cb;
+      --color-available: #1e3a5f;
+      --color-available-hover: #1565c0;
+      --color-available-border: #1976d2;
+      --color-selected: #f57f17;
+      --color-selected-border: #ffa000;
+      --color-held: #4a148c;
+      --color-held-border: #7b1fa2;
+      --color-held-mine: #e65100;
+      --color-held-mine-border: #ff6d00;
+      --color-booked: #1b5e20;
+      --color-booked-border: #2e7d32;
+      --color-booked-mine: #00695c;
+      --color-booked-mine-border: #00897b;
+      --radius: 8px;
+      --radius-sm: 4px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+
+    .session-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .session-id {
+      font-family: monospace;
+      font-size: 0.75rem;
+      background: var(--color-surface-2);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+
+    .dot-connected { color: #4caf50; font-size: 1rem; }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .stage {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      border: 2px solid #3949ab;
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(57, 73, 171, 0.3);
+    }
+
+    .stage-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: #9fa8da;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      margin-bottom: 24px;
+      padding: 12px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .seat-demo {
+      width: 20px; height: 20px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+    }
+    .sd-available   { background: var(--color-available);   border-color: var(--color-available-border); }
+    .sd-selected    { background: var(--color-selected);    border-color: var(--color-selected-border); }
+    .sd-held-mine   { background: var(--color-held-mine);   border-color: var(--color-held-mine-border); }
+    .sd-held        { background: var(--color-held);        border-color: var(--color-held-border); }
+    .sd-booked-mine { background: var(--color-booked-mine); border-color: var(--color-booked-mine-border); }
+    .sd-booked      { background: var(--color-booked);      border-color: var(--color-booked-border); }
+
+    .seat-map {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .seat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .row-label {
+      width: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+    }
+
+    .seats-container { display: flex; gap: 6px; }
+
+    .seat {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .seat:hover { transform: scale(1.1); }
+
+    .s-available   { background: var(--color-available);   border-color: var(--color-available-border);   color: #90caf9; }
+    .s-selected    { background: var(--color-selected);    border-color: var(--color-selected-border);    color: #fff; }
+    .s-held-mine   { background: var(--color-held-mine);   border-color: var(--color-held-mine-border);   color: #ffe0b2; animation: pulse-mine 2s infinite; }
+    .s-held        { background: var(--color-held);        border-color: var(--color-held-border);        color: #ce93d8; cursor: not-allowed; }
+    .s-booked-mine { background: var(--color-booked-mine); border-color: var(--color-booked-mine-border); color: #b2dfdb; cursor: default; }
+    .s-booked      { background: var(--color-booked);      border-color: var(--color-booked-border);      color: #a5d6a7; cursor: not-allowed; }
+
+    @keyframes pulse-mine {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,109,0,0.4); }
+      50%       { box-shadow: 0 0 0 6px rgba(255,109,0,0); }
+    }
+
+    .inventory { display: flex; gap: 12px; margin-bottom: 20px; }
+
+    .inv-item {
+      flex: 1;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 12px;
+      text-align: center;
+    }
+
+    .inv-count { display: block; font-size: 1.8rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .inv-label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .action-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .panel-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .panel-info { font-size: 1rem; color: var(--color-text-muted); }
+    .panel-info strong { color: var(--color-text); font-size: 1.2rem; }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn-primary   { background: #1565c0; color: #fff; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>🎭 Seat Booking</h1>
+    <div class="session-info">
+      <span>Session:</span>
+      <span class="session-id">a1b2c3d4…</span>
+      <span class="dot-connected" title="Connected to live updates">●</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stage"><div class="stage-label">STAGE</div></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="seat-demo sd-available"></div><span>Available</span></div>
+    <div class="legend-item"><div class="seat-demo sd-selected"></div><span>Selected</span></div>
+    <div class="legend-item"><div class="seat-demo sd-held-mine"></div><span>Your Hold</span></div>
+    <div class="legend-item"><div class="seat-demo sd-held"></div><span>Held by Other</span></div>
+    <div class="legend-item"><div class="seat-demo sd-booked-mine"></div><span>Your Booking</span></div>
+    <div class="legend-item"><div class="seat-demo sd-booked"></div><span>Booked</span></div>
+  </div>
+
+  <div class="seat-map" id="seat-map"></div>
+
+  <div class="inventory">
+    <div class="inv-item"><span class="inv-count" id="cnt-avail">–</span><span class="inv-label">Available</span></div>
+    <div class="inv-item"><span class="inv-count" id="cnt-held">–</span><span class="inv-label">Held</span></div>
+    <div class="inv-item"><span class="inv-count" id="cnt-booked">–</span><span class="inv-label">Booked</span></div>
+    <div class="inv-item"><span class="inv-count" id="cnt-total">–</span><span class="inv-label">Total</span></div>
+  </div>
+
+  <div class="action-panel">
+    <div class="panel-row">
+      <div class="panel-info"><strong id="sel-count">2</strong> seat(s) selected</div>
+      <button class="btn btn-primary" id="btn-hold">Hold Selected Seats</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Static seat data — simulates a realistic mixed state
+  const ROWS = ['A','B','C','D','E'];
+  const SEATS_PER_ROW = 10;
+  const MY_SESSION = 'a1b2c3d4-demo';
+
+  // Build seat data with realistic mixed states
+  const seats = [];
+  const stateMap = {
+    // Row A: mostly available, 2 selected by user
+    'A1': 'selected', 'A2': 'selected',
+    'A3': 'available', 'A4': 'available', 'A5': 'available',
+    'A6': 'available', 'A7': 'available', 'A8': 'available',
+    'A9': 'available', 'A10': 'available',
+    // Row B: some booked, some held by others
+    'B1': 'booked', 'B2': 'booked', 'B3': 'booked',
+    'B4': 'held', 'B5': 'held',
+    'B6': 'available', 'B7': 'available', 'B8': 'available',
+    'B9': 'available', 'B10': 'available',
+    // Row C: user's own hold on C3-C5
+    'C1': 'available', 'C2': 'available',
+    'C3': 'held-mine', 'C4': 'held-mine', 'C5': 'held-mine',
+    'C6': 'available', 'C7': 'available', 'C8': 'available',
+    'C9': 'booked', 'C10': 'booked',
+    // Row D: user's confirmed booking on D1-D2
+    'D1': 'booked-mine', 'D2': 'booked-mine',
+    'D3': 'available', 'D4': 'available', 'D5': 'available',
+    'D6': 'available', 'D7': 'held', 'D8': 'held',
+    'D9': 'booked', 'D10': 'booked',
+    // Row E: mostly available
+    'E1': 'available', 'E2': 'available', 'E3': 'available',
+    'E4': 'available', 'E5': 'available', 'E6': 'available',
+    'E7': 'available', 'E8': 'available', 'E9': 'available',
+    'E10': 'available',
+  };
+
+  for (const row of ROWS) {
+    for (let s = 1; s <= SEATS_PER_ROW; s++) {
+      const id = `${row}${s}`;
+      seats.push({ id, row, num: s, state: stateMap[id] || 'available' });
+    }
+  }
+
+  // Count inventory
+  let avail = 0, held = 0, booked = 0;
+  for (const s of seats) {
+    if (s.state === 'available' || s.state === 'selected') avail++;
+    else if (s.state === 'held' || s.state === 'held-mine') held++;
+    else if (s.state === 'booked' || s.state === 'booked-mine') booked++;
+  }
+  document.getElementById('cnt-avail').textContent = avail;
+  document.getElementById('cnt-held').textContent = held;
+  document.getElementById('cnt-booked').textContent = booked;
+  document.getElementById('cnt-total').textContent = seats.length;
+
+  // Count selected
+  const selectedCount = seats.filter(s => s.state === 'selected').length;
+  document.getElementById('sel-count').textContent = selectedCount;
+
+  // Render seat map
+  const mapEl = document.getElementById('seat-map');
+  const rows = {};
+  for (const s of seats) {
+    if (!rows[s.row]) rows[s.row] = [];
+    rows[s.row].push(s);
+  }
+
+  for (const row of ROWS) {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'seat-row';
+
+    const label = document.createElement('div');
+    label.className = 'row-label';
+    label.textContent = row;
+    rowEl.appendChild(label);
+
+    const container = document.createElement('div');
+    container.className = 'seats-container';
+
+    for (const seat of rows[row]) {
+      const el = document.createElement('div');
+      el.className = `seat s-${seat.state}`;
+      el.textContent = seat.num;
+      el.title = `${seat.id} — ${seat.state}`;
+      container.appendChild(el);
+    }
+
+    rowEl.appendChild(container);
+    mapEl.appendChild(rowEl);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+/* ─── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0f0f1a;
+  color: #e0e0f0;
+  min-height: 100vh;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #1a1a2e;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+header h1 { font-size: 1.5rem; }
+
+#session-info {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* ─── Main layout ──────────────────────────────────────────────────────────── */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ─── Stage ────────────────────────────────────────────────────────────────── */
+.stage {
+  background: #2a2a4a;
+  border: 2px solid #4a4a8a;
+  border-radius: 8px;
+  text-align: center;
+  padding: 0.5rem;
+  letter-spacing: 0.3em;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+/* ─── Seat map ─────────────────────────────────────────────────────────────── */
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  color: #888;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.seat {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 6px 6px 3px 3px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, box-shadow 0.1s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:hover:not(.booked):not(.held-other) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Available */
+.seat.available {
+  background: #2d5a27;
+  border-color: #4a9a40;
+  color: #a0e090;
+}
+.seat.available:hover { background: #3a7a32; }
+
+/* Selected (pre-hold) */
+.seat.selected {
+  background: #1a5a8a;
+  border-color: #40a0e0;
+  color: #a0d8f8;
+  box-shadow: 0 0 8px rgba(64,160,224,0.5);
+}
+
+/* Held by current user */
+.seat.held-mine {
+  background: #7a5a10;
+  border-color: #e0a020;
+  color: #f0d080;
+  animation: pulse-hold 2s ease-in-out infinite;
+}
+
+/* Held by someone else */
+.seat.held-other {
+  background: #3a2a2a;
+  border-color: #6a4a4a;
+  color: #8a6a6a;
+  cursor: not-allowed;
+}
+
+/* Booked */
+.seat.booked {
+  background: #2a1a3a;
+  border-color: #6a4a8a;
+  color: #8a6aaa;
+  cursor: not-allowed;
+}
+
+@keyframes pulse-hold {
+  0%, 100% { box-shadow: 0 0 4px rgba(224,160,32,0.3); }
+  50%       { box-shadow: 0 0 12px rgba(224,160,32,0.7); }
+}
+
+/* ─── Legend ───────────────────────────────────────────────────────────────── */
+#legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.seat-demo {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 3px;
+  border: 2px solid transparent;
+}
+
+.seat-demo.available  { background: #2d5a27; border-color: #4a9a40; }
+.seat-demo.held-other { background: #3a2a2a; border-color: #6a4a4a; }
+.seat-demo.held-mine  { background: #7a5a10; border-color: #e0a020; }
+.seat-demo.selected   { background: #1a5a8a; border-color: #40a0e0; }
+.seat-demo.booked     { background: #2a1a3a; border-color: #6a4a8a; }
+
+/* ─── Action panel ─────────────────────────────────────────────────────────── */
+#action-panel {
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 10px;
+  padding: 1.25rem;
+  min-height: 5rem;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#hold-btn {
+  background: #2a6aaa;
+  color: #fff;
+  margin-top: 0.75rem;
+}
+#hold-btn:not(:disabled):hover { background: #3a8adc; }
+
+#confirm-btn {
+  background: #2a8a3a;
+  color: #fff;
+}
+#confirm-btn:hover { background: #3aaa4a; }
+
+#release-btn {
+  background: #6a2a2a;
+  color: #fff;
+}
+#release-btn:hover { background: #8a3a3a; }
+
+#new-booking-btn {
+  background: #2a4a8a;
+  color: #fff;
+  margin-top: 0.75rem;
+}
+#new-booking-btn:hover { background: #3a6aaa; }
+
+#error-dismiss-btn {
+  background: #4a4a6a;
+  color: #fff;
+  margin-top: 0.75rem;
+}
+
+#selection-info { color: #aaa; font-size: 0.9rem; }
+
+#hold-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+#hold-actions { display: flex; gap: 0.75rem; }
+
+.timer {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #e0a020;
+}
+
+.timer.urgent { color: #e04020; animation: blink 0.5s step-end infinite; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.booking-success {
+  color: #80e090;
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: #e06060;
+  background: #2a1a1a;
+  border: 1px solid #6a2a2a;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── Inventory bar ────────────────────────────────────────────────────────── */
+#inventory-bar {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  color: #888;
+  border-top: 1px solid #2a2a4a;
+  padding-top: 0.75rem;
+}
+
+#inv-available { color: #4a9a40; }
+#inv-held      { color: #e0a020; }
+#inv-booked    { color: #8a6aaa; }
+
+/* ─── Loading ──────────────────────────────────────────────────────────────── */
+#loading {
+  text-align: center;
+  color: #888;
+  padding: 2rem;
+}
+
+/* ─── SSE status dot ───────────────────────────────────────────────────────── */
+#sse-status {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #888;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+#sse-status.connected    { background: #4a9a40; }
+#sse-status.disconnected { background: #e04020; }

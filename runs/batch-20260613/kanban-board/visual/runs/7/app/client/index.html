@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collaborative Kanban Board</title>
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">PGLite + SSE</p>
+        <h1>Collaborative Kanban</h1>
+      </div>
+      <div id="connection-status" class="status status-connecting">Connecting…</div>
+    </header>
+
+    <main>
+      <div id="board" class="board" aria-live="polite"></div>
+    </main>
+
+    <template id="column-template">
+      <section class="column">
+        <div class="column-header">
+          <h2></h2>
+          <span class="count"></span>
+        </div>
+        <form class="add-card-form">
+          <input name="text" type="text" maxlength="240" placeholder="Add a card…" autocomplete="off" />
+          <button type="submit">Add</button>
+        </form>
+        <div class="card-list"></div>
+      </section>
+    </template>
+
+    <template id="card-template">
+      <article class="card" draggable="true">
+        <p></p>
+      </article>
+    </template>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

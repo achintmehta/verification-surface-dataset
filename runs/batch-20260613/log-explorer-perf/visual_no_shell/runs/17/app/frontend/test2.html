@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <pre id="out"></pre>
+  <script>
+    async function run() {
+      const out = document.getElementById('out');
+      function log(msg) { out.textContent += msg + '\n'; }
+      
+      try {
+        const res = await fetch('http://localhost:3000/api/stats');
+        const data = await res.json();
+        log(JSON.stringify(data));
+      } catch (e) {
+        log(e.message);
+      }
+    }
+    run();
+  </script>
+</body>
+</html>

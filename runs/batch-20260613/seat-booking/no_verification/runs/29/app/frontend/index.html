@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Seat Booking - Live Event</h1>
+    
+    <div class="legend">
+      <div class="legend-item"><span class="seat available"></span> Available</div>
+      <div class="legend-item"><span class="seat held"></span> Held (by you)</div>
+      <div class="legend-item"><span class="seat booked"></span> Booked</div>
+      <div class="legend-item"><span class="seat held-other"></span> Held (other)</div>
+    </div>
+
+    <div id="seat-map" class="seat-map"></div>
+
+    <div id="controls" class="controls">
+      <div id="selection-info">Select available seats to hold</div>
+      <button id="hold-btn" disabled>Hold Selected Seats</button>
+      <div id="hold-info" style="display: none;">
+        <div>Hold active: <span id="hold-seats"></span></div>
+        <div>Expires in: <span id="countdown"></span></div>
+        <button id="confirm-btn">Confirm Booking</button>
+        <button id="release-btn">Release Hold</button>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

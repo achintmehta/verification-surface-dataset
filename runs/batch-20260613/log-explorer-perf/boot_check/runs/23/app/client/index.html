@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <h1>Log Explorer</h1>
+      <div class="filters">
+        <div class="filter-group">
+          <label for="severity-select">Severity:</label>
+          <select id="severity-select">
+            <option value="">All</option>
+            <option value="debug">Debug</option>
+            <option value="info">Info</option>
+            <option value="warn">Warn</option>
+            <option value="error">Error</option>
+          </select>
+          <span id="severity-badges" class="badges"></span>
+        </div>
+        <div class="filter-group">
+          <label for="search-input">Search:</label>
+          <input type="text" id="search-input" placeholder="Filter messages..." autocomplete="off" />
+        </div>
+        <div class="row-count" id="row-count">Loading...</div>
+      </div>
+    </header>
+    <div class="table-header">
+      <div class="col col-ts">Timestamp</div>
+      <div class="col col-severity">Severity</div>
+      <div class="col col-service">Service</div>
+      <div class="col col-message">Message</div>
+    </div>
+    <div class="virtual-scroller" id="virtual-scroller">
+      <div class="scroll-spacer" id="scroll-spacer"></div>
+      <div class="row-container" id="row-container"></div>
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <button id="btn-prev" title="Previous week">&larr; Prev</button>
+        <button id="btn-today">Today</button>
+        <button id="btn-next" title="Next week">Next &rarr;</button>
+      </div>
+      <h1 id="week-title"></h1>
+    </header>
+    <div class="calendar-container">
+      <div class="calendar-scroll">
+        <div class="calendar-grid" id="calendar-grid">
+          <!-- Time gutter + 7 day columns rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event modal -->
+  <div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal" id="event-modal">
+      <h2 id="modal-title">Create Event</h2>
+      <form id="event-form">
+        <input type="hidden" id="event-id" />
+        <div class="form-group">
+          <label for="event-title-input">Title</label>
+          <input type="text" id="event-title-input" required placeholder="Event title" />
+        </div>
+        <div class="form-group">
+          <label for="event-date-input">Date</label>
+          <input type="date" id="event-date-input" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="event-start-input">Start</label>
+            <input type="time" id="event-start-input" required />
+          </div>
+          <div class="form-group">
+            <label for="event-end-input">End</label>
+            <input type="time" id="event-end-input" required />
+          </div>
+        </div>
+        <div class="form-error" id="form-error" hidden></div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="btn-save">Save</button>
+          <button type="button" class="btn-secondary" id="btn-cancel">Cancel</button>
+          <button type="button" class="btn-danger" id="btn-delete" hidden>Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

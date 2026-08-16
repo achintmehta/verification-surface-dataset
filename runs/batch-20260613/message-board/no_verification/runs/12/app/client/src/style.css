@@ -1,0 +1,175 @@
+:root {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel-2: #273449;
+  --accent: #38bdf8;
+  --accent-strong: #0ea5e9;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --err: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+}
+
+#app {
+  width: 100%;
+  max-width: 720px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-left: 1px solid #0b1220;
+  border-right: 1px solid #0b1220;
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #0b1220;
+  background: var(--panel-2);
+}
+
+.board-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+
+.status--connecting {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warn);
+}
+
+.status--online {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--ok);
+}
+
+.status--offline {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--err);
+}
+
+.board-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.messages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  background: var(--panel-2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid #0b1220;
+  animation: pop-in 0.18s ease-out;
+}
+
+.message__text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message__time {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.empty {
+  list-style: none;
+  text-align: center;
+  color: var(--muted);
+  padding: 32px 0;
+}
+
+.message-form {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid #0b1220;
+  background: var(--panel-2);
+}
+
+.message-input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.message-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.send-button {
+  padding: 0 20px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-strong);
+  color: #04212e;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.send-button:hover {
+  background: var(--accent);
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

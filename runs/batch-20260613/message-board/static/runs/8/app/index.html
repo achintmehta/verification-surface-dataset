@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PGLite Realtime Message Board</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="board-card" aria-labelledby="board-title">
+        <header class="board-header">
+          <div>
+            <p class="eyebrow">PGLite + SSE</p>
+            <h1 id="board-title">Realtime Message Board</h1>
+          </div>
+          <span id="connection-status" class="status status--connecting">Connecting</span>
+        </header>
+
+        <ul id="messages" class="messages" aria-live="polite" aria-label="Messages"></ul>
+
+        <p id="empty-state" class="empty-state">No messages yet. Be the first to post.</p>
+
+        <form id="message-form" class="message-form">
+          <label class="sr-only" for="message-input">Message text</label>
+          <input
+            id="message-input"
+            name="text"
+            type="text"
+            maxlength="1000"
+            autocomplete="off"
+            placeholder="Write a message…"
+            required
+          />
+          <button type="submit">Post</button>
+        </form>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

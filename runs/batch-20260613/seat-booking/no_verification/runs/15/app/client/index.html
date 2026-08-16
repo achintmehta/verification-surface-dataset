@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>🎟️ Live Seat Booking</h1>
+      <div class="conn">
+        <span id="conn-dot" class="dot"></span>
+        <span id="conn-text">connecting…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage-wrap">
+        <div class="stage">STAGE</div>
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch held"></i> Held</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="inventory">
+          <div><strong id="inv-available">–</strong><span>Available</span></div>
+          <div><strong id="inv-held">–</strong><span>Held</span></div>
+          <div><strong id="inv-booked">–</strong><span>Booked</span></div>
+          <div><strong id="inv-total">–</strong><span>Total</span></div>
+        </div>
+
+        <div class="selection">
+          <h2>Selection</h2>
+          <p id="selection-text">No seats selected.</p>
+          <button id="hold-btn" disabled>Hold selected seats</button>
+        </div>
+
+        <div id="hold-box" class="hold-box hidden">
+          <h2>Active hold</h2>
+          <p id="hold-seats"></p>
+          <div class="countdown">
+            <span id="countdown">--:--</span> until expiry
+          </div>
+          <div class="hold-actions">
+            <button id="confirm-btn">Confirm booking</button>
+            <button id="release-btn" class="secondary">Release</button>
+          </div>
+        </div>
+
+        <div id="message" class="message hidden"></div>
+
+        <div class="session">
+          Session: <code id="session-id"></code>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Week View</h1>
+      <div class="nav">
+        <button id="prev-week">Previous</button>
+        <button id="today">Today</button>
+        <button id="next-week">Next</button>
+        <span id="week-range"></span>
+      </div>
+    </header>
+    <div id="calendar"></div>
+  </div>
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="modal-title">Create Event</h2>
+      <form id="event-form">
+        <input type="hidden" id="event-id">
+        <div>
+          <label>Title</label>
+          <input type="text" id="event-title" required>
+        </div>
+        <div>
+          <label>Start</label>
+          <input type="datetime-local" id="event-start" required>
+        </div>
+        <div>
+          <label>End</label>
+          <input type="datetime-local" id="event-end" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="delete-btn" class="hidden">Delete</button>
+          <button type="button" id="cancel-btn">Cancel</button>
+          <button type="submit" id="save-btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

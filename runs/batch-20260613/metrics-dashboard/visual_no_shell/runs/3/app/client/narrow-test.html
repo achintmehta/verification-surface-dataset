@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Narrow Viewport Test</title>
+  <script>
+    // Reset to light theme then show narrow view
+    fetch('http://localhost:3001/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'light' })
+    }).then(() => {
+      window.location.href = '/';
+    });
+  </script>
+</head>
+<body>Resetting theme...</body>
+</html>

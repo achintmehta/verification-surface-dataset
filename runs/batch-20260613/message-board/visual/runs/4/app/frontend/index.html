@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ── Header ── -->
+      <header class="header">
+        <div class="header__inner">
+          <h1 class="header__title">
+            <span class="header__icon">💬</span>
+            Message Board
+          </h1>
+          <span class="header__status" id="status" title="Connection status">
+            <span class="status__dot"></span>
+            <span class="status__label">Connecting…</span>
+          </span>
+        </div>
+      </header>
+
+      <!-- ── Main ── -->
+      <main class="main">
+        <!-- Message feed -->
+        <section class="feed" aria-label="Message feed" aria-live="polite">
+          <ul class="feed__list" id="messageList">
+            <!-- Messages are injected here by JS -->
+          </ul>
+          <div class="feed__empty" id="emptyState" hidden>
+            <span class="feed__empty-icon">🗒️</span>
+            <p>No messages yet. Be the first to say something!</p>
+          </div>
+          <div class="feed__loading" id="loadingState">
+            <span class="spinner"></span>
+            Loading messages…
+          </div>
+        </section>
+
+        <!-- Compose form -->
+        <form class="compose" id="composeForm" novalidate>
+          <div class="compose__field">
+            <label class="compose__label" for="messageInput">New message</label>
+            <div class="compose__row">
+              <textarea
+                class="compose__input"
+                id="messageInput"
+                name="text"
+                placeholder="Type a message…"
+                rows="2"
+                maxlength="2000"
+                required
+                autocomplete="off"
+              ></textarea>
+              <button class="compose__btn" type="submit" aria-label="Send message">
+                <svg class="compose__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span class="compose__btn-label">Send</span>
+              </button>
+            </div>
+            <div class="compose__meta">
+              <span class="compose__char-count" id="charCount">0 / 2000</span>
+              <span class="compose__hint">Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to send</span>
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

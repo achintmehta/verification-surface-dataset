@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="inventory" class="inventory"></div>
+      <div id="connection-status" class="connection-status">Connecting…</div>
+    </header>
+
+    <main>
+      <section id="seat-map-container">
+        <div class="stage">STAGE</div>
+        <div id="seat-map" class="seat-map"></div>
+      </section>
+
+      <aside id="panel" class="panel">
+        <h2>Your Selection</h2>
+        <div id="selected-seats" class="selected-seats">No seats selected</div>
+        <div id="hold-info" class="hold-info" style="display:none;">
+          <p>Hold expires in: <span id="hold-timer" class="hold-timer">--</span>s</p>
+        </div>
+        <div class="actions">
+          <button id="btn-hold" disabled>Hold Selected Seats</button>
+          <button id="btn-confirm" disabled style="display:none;">Confirm Booking</button>
+          <button id="btn-release" disabled style="display:none;">Release Hold</button>
+        </div>
+        <div id="error-msg" class="error-msg" style="display:none;"></div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="legend">
+        <span class="legend-item"><span class="seat-icon available"></span> Available</span>
+        <span class="legend-item"><span class="seat-icon selected"></span> Selected</span>
+        <span class="legend-item"><span class="seat-icon held"></span> Held</span>
+        <span class="legend-item"><span class="seat-icon held-mine"></span> Your Hold</span>
+        <span class="legend-item"><span class="seat-icon booked"></span> Booked</span>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

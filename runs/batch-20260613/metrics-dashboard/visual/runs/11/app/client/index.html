@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <script>
+      // Apply a best-effort theme before first paint to avoid flash.
+      // The authoritative value is loaded from the API; this is just a hint
+      // so we don't paint light then flip to dark.
+      (function () {
+        try {
+          var cached = localStorage.getItem('theme-hint');
+          if (cached === 'light' || cached === 'dark') {
+            document.documentElement.setAttribute('data-theme', cached);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <h1>Metrics Dashboard</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-toggle-label">Theme</span>
+          <span id="theme-toggle-state" class="theme-toggle-state">Light</span>
+        </button>
+      </header>
+
+      <main id="main" class="dashboard" aria-busy="true">
+        <div id="status" class="status" hidden></div>
+        <section class="stat-cards" id="stat-cards" aria-label="Summary statistics"></section>
+        <section class="panels">
+          <article class="panel panel-chart">
+            <h2 class="panel-title">Visitors — last 30 days</h2>
+            <div class="chart-wrap" id="chart-wrap">
+              <canvas id="chart-canvas"></canvas>
+            </div>
+          </article>
+          <article class="panel panel-categories">
+            <h2 class="panel-title">Category breakdown</h2>
+            <div class="bars" id="bars"></div>
+          </article>
+          <article class="panel panel-table">
+            <h2 class="panel-title">Recent items</h2>
+            <div class="table-scroll" id="table-scroll"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

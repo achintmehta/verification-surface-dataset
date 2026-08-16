@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Metrics Dashboard</title>
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('preferred-theme');
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', '/api/settings', false);
+          xhr.send(null);
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var parsed = JSON.parse(xhr.responseText);
+            if (parsed.theme === 'dark' || parsed.theme === 'light') theme = parsed.theme;
+          }
+          if (theme === 'dark' || theme === 'light') {
+            document.documentElement.dataset.theme = theme;
+            localStorage.setItem('preferred-theme', theme);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

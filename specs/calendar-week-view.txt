@@ -1,0 +1,105 @@
+## Context
+
+We are building a single-user week-view calendar as a traditional client-server web application. The user sees one week (7 day columns, a continuous 00:00–24:00 time axis) and can create, edit, and delete events with minute-precision start and end times. Events are persisted server-side. The defining challenge is the layout of overlapping events: any number of events may overlap in time, and the calendar must render every one of them visibly, with vertical position and height exactly proportional to their times, and with overlapping events sharing horizontal space within their day column so that no event block ever covers another. To minimize external dependencies while retaining the power of PostgreSQL, we use PGLite embedded within a Node.js server.
+
+## Goals / Non-Goals
+
+**Goals:**
+- A week view rendering 7 day columns against a shared time axis, with events placed accurately to the minute.
+- Create events (title, start, end) by selecting a time range; edit and delete existing events.
+- A correct overlap layout: events that overlap in time are laid out side-by-side within the day column; every event remains fully visible and clickable.
+- Persist events durably on local disk using PGLite, exposed via a JSON HTTP API.
+- Navigate between weeks (previous / today / next) without losing data.
+
+**Non-Goals:**
+- Multi-user collaboration, sharing, or real-time sync between clients.
+- Recurring events, reminders, time zones beyond the browser's local zone, or all-day events.
+- Month and day views; only the week view is in scope.
+- Drag-to-move or drag-to-resize of existing events (edit via a form is sufficient).
+
+## Decisions
+
+**Decision 1: Cluster-based overlap layout**
+- *Rationale*: Within a day, events are grouped into overlap clusters (maximal sets of transitively overlapping events). Within a cluster, events are assigned columns greedily by start time; each event's width is the day-column width divided by the number of columns its cluster needed, and its horizontal offset is its assigned column index. This is the standard calendar algorithm: it guarantees zero visual overlap while using the full column width when there is no contention.
+
+**Decision 2: Absolute positioning from time arithmetic**
+- *Rationale*: Each event block's top and height are computed directly from its start/end times against the time axis (e.g. minutes-from-midnight mapped to pixels). Layout correctness is then a pure function of the data, which keeps the renderer testable and the geometry exact rather than approximated by stacked DOM flow.
+
+**Decision 3: Embedded PGLite vs external Postgres**
+- *Rationale*: PGLite runs PostgreSQL inside the Node.js process, persists to the local filesystem, and removes any external database dependency while keeping real SQL for date-range queries (events overlapping the requested week).
+
+**Decision 4: Vanilla JS / Vite frontend**
+- *Rationale*: The UI is a single demanding view. Vanilla JS with Vite keeps the dependency tree small and puts the layout algorithm fully in our own code where it can be reasoned about.
+
+## Risks / Trade-offs
+
+- [Risk] Overlap layout is easy to get subtly wrong: events rendered on top of each other, events escaping their day column, or width not reclaimed after a cluster ends.
+  - *Mitigation*: The cluster algorithm is specified precisely above; acceptance criteria below pin the observable geometry.
+- [Risk] Minute-precision placement drifts when the time axis is styled with borders/padding.
+  - *Mitigation*: Compute positions from a single axis-height constant; verify against known fixtures (e.g. a 09:00–10:30 event spans exactly 1.5 hour-rows).
+- [Risk] Events crossing midnight or extending outside the visible week break the geometry.
+  - *Mitigation*: Clamp rendering to the day column; an event ending at 24:00 must end exactly at the bottom edge.
+
+## Why
+
+A calendar week view is a compact task whose correctness is almost entirely *visual-geometric*: the API is trivial, but whether three simultaneous 09:00–10:00 events render as three equal side-by-side blocks — rather than three stacked rectangles hiding each other — is only observable in the rendered page. It is an excellent demonstration of disciplined layout programming over a simple persistent API.
+
+## What Changes
+
+- A brand new client-server web application.
+- Backend: Node.js + Express + embedded PGLite persisting to local disk, with a small JSON API for events.
+- Frontend: a Vanilla JS / Vite single-page week view implementing the cluster overlap layout.
+
+## Capabilities
+
+### New Capabilities
+- `week-calendar`: week grid rendering, event CRUD, and the overlap layout engine.
+
+### Modified Capabilities
+None (greenfield project).
+
+## Impact
+
+New project. Establishes the Node.js backend, the PGLite `events` schema, the events API, and the week-view frontend with its layout engine.
+
+## 1. Project Initialization
+
+- [ ] 1.1 Set up the Node.js backend project declaring its dependencies (express, @electric-sql/pglite, cors) in package.json
+- [ ] 1.2 Set up the Vanilla JS / Vite frontend project
+- [ ] 1.3 Provide npm scripts for running the backend and frontend development servers together
+
+## 2. Backend & Database
+
+- [ ] 2.1 Express server with CORS and JSON body parsing
+- [ ] 2.2 Initialize embedded PGLite writing to the local file system
+- [ ] 2.3 Create the `events` table (`id`, `title`, `start_at` timestamp, `end_at` timestamp) with a check that `end_at > start_at`
+- [ ] 2.4 `GET /api/events?start=<iso>&end=<iso>` returning all events overlapping the requested range
+- [ ] 2.5 `POST /api/events` validating title non-empty and `end_at > start_at`; reject invalid input with 400
+- [ ] 2.6 `PUT /api/events/:id` and `DELETE /api/events/:id`
+
+## 3. Week View & Layout Engine
+
+- [ ] 3.1 Render the week grid: 7 day columns Monday–Sunday, hour lines 00:00–24:00, day/date headers, and a visual indicator on today's column
+- [ ] 3.2 Place each event block with top and height proportional to its start/end times (minute precision)
+- [ ] 3.3 Implement the cluster overlap layout: group transitively overlapping events per day, assign columns greedily by start time, divide the cluster's width equally among its columns
+- [ ] 3.4 Ensure non-overlapping events use the full day-column width, including events later in a day after an earlier cluster has ended
+- [ ] 3.5 Clamp events to their day column; an event ending at 24:00 ends exactly at the bottom edge
+- [ ] 3.6 Each event block shows its title and time range, truncating with ellipsis rather than spilling outside its block
+
+## 4. Interaction
+
+- [ ] 4.1 Click-drag (or click) on an empty time range opens a create form pre-filled with that range; submitting persists via `POST /api/events` and renders the new event
+- [ ] 4.2 Clicking an event opens an edit form supporting save (`PUT`) and delete (`DELETE`)
+- [ ] 4.3 Previous / Today / Next week navigation refetches and re-renders
+- [ ] 4.4 The week renders correctly on initial load from persisted data (reload reproduces the same layout)
+
+## Acceptance Criteria (graded)
+
+- Vertical geometry is exact: an event's top edge corresponds to its start time and its bottom edge to its end time, to the minute, against the hour grid.
+- No two event blocks ever visually overlap, for any input data.
+- N events sharing an identical time range render as N equal-width blocks side by side, together filling the day column's width.
+- Partially overlapping chains (e.g. 09:00–11:00, 10:00–12:00, 11:30–13:00) render with every event fully visible and width divided only while contended.
+- An event that overlaps nothing occupies the full width of its day column, even when other clusters exist earlier the same day.
+- Events are rendered only within their own day column; an event ending at 24:00 terminates exactly at the column's bottom edge.
+- Creating, editing, and deleting events updates the rendered week and persists across a full server restart and page reload.
+- Invalid events (empty title, end not after start) are rejected with HTTP 400 and nothing is persisted.

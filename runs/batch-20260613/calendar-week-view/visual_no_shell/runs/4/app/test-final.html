@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Final Verification</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    body { margin: 0; }
+    #app { height: 100vh; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="module">
+// Import and run the main app, but scroll to 21:00 after render
+import '/src/main.js';
+
+// After a short delay, scroll to show the late night event
+setTimeout(() => {
+  const calBody = document.querySelector('.calendar-body');
+  if (calBody) {
+    calBody.scrollTop = 21 * 60 - 30; // scroll to 21:00
+  }
+}, 500);
+</script>
+</body>
+</html>

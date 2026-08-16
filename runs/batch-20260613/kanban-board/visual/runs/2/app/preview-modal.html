@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board – Modal Preview</title>
+  <style>
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface-2:#273549;--surface-3:#334155;
+  --border:#334155;--border-light:#475569;--accent:#6366f1;--accent-hover:#818cf8;
+  --accent-dim:rgba(99,102,241,.15);--text:#f1f5f9;--text-muted:#94a3b8;
+  --text-faint:#64748b;--danger:#ef4444;--success:#22c55e;
+  --radius-sm:6px;--radius:10px;--radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow:0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.6);--col-width:300px;--header-h:60px;
+  --transition:.15s ease
+}
+html,body{height:100%;font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+.app-header{height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;position:fixed;inset:0 0 auto 0;z-index:100;box-shadow:var(--shadow-sm)}
+.header-inner{display:flex;align-items:center;gap:12px;width:100%}
+.header-logo{color:var(--accent);display:flex;align-items:center}
+.header-title{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;color:var(--text);flex:1}
+.connection-badge{display:flex;align-items:center;gap:6px;font-size:.75rem;font-weight:500;color:var(--success);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success)}
+.board-wrapper{position:fixed;inset:var(--header-h) 0 0 0;overflow-x:auto;overflow-y:hidden;padding:24px}
+.board{display:flex;gap:16px;height:100%;align-items:flex-start;min-width:max-content}
+.column{width:var(--col-width);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;flex-direction:column;max-height:calc(100vh - var(--header-h) - 48px);flex-shrink:0}
+.column-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+.column-title{font-size:.875rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
+.column-count{font-size:.75rem;font-weight:600;color:var(--text-faint);background:var(--surface-2);border-radius:999px;padding:2px 8px;min-width:24px;text-align:center}
+.card-list{flex:1;overflow-y:auto;padding:10px 10px 4px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:grab;user-select:none;position:relative;word-break:break-word;line-height:1.5;font-size:.875rem}
+.add-card-btn{display:flex;align-items:center;gap:6px;width:100%;padding:10px 14px;background:transparent;border:none;border-top:1px solid var(--border);color:var(--text-faint);font-size:.8125rem;font-weight:500;cursor:pointer;border-radius:0 0 var(--radius-lg) var(--radius-lg)}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:#000000a6;display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:28px 28px 24px;width:min(420px,calc(100vw - 32px));box-shadow:var(--shadow-lg)}
+.modal-title{font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text)}
+.modal-textarea{width:100%;background:var(--surface-2);border:1px solid var(--accent);border-radius:var(--radius);color:var(--text);font-size:.875rem;font-family:inherit;padding:10px 12px;resize:vertical;outline:none;line-height:1.5}
+.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.btn{padding:8px 18px;border-radius:var(--radius-sm);font-size:.875rem;font-weight:600;font-family:inherit;cursor:pointer;border:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border)}
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="4" width="7" height="20" rx="2" fill="currentColor" opacity="0.9"/>
+          <rect x="10.5" y="4" width="7" height="14" rx="2" fill="currentColor" opacity="0.7"/>
+          <rect x="19" y="4" width="7" height="9" rx="2" fill="currentColor" opacity="0.5"/>
+        </svg>
+      </span>
+      <h1 class="header-title">Kanban Board</h1>
+      <span class="connection-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-label">Live</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="board-wrapper">
+    <div class="board">
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">To Do</span>
+          <span class="column-count">2</span>
+        </div>
+        <div class="card-list">
+          <div class="card">Write tests</div>
+          <div class="card">Add SSE real-time sync</div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add a card
+        </button>
+      </div>
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">In Progress</span>
+          <span class="column-count">1</span>
+        </div>
+        <div class="card-list">
+          <div class="card">Build the Kanban board</div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add a card
+        </button>
+      </div>
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">Done</span>
+          <span class="column-count">1</span>
+        </div>
+        <div class="card-list">
+          <div class="card">Set up project</div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add a card
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal open -->
+  <div class="modal-overlay">
+    <div class="modal">
+      <h2 class="modal-title">Add a card</h2>
+      <textarea class="modal-textarea" rows="3" placeholder="What needs to be done?">Deploy to production</textarea>
+      <div class="modal-actions">
+        <button class="btn btn-primary">Add Card</button>
+        <button class="btn btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

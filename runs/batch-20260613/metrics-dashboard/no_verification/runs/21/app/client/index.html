@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1 class="header__title">Metrics Dashboard</h1>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-toggle__icon" id="theme-icon">🌙</span>
+    </button>
+  </header>
+
+  <main class="dashboard" id="dashboard">
+    <!-- Stat Cards -->
+    <section class="stat-cards" id="stat-cards" aria-label="Summary statistics">
+      <div class="card stat-card" id="card-visitors">
+        <span class="stat-card__label">Total Visitors</span>
+        <span class="stat-card__value" id="val-visitors">—</span>
+      </div>
+      <div class="card stat-card" id="card-revenue">
+        <span class="stat-card__label">Total Revenue</span>
+        <span class="stat-card__value" id="val-revenue">—</span>
+      </div>
+      <div class="card stat-card" id="card-bestday">
+        <span class="stat-card__label">Best Day</span>
+        <span class="stat-card__value" id="val-bestday">—</span>
+        <span class="stat-card__sub" id="val-bestday-date"></span>
+      </div>
+      <div class="card stat-card" id="card-trend">
+        <span class="stat-card__label">7-Day Trend</span>
+        <span class="stat-card__value" id="val-trend">—</span>
+        <span class="stat-card__indicator" id="trend-indicator"></span>
+      </div>
+    </section>
+
+    <!-- Chart + Categories row -->
+    <section class="body-grid" id="body-grid">
+      <div class="card chart-card" id="chart-card">
+        <h2 class="card__title">Visitors (30 Days)</h2>
+        <div class="chart-container" id="chart-container">
+          <svg id="timeseries-chart" width="100%" height="100%"></svg>
+        </div>
+      </div>
+      <div class="card categories-card" id="categories-card">
+        <h2 class="card__title">Category Breakdown</h2>
+        <div class="categories-list" id="categories-list"></div>
+      </div>
+    </section>
+
+    <!-- Recent Items Table -->
+    <section class="card table-card" id="table-card">
+      <h2 class="card__title">Recent Items</h2>
+      <div class="table-wrapper" id="table-wrapper">
+        <table class="data-table" id="recent-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th class="num-col">Value</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Error state overlay -->
+    <div class="error-state" id="error-state" hidden>
+      <p>⚠️ Unable to load dashboard data. Please ensure the server is running and try again.</p>
+    </div>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

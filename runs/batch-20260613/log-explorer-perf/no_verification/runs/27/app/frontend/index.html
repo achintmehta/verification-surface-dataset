@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Explorer</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
+    .header { background: #fff; border-bottom: 1px solid #dee2e6; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+    .header h1 { margin: 0; font-size: 20px; }
+    .filters { display: flex; gap: 12px; align-items: center; flex: 1; }
+    .filter-group { display: flex; align-items: center; gap: 6px; }
+    select, input { padding: 6px 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+    .stats { font-size: 13px; color: #6c757d; margin-left: auto; }
+    .table-container { height: calc(100vh - 70px); overflow: auto; position: relative; background: #fff; }
+    .virtual-scroller { position: relative; }
+    .log-row { 
+      display: flex; 
+      border-bottom: 1px solid #eee; 
+      font-size: 13px; 
+      font-family: ui-monospace, monospace;
+      position: absolute;
+      left: 0; right: 0;
+      height: 32px;
+      align-items: center;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+    .log-row:hover { background: #f1f3f5; }
+    .col-ts { width: 180px; flex-shrink: 0; color: #495057; }
+    .col-sev { width: 70px; flex-shrink: 0; }
+    .col-svc { width: 160px; flex-shrink: 0; color: #495057; }
+    .col-msg { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sev-debug { color: #6c757d; }
+    .sev-info { color: #0d6efd; }
+    .sev-warn { color: #fd7e14; }
+    .sev-error { color: #dc3545; font-weight: 500; }
+    .row-count { padding: 8px 20px; font-size: 12px; color: #6c757d; background: #fff; border-top: 1px solid #dee2e6; }
+    .loading { padding: 40px; text-align: center; color: #6c757d; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Log Explorer</h1>
+    <div class="filters">
+      <div class="filter-group">
+        <label>Severity:</label>
+        <select id="severity-filter">
+          <option value="">All</option>
+          <option value="debug">Debug</option>
+          <option value="info">Info</option>
+          <option value="warn">Warn</option>
+          <option value="error">Error</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Search:</label>
+        <input type="text" id="search-input" placeholder="Search message..." style="width: 280px;">
+      </div>
+    </div>
+    <div class="stats" id="stats-display"></div>
+  </div>
+  
+  <div class="table-container" id="table-container">
+    <div class="virtual-scroller" id="scroller"></div>
+  </div>
+  
+  <div class="row-count" id="row-count">0 of 0 rows</div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

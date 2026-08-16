@@ -1,0 +1,34 @@
+:root { color-scheme: light dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #10131a; color: #eef2ff; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+#app { max-width: 900px; margin: 0 auto; padding: 24px; }
+header { margin-bottom: 16px; }
+h1 { margin: 0 0 6px; }
+.muted { color: #9aa3b2; margin: 0; }
+code { background: #1d2430; padding: 2px 6px; border-radius: 5px; }
+.panel { background: #171c27; border: 1px solid #293244; border-radius: 12px; padding: 14px; margin: 12px 0; box-shadow: 0 8px 24px rgb(0 0 0 / 0.18); }
+.controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+button { border: 0; border-radius: 9px; padding: 10px 14px; font-weight: 700; cursor: pointer; background: #4f7cff; color: white; }
+button:disabled { cursor: not-allowed; opacity: 0.45; }
+#confirmBtn { background: #16a34a; }
+#releaseBtn { background: #ef4444; }
+#countdown { font-weight: 800; color: #fbbf24; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; color: #cbd5e1; }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: 4px; vertical-align: -2px; }
+.swatch.available { background: #dbeafe; }
+.swatch.selected { background: #fbbf24; }
+.swatch.held { background: #9333ea; }
+.swatch.mine { background: #06b6d4; }
+.swatch.booked { background: #475569; }
+.grid { display: grid; grid-template-columns: 42px repeat(10, minmax(46px, 1fr)); gap: 8px; align-items: center; margin-top: 18px; }
+.row-label { color: #cbd5e1; font-weight: 900; text-align: center; }
+.seat { min-height: 44px; padding: 0; border: 2px solid transparent; transition: transform 0.09s ease, filter 0.09s ease; }
+.seat:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.08); }
+.seat.available { background: #dbeafe; color: #0f172a; }
+.seat.selected { background: #fbbf24; color: #1f2937; border-color: #fde68a; }
+.seat.held { background: #7e22ce; color: white; }
+.seat.mine { background: #06b6d4; color: #082f49; }
+.seat.booked { background: #475569; color: #cbd5e1; text-decoration: line-through; }
+.seat.conflict { outline: 3px solid #ef4444; }
+#message { min-height: 24px; color: #fef3c7; font-weight: 700; }
+@media (max-width: 720px) { #app { padding: 12px; } .grid { grid-template-columns: 32px repeat(10, minmax(28px, 1fr)); gap: 5px; } .seat { min-height: 34px; font-size: 12px; border-radius: 6px; } }

@@ -1,0 +1,14 @@
+{
+  "name": "metrics-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Read-mostly analytics dashboard with PGLite backend and Vanilla JS/Vite frontend",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev": "npm run install:all && concurrently -k -n server,client -c green,cyan \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎟️ Seat Booking</h1>
+      <div id="session-info">
+        Session: <code id="session-id-display"></code>
+      </div>
+    </header>
+
+    <main>
+      <section id="seat-map-section">
+        <h2>Seat Map</h2>
+        <div id="screen-label">STAGE</div>
+        <div id="seat-map"></div>
+        <div id="legend">
+          <span class="legend-item"><span class="legend-swatch available"></span> Available</span>
+          <span class="legend-item"><span class="legend-swatch held"></span> Held</span>
+          <span class="legend-item"><span class="legend-swatch held-mine"></span> My Hold</span>
+          <span class="legend-item"><span class="legend-swatch booked"></span> Booked</span>
+          <span class="legend-item"><span class="legend-swatch selected"></span> Selected</span>
+        </div>
+      </section>
+
+      <section id="actions-section">
+        <div id="selection-info">
+          <p>Selected seats: <span id="selected-seats-display">None</span></p>
+        </div>
+        <div id="action-buttons">
+          <button id="hold-btn" disabled>Hold Selected Seats</button>
+          <button id="confirm-btn" disabled>Confirm Booking</button>
+          <button id="release-btn" disabled>Release Hold</button>
+        </div>
+        <div id="hold-timer" class="hidden">
+          <p>Hold expires in: <span id="countdown">--</span>s</p>
+        </div>
+        <div id="status-message"></div>
+      </section>
+
+      <section id="inventory-section">
+        <h2>Inventory</h2>
+        <div id="inventory">
+          <span>Available: <strong id="count-available">0</strong></span>
+          <span>Held: <strong id="count-held">0</strong></span>
+          <span>Booked: <strong id="count-booked">0</strong></span>
+          <span>Total: <strong id="count-total">0</strong></span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

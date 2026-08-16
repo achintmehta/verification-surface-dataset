@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Board – Preview</title>
+  <style>
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface-2:#273549;--surface-3:#334155;
+  --border:#334155;--border-light:#475569;--accent:#6366f1;--accent-hover:#818cf8;
+  --accent-dim:rgba(99,102,241,.15);--text:#f1f5f9;--text-muted:#94a3b8;
+  --text-faint:#64748b;--danger:#ef4444;--success:#22c55e;--warning:#f59e0b;
+  --radius-sm:6px;--radius:10px;--radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow:0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.6);--col-width:300px;--header-h:60px;
+  --transition:.15s ease
+}
+html,body{height:100%;font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+.app-header{height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;position:fixed;inset:0 0 auto 0;z-index:100;box-shadow:var(--shadow-sm)}
+.header-inner{display:flex;align-items:center;gap:12px;width:100%}
+.header-logo{color:var(--accent);display:flex;align-items:center}
+.header-title{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;color:var(--text);flex:1}
+.connection-badge{display:flex;align-items:center;gap:6px;font-size:.75rem;font-weight:500;color:var(--success);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:4px 10px}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success)}
+.board-wrapper{position:fixed;inset:var(--header-h) 0 0 0;overflow-x:auto;overflow-y:hidden;padding:24px}
+.board{display:flex;gap:16px;height:100%;align-items:flex-start;min-width:max-content}
+.column{width:var(--col-width);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;flex-direction:column;max-height:calc(100vh - var(--header-h) - 48px);flex-shrink:0}
+.column-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+.column-title{font-size:.875rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
+.column-count{font-size:.75rem;font-weight:600;color:var(--text-faint);background:var(--surface-2);border-radius:999px;padding:2px 8px;min-width:24px;text-align:center}
+.card-list{flex:1;overflow-y:auto;padding:10px 10px 4px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:grab;user-select:none;position:relative;word-break:break-word;line-height:1.5;font-size:.875rem}
+.card:hover{border-color:var(--border-light);box-shadow:var(--shadow-sm)}
+.card-drag-handle{position:absolute;top:10px;right:10px;color:var(--text-faint);opacity:0;pointer-events:none}
+.card:hover .card-drag-handle{opacity:1}
+.add-card-btn{display:flex;align-items:center;gap:6px;width:100%;padding:10px 14px;background:transparent;border:none;border-top:1px solid var(--border);color:var(--text-faint);font-size:.8125rem;font-weight:500;cursor:pointer;border-radius:0 0 var(--radius-lg) var(--radius-lg)}
+.add-card-btn:hover{background:var(--surface-3);color:var(--text)}
+.empty-column{color:var(--text-faint);font-size:.8rem;text-align:center;padding:20px 0 12px}
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="4" width="7" height="20" rx="2" fill="currentColor" opacity="0.9"/>
+          <rect x="10.5" y="4" width="7" height="14" rx="2" fill="currentColor" opacity="0.7"/>
+          <rect x="19" y="4" width="7" height="9" rx="2" fill="currentColor" opacity="0.5"/>
+        </svg>
+      </span>
+      <h1 class="header-title">Kanban Board</h1>
+      <span class="connection-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-label">Live</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="board-wrapper">
+    <div class="board">
+
+      <!-- TO DO column -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">To Do</span>
+          <span class="column-count">3</span>
+        </div>
+        <div class="card-list">
+          <div class="card">
+            Write tests
+            <span class="card-drag-handle">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/>
+                <circle cx="4" cy="6" r="1.2"/><circle cx="8" cy="6" r="1.2"/>
+                <circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card">
+            Implement drag-and-drop reordering
+            <span class="card-drag-handle">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/>
+                <circle cx="4" cy="6" r="1.2"/><circle cx="8" cy="6" r="1.2"/>
+                <circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card">
+            Add SSE real-time sync
+            <span class="card-drag-handle">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/>
+                <circle cx="4" cy="6" r="1.2"/><circle cx="8" cy="6" r="1.2"/>
+                <circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add a card
+        </button>
+      </div>
+
+      <!-- IN PROGRESS column -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">In Progress</span>
+          <span class="column-count">2</span>
+        </div>
+        <div class="card-list">
+          <div class="card">
+            Design the UI
+            <span class="card-drag-handle">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/>
+                <circle cx="4" cy="6" r="1.2"/><circle cx="8" cy="6" r="1.2"/>
+                <circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card">
+            Build the Kanban board
+            <span class="card-drag-handle">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/>
+                <circle cx="4" cy="6" r="1.2"/><circle cx="8" cy="6" r="1.2"/>
+                <circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add a card
+        </button>
+      </div>
+
+      <!-- DONE column -->
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">Done</span>
+          <span class="column-count">1</span>
+        </div>
+        <div class="card-list">
+          <div class="card">
+            Set up project
+            <span class="card-drag-handle">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                <circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/>
+                <circle cx="4" cy="6" r="1.2"/><circle cx="8" cy="6" r="1.2"/>
+                <circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <button class="add-card-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add a card
+        </button>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

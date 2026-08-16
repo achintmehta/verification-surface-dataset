@@ -1,0 +1,298 @@
+/* ================================================================
+   Kanban Board – Stylesheet
+   ================================================================ */
+
+/* ── Reset & base ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:           #f0f2f5;
+  --header-bg:    #1a1f36;
+  --header-fg:    #ffffff;
+  --col-bg:       #ebecf0;
+  --col-radius:   10px;
+  --col-width:    300px;
+  --card-bg:      #ffffff;
+  --card-radius:  6px;
+  --card-shadow:  0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+  --card-drag-shadow: 0 8px 24px rgba(0,0,0,.18);
+  --accent:       #0052cc;
+  --accent-light: #deebff;
+  --danger:       #de350b;
+  --text:         #172b4d;
+  --text-muted:   #6b778c;
+  --border:       #dfe1e6;
+  --dot-ok:       #36b37e;
+  --dot-err:      #de350b;
+  --dot-wait:     #ffab00;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+               Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+}
+
+body {
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+.app-header {
+  background: var(--header-bg);
+  color: var(--header-fg);
+  padding: 0 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+.app-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  flex: 1;
+}
+
+/* ── Connection status indicator ─────────────────────────────── */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  opacity: .85;
+}
+
+.connection-status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot-wait);
+  transition: background .3s;
+}
+
+.connection-status.connected .dot    { background: var(--dot-ok); }
+.connection-status.error     .dot    { background: var(--dot-err); }
+.connection-status.connected .label  { color: #a3f7bf; }
+.connection-status.error     .label  { color: #ffbdad; }
+
+/* ── Board layout ─────────────────────────────────────────────── */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.board-loading {
+  color: var(--text-muted);
+  font-size: 15px;
+  padding: 40px;
+}
+
+/* ── Column ───────────────────────────────────────────────────── */
+.column {
+  background: var(--col-bg);
+  border-radius: var(--col-radius);
+  width: var(--col-width);
+  min-width: var(--col-width);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 52px - 48px);
+}
+
+.column-header {
+  padding: 12px 14px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.column-title {
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--text-muted);
+}
+
+.column-count {
+  background: var(--border);
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Card list ────────────────────────────────────────────────── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 40px;
+}
+
+/* Drop-zone highlight when dragging over a column */
+.card-list.drag-over {
+  background: rgba(0, 82, 204, .06);
+  border-radius: 6px;
+  outline: 2px dashed var(--accent);
+  outline-offset: -2px;
+}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 10px 12px;
+  box-shadow: var(--card-shadow);
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow .15s, opacity .15s, transform .15s;
+  word-break: break-word;
+  line-height: 1.45;
+  position: relative;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: .45;
+  box-shadow: none;
+}
+
+/* Ghost card shown at the drop target position */
+.card-placeholder {
+  border-radius: var(--card-radius);
+  background: var(--accent-light);
+  border: 2px dashed var(--accent);
+  min-height: 40px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* ── Add-card form ────────────────────────────────────────────── */
+.add-card-area {
+  padding: 6px 8px 10px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .15s, color .15s;
+}
+
+.add-card-btn:hover {
+  background: rgba(9,30,66,.08);
+  color: var(--text);
+}
+
+.add-card-btn .icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.add-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+
+.add-card-form textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.add-card-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-primary:hover {
+  background: #0747a6;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background .15s, color .15s;
+}
+
+.btn-cancel:hover {
+  background: rgba(9,30,66,.08);
+  color: var(--danger);
+}
+
+/* ── Scrollbar styling ────────────────────────────────────────── */
+.card-list::-webkit-scrollbar {
+  width: 4px;
+}
+.card-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.card-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}

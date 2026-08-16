@@ -1,0 +1,317 @@
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface-hover: #252833;
+  --column-bg: #1e2130;
+  --card-bg: #282b3a;
+  --card-hover: #2e3245;
+  --card-dragging: #3a3e52;
+  --text: #e4e5ea;
+  --text-muted: #8b8fa3;
+  --accent: #6c63ff;
+  --accent-hover: #7b73ff;
+  --accent-glow: rgba(108, 99, 255, 0.25);
+  --danger: #ff5757;
+  --border: #2e3145;
+  --drop-target: rgba(108, 99, 255, 0.12);
+  --drop-indicator: #6c63ff;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --radius: 8px;
+  --radius-sm: 6px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status.connected {
+  background: rgba(80, 200, 120, 0.15);
+  color: #50c878;
+}
+
+.status.disconnected {
+  background: rgba(255, 87, 87, 0.15);
+  color: var(--danger);
+}
+
+/* Board */
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  min-height: calc(100vh - 60px);
+  align-items: flex-start;
+}
+
+/* Column */
+.column {
+  background: var(--column-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-width: 300px;
+  max-width: 340px;
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.column-header h2 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.column-header .card-count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Card List */
+.card-list {
+  flex: 1;
+  min-height: 60px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.card-list.drag-over {
+  background: var(--drop-target);
+}
+
+/* Drop Indicator */
+.drop-indicator {
+  height: 3px;
+  background: var(--drop-indicator);
+  border-radius: 2px;
+  margin: -1px 4px;
+  transition: opacity 0.1s;
+  pointer-events: none;
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+  position: relative;
+}
+
+.card:hover {
+  background: var(--card-hover);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: 0.4;
+  transform: scale(0.97);
+  background: var(--card-dragging);
+}
+
+.card .card-text {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  word-wrap: break-word;
+  color: var(--text);
+}
+
+.card .card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.card .card-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.card .card-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.card:hover .card-delete {
+  opacity: 1;
+}
+
+.card .card-delete:hover {
+  color: var(--danger);
+}
+
+/* Add Card Form */
+.add-card-form {
+  padding: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.add-card-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.add-card-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.add-card-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-card-input-wrapper textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.add-card-input-wrapper textarea:focus {
+  border-color: var(--accent);
+}
+
+.add-card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.add-card-actions button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.add-card-actions .btn-submit {
+  background: var(--accent);
+  color: #fff;
+}
+
+.add-card-actions .btn-submit:hover {
+  background: var(--accent-hover);
+}
+
+.add-card-actions .btn-cancel {
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.add-card-actions .btn-cancel:hover {
+  background: var(--surface-hover);
+}
+
+/* Empty column state */
+.card-list-empty-msg {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 20px 0;
+  pointer-events: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

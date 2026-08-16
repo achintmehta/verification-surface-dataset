@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🎟️ Event Seat Booking</h1>
+      <div id="status-line" class="status-line">Connecting…</div>
+    </header>
+
+    <main>
+      <section class="stage">STAGE</section>
+
+      <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+
+      <section class="legend">
+        <span class="legend-item"><span class="seat available"></span> Available</span>
+        <span class="legend-item"><span class="seat held"></span> Held</span>
+        <span class="legend-item"><span class="seat mine"></span> Your selection / hold</span>
+        <span class="legend-item"><span class="seat booked"></span> Booked</span>
+      </section>
+
+      <section class="controls">
+        <div id="selection-info" class="selection-info">No seats selected.</div>
+        <div class="buttons">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" disabled>Confirm booking</button>
+          <button id="release-btn" disabled>Release hold</button>
+        </div>
+        <div id="countdown" class="countdown"></div>
+        <div id="message" class="message" role="status"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

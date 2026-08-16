@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>🎭 Seat Booking</h1>
+        <div id="inventory" class="inventory">
+          <span id="inv-available">Available: --</span>
+          <span id="inv-held">Held: --</span>
+          <span id="inv-booked">Booked: --</span>
+          <span id="inv-total">Total: --</span>
+        </div>
+        <div id="connection-status" class="connection-status disconnected">
+          ● Disconnected
+        </div>
+      </header>
+
+      <main>
+        <div class="stage">STAGE</div>
+        <div id="seat-map" class="seat-map"></div>
+      </main>
+
+      <aside id="action-panel" class="action-panel">
+        <h2>Your Selection</h2>
+        <div id="selected-seats" class="selected-seats">
+          <p class="placeholder">Click seats to select them</p>
+        </div>
+        <div id="hold-info" class="hold-info" style="display: none">
+          <p>
+            Hold expires in: <strong id="hold-countdown">--</strong>
+          </p>
+          <p>
+            Hold ID: <code id="hold-id-display">--</code>
+          </p>
+        </div>
+        <div class="actions">
+          <button id="btn-hold" disabled>Hold Selected Seats</button>
+          <button id="btn-confirm" disabled>Confirm Booking</button>
+          <button id="btn-release" disabled style="display: none">
+            Release Hold
+          </button>
+          <button id="btn-clear">Clear Selection</button>
+        </div>
+        <div id="error-message" class="error-message" style="display: none"></div>
+        <div id="success-message" class="success-message" style="display: none"></div>
+      </aside>
+
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot available"></span> Available</span>
+        <span class="legend-item"><span class="legend-dot held"></span> Held</span>
+        <span class="legend-item"><span class="legend-dot held-by-you"></span> Your Hold</span>
+        <span class="legend-item"><span class="legend-dot booked"></span> Booked</span>
+        <span class="legend-item"><span class="legend-dot selected"></span> Selected</span>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

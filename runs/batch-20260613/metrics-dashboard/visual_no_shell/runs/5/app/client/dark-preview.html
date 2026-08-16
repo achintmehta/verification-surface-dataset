@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard — Dark Preview</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <script>
+    document.documentElement.setAttribute('data-theme', 'dark');
+  </script>
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1 class="header-title">
+          <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Metrics Dashboard
+        </h1>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
+          <span class="theme-icon theme-icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon--dark"  aria-hidden="true">🌙</span>
+          <span class="theme-btn__label">Toggle theme</span>
+        </button>
+      </div>
+    </header>
+    <main class="main" id="main-content">
+      <div id="error-banner" class="error-banner" role="alert" hidden>
+        <strong>⚠ Unable to reach the server.</strong>
+        The dashboard cannot load data. Please ensure the backend is running on
+        <code>http://localhost:3001</code>.
+      </div>
+      <div id="loading-state" class="loading-state" aria-live="polite">
+        <div class="spinner" role="status"></div>
+        <p>Loading dashboard…</p>
+      </div>
+      <div id="dashboard" class="dashboard" hidden>
+        <section class="stat-cards" aria-label="Summary statistics">
+          <article class="stat-card" aria-labelledby="label-visitors">
+            <div class="stat-card__label" id="label-visitors">Total Visitors</div>
+            <div class="stat-card__value" id="stat-visitors">—</div>
+            <div class="stat-card__sub" id="stat-visitors-sub">across 30 days</div>
+          </article>
+          <article class="stat-card" aria-labelledby="label-revenue">
+            <div class="stat-card__label" id="label-revenue">Total Revenue</div>
+            <div class="stat-card__value" id="stat-revenue">—</div>
+            <div class="stat-card__sub" id="stat-revenue-sub">across 30 days</div>
+          </article>
+          <article class="stat-card" aria-labelledby="label-best-day">
+            <div class="stat-card__label" id="label-best-day">Best Day Revenue</div>
+            <div class="stat-card__value" id="stat-best-day">—</div>
+            <div class="stat-card__sub" id="stat-best-day-sub"></div>
+          </article>
+          <article class="stat-card" aria-labelledby="label-trend">
+            <div class="stat-card__label" id="label-trend">7-Day Trend</div>
+            <div class="stat-card__value" id="stat-trend">—</div>
+            <div class="stat-card__sub" id="stat-trend-sub">vs prior 7 days</div>
+          </article>
+        </section>
+        <section class="body-grid" aria-label="Charts and breakdowns">
+          <div class="panel chart-panel">
+            <h2 class="panel__title">30-Day Revenue</h2>
+            <div class="chart-container" id="chart-container" aria-label="30-day revenue time series"></div>
+          </div>
+          <div class="panel categories-panel">
+            <h2 class="panel__title">Revenue by Category</h2>
+            <div class="categories-list" id="categories-list" role="list" aria-label="Revenue breakdown by category"></div>
+          </div>
+        </section>
+        <section class="panel table-panel" aria-labelledby="recent-title">
+          <h2 class="panel__title" id="recent-title">Recent Items</h2>
+          <div class="table-wrapper" role="region" aria-label="Recent items table" tabindex="0">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num-col">Value</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

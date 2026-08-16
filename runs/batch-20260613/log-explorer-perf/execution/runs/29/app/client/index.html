@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Explorer</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+    .controls { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+    select, input { padding: 8px; font-size: 14px; }
+    .stats { margin-bottom: 10px; font-size: 14px; color: #555; }
+    .virtual-table { border: 1px solid #ddd; background: white; position: relative; overflow: hidden; }
+    .virtual-scroller { overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    th { background: #f8f8f8; position: sticky; top: 0; z-index: 1; }
+    .severity-debug { color: #666; }
+    .severity-info { color: #0066cc; }
+    .severity-warn { color: #cc8800; }
+    .severity-error { color: #cc0000; font-weight: bold; }
+    .row { height: 36px; }
+    .row-count { font-size: 13px; }
+  </style>
+</head>
+<body>
+  <h1>Log Explorer</h1>
+  
+  <div class="controls">
+    <select id="severity-filter">
+      <option value="">All Severities</option>
+      <option value="debug">Debug</option>
+      <option value="info">Info</option>
+      <option value="warn">Warn</option>
+      <option value="error">Error</option>
+    </select>
+    <input type="text" id="search-input" placeholder="Search message..." style="width: 300px;">
+    <div class="row-count" id="row-count">0 of 0</div>
+  </div>
+  
+  <div class="stats" id="stats"></div>
+  
+  <div id="virtual-table" class="virtual-table" style="height: 600px;">
+    <div id="scroller" class="virtual-scroller" style="height: 100%; overflow-y: auto;">
+      <div id="spacer" style="position: relative;"></div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 180px;">Timestamp</th>
+            <th style="width: 80px;">Severity</th>
+            <th style="width: 120px;">Service</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

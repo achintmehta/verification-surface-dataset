@@ -1,0 +1,238 @@
+# ============================================================================
+# Publication .gitignore - whitelist style (decision record:
+# paper/PUBLISH-MANIFEST.md, itself unpublished).
+# Everything is ignored by default; only publishable artifacts are re-included.
+# Target: GitHub repo -> Zenodo archive (data + instrument + analysis code;
+# manuscript and internal docs excluded).
+# ============================================================================
+
+# ---- 1. ignore everything at the repo root ---------------------------------
+/*
+
+# ---- 2. root files to publish (BARE-MINIMUM policy, 2026-07-16) ------------
+# Only data plus the scripts the paper's own text promises or that are
+# required to regenerate the dataset of record from the published inputs.
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/CLAIMS.md
+!/verify_paper_claims.py
+# release-time transcript of the checker, for readers who inspect rather than
+# run (regenerate and rename each release)
+!/verify-output-v1.2.0.txt
+!/LICENSE
+!/CHANGELOG.md
+!/CITATION.cff
+!/.zenodo.json
+
+# the reproduction chain: probe presence -> input verification -> THE join
+# -> independent join verification (paper section 4 promises the released
+# verification tooling; merge_results.py regenerates run-summary.csv
+# byte-for-byte from the published inputs)
+!/check_probe_completeness.py
+!/verify_pre_merge_results.py
+!/merge_results.py
+!/verify_post_merge_results.py
+
+# the polish judging tool (paper section 7.3: "the judging tool ships with
+# the release")
+!/polish_compare.py
+
+# hand-compiled discovery record cited by the paper (section 6's 52-run
+# idiom claim); the scanner OUTPUTS it complements are published as data in
+# runs/batch-20260613/ (wiring_report.csv, datadir_report.csv, ...)
+!/grading-hazards.csv
+
+# NOT published (grading-campaign ops + exploratory scanners; their outputs
+# are published as data): frontend_probe.py, build_grading_worklist.py,
+# build_grading_order.py, autofill_nonbooting_scorecards.py,
+# regrade_nonbooting.py, freeze_analysis.py, export_release_assets.py,
+# scan_wiring.py, find_missing_datadir.py, extend_vs_rewrite.py,
+# architecture_scan.py, screenshot_analysis.py, model_profiles.py,
+# scrub_scan.py, RUNBOOK.md (internal ops)
+
+# ---- 3. instrument: grader + rubrics ----------------------------------------
+!/grader/
+
+# ---- 4. specs + starter (P1 export, hash-verified against manifests) -------
+# publish ONLY the hash-verified .txt exports + the brownfield starter. The
+# extensionless legacy spec files and the -blind/-playwright variants from
+# pre-batch experiments stay private. (Patterns WITHOUT a trailing slash
+# match files as well as directories; the old trailing-slash form silently
+# let the variant FILES through.)
+!/specs/
+/specs/*-blind
+/specs/*-playwright
+/specs/kanban-board
+/specs/message-board
+/specs/seat-booking
+
+# ---- 5. agent interface exports (P2: prompts, schemas, example traces) -----
+!/agent-interface/
+
+# ---- 6. public docs, whitelist-style (BARE MINIMUM): the grading protocol,
+# the terminology, and the specimen notebook the paper's Appendix D promises.
+# Everything else in guidelines/ (handoff, project explainers, refactor
+# records, internal strategy) stays private.
+!/guidelines/
+/guidelines/*
+!/guidelines/app-grading-guide.md
+!/guidelines/glossary.md
+!/guidelines/defect-specimens-batch-20260613.md
+
+# ---- 7. the sealed freezes: 20260720 = dataset of record (adds the token-spread
+# table, section 9, to freeze-tables.txt; every data file byte-identical to
+# 20260716). 20260716 (card corrections, whole-app survival amendment + audit,
+# grader-attribution fixes) and 20260703 = superseded, kept for provenance ----
+!/freeze-20260720/
+!/freeze-20260716/
+!/freeze-20260703/
+
+# ---- 8. statistics from paper/ (BARE MINIMUM: the pre-registered plan, the
+# committed analysis code, and its complete output — exactly what paper
+# section 5.1 promises). The manuscript, builders, calculations trace, and
+# companion tools stay private; the sealed freeze-tables live inside
+# freeze-20260720/ already.
+!/paper/
+/paper/*
+!/paper/stats-plan.md
+!/paper/stats_analysis.py
+!/paper/stats-results.txt
+# 1.2.0: the analysis plan's named mixed-effects cross-check and its output
+!/paper/stats_mixed_effects.py
+!/paper/stats-mixed-effects.txt
+
+# ---- 9. the dataset ----------------------------------------------------------
+!/runs/
+/runs/*
+!/runs/batch-20260613/
+/runs/batch-20260613/*
+!/runs/batch-20260613/results.jsonl
+!/runs/batch-20260613/results.csv
+!/runs/batch-20260613/automatic_probes_results.jsonl
+!/runs/batch-20260613/automatic_probes_results.csv
+!/runs/batch-20260613/merged_results.jsonl
+!/runs/batch-20260613/visual_items.jsonl
+!/runs/batch-20260613/completeness_report.csv
+!/runs/batch-20260613/run-summary.csv
+!/runs/batch-20260613/genuine-boot-failures.csv
+!/runs/batch-20260613/ungraded-runs.csv
+!/runs/batch-20260613/auto-filled-nonbooting-regrade.csv
+!/runs/batch-20260613/wiring_report.csv
+!/runs/batch-20260613/datadir_report.csv
+!/runs/batch-20260613/datadir-unknown-resolutions.csv
+!/runs/batch-20260613/frontend-launch-audit.csv
+!/runs/batch-20260613/extend-vs-rewrite.csv
+!/runs/batch-20260613/architecture-report.csv
+!/runs/batch-20260613/screenshot-report.csv
+!/runs/batch-20260613/model-profiles.csv
+!/runs/batch-20260613/frontend-probe-results.csv
+# task directories: app code + logs + screenshots
+!/runs/batch-20260613/*/
+
+# within each run, smoke/ is restricted to the three published log files
+# (console.log is retained locally and not published)
+/runs/batch-20260613/*/*/runs/*/smoke/*
+!/runs/batch-20260613/*/*/runs/*/smoke/logs/
+/runs/batch-20260613/*/*/runs/*/smoke/logs/*
+!/runs/batch-20260613/*/*/runs/*/smoke/logs/manifest.json
+!/runs/batch-20260613/*/*/runs/*/smoke/logs/commands.json
+!/runs/batch-20260613/*/*/runs/*/smoke/logs/visual-scores.json
+
+# ---- 10. global content excludes (apply inside whitelisted trees too) ------
+# generated / runtime state (matches the grader's own staging exclusions)
+# node_modules under ANY name, including renamed leftovers from grading
+# sessions (node_modules_old, node_modules.bak, ...): their .bin symlinks
+# are also unreadable by Windows git (WSL-created symlinks on NTFS)
+node_modules*/
+board-data/
+data/
+.data/
+db/
+db-data/
+test-results/
+playwright-report/
+__pycache__/
+
+# PGLite/Postgres data directories under ANY name the models invented
+# (observed: pgdata, .pgdata, pglite-data, .pglite, .pglite-data,
+#  pgdata.bak-wsl, db-data, logs.db, test-db)
+*pgdata*/
+*pglite*/
+postgres-data/
+*.db/
+*-db/
+*_db/
+*-data/
+*-data-*/
+db-old/
+# STRUCTURAL backstop (2026-07-16): models invent unlimited cluster-dir names
+# (observed additionally: test-pg, testdata, db_data, seat-booking-db-test),
+# so exclude the cluster LAYOUT itself, which is invariant: numeric database
+# directories under base/, numeric files under global/, and the unmistakable
+# cluster marker files. This is what actually removes the gigabytes.
+# NOTE the **/ prefix: a pattern with an internal slash is otherwise anchored
+# to the repo root and silently matches nothing in nested app trees.
+**/base/[0-9]*/
+**/global/[0-9]*
+pg_control
+pg_internal.init
+pg_filenode.map
+postmaster.pid
+postmaster.opts
+# backstop: postgres-internal directory names are unmistakable wherever they appear
+pg_wal/
+pg_xact/
+pg_multixact/
+pg_commit_ts/
+pg_dynshmem/
+pg_logical/
+pg_notify/
+pg_replslot/
+pg_serial/
+pg_snapshots/
+pg_stat/
+pg_stat_tmp/
+pg_subtrans/
+pg_tblspc/
+pg_twophase/
+PG_VERSION
+
+# full request/response traces are too large for the git tree (~5 GB); they
+# are published as a supplementary archive in the Zenodo record (unpacking to
+# the same runs/batch-20260613/... paths), and 8 exemplars live under
+# agent-interface/example-traces/
+trace.jsonl
+
+# grading-session residue and tool noise
+.probe_dev.log
+cmd_out_*
+*.swp
+*.timestamp-*.mjs
+
+# lockfiles are regenerable from the manifests
+package-lock.json
+
+# superseded working backups - never published
+*.pre-regrade
+*.pre-visual-merge-*
+results-regrade.jsonl
+
+# NOTE: shipped dist/ bundles are deliberately NOT excluded (several runs were
+# graded through them - specimen log S1/S2). app/images/screenshot.png captures
+# ARE included (they feed the model-signatures analysis).
+
+# pre-registered protocol for the intra-rater re-grade
+!/REGRADE_RUNBOOK.md
+
+# ---- 12. re-grade protocol and its tooling (REGRADE_RUNBOOK.md). The sample,
+# the mapping, and the filled cards stay out until the results ship: _sealed/
+# names conditions, and the R0xx card directories are working state.
+!/regrade/
+/regrade/*
+!/regrade/README.txt
+!/regrade/exclusions.csv
+!/regrade/draw_sample.py
+!/regrade/stage.py
+!/regrade/serve.py
+!/regrade/status.py

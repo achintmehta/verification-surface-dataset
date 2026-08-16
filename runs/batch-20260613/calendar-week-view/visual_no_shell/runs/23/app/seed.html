@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Events</title></head>
+<body>
+<h1>Seeding test events...</h1>
+<pre id="log"></pre>
+<script>
+const log = document.getElementById('log');
+function addLog(msg) { log.textContent += msg + '\n'; }
+
+async function seed() {
+  // Get current week's Monday in local time
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(monday.getDate() + diff);
+  monday.setHours(0,0,0,0);
+
+  function dayAt(dayOffset, h, m) {
+    const d = new Date(monday);
+    d.setDate(d.getDate() + dayOffset);
+    d.setHours(h, m, 0, 0);
+    return d.toISOString();
+  }
+
+  const events = [
+    // Monday: 3 identical overlapping events at 9:00-10:00
+    { title: "Meeting A", start_at: dayAt(0, 9, 0), end_at: dayAt(0, 10, 0) },
+    { title: "Meeting B", start_at: dayAt(0, 9, 0), end_at: dayAt(0, 10, 0) },
+    { title: "Meeting C", start_at: dayAt(0, 9, 0), end_at: dayAt(0, 10, 0) },
+    // Monday: non-overlapping event later in the day
+    { title: "Lunch", start_at: dayAt(0, 12, 0), end_at: dayAt(0, 13, 0) },
+
+    // Tuesday: partially overlapping chain
+    { title: "Chain 1", start_at: dayAt(1, 9, 0), end_at: dayAt(1, 11, 0) },
+    { title: "Chain 2", start_at: dayAt(1, 10, 0), end_at: dayAt(1, 12, 0) },
+    { title: "Chain 3", start_at: dayAt(1, 11, 30), end_at: dayAt(1, 13, 0) },
+
+    // Wednesday: event ending at midnight (24:00)
+    { title: "Late Night", start_at: dayAt(2, 22, 0), end_at: dayAt(3, 0, 0) },
+    
+    // Thursday: single short event
+    { title: "Standup", start_at: dayAt(3, 9, 15), end_at: dayAt(3, 9, 45) },
+
+    // Friday: Complex overlap with 3 events
+    { title: "Workshop", start_at: dayAt(4, 14, 0), end_at: dayAt(4, 16, 0) },
+    { title: "Review", start_at: dayAt(4, 14, 30), end_at: dayAt(4, 15, 30) },
+    { title: "1:1", start_at: dayAt(4, 15, 0), end_at: dayAt(4, 16, 30) },
+  ];
+
+  for (const evt of events) {
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(evt)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        addLog(`Created: ${evt.title} (${res.status}) id=${data.id}`);
+      } else {
+        addLog(`FAILED: ${evt.title} (${res.status}) ${data.error}`);
+      }
+    } catch(e) {
+      addLog(`ERROR: ${evt.title} - ${e.message}`);
+    }
+  }
+  addLog('\nDone! Go to / to see the calendar.');
+}
+seed();
+</script>
+</body>
+</html>

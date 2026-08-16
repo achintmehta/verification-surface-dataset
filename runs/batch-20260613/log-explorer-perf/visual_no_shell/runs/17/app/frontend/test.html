@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <pre id="out"></pre>
+  <script>
+    async function run() {
+      const out = document.getElementById('out');
+      function log(msg) { out.textContent += msg + '\n'; }
+      
+      async function fetchTime(url) {
+        const start = Date.now();
+        const res = await fetch(url);
+        await res.json();
+        return Date.now() - start;
+      }
+
+      log("Testing offset 0...");
+      let t = await fetchTime('http://localhost:3000/api/logs?offset=0&limit=100');
+      log(`Offset 0: ${t}ms`);
+
+      log("Testing offset 50000...");
+      t = await fetchTime('http://localhost:3000/api/logs?offset=50000&limit=100');
+      log(`Offset 50000: ${t}ms`);
+
+      log("Testing offset 99900...");
+      t = await fetchTime('http://localhost:3000/api/logs?offset=99900&limit=100');
+      log(`Offset 99900: ${t}ms`);
+
+      log("Testing severity filter...");
+      t = await fetchTime('http://localhost:3000/api/logs?severity=error&offset=4000&limit=100');
+      log(`Severity error offset 4000: ${t}ms`);
+
+      log("Testing selective substring...");
+      t = await fetchTime('http://localhost:3000/api/logs?q=timeout&offset=0&limit=100');
+      log(`Substring 'timeout' offset 0: ${t}ms`);
+
+      log("Testing non-selective substring...");
+      t = await fetchTime('http://localhost:3000/api/logs?q=user&offset=50000&limit=100');
+      log(`Substring 'user' offset 50000: ${t}ms`);
+    }
+    run();
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Debug API</title></head>
+<body>
+<h2>API Debug</h2>
+<p>Fetching all events for current month...</p>
+<pre id="log"></pre>
+<script>
+async function debug() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString();
+  const res = await fetch(`/api/events?start=${start}&end=${end}`);
+  const data = await res.json();
+  document.getElementById('log').textContent = JSON.stringify(data, null, 2);
+}
+debug();
+</script>
+</body>
+</html>

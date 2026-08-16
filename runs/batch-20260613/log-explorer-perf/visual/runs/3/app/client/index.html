@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Top header ── -->
+    <header class="header">
+      <div class="header-left">
+        <h1 class="logo">📋 Log Explorer</h1>
+        <span class="row-count" id="row-count">Loading…</span>
+      </div>
+      <div class="header-right">
+        <div class="filter-group">
+          <label for="severity-select">Severity</label>
+          <select id="severity-select">
+            <option value="">All</option>
+            <option value="error">Error</option>
+            <option value="warn">Warn</option>
+            <option value="info">Info</option>
+            <option value="debug">Debug</option>
+          </select>
+        </div>
+        <div class="filter-group search-group">
+          <label for="search-input">Search</label>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Filter by message…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="clear-search" class="clear-btn" title="Clear search" aria-label="Clear search">✕</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Column headers ── -->
+    <div class="table-header" aria-hidden="true">
+      <div class="col col-ts">Timestamp</div>
+      <div class="col col-severity">Severity</div>
+      <div class="col col-service">Service</div>
+      <div class="col col-message">Message</div>
+    </div>
+
+    <!-- ── Virtual scroll container ── -->
+    <div class="scroller-container" id="scroller-container" role="log" aria-label="Log entries">
+      <!-- scroller-inner height = total * ROW_HEIGHT, creates the scroll range -->
+      <div class="scroller-inner" id="scroller-inner">
+        <!-- rows-viewport is absolutely positioned at the current window offset -->
+        <div class="rows-viewport" id="rows-viewport"></div>
+      </div>
+    </div>
+
+    <!-- ── Status bar ── -->
+    <div class="status-bar">
+      <span id="status-text">Initializing…</span>
+    </div>
+
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

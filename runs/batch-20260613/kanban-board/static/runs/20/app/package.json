@@ -1,0 +1,22 @@
+{
+  "name": "kanban-board",
+  "version": "1.0.0",
+  "description": "Real-time collaborative Kanban board",
+  "type": "module",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node backend/server.js",
+    "client": "vite frontend --port 3000"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.2.0"
+  }
+}

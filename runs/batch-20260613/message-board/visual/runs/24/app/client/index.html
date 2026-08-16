@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Message Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>💬 Message Board</h1>
+        <p class="subtitle">Real-time updates via SSE &amp; PGLite</p>
+      </header>
+
+      <main>
+        <div id="messages" role="log" aria-live="polite" aria-label="Messages">
+          <!-- Messages will be rendered here -->
+        </div>
+      </main>
+
+      <footer>
+        <form id="message-form" autocomplete="off">
+          <input
+            id="message-input"
+            type="text"
+            placeholder="Type a message…"
+            aria-label="Message text"
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </footer>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

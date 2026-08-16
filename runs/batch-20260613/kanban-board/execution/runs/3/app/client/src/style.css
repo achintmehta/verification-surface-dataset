@@ -1,0 +1,248 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #f0f2f5;
+  --header-bg:   #1a1f36;
+  --header-fg:   #ffffff;
+  --col-bg:      #ebecf0;
+  --col-radius:  10px;
+  --card-bg:     #ffffff;
+  --card-radius: 6px;
+  --card-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+  --accent:      #0052cc;
+  --accent-hover:#0065ff;
+  --danger:      #de350b;
+  --text:        #172b4d;
+  --text-muted:  #6b778c;
+  --gap:         16px;
+  --col-width:   280px;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--gap);
+  height: 52px;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+.app-header h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.connection-status {
+  font-size: .8rem;
+  opacity: .85;
+  transition: opacity .3s;
+}
+.connection-status.connected  { color: #57d9a3; }
+.connection-status.error      { color: #ff7452; }
+
+/* ============================================================
+   Board
+   ============================================================ */
+.board {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: var(--gap);
+  overflow-x: auto;
+  min-height: calc(100vh - 52px);
+}
+
+.board-loading {
+  color: var(--text-muted);
+  font-size: 1rem;
+  padding: 40px;
+}
+
+/* ============================================================
+   Column
+   ============================================================ */
+.column {
+  flex: 0 0 var(--col-width);
+  background: var(--col-bg);
+  border-radius: var(--col-radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 52px - 2*var(--gap));
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  font-weight: 700;
+  font-size: .9rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.column-header .card-count {
+  background: rgba(0,0,0,.08);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+/* ============================================================
+   Card list
+   ============================================================ */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 40px;
+}
+
+/* Drop target highlight */
+.card-list.drag-over {
+  background: rgba(0, 82, 204, .06);
+  border-radius: 6px;
+}
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 10px 12px;
+  box-shadow: var(--card-shadow);
+  cursor: grab;
+  user-select: none;
+  font-size: .9rem;
+  line-height: 1.45;
+  word-break: break-word;
+  transition: box-shadow .15s, opacity .15s, transform .15s;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.card.dragging {
+  opacity: .45;
+  cursor: grabbing;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+/* Ghost placeholder shown while dragging */
+.card-ghost {
+  background: rgba(0, 82, 204, .08);
+  border: 2px dashed var(--accent);
+  border-radius: var(--card-radius);
+  pointer-events: none;
+}
+
+/* ============================================================
+   Add-card form
+   ============================================================ */
+.add-card-area {
+  padding: 4px 8px 10px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: .88rem;
+  transition: background .15s, color .15s;
+}
+.add-card-btn:hover {
+  background: rgba(0,0,0,.06);
+  color: var(--text);
+}
+
+.add-card-form {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+}
+.add-card-form.open { display: flex; }
+
+.add-card-form textarea {
+  resize: none;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: .9rem;
+  font-family: inherit;
+  outline: none;
+  min-height: 72px;
+  color: var(--text);
+}
+
+.add-card-form .form-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-cancel {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background .15s;
+}
+.btn-cancel:hover { background: rgba(0,0,0,.08); color: var(--text); }
+
+/* ============================================================
+   Scrollbar styling (webkit)
+   ============================================================ */
+.card-list::-webkit-scrollbar { width: 5px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 3px; }

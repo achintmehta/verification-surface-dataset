@@ -1,0 +1,32 @@
+[server] Starting up...
+[db] Opening PGLite at /mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/data/pglite
+(node:342265) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/server/index.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[db] PGLite ready
+[server] Fatal error: error: extension "pg_trgm" is not available
+    at ye.Ve (file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/node_modules/@electric-sql/pglite/dist/chunk-EADU5A67.js:1:17602)
+    at ye.nt (file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/node_modules/@electric-sql/pglite/dist/chunk-EADU5A67.js:1:14988)
+    at ye.parse (file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/node_modules/@electric-sql/pglite/dist/chunk-EADU5A67.js:1:13740)
+    at pe.execProtocol (file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/node_modules/@electric-sql/pglite/dist/index.js:3:239489)
+    at async pe.l (file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/node_modules/@electric-sql/pglite/dist/chunk-A7RFOIQ7.js:8:1911)
+    at async file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/boot_check/runs/3/app/node_modules/@electric-sql/pglite/dist/chunk-A7RFOIQ7.js:8:2923 {
+  length: 318,
+  severity: 'ERROR',
+  code: '0A000',
+  detail: 'Could not open extension control file "/tmp/pglite/share/postgresql/extension/pg_trgm.control": No such file or directory.',
+  hint: 'The extension must first be installed on the system where PostgreSQL is running.',
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'extension.c',
+  line: '509',
+  routine: 'parse_extension_control_file'
+}

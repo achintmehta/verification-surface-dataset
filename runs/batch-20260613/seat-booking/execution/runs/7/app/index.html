@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+  </head>
+  <body>
+    <main id="app">
+      <header>
+        <div>
+          <h1>Seat Booking</h1>
+          <p class="subtle">Select available seats, hold them briefly, then confirm your booking.</p>
+        </div>
+        <div class="session-card">
+          <span>Session</span>
+          <code id="sessionId"></code>
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <div class="inventory" id="inventory">Loading inventory…</div>
+        <div class="actions">
+          <button id="holdButton" disabled>Hold selected seats</button>
+          <button id="confirmButton" disabled>Confirm hold</button>
+          <button id="releaseButton" disabled>Release hold</button>
+        </div>
+      </section>
+
+      <section class="hold-panel" id="holdPanel" hidden>
+        <strong>Current hold:</strong>
+        <span id="holdInfo"></span>
+        <span id="countdown"></span>
+      </section>
+
+      <section class="legend">
+        <span><i class="swatch available"></i> Available</span>
+        <span><i class="swatch selected"></i> Selected</span>
+        <span><i class="swatch held"></i> Held</span>
+        <span><i class="swatch mine"></i> Your hold</span>
+        <span><i class="swatch booked"></i> Booked</span>
+      </section>
+
+      <div id="message" class="message"></div>
+      <section id="seatMap" class="seat-map" aria-label="Seat map"></section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head><title>Seed Events</title></head>
+<body>
+<h2>Seeding test events...</h2>
+<pre id="log"></pre>
+<script>
+const API = 'http://localhost:3001/api';
+const log = document.getElementById('log');
+
+// Today is Friday June 19, 2026
+// Week: Mon Jun 15 – Sun Jun 21, 2026
+
+const events = [
+  // Monday: 3 identical overlapping events (09:00–10:00)
+  { title: 'Team Standup A', start_at: '2026-06-15T09:00:00', end_at: '2026-06-15T10:00:00' },
+  { title: 'Team Standup B', start_at: '2026-06-15T09:00:00', end_at: '2026-06-15T10:00:00' },
+  { title: 'Team Standup C', start_at: '2026-06-15T09:00:00', end_at: '2026-06-15T10:00:00' },
+
+  // Tuesday: Partially overlapping chain
+  { title: 'Meeting 1', start_at: '2026-06-16T09:00:00', end_at: '2026-06-16T11:00:00' },
+  { title: 'Meeting 2', start_at: '2026-06-16T10:00:00', end_at: '2026-06-16T12:00:00' },
+  { title: 'Meeting 3', start_at: '2026-06-16T11:30:00', end_at: '2026-06-16T13:00:00' },
+  // Non-overlapping event later in the day (should use full width)
+  { title: 'Lunch', start_at: '2026-06-16T13:30:00', end_at: '2026-06-16T14:30:00' },
+
+  // Wednesday: Single event (full width)
+  { title: 'All-hands', start_at: '2026-06-17T14:00:00', end_at: '2026-06-17T15:30:00' },
+
+  // Thursday: Two overlapping events
+  { title: 'Design Review', start_at: '2026-06-18T10:00:00', end_at: '2026-06-18T11:30:00' },
+  { title: 'Code Review', start_at: '2026-06-18T10:30:00', end_at: '2026-06-18T12:00:00' },
+
+  // Friday (today): Event ending at midnight
+  { title: 'Late Night Deploy', start_at: '2026-06-19T23:00:00', end_at: '2026-06-20T00:00:00' },
+  { title: 'Morning Sync', start_at: '2026-06-19T08:00:00', end_at: '2026-06-19T09:00:00' },
+
+  // Saturday: Event spanning most of the day
+  { title: 'Hackathon', start_at: '2026-06-20T09:00:00', end_at: '2026-06-20T18:00:00' },
+];
+
+async function seed() {
+  for (const ev of events) {
+    try {
+      const res = await fetch(`${API}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ev),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        log.textContent += `✓ Created: ${ev.title} (id=${data.id})\n`;
+      } else {
+        log.textContent += `✗ Failed: ${ev.title} — ${data.error}\n`;
+      }
+    } catch (err) {
+      log.textContent += `✗ Error: ${ev.title} — ${err.message}\n`;
+    }
+  }
+  log.textContent += '\nDone! Go to http://localhost:5173 to see the calendar.';
+}
+
+seed();
+</script>
+</body>
+</html>

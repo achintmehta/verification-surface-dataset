@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div class="session-info">
+        Session: <span id="session-id"></span>
+      </div>
+    </header>
+
+    <div class="inventory-bar" id="inventory-bar">
+      <span class="inv-item"><span class="dot available"></span> Available: <strong id="count-available">0</strong></span>
+      <span class="inv-item"><span class="dot held"></span> Held: <strong id="count-held">0</strong></span>
+      <span class="inv-item"><span class="dot booked"></span> Booked: <strong id="count-booked">0</strong></span>
+      <span class="inv-item">Total: <strong id="count-total">0</strong></span>
+    </div>
+
+    <div class="stage">STAGE</div>
+
+    <div id="seat-map" class="seat-map"></div>
+
+    <div class="controls" id="controls">
+      <div id="selection-info">Select seats to hold them</div>
+      <div class="button-group">
+        <button id="btn-hold" disabled>Hold Selected Seats</button>
+        <button id="btn-confirm" disabled style="display:none">Confirm Booking</button>
+        <button id="btn-release" disabled style="display:none">Release Hold</button>
+      </div>
+      <div id="hold-timer" style="display:none">
+        Hold expires in: <span id="timer-value">--</span>s
+      </div>
+      <div id="error-message" class="error" style="display:none"></div>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot available"></span> Available</span>
+      <span><span class="dot selected"></span> Selected</span>
+      <span><span class="dot held"></span> Held</span>
+      <span><span class="dot my-hold"></span> My Hold</span>
+      <span><span class="dot booked"></span> Booked</span>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

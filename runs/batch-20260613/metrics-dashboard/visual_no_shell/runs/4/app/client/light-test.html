@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Set Light Theme</title></head>
+<body>
+  <p>Setting light theme...</p>
+  <script>
+    fetch('http://localhost:3001/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'light' })
+    }).then(() => { window.location.href = '/'; });
+  </script>
+</body>
+</html>

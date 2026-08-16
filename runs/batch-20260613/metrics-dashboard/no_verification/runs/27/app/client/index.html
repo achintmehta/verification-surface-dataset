@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Metrics Dashboard</h1>
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="icon">🌓</span>
+        </button>
+      </div>
+    </header>
+
+    <div id="error-banner" class="error-banner" style="display: none;">
+      <span>⚠️ Unable to load data from server. Please ensure the backend is running.</span>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Visitors</div>
+        <div id="total-visitors" class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Revenue</div>
+        <div id="total-revenue" class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Best Day</div>
+        <div id="best-day" class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">7-Day Trend</div>
+        <div id="seven-day-trend" class="stat-value">-</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-grid">
+      <!-- Time Series Chart -->
+      <div class="card chart-card">
+        <h2>30-Day Visitors Trend</h2>
+        <div id="timeseries-container" class="chart-container">
+          <canvas id="timeseries-chart" width="800" height="300"></canvas>
+        </div>
+      </div>
+
+      <!-- Category Breakdown -->
+      <div class="card category-card">
+        <h2>Category Breakdown</h2>
+        <div id="categories-container" class="categories-container"></div>
+      </div>
+    </div>
+
+    <!-- Recent Items Table -->
+    <div class="card table-card">
+      <h2>Recent Items</h2>
+      <div class="table-container">
+        <table id="recent-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Value</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

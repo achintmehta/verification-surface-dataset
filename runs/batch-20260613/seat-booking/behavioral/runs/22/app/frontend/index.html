@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <h1>🎟️ Seat Booking</h1>
+
+    <div id="inventory-bar">
+      <span id="inv-available">Available: –</span>
+      <span id="inv-held">Held: –</span>
+      <span id="inv-booked">Booked: –</span>
+      <span id="inv-total">Total: –</span>
+    </div>
+
+    <div id="seat-map"></div>
+
+    <div id="controls">
+      <div id="selection-info">Select one or more available seats</div>
+      <div id="hold-info" style="display:none">
+        <span id="hold-timer"></span>
+        <button id="btn-confirm">Confirm Booking</button>
+        <button id="btn-release">Release Hold</button>
+      </div>
+      <button id="btn-hold" disabled>Hold Selected Seats</button>
+      <div id="error-msg" style="display:none"></div>
+    </div>
+
+    <div id="legend">
+      <span class="legend-item"><span class="seat-sample available"></span> Available</span>
+      <span class="legend-item"><span class="seat-sample held"></span> Held</span>
+      <span class="legend-item"><span class="seat-sample held-mine"></span> My Hold</span>
+      <span class="legend-item"><span class="seat-sample booked"></span> Booked</span>
+      <span class="legend-item"><span class="seat-sample selected"></span> Selected</span>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

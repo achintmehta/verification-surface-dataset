@@ -1,0 +1,315 @@
+/* === Reset & Base === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #f5f6fa;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* === Toolbar === */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.toolbar button {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.toolbar button:hover {
+  background: #eef;
+}
+
+.toolbar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 16px;
+}
+
+/* === Calendar Container === */
+.calendar-container {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* === Time Gutter === */
+.time-gutter {
+  width: 60px;
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.time-gutter-header {
+  position: sticky;
+  top: 0;
+  z-index: 11;
+  background: #fafafa;
+}
+
+.time-label {
+  position: absolute;
+  right: 8px;
+  font-size: 11px;
+  color: #888;
+  transform: translateY(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* === Week Grid === */
+.week-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+}
+
+/* === Day Column === */
+.day-column {
+  position: relative;
+  border-right: 1px solid #e8e8e8;
+  min-width: 0;
+}
+
+.day-column:last-child {
+  border-right: none;
+}
+
+.day-column.today .day-body {
+  background: rgba(66, 133, 244, 0.04);
+}
+
+/* Day header */
+.day-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 2px solid #ddd;
+  text-align: center;
+  padding: 6px 4px;
+  font-size: 12px;
+  line-height: 1.4;
+  height: 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-header .day-name {
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.day-header .day-date {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+
+.day-column.today .day-header .day-date {
+  color: #fff;
+  background: #4285f4;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+}
+
+/* Day body (events go here) */
+.day-body {
+  position: relative;
+}
+
+/* Hour lines */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e8e8e8;
+  pointer-events: none;
+}
+
+/* half-hour line */
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dotted #f0f0f0;
+  pointer-events: none;
+}
+
+/* === Event Block === */
+.event-block {
+  position: absolute;
+  border-radius: 4px;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 1.3;
+  overflow: hidden;
+  cursor: pointer;
+  border-left: 3px solid rgba(0,0,0,0.15);
+  z-index: 5;
+  transition: box-shadow 0.15s;
+}
+
+.event-block:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 6;
+}
+
+.event-block .event-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-block .event-time {
+  font-size: 10px;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === Selection overlay === */
+.selection-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(66, 133, 244, 0.15);
+  border: 1px dashed #4285f4;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* === Modal === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  min-width: 340px;
+  max-width: 420px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #555;
+}
+
+.modal input[type="text"],
+.modal input[type="datetime-local"] {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.modal-actions button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#btn-save {
+  background: #4285f4;
+  color: #fff;
+}
+
+#btn-save:hover {
+  background: #3367d6;
+}
+
+#btn-delete {
+  background: #ea4335;
+  color: #fff;
+}
+
+#btn-delete:hover {
+  background: #c5221f;
+}
+
+#btn-cancel {
+  background: #eee;
+  color: #333;
+}
+
+#btn-cancel:hover {
+  background: #ddd;
+}
+
+.form-error {
+  color: #ea4335;
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: #fce8e6;
+  border-radius: 4px;
+}
+
+/* Clickable day body for creating events */
+.day-body {
+  cursor: crosshair;
+}

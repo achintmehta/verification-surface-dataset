@@ -1,0 +1,277 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f1117;
+  --bg-surface: #1a1d27;
+  --bg-row: #1e2130;
+  --bg-row-alt: #1a1d27;
+  --bg-row-hover: #252840;
+  --border: #2e3148;
+  --text: #e2e4f0;
+  --text-muted: #7b7f9e;
+  --accent: #5b6af0;
+
+  --debug: #6b7db3;
+  --info: #4ade80;
+  --warn: #facc15;
+  --error: #f87171;
+
+  --row-height: 36px;
+  --header-height: 56px;
+  --table-header-height: 36px;
+  --status-height: 28px;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', 'Menlo', monospace;
+  --font-ui: system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== Toolbar ===== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding: 0 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.app-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.row-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+select, input[type="text"] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-family: var(--font-ui);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+select:focus, input[type="text"]:focus {
+  border-color: var(--accent);
+}
+
+input[type="text"] {
+  width: 240px;
+}
+
+/* ===== Severity Badges ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.badge-debug { background: rgba(107,125,179,0.2); color: var(--debug); border: 1px solid rgba(107,125,179,0.4); }
+.badge-info  { background: rgba(74,222,128,0.15); color: var(--info);  border: 1px solid rgba(74,222,128,0.3); }
+.badge-warn  { background: rgba(250,204,21,0.15); color: var(--warn);  border: 1px solid rgba(250,204,21,0.3); }
+.badge-error { background: rgba(248,113,113,0.15); color: var(--error); border: 1px solid rgba(248,113,113,0.3); }
+
+/* ===== Table Header ===== */
+.table-header {
+  display: flex;
+  align-items: center;
+  height: var(--table-header-height);
+  padding: 0 12px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+/* ===== Column widths ===== */
+.col-ts       { width: 200px; flex-shrink: 0; }
+.col-severity { width: 80px;  flex-shrink: 0; }
+.col-service  { width: 160px; flex-shrink: 0; }
+.col-message  { flex: 1; min-width: 0; }
+
+/* ===== Scroller ===== */
+.scroller-container {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.scroller-container::-webkit-scrollbar { width: 8px; }
+.scroller-container::-webkit-scrollbar-track { background: transparent; }
+.scroller-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* The spacer sets the total scrollable height */
+.scroll-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  pointer-events: none;
+}
+
+/* The rows viewport is positioned absolutely within the scroller */
+.rows-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+/* ===== Log Row ===== */
+.log-row {
+  display: flex;
+  align-items: center;
+  height: var(--row-height);
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transition: background 0.08s;
+  cursor: default;
+}
+
+.log-row:nth-child(odd)  { background: var(--bg-row); }
+.log-row:nth-child(even) { background: var(--bg-row-alt); }
+.log-row:hover           { background: var(--bg-row-hover); }
+
+.log-row .col-ts {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.log-row .col-severity {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.log-row .col-service {
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+}
+
+.log-row .col-message {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+
+/* Severity colors */
+.sev-debug { color: var(--debug); }
+.sev-info  { color: var(--info); }
+.sev-warn  { color: var(--warn); }
+.sev-error { color: var(--error); }
+
+/* ===== Status Bar ===== */
+.status-bar {
+  height: var(--status-height);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ===== Loading / Empty states ===== */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-family: var(--font-ui);
+}
+
+/* ===== Highlight search match ===== */
+mark {
+  background: rgba(250, 204, 21, 0.3);
+  color: var(--warn);
+  border-radius: 2px;
+  padding: 0 1px;
+}

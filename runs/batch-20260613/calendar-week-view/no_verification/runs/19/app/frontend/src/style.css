@@ -1,0 +1,212 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+header button {
+  margin-right: 10px;
+  padding: 5px 10px;
+}
+
+header h2 {
+  margin: 0 0 0 20px;
+  font-size: 1.2rem;
+}
+
+.calendar-container {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-template-rows: auto 1fr;
+  flex: 1;
+  overflow: hidden;
+}
+
+.time-axis-header {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background: #fafafa;
+}
+
+.days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid #ccc;
+  background: #fafafa;
+  overflow-y: scroll; /* to align with grid scrollbar */
+}
+
+.day-header {
+  padding: 10px;
+  text-align: center;
+  border-right: 1px solid #eee;
+  font-weight: bold;
+}
+
+.day-header.today {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.time-axis-container {
+  border-right: 1px solid #ccc;
+  background: #fafafa;
+  overflow: hidden;
+  position: relative;
+}
+
+.time-axis {
+  position: relative;
+  height: 1440px;
+}
+
+.time-label {
+  position: absolute;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #666;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+  overflow-y: scroll;
+  background: #fff;
+}
+
+.day-column {
+  position: relative;
+  border-right: 1px solid #eee;
+  height: 1440px; /* 24 hours * 60px */
+}
+
+.day-column.today {
+  background: #fafafa;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #eee;
+  pointer-events: none;
+}
+
+.event {
+  position: absolute;
+  background: #1890ff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #096dd9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.event-title {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.form-actions button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#delete-btn {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+#save-btn {
+  background: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+#cancel-btn {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

@@ -1,0 +1,164 @@
+:root {
+  --bg: #0f1729;
+  --col-bg: #1b2438;
+  --card-bg: #2a3650;
+  --card-bg-hover: #33415f;
+  --accent: #4f8cff;
+  --text: #e6ebf5;
+  --muted: #8b97b3;
+  --danger: #ff5d5d;
+  --ok: #36d399;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.app-header h1 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.conn-status {
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+.conn-status.online {
+  color: var(--ok);
+}
+.conn-status.offline {
+  color: var(--danger);
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.column {
+  background: var(--col-bg);
+  border-radius: 12px;
+  width: 300px;
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 140px);
+}
+
+.column-header {
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.column-count {
+  font-size: 12px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+.card-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 60px;
+}
+
+.card-list.drag-over {
+  background: rgba(79, 140, 255, 0.06);
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: grab;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  word-break: break-word;
+  transition: background 0.15s, transform 0.05s;
+}
+.card:hover {
+  background: var(--card-bg-hover);
+}
+.card:active {
+  cursor: grabbing;
+}
+.card.dragging {
+  opacity: 0.4;
+}
+
+.drop-indicator {
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: -4px 0;
+}
+
+.add-card {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.add-card textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 38px;
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.add-card button {
+  margin-top: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.add-card button:hover {
+  filter: brightness(1.08);
+}
+.add-card button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

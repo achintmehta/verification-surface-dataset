@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+  </head>
+  <body>
+    <main id="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Single-event ticketing</p>
+          <h1>Seat Booking</h1>
+          <p class="subtle">Select available seats, hold them briefly, then confirm to book.</p>
+        </div>
+        <div class="session-card">
+          <span>Session</span>
+          <code id="sessionId"></code>
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <div class="legend">
+          <span><i class="legend-box available"></i> Available</span>
+          <span><i class="legend-box selected"></i> Selected</span>
+          <span><i class="legend-box held"></i> Held</span>
+          <span><i class="legend-box booked"></i> Booked</span>
+        </div>
+        <div id="inventory" class="inventory"></div>
+      </section>
+
+      <section id="notice" class="notice" hidden></section>
+
+      <section class="content">
+        <div id="seatGrid" class="seat-grid" aria-label="Seat map"></div>
+        <aside class="panel">
+          <h2>Your selection</h2>
+          <p id="selectionText" class="subtle">No seats selected.</p>
+          <button id="holdBtn" class="primary" disabled>Hold selected seats</button>
+
+          <div id="holdPanel" class="hold-panel" hidden>
+            <h3>Current hold</h3>
+            <p id="holdText"></p>
+            <p class="countdown">Expires in <strong id="countdown">--</strong></p>
+            <button id="confirmBtn" class="success">Confirm booking</button>
+            <button id="releaseBtn" class="secondary">Release hold</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

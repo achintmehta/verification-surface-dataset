@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="nav">
+        <button id="prev" title="Previous week">&#8249;</button>
+        <button id="today">Today</button>
+        <button id="next" title="Next week">&#8250;</button>
+      </div>
+      <h1 id="range-label"></h1>
+    </header>
+
+    <div class="calendar">
+      <div class="day-headers">
+        <div class="gutter-corner"></div>
+        <div id="headers" class="headers"></div>
+      </div>
+      <div class="scroll">
+        <div class="grid-wrap">
+          <div id="time-gutter" class="time-gutter"></div>
+          <div id="days" class="days"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h2 id="modal-title">New event</h2>
+      <form id="event-form">
+        <label>Title
+          <input type="text" id="f-title" autocomplete="off" />
+        </label>
+        <div class="row">
+          <label>Date
+            <input type="date" id="f-date" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Start
+            <input type="time" id="f-start" step="60" />
+          </label>
+          <label>End
+            <input type="time" id="f-end" step="60" />
+          </label>
+        </div>
+        <p id="form-error" class="form-error"></p>
+        <div class="modal-actions">
+          <button type="button" id="f-delete" class="danger hidden">Delete</button>
+          <span class="spacer"></span>
+          <button type="button" id="f-cancel">Cancel</button>
+          <button type="submit" id="f-save" class="primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

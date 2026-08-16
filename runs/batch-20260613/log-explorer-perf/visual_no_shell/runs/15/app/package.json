@@ -1,0 +1,23 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "High-volume log explorer with windowed query API and virtualized UI",
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,green \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "node server/index.js",
+    "dev:client": "vite --config client/vite.config.js",
+    "start": "npm run dev",
+    "build": "vite build --config client/vite.config.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.12",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "vite": "^5.4.8"
+  }
+}

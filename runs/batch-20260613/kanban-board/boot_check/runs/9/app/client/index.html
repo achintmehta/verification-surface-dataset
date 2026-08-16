@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collaborative Kanban Board</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Collaborative Kanban</h1>
+        <p>Drag cards between columns. Changes sync to every open client.</p>
+      </div>
+      <div id="connectionStatus" class="status status-connecting">Connecting…</div>
+    </header>
+
+    <main id="board" class="board" aria-live="polite"></main>
+
+    <template id="columnTemplate">
+      <section class="column">
+        <header class="column-header">
+          <h2></h2>
+          <span class="count"></span>
+        </header>
+        <div class="card-list"></div>
+        <form class="new-card-form">
+          <input name="text" type="text" maxlength="500" autocomplete="off" placeholder="Add a card…" />
+          <button type="submit">Add</button>
+        </form>
+      </section>
+    </template>
+
+    <template id="cardTemplate">
+      <article class="card" draggable="true"></article>
+    </template>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

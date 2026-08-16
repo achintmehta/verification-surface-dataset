@@ -1,0 +1,289 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.inventory {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.connection-status {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  color: #888;
+}
+
+.connection-status.connected {
+  color: #4caf50;
+}
+
+.connection-status.disconnected {
+  color: #f44336;
+}
+
+main {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* ─── Seat Map ──────────────────── */
+
+#seat-map-container {
+  flex: 1;
+}
+
+.stage {
+  text-align: center;
+  background: #16213e;
+  border: 2px solid #0f3460;
+  border-radius: 8px 8px 40px 40px;
+  padding: 8px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: #e94560;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.seat {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px 6px 3px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.seat:hover:not(.booked):not(.held) {
+  transform: scale(1.15);
+}
+
+.seat.available {
+  background: #2d6a4f;
+  color: #fff;
+}
+
+.seat.selected {
+  background: #f4a261;
+  color: #000;
+  border-color: #e76f51;
+  transform: scale(1.1);
+}
+
+.seat.held {
+  background: #6c757d;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.seat.held-mine {
+  background: #0077b6;
+  color: #fff;
+  cursor: default;
+}
+
+.seat.booked {
+  background: #e94560;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.seat.booked-mine {
+  background: #9b5de5;
+  color: #fff;
+  cursor: default;
+}
+
+/* ─── Panel ─────────────────────── */
+
+.panel {
+  width: 240px;
+  background: #16213e;
+  border-radius: 12px;
+  padding: 16px;
+  position: sticky;
+  top: 20px;
+}
+
+.panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #e94560;
+}
+
+.selected-seats {
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  min-height: 24px;
+  color: #ccc;
+}
+
+.hold-info {
+  background: #0f3460;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.hold-timer {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #f4a261;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actions button {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#btn-hold {
+  background: #2d6a4f;
+  color: #fff;
+}
+
+#btn-hold:not(:disabled):hover {
+  background: #40916c;
+}
+
+#btn-confirm {
+  background: #e94560;
+  color: #fff;
+}
+
+#btn-confirm:not(:disabled):hover {
+  background: #ff6b6b;
+}
+
+#btn-release {
+  background: #6c757d;
+  color: #fff;
+}
+
+#btn-release:not(:disabled):hover {
+  background: #868e96;
+}
+
+.error-msg {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #c62828;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+/* ─── Legend ─────────────────────── */
+
+footer {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+}
+
+.seat-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px 4px 2px 2px;
+  display: inline-block;
+}
+
+.seat-icon.available { background: #2d6a4f; }
+.seat-icon.selected { background: #f4a261; }
+.seat-icon.held { background: #6c757d; }
+.seat-icon.held-mine { background: #0077b6; }
+.seat-icon.booked { background: #e94560; }
+
+@media (max-width: 700px) {
+  main {
+    flex-direction: column;
+  }
+  .panel {
+    width: 100%;
+    position: static;
+  }
+  .seat {
+    width: 28px;
+    height: 28px;
+    font-size: 0.6rem;
+  }
+}

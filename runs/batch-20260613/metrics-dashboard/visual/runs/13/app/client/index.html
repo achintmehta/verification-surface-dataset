@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <script>
+      // Apply persisted theme before first paint to avoid flash.
+      (async function () {
+        try {
+          const r = await fetch('/api/settings');
+          if (r.ok) {
+            const s = await r.json();
+            if (s.theme) document.documentElement.setAttribute('data-theme', s.theme);
+          }
+        } catch (e) {
+          /* leave default; app will show error state */
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-header__inner">
+        <h1 class="app-title">Metrics Dashboard</h1>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container" id="app">
+      <div id="global-error" class="global-error" hidden>
+        <strong>Couldn't load dashboard data.</strong>
+        <p>The backend may be offline. <button id="retry-btn" type="button">Retry</button></p>
+      </div>
+
+      <section class="stat-cards" id="stat-cards" aria-label="Summary statistics"></section>
+
+      <section class="grid-body">
+        <section class="card chart-card" aria-label="Visitors over time">
+          <div class="card__head">
+            <h2 class="card__title">Visitors — last 30 days</h2>
+          </div>
+          <div class="chart-wrap" id="chart-wrap">
+            <svg id="chart" class="chart" role="img" aria-label="Time series chart of daily visitors"></svg>
+          </div>
+        </section>
+
+        <section class="card breakdown-card" aria-label="Traffic by category">
+          <div class="card__head">
+            <h2 class="card__title">Traffic by category</h2>
+          </div>
+          <div class="breakdown" id="breakdown"></div>
+        </section>
+
+        <section class="card table-card" aria-label="Recent items">
+          <div class="card__head">
+            <h2 class="card__title">Recent items</h2>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num">Value</th>
+                  <th scope="col">Created</th>
+                </tr>
+              </thead>
+              <tbody id="recent-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

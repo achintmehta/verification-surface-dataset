@@ -1,0 +1,238 @@
+:root {
+  --bg: #0f1117;
+  --panel: #171a23;
+  --panel-2: #1e222d;
+  --border: #2a2f3c;
+  --text: #d7dbe4;
+  --muted: #8b93a7;
+  --accent: #4f8cff;
+
+  --sev-debug: #6b7280;
+  --sev-info: #3b82f6;
+  --sev-warn: #f59e0b;
+  --sev-error: #ef4444;
+
+  --row-height: 28px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.control-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.control-search {
+  flex: 1;
+  max-width: 420px;
+}
+
+select,
+input[type='text'] {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font: inherit;
+  outline: none;
+}
+
+input[type='text'] {
+  width: 100%;
+}
+
+select:focus,
+input[type='text']:focus {
+  border-color: var(--accent);
+}
+
+.count-badge {
+  margin-left: auto;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.count-badge strong {
+  color: var(--text);
+}
+
+.status {
+  min-width: 60px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+}
+
+.status.loading {
+  color: var(--accent);
+}
+
+.table-head {
+  display: flex;
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  padding: 6px 16px;
+}
+
+.col {
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-ts {
+  flex: 0 0 200px;
+}
+.col-sev {
+  flex: 0 0 70px;
+}
+.col-svc {
+  flex: 0 0 150px;
+}
+.col-msg {
+  flex: 1 1 auto;
+}
+
+.viewport {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Isolate layout/paint of the scroller for performance without size
+     containment (which would interfere with scroll-height from the spacer). */
+  contain: layout paint;
+}
+
+.spacer {
+  width: 1px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.rows-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.log-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--row-height);
+  line-height: var(--row-height);
+  display: flex;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(42, 47, 60, 0.5);
+  white-space: nowrap;
+}
+
+.log-row:hover {
+  background: var(--panel);
+}
+
+.log-row.pending {
+  opacity: 0.35;
+}
+
+.sev-pill {
+  display: inline-block;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+  padding: 0 6px;
+  line-height: 16px;
+  height: 16px;
+  align-self: center;
+}
+
+.sev-debug {
+  background: rgba(107, 114, 128, 0.2);
+  color: var(--sev-debug);
+}
+.sev-info {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--sev-info);
+}
+.sev-warn {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--sev-warn);
+}
+.sev-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--sev-error);
+}
+
+.cell-msg {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-state {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--muted);
+}

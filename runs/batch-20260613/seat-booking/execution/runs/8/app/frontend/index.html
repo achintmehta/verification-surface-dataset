@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header>
+        <div>
+          <h1>Seat Booking</h1>
+          <p>Hold seats temporarily, then confirm to book. Updates are live via SSE.</p>
+        </div>
+        <div class="session-card">
+          <label for="sessionId">Session id</label>
+          <input id="sessionId" autocomplete="off" />
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <div class="legend">
+          <span><i class="swatch available"></i>Available</span>
+          <span><i class="swatch selected"></i>Selected</span>
+          <span><i class="swatch held"></i>Held</span>
+          <span><i class="swatch mine"></i>Your hold</span>
+          <span><i class="swatch booked"></i>Booked</span>
+        </div>
+        <div id="inventory" class="inventory">Loading inventory…</div>
+      </section>
+
+      <section id="notice" class="notice" role="status"></section>
+
+      <section id="seatMap" class="seat-map" aria-label="Seat map"></section>
+
+      <section class="actions">
+        <div>
+          <strong>Selected:</strong> <span id="selectedSeats">none</span>
+        </div>
+        <div id="holdInfo" class="hold-info">No active hold</div>
+        <button id="holdButton">Hold selected seats</button>
+        <button id="confirmButton" disabled>Confirm hold</button>
+        <button id="releaseButton" disabled>Release hold</button>
+        <button id="refreshButton">Refresh</button>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

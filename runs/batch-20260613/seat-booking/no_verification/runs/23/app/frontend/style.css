@@ -1,0 +1,309 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+#app {
+  max-width: 800px;
+  width: 100%;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+header h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.inventory {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.inventory span {
+  padding: 4px 12px;
+  background: #16213e;
+  border-radius: 12px;
+}
+
+/* ─── Seat Map ─────────────────────────────────────── */
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: #888;
+}
+
+.seat {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.seat.available {
+  background: #0f3460;
+  color: #7ec8e3;
+  border-color: #1a4a7a;
+}
+
+.seat.available:hover {
+  background: #1a5276;
+  border-color: #3498db;
+  transform: scale(1.08);
+}
+
+.seat.selected {
+  background: #2980b9;
+  color: #fff;
+  border-color: #3498db;
+  transform: scale(1.08);
+}
+
+.seat.held {
+  background: #e67e22;
+  color: #fff;
+  border-color: #d35400;
+  cursor: not-allowed;
+}
+
+.seat.held-mine {
+  background: #27ae60;
+  color: #fff;
+  border-color: #2ecc71;
+  cursor: default;
+  animation: pulse 2s infinite;
+}
+
+.seat.booked {
+  background: #555;
+  color: #999;
+  border-color: #666;
+  cursor: not-allowed;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ─── Controls ─────────────────────────────────────── */
+
+.controls {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.selection-info {
+  margin-bottom: 12px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.hold-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.hold-timer {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e67e22;
+  min-width: 60px;
+}
+
+.hold-timer.urgent {
+  color: #e74c3c;
+  animation: blink 0.6s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-hold {
+  background: #2980b9;
+  color: #fff;
+}
+
+.btn-hold:not(:disabled):hover {
+  background: #3498db;
+}
+
+.btn-confirm {
+  background: #27ae60;
+  color: #fff;
+}
+
+.btn-confirm:hover {
+  background: #2ecc71;
+}
+
+.btn-release {
+  background: #c0392b;
+  color: #fff;
+}
+
+.btn-release:hover {
+  background: #e74c3c;
+}
+
+/* ─── Messages ─────────────────────────────────────── */
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.message {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  animation: fadeIn 0.3s ease;
+}
+
+.message.success {
+  background: #1e5631;
+  color: #82e0aa;
+}
+
+.message.error {
+  background: #641e16;
+  color: #f1948a;
+}
+
+.message.info {
+  background: #1b3a4b;
+  color: #85c1e9;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Legend ────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.seat-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.seat-box.available {
+  background: #0f3460;
+  border: 1px solid #1a4a7a;
+}
+
+.seat-box.selected {
+  background: #2980b9;
+  border: 1px solid #3498db;
+}
+
+.seat-box.held {
+  background: #e67e22;
+  border: 1px solid #d35400;
+}
+
+.seat-box.held-mine {
+  background: #27ae60;
+  border: 1px solid #2ecc71;
+}
+
+.seat-box.booked {
+  background: #555;
+  border: 1px solid #666;
+}
+
+/* ─── Stage ─────────────────────────────────────────── */
+
+.stage {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 8px 40px;
+  background: #16213e;
+  border-radius: 6px;
+  color: #666;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}

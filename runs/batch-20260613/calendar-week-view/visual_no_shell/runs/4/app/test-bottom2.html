@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bottom Edge Test</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    body { margin: 0; }
+    #app { height: 100vh; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="module">
+import '/src/main.js';
+
+// Scroll to the very bottom after render
+setTimeout(() => {
+  const calBody = document.querySelector('.calendar-body');
+  if (calBody) {
+    calBody.scrollTop = calBody.scrollHeight; // scroll to absolute bottom
+  }
+}, 500);
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Reset & base                                                                 */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f4f6f9;
+  --color-surface:     #ffffff;
+  --color-border:      #dde1e9;
+  --color-primary:     #4f6ef7;
+  --color-primary-h:   #3a57d4;
+  --color-text:        #1a1d23;
+  --color-text-muted:  #6b7280;
+  --color-badge-ok:    #22c55e;
+  --color-badge-err:   #ef4444;
+  --color-badge-wait:  #f59e0b;
+  --radius:            10px;
+  --shadow:            0 2px 8px rgba(0, 0, 0, 0.08);
+  --font:              system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                       Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* App shell                                                                    */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 720px;
+  min-height: 100vh;
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Header                                                                       */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ── Connection status badge ─────────────────────────────────────────────── */
+
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-badge-wait);
+  color: #fff;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+
+.status-badge.connected {
+  background: var(--color-badge-ok);
+}
+
+.status-badge.error {
+  background: var(--color-badge-err);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Feed                                                                         */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+.feed-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Individual message bubble ───────────────────────────────────────────── */
+
+.message-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  animation: slide-in 0.18s ease-out both;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.message-meta {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+
+.empty-state {
+  display: none;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
+
+.empty-state.visible {
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Compose bar                                                                  */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+.compose-bar {
+  border-top: 1px solid var(--color-border);
+  padding: 0.875rem 1.5rem;
+  background: var(--color-surface);
+  position: sticky;
+  bottom: 0;
+}
+
+.compose-form {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.compose-input {
+  flex: 1;
+  padding: 0.6rem 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: var(--font);
+  color: var(--color-text);
+  background: var(--color-bg);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.compose-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.18);
+}
+
+.compose-btn {
+  padding: 0.6rem 1.25rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.compose-btn:hover:not(:disabled) {
+  background: var(--color-primary-h);
+}
+
+.compose-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.compose-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Accessibility                                                                */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Responsive tweaks                                                            */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .feed-wrapper {
+    padding: 0.75rem 1rem;
+  }
+
+  .compose-bar {
+    padding: 0.75rem 1rem;
+  }
+}

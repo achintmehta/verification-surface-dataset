@@ -1,0 +1,169 @@
+:root {
+  --available: #2e7d32;
+  --available-bg: #e8f5e9;
+  --selected: #1565c0;
+  --held: #ef6c00;
+  --mine: #6a1b9a;
+  --booked: #757575;
+  --bg: #0f1115;
+  --panel: #1a1d23;
+  --text: #e6e6e6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #2a2e36;
+}
+
+header h1 { margin: 0 0 12px; font-size: 1.4rem; }
+
+.legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.85rem; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.swatch {
+  width: 16px; height: 16px; border-radius: 4px; display: inline-block;
+}
+.swatch.available { background: var(--available); }
+.swatch.selected { background: var(--selected); }
+.swatch.held { background: var(--held); }
+.swatch.mine { background: var(--mine); }
+.swatch.booked { background: var(--booked); }
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  padding: 24px;
+  align-items: start;
+}
+
+#screen {
+  grid-column: 1;
+  text-align: center;
+  letter-spacing: 8px;
+  font-size: 0.8rem;
+  color: #8a8f99;
+  background: linear-gradient(#3a3f4a, transparent);
+  padding: 8px;
+  border-radius: 6px 6px 40px 40px / 6px 6px 100px 100px;
+  margin-bottom: 16px;
+}
+
+#seat-map {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  color: #8a8f99;
+  font-weight: 600;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px 6px 10px 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.seat:hover:not(:disabled) { transform: translateY(-2px); }
+
+.seat.available { background: var(--available); }
+.seat.selected { background: var(--selected); box-shadow: 0 0 0 2px #fff inset; }
+.seat.held { background: var(--held); cursor: not-allowed; }
+.seat.mine { background: var(--mine); cursor: not-allowed; }
+.seat.booked { background: var(--booked); cursor: not-allowed; }
+.seat.conflict { animation: flash 0.6s ease 3; }
+
+@keyframes flash {
+  0%, 100% { box-shadow: 0 0 0 2px transparent inset; }
+  50% { box-shadow: 0 0 0 3px #ff1744 inset; }
+}
+
+#panel {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  background: var(--panel);
+  border: 1px solid #2a2e36;
+  border-radius: 12px;
+  padding: 18px;
+  position: sticky;
+  top: 24px;
+}
+
+.inventory {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+}
+.inventory div {
+  flex: 1;
+  text-align: center;
+  background: #23272f;
+  border-radius: 8px;
+  padding: 8px 4px;
+}
+.inventory .num { display: block; font-size: 1.2rem; font-weight: 700; }
+
+.selection-info, .hold-info { font-size: 0.9rem; margin-bottom: 14px; }
+.hold-info strong { color: var(--held); font-variant-numeric: tabular-nums; }
+
+.actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+
+button {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--selected);
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+button:disabled { background: #3a3f4a; color: #777; cursor: not-allowed; }
+button.secondary { background: #5a3030; }
+button.link {
+  background: none; color: #6fa8ff; padding: 0; font-size: 0.8rem;
+  width: auto; text-decoration: underline;
+}
+
+.message { min-height: 20px; font-size: 0.85rem; margin: 8px 0; }
+.message.error { color: #ff6b6b; }
+.message.success { color: #51cf66; }
+.message.info { color: #74c0fc; }
+
+.session { margin-top: 14px; font-size: 0.75rem; color: #8a8f99; display: flex; flex-direction: column; gap: 4px; }
+.session code { color: #b0b6c0; }
+
+.conn-status { margin-top: 10px; font-size: 0.75rem; }
+.conn-status.live::before { content: '● '; color: #51cf66; }
+.conn-status.down::before { content: '● '; color: #ff6b6b; }
+
+.hidden { display: none !important; }

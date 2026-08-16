@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Set Dark Theme</title>
+</head>
+<body>
+  <p>Setting dark theme...</p>
+  <script>
+    fetch('http://localhost:3001/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'dark' })
+    }).then(() => {
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>

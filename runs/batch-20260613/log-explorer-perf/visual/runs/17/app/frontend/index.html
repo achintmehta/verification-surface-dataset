@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Explorer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #fff;
+            padding: 16px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .filters {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+        }
+        input, select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input {
+            flex: 1;
+            max-width: 400px;
+        }
+        .stats {
+            font-size: 14px;
+            color: #666;
+        }
+        .badges {
+            display: flex;
+            gap: 8px;
+        }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .badge.debug { background-color: #888; }
+        .badge.info { background-color: #2196F3; }
+        .badge.warn { background-color: #FF9800; }
+        .badge.error { background-color: #F44336; }
+        
+        .table-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            background-color: #fff;
+        }
+        .table-header {
+            display: flex;
+            position: sticky;
+            top: 0;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .table-row {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            position: absolute;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .cell {
+            padding: 8px 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .cell.ts { width: 200px; flex-shrink: 0; }
+        .cell.severity { width: 100px; flex-shrink: 0; }
+        .cell.service { width: 150px; flex-shrink: 0; }
+        .cell.message { flex: 1; }
+        
+        .severity-text.debug { color: #888; }
+        .severity-text.info { color: #2196F3; }
+        .severity-text.warn { color: #FF9800; }
+        .severity-text.error { color: #F44336; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="filters">
+            <select id="severity-filter">
+                <option value="">All Severities</option>
+                <option value="debug">Debug</option>
+                <option value="info">Info</option>
+                <option value="warn">Warn</option>
+                <option value="error">Error</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Search messages...">
+        </div>
+        <div class="stats" id="stats-display">
+            Loading stats...
+        </div>
+        <div class="badges" id="badges-display"></div>
+    </header>
+    <div class="table-header">
+        <div class="cell ts">Timestamp</div>
+        <div class="cell severity">Severity</div>
+        <div class="cell service">Service</div>
+        <div class="cell message">Message</div>
+    </div>
+    <div class="table-container" id="table-container">
+        <div id="virtual-scroller" style="position: relative; width: 100%;"></div>
+    </div>
+    <script type="module" src="/main.js"></script>
+</body>
+</html>

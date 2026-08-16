@@ -1,0 +1,237 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+#app {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.inventory {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.inv-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.available { background: #4ecca3; }
+.dot.held { background: #f0a500; }
+.dot.booked { background: #e23e57; }
+
+.stage {
+  text-align: center;
+  background: #16213e;
+  border: 2px solid #0f3460;
+  border-radius: 4px 4px 50% 50%;
+  padding: 10px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  letter-spacing: 4px;
+  color: #999;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.seat {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px 6px 2px 2px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.seat.available {
+  background: #4ecca3;
+  color: #1a1a2e;
+}
+
+.seat.available:hover {
+  background: #6ee6be;
+  transform: scale(1.1);
+}
+
+.seat.held {
+  background: #f0a500;
+  color: #1a1a2e;
+  cursor: not-allowed;
+}
+
+.seat.held.mine {
+  background: #f0a500;
+  border-color: #fff;
+  cursor: pointer;
+}
+
+.seat.booked {
+  background: #e23e57;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.seat.booked.mine {
+  border-color: #fff;
+}
+
+.seat.selected {
+  border-color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(78, 204, 163, 0.6);
+}
+
+.actions {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.selection-info {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: #bbb;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-hold {
+  background: #4ecca3;
+  color: #1a1a2e;
+}
+
+.btn-hold:hover:not(:disabled) {
+  background: #6ee6be;
+}
+
+.btn-confirm {
+  background: #3282b8;
+  color: #fff;
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background: #4a9fd5;
+}
+
+.btn-release {
+  background: #e23e57;
+  color: #fff;
+}
+
+.btn-release:hover:not(:disabled) {
+  background: #f05a73;
+}
+
+.hold-timer {
+  font-size: 1.1rem;
+  color: #f0a500;
+  margin-bottom: 10px;
+}
+
+.status-msg {
+  font-size: 0.9rem;
+  min-height: 24px;
+  margin-top: 8px;
+}
+
+.status-msg.error { color: #e23e57; }
+.status-msg.success { color: #4ecca3; }
+.status-msg.info { color: #3282b8; }
+
+.sse-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.sse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.sse-dot.connected { background: #4ecca3; }
+.sse-dot.disconnected { background: #e23e57; }

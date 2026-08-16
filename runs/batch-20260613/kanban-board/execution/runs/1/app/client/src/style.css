@@ -1,0 +1,294 @@
+/* ============================================================
+   Kanban Board – Styles
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:           #f0f2f5;
+  --header-bg:    #1a1f36;
+  --header-fg:    #ffffff;
+  --col-bg:       #ebecf0;
+  --col-radius:   10px;
+  --card-bg:      #ffffff;
+  --card-radius:  6px;
+  --card-shadow:  0 1px 3px rgba(0,0,0,.15);
+  --accent:       #0052cc;
+  --danger:       #de350b;
+  --text:         #172b4d;
+  --text-muted:   #6b778c;
+  --gap:          12px;
+  --col-width:    280px;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  height: 52px;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+
+.app-header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.connection-status {
+  font-size: 1.1rem;
+  color: #ff5630;   /* red = disconnected */
+  transition: color .3s;
+  margin-left: auto;
+  cursor: default;
+}
+
+.connection-status.connected {
+  color: #36b37e;   /* green = connected */
+}
+
+/* ── Board ───────────────────────────────────────────────── */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: 20px;
+  min-height: calc(100vh - 52px);
+  overflow-x: auto;
+}
+
+.board-loading {
+  color: var(--text-muted);
+  font-size: .95rem;
+  padding: 20px;
+}
+
+/* ── Column ──────────────────────────────────────────────── */
+.column {
+  flex: 0 0 var(--col-width);
+  background: var(--col-bg);
+  border-radius: var(--col-radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 92px);
+}
+
+.column-header {
+  padding: 10px 12px 8px;
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.column-header .card-count {
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(9,30,66,.08);
+  border-radius: 10px;
+  padding: 1px 7px;
+}
+
+/* ── Card list ───────────────────────────────────────────── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Drop-target highlight */
+.card-list.drag-over {
+  background: rgba(0, 82, 204, .06);
+  border-radius: 6px;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 10px 12px;
+  box-shadow: var(--card-shadow);
+  cursor: grab;
+  user-select: none;
+  font-size: .875rem;
+  line-height: 1.45;
+  word-break: break-word;
+  transition: box-shadow .15s, opacity .15s, transform .15s;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 3px 8px rgba(0,0,0,.2);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+/* Card being dragged */
+.card.dragging {
+  opacity: .45;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  transform: rotate(1.5deg) scale(1.02);
+}
+
+/* Ghost placeholder shown in the drop target */
+.card-ghost {
+  background: rgba(0, 82, 204, .12);
+  border: 2px dashed var(--accent);
+  border-radius: var(--card-radius);
+  height: 44px;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* Optimistic card (not yet confirmed by server) */
+.card.optimistic {
+  opacity: .75;
+  border-left: 3px solid var(--accent);
+}
+
+/* ── Add-card form ───────────────────────────────────────── */
+.add-card-area {
+  padding: 6px 8px 10px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: .875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .15s, color .15s;
+}
+
+.add-card-btn:hover {
+  background: rgba(9,30,66,.08);
+  color: var(--text);
+}
+
+.add-card-btn::before {
+  content: '+';
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.add-card-form {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-card-form.visible {
+  display: flex;
+}
+
+.add-card-form textarea {
+  resize: none;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: .875rem;
+  font-family: inherit;
+  line-height: 1.45;
+  outline: none;
+  min-height: 72px;
+  color: var(--text);
+}
+
+.add-card-form textarea:focus {
+  box-shadow: 0 0 0 2px rgba(0,82,204,.25);
+}
+
+.add-card-form-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-add-confirm {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-add-confirm:hover {
+  background: #0747a6;
+}
+
+.btn-add-cancel {
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: color .15s, background .15s;
+}
+
+.btn-add-cancel:hover {
+  color: var(--danger);
+  background: rgba(222,53,11,.08);
+}
+
+/* ── Scrollbar styling ───────────────────────────────────── */
+.card-list::-webkit-scrollbar {
+  width: 5px;
+}
+.card-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.card-list::-webkit-scrollbar-thumb {
+  background: rgba(9,30,66,.2);
+  border-radius: 3px;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  :root { --col-width: 240px; }
+  .board { padding: 12px; gap: 8px; }
+}

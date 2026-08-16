@@ -1,0 +1,48 @@
+
+> metrics-dashboard@1.0.0 dev
+> concurrently "npm run dev:backend" "npm run dev:frontend"
+
+[1] 
+[1] > metrics-dashboard@1.0.0 dev:frontend
+[1] > vite --port 5173
+[1] 
+[0] 
+[0] > metrics-dashboard@1.0.0 dev:backend
+[0] > node server/index.js
+[0] 
+[1] 
+[1]   VITE v5.4.21  ready in 106 ms
+[1] 
+[1]   ➜  Local:   http://localhost:5173/
+[1]   ➜  Network: use --host to expose
+[0] Database seeded successfully.
+[0] Backend server running on http://localhost:3001
+[0] error: column "daily_metrics.date" must appear in the GROUP BY clause or be used in an aggregate function
+[0]     at ye.Ve (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/21/app/node_modules/@electric-sql/pglite/dist/chunk-EADU5A67.js:1:17602)
+[0]     at ye.nt (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/21/app/node_modules/@electric-sql/pglite/dist/chunk-EADU5A67.js:1:14988)
+[0]     at ye.parse (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/21/app/node_modules/@electric-sql/pglite/dist/chunk-EADU5A67.js:1:13740)
+[0]     at pe.execProtocol (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/21/app/node_modules/@electric-sql/pglite/dist/index.js:3:239489)
+[0]     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[0]     at async pe.l (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/21/app/node_modules/@electric-sql/pglite/dist/chunk-A7RFOIQ7.js:8:1911)
+[0]     at async file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/21/app/node_modules/@electric-sql/pglite/dist/chunk-A7RFOIQ7.js:8:2130 {
+[0]   length: 181,
+[0]   severity: 'ERROR',
+[0]   code: '42803',
+[0]   detail: undefined,
+[0]   hint: undefined,
+[0]   position: '59',
+[0]   internalPosition: undefined,
+[0]   internalQuery: undefined,
+[0]   where: undefined,
+[0]   schema: undefined,
+[0]   table: undefined,
+[0]   column: undefined,
+[0]   dataType: undefined,
+[0]   constraint: undefined,
+[0]   file: 'parse_agg.c',
+[0]   line: '1444',
+[0]   routine: 'check_ungrouped_columns_walker'
+[0] }
+[1] 7:51:02 AM [vite] page reload main.js
+[1] npm run dev:frontend exited with code SIGTERM
+[0] npm run dev:backend exited with code SIGTERM

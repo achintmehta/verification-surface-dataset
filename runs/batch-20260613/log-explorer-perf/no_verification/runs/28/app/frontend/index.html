@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Explorer</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .filters { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+    select, input { padding: 8px; font-size: 14px; }
+    .stats { margin-bottom: 10px; color: #555; }
+    .virtual-container { 
+      height: 600px; 
+      overflow-y: auto; 
+      border: 1px solid #ddd; 
+      background: white; 
+      position: relative;
+    }
+    .virtual-scroller {
+      position: relative;
+    }
+    .log-row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+    .log-row:hover { background: #f9f9f9; }
+    .col-ts { width: 180px; font-family: monospace; }
+    .col-sev { width: 70px; font-weight: bold; }
+    .col-svc { width: 140px; }
+    .col-msg { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .debug { color: #6b7280; }
+    .info { color: #2563eb; }
+    .warn { color: #d97706; }
+    .error { color: #dc2626; }
+    .row-count { font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Log Explorer</h1>
+    <div class="filters">
+      <select id="severity-filter">
+        <option value="">All Severities</option>
+        <option value="debug">Debug</option>
+        <option value="info">Info</option>
+        <option value="warn">Warn</option>
+        <option value="error">Error</option>
+      </select>
+      <input type="text" id="search-input" placeholder="Search message..." style="width: 300px;">
+      <div class="row-count" id="row-count"></div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div id="virtual-container" class="virtual-container">
+      <div id="virtual-scroller" class="virtual-scroller"></div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

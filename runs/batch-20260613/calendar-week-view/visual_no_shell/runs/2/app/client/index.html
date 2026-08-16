@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top navigation bar -->
+    <header id="cal-header">
+      <div class="nav-controls">
+        <button id="btn-prev" title="Previous week">&#8249;</button>
+        <button id="btn-today">Today</button>
+        <button id="btn-next" title="Next week">&#8250;</button>
+      </div>
+      <h1 id="week-label"></h1>
+    </header>
+
+    <!-- Sticky day-header row (outside scroll area) -->
+    <div id="header-row">
+      <div id="header-gutter"></div>
+      <div id="header-days"></div>
+    </div>
+
+    <!-- Scrollable time body -->
+    <div id="scroll-area">
+      <div id="time-gutter"></div>
+      <div id="days-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal overlay for create / edit -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal">
+      <h2 id="modal-title">New Event</h2>
+      <form id="event-form">
+        <label>
+          Title
+          <input type="text" id="f-title" required placeholder="Event title" />
+        </label>
+        <label>
+          Start
+          <input type="datetime-local" id="f-start" required step="60" />
+        </label>
+        <label>
+          End
+          <input type="datetime-local" id="f-end" required step="60" />
+        </label>
+        <div id="form-error" class="hidden"></div>
+        <div class="form-actions">
+          <button type="submit" id="btn-save">Save</button>
+          <button type="button" id="btn-delete" class="danger hidden">Delete</button>
+          <button type="button" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking — Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-bg: #0f0f1a;
+      --color-surface: #1a1a2e;
+      --color-surface-2: #16213e;
+      --color-border: #2a2a4a;
+      --color-text: #e0e0f0;
+      --color-text-muted: #8888aa;
+      --color-available: #2d5a27;
+      --color-available-border: #4a9a40;
+      --color-selected: #1a4a8a;
+      --color-selected-border: #4a8aff;
+      --color-held-mine: #7a5a00;
+      --color-held-mine-border: #ffaa00;
+      --color-held-other: #5a2a2a;
+      --color-held-other-border: #aa4444;
+      --color-booked-mine: #1a5a3a;
+      --color-booked-mine-border: #00cc66;
+      --color-booked-other: #3a3a3a;
+      --color-booked-other-border: #666666;
+      --color-primary: #4a8aff;
+      --color-success: #00cc66;
+      --color-danger: #ff4444;
+      --color-warning: #ffaa00;
+      --radius: 6px;
+      --radius-sm: 4px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    body { background: var(--color-bg); color: var(--color-text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+    .header { background: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 12px 24px; }
+    .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .header h1 { font-size: 20px; font-weight: 700; color: var(--color-primary); }
+    .session-info { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-muted); }
+    .session-id { font-family: monospace; font-size: 11px; background: var(--color-surface-2); padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); }
+    .connection-status { font-size: 16px; color: var(--color-success); }
+    .main { max-width: 900px; margin: 0 auto; padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; }
+    .stage { background: linear-gradient(135deg, #2a2a4a, #1a1a3a); border: 2px solid var(--color-border); border-radius: var(--radius); padding: 10px; text-align: center; }
+    .stage-label { font-size: 12px; font-weight: 700; letter-spacing: 4px; color: var(--color-text-muted); text-transform: uppercase; }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: center; padding: 12px; background: var(--color-surface); border-radius: var(--radius); border: 1px solid var(--color-border); }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-muted); }
+    .seat-demo { width: 20px; height: 20px; border-radius: var(--radius-sm); border: 2px solid; }
+    .seat-demo.available { background: var(--color-available); border-color: var(--color-available-border); }
+    .seat-demo.selected { background: var(--color-selected); border-color: var(--color-selected-border); }
+    .seat-demo.held-mine { background: var(--color-held-mine); border-color: var(--color-held-mine-border); }
+    .seat-demo.held-other { background: var(--color-held-other); border-color: var(--color-held-other-border); }
+    .seat-demo.booked-mine { background: var(--color-booked-mine); border-color: var(--color-booked-mine-border); }
+    .seat-demo.booked-other { background: var(--color-booked-other); border-color: var(--color-booked-other-border); }
+    .seat-map { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; }
+    .seat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .row-label { width: 24px; text-align: center; font-weight: 700; font-size: 13px; color: var(--color-text-muted); }
+    .seats-container { display: flex; gap: 6px; }
+    .seat-aisle { width: 16px; }
+    .seat { width: 36px; height: 36px; border-radius: var(--radius-sm); border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+    .seat--available { background: var(--color-available); border-color: var(--color-available-border); color: #aaffaa; }
+    .seat--selected { background: var(--color-selected); border-color: var(--color-selected-border); color: #aaccff; box-shadow: 0 0 8px rgba(74,138,255,0.4); }
+    .seat--held-mine { background: var(--color-held-mine); border-color: var(--color-held-mine-border); color: #ffdd88; }
+    .seat--held-other { background: var(--color-held-other); border-color: var(--color-held-other-border); color: #ffaaaa; }
+    .seat--booked-mine { background: var(--color-booked-mine); border-color: var(--color-booked-mine-border); color: #88ffcc; }
+    .seat--booked-other { background: var(--color-booked-other); border-color: var(--color-booked-other-border); color: #aaaaaa; }
+    .inventory { display: flex; gap: 12px; justify-content: center; }
+    .inventory-item { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 10px 20px; text-align: center; flex: 1; max-width: 120px; }
+    .inv-count { display: block; font-size: 24px; font-weight: 700; color: var(--color-primary); }
+    .inv-label { font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .action-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 20px; }
+    .selection-info { color: var(--color-text-muted); margin-bottom: 12px; font-size: 13px; }
+    .btn { padding: 10px 20px; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--color-primary); color: white; }
+    .btn:disabled { opacity: 0.4; }
+    .hold-info { display: flex; gap: 20px; margin-bottom: 16px; }
+    .hold-seats, .hold-timer { font-size: 13px; color: var(--color-text-muted); }
+    .hold-seats strong, .hold-timer strong { color: var(--color-text); }
+    .countdown { font-size: 18px; font-weight: 700; color: var(--color-warning); }
+    .hold-actions { display: flex; gap: 12px; }
+    .btn-success { background: var(--color-success); color: #001a0d; }
+    .btn-danger { background: var(--color-danger); color: white; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1>🎭 Seat Booking</h1>
+        <div class="session-info">
+          <span>Session:</span>
+          <span class="session-id">sess-preview123…</span>
+          <span class="connection-status">●</span>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <div class="stage"><div class="stage-label">STAGE</div></div>
+      <div class="legend">
+        <div class="legend-item"><div class="seat-demo available"></div><span>Available</span></div>
+        <div class="legend-item"><div class="seat-demo selected"></div><span>Selected</span></div>
+        <div class="legend-item"><div class="seat-demo held-mine"></div><span>Your Hold</span></div>
+        <div class="legend-item"><div class="seat-demo held-other"></div><span>Held</span></div>
+        <div class="legend-item"><div class="seat-demo booked-mine"></div><span>Your Booking</span></div>
+        <div class="legend-item"><div class="seat-demo booked-other"></div><span>Booked</span></div>
+      </div>
+      <div id="seat-map" class="seat-map"></div>
+      <div class="inventory">
+        <div class="inventory-item"><span class="inv-count" id="inv-available">46</span><span class="inv-label">Available</span></div>
+        <div class="inventory-item"><span class="inv-count" id="inv-held">2</span><span class="inv-label">Held</span></div>
+        <div class="inventory-item"><span class="inv-count" id="inv-booked">2</span><span class="inv-label">Booked</span></div>
+        <div class="inventory-item"><span class="inv-count">50</span><span class="inv-label">Total</span></div>
+      </div>
+      <div class="action-panel">
+        <div class="hold-info">
+          <div class="hold-seats"><strong>Held seats:</strong> C3, C4</div>
+          <div class="hold-timer"><strong>Expires in:</strong> <span class="countdown">0:47</span></div>
+        </div>
+        <div class="hold-actions">
+          <button class="btn btn-success">✓ Confirm Booking</button>
+          <button class="btn btn-danger">✗ Release Hold</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    // Render a realistic seat map
+    const seats = [];
+    const rows = ['A','B','C','D','E'];
+    for (const row of rows) {
+      for (let s = 1; s <= 10; s++) {
+        let status = 'available';
+        // A1, A2 = booked (other)
+        if (row === 'A' && (s === 1 || s === 2)) status = 'booked-other';
+        // C3, C4 = held (mine - current hold)
+        if (row === 'C' && (s === 3 || s === 4)) status = 'held-mine';
+        // B5, B6 = held (other)
+        if (row === 'B' && (s === 5 || s === 6)) status = 'held-other';
+        // D7, D8 = selected
+        if (row === 'D' && (s === 7 || s === 8)) status = 'selected';
+        seats.push({ id: row+s, row, seat_number: s, status });
+      }
+    }
+
+    const mapEl = document.getElementById('seat-map');
+    const rowMap = {};
+    for (const seat of seats) {
+      if (!rowMap[seat.row]) rowMap[seat.row] = [];
+      rowMap[seat.row].push(seat);
+    }
+
+    for (const [rowLabel, rowSeats] of Object.entries(rowMap)) {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'seat-row';
+      const label = document.createElement('div');
+      label.className = 'row-label';
+      label.textContent = rowLabel;
+      rowEl.appendChild(label);
+      const container = document.createElement('div');
+      container.className = 'seats-container';
+      for (const seat of rowSeats) {
+        if (seat.seat_number === 6) {
+          const aisle = document.createElement('div');
+          aisle.className = 'seat-aisle';
+          container.appendChild(aisle);
+        }
+        const el = document.createElement('div');
+        el.className = `seat seat--${seat.status}`;
+        el.textContent = seat.seat_number;
+        container.appendChild(el);
+      }
+      rowEl.appendChild(container);
+      mapEl.appendChild(rowEl);
+    }
+  </script>
+</body>
+</html>

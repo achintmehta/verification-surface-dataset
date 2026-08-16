@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Metrics Dashboard</h1>
+        <button id="theme-toggle">Toggle Theme</button>
+      </header>
+      
+      <div id="error-state" class="hidden">
+        <h2>Error loading dashboard</h2>
+        <p>Could not connect to the API. Please ensure the backend is running.</p>
+      </div>
+
+      <main id="dashboard" class="hidden">
+        <div class="stat-cards">
+          <div class="card">
+            <h3>Total Visitors</h3>
+            <div class="value" id="stat-visitors">-</div>
+          </div>
+          <div class="card">
+            <h3>Total Revenue</h3>
+            <div class="value" id="stat-revenue">-</div>
+          </div>
+          <div class="card">
+            <h3>Best Day Revenue</h3>
+            <div class="value" id="stat-best-day">-</div>
+            <div class="subtext" id="stat-best-day-date">-</div>
+          </div>
+          <div class="card">
+            <h3>7-Day Trend</h3>
+            <div class="value" id="stat-trend">-</div>
+          </div>
+        </div>
+
+        <div class="main-content">
+          <div class="card chart-container">
+            <h3>30-Day Revenue</h3>
+            <div class="canvas-wrapper">
+              <canvas id="timeseries-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="card categories-container">
+            <h3>Category Breakdown</h3>
+            <div id="categories-list"></div>
+          </div>
+        </div>
+
+        <div class="card table-container">
+          <h3>Recent Items</h3>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Value</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-items-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

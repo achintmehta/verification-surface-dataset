@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <!-- Theme is applied before first paint via inline script -->
+  <script>
+    (function () {
+      // Immediately apply persisted theme to avoid flash
+      try {
+        const stored = sessionStorage.getItem('__theme__');
+        if (stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/index-TCkJive8.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BZ0pXO-7.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <h1 class="brand-title">Metrics Dashboard</h1>
+        </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle light/dark theme" title="Toggle theme">
+          <span class="theme-icon theme-icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon--dark" aria-hidden="true">🌙</span>
+          <span class="theme-label">Toggle theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Error banner -->
+      <div id="error-banner" class="error-banner" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="error-message">Unable to reach the backend. Please ensure the server is running.</span>
+      </div>
+
+      <!-- Stat cards -->
+      <section class="section" aria-label="Summary statistics">
+        <div class="stat-grid" id="stat-grid">
+          <div class="stat-card skeleton" id="card-visitors">
+            <div class="stat-label">Total Visitors</div>
+            <div class="stat-value" id="val-visitors">—</div>
+            <div class="stat-trend" id="trend-visitors"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-revenue">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value" id="val-revenue">—</div>
+            <div class="stat-trend" id="trend-revenue"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-bestday">
+            <div class="stat-label">Best Day</div>
+            <div class="stat-value" id="val-bestday">—</div>
+            <div class="stat-trend" id="trend-bestday"></div>
+          </div>
+          <div class="stat-card skeleton" id="card-trend">
+            <div class="stat-label">7-Day Trend</div>
+            <div class="stat-value" id="val-trend">—</div>
+            <div class="stat-trend" id="trend-detail"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts row -->
+      <section class="section charts-section" aria-label="Charts">
+        <div class="charts-grid">
+          <!-- Time-series chart -->
+          <div class="chart-card" id="timeseries-card">
+            <div class="chart-header">
+              <h2 class="chart-title">30-Day Visitors</h2>
+              <div class="chart-legend">
+                <span class="legend-dot legend-dot--visitors"></span>
+                <span class="legend-label">Visitors / day</span>
+              </div>
+            </div>
+            <div class="chart-body" id="timeseries-container">
+              <svg id="timeseries-svg" class="chart-svg" aria-label="30-day visitors time series chart" role="img"></svg>
+            </div>
+          </div>
+
+          <!-- Category breakdown -->
+          <div class="chart-card" id="categories-card">
+            <div class="chart-header">
+              <h2 class="chart-title">Category Breakdown</h2>
+            </div>
+            <div class="chart-body" id="categories-container">
+              <div id="categories-bars" class="category-bars"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent items table -->
+      <section class="section" aria-label="Recent items">
+        <div class="table-card">
+          <div class="table-header">
+            <h2 class="chart-title">Recent Items</h2>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="col-right">Value</th>
+                  <th scope="col" class="col-right">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <tr class="skeleton-row"><td colspan="4">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Metrics Dashboard &mdash; data refreshes on reload</p>
+    </footer>
+  </div>
+
+</body>
+</html>

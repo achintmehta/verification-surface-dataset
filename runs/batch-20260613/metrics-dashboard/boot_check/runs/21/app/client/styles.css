@@ -1,0 +1,395 @@
+/* ========== CSS Variables / Theming ========== */
+:root {
+  /* Light theme (default) */
+  --bg-primary: #f0f2f5;
+  --bg-card: #ffffff;
+  --bg-header: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555770;
+  --text-muted: #8888a0;
+  --border-color: #e0e0e8;
+  --chart-grid: #e0e0e8;
+  --chart-axis: #555770;
+  --chart-line: #4361ee;
+  --chart-dot: #4361ee;
+  --chart-area: rgba(67, 97, 238, 0.1);
+  --bar-fill: #4361ee;
+  --bar-bg: #e8ecf4;
+  --trend-up: #10b981;
+  --trend-down: #ef4444;
+  --table-stripe: #f8f9fb;
+  --table-hover: #eef1f8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.1);
+  --toggle-bg: #e0e0e8;
+  --toggle-fg: #1a1a2e;
+  --focus-ring: #4361ee;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0f0f1a;
+  --bg-card: #1a1a2e;
+  --bg-header: #1a1a2e;
+  --text-primary: #e8e8f0;
+  --text-secondary: #b0b0c8;
+  --text-muted: #7878a0;
+  --border-color: #2a2a44;
+  --chart-grid: #2a2a44;
+  --chart-axis: #b0b0c8;
+  --chart-line: #6b8cff;
+  --chart-dot: #6b8cff;
+  --chart-area: rgba(107, 140, 255, 0.15);
+  --bar-fill: #6b8cff;
+  --bar-bg: #252540;
+  --trend-up: #34d399;
+  --trend-down: #f87171;
+  --table-stripe: #151528;
+  --table-hover: #222240;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.4);
+  --toggle-bg: #2a2a44;
+  --toggle-fg: #e8e8f0;
+}
+
+/* ========== Reset & Base ========== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========== Header ========== */
+.header {
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.theme-toggle {
+  flex-shrink: 0;
+  background: var(--toggle-bg);
+  color: var(--toggle-fg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+  opacity: 0.85;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ========== Dashboard Main ========== */
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* ========== Loading / Error States ========== */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.error-state p {
+  color: var(--trend-down);
+  font-weight: 500;
+}
+
+/* ========== Card Base ========== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, background 0.2s, border-color 0.2s;
+}
+
+/* ========== Stat Cards Grid ========== */
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.stat-sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.trend-up {
+  color: var(--trend-up);
+}
+
+.trend-down {
+  color: var(--trend-down);
+}
+
+/* ========== Charts Row ========== */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chart-card {
+  padding: 1rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.chart-container {
+  width: 100%;
+  height: 260px;
+  position: relative;
+}
+
+.chart-container svg {
+  display: block;
+}
+
+/* ========== Category Bars ========== */
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.category-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.category-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ========== Recent Items Table ========== */
+.table-section {
+  margin-bottom: 1rem;
+}
+
+.table-card {
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--table-stripe);
+}
+
+.data-table tbody tr:hover {
+  background: var(--table-hover);
+}
+
+.td-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.td-category {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.td-value {
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.td-date {
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+/* ========== Responsive Breakpoints ========== */
+
+/* >= 640px: 2 columns */
+@media (min-width: 640px) {
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .charts-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .header-title {
+    font-size: 1.25rem;
+  }
+  .stat-value {
+    font-size: 1.6rem;
+  }
+}
+
+/* >= 1024px: 4-across stat cards, 2-col body */
+@media (min-width: 1024px) {
+  .stat-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .dashboard {
+    padding: 1.5rem;
+  }
+  .header {
+    padding: 0.75rem 1.5rem;
+  }
+  .header-title {
+    font-size: 1.375rem;
+  }
+  .stat-value {
+    font-size: 1.75rem;
+  }
+}

@@ -1,0 +1,465 @@
+/* ─── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 64px;          /* px per hour — all geometry derives from this */
+  --time-gutter-width: 56px;
+  --header-height: 60px;
+  --day-header-height: 60px;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-border: #e0e0e0;
+  --color-border-light: #f0f0f0;
+  --color-primary: #1a73e8;
+  --color-primary-light: #e8f0fe;
+  --color-today-bg: #e8f0fe;
+  --color-today-header: #1a73e8;
+  --color-text: #202124;
+  --color-text-secondary: #5f6368;
+  --color-event-default: #1a73e8;
+  --color-event-text: #ffffff;
+  --color-danger: #d93025;
+  --color-danger-hover: #b52d22;
+  --radius-event: 4px;
+  --shadow-modal: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+#cal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  height: var(--header-height);
+  z-index: 10;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  line-height: 1;
+  transition: background 0.15s;
+}
+.nav-btn:hover {
+  background: var(--color-border-light);
+}
+.today-btn {
+  font-size: 13px;
+  padding: 6px 14px;
+}
+
+#week-label {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+/* ─── Calendar Container ───────────────────────────────────────────────────── */
+#calendar-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+/* ─── Day Headers ──────────────────────────────────────────────────────────── */
+#day-headers {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  height: var(--day-header-height);
+  z-index: 5;
+}
+
+.time-gutter-header {
+  width: var(--time-gutter-width);
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border);
+}
+
+.day-header-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--color-border);
+  padding: 6px 0;
+  user-select: none;
+}
+.day-header-cell:last-child {
+  border-right: none;
+}
+
+.day-name {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
+}
+
+.day-number {
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--color-text);
+  line-height: 1.2;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.day-header-cell.today .day-name {
+  color: var(--color-today-header);
+}
+.day-header-cell.today .day-number {
+  background: var(--color-today-header);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ─── Grid Scroll ──────────────────────────────────────────────────────────── */
+#grid-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#grid-inner {
+  display: flex;
+  position: relative;
+  /* Total height = 24 hours × hour-height */
+  height: calc(24 * var(--hour-height));
+}
+
+/* ─── Time Gutter ──────────────────────────────────────────────────────────── */
+#time-gutter {
+  width: var(--time-gutter-width);
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid var(--color-border);
+}
+
+.hour-label {
+  position: absolute;
+  right: 8px;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  line-height: 1;
+  /* Vertically centered on the hour line */
+  transform: translateY(-50%);
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ─── Day Columns ──────────────────────────────────────────────────────────── */
+#day-columns {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.day-col {
+  flex: 1;
+  position: relative;
+  border-right: 1px solid var(--color-border);
+  cursor: crosshair;
+  overflow: hidden;
+}
+.day-col:last-child {
+  border-right: none;
+}
+
+.day-col.today-col {
+  background: rgba(232, 240, 254, 0.25);
+}
+
+/* Hour lines inside each day column */
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--color-border-light);
+  pointer-events: none;
+}
+
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--color-border-light);
+  pointer-events: none;
+}
+
+/* ─── Event Blocks ─────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: var(--radius-event);
+  background: var(--color-event-default);
+  color: var(--color-event-text);
+  padding: 3px 6px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: filter 0.1s, box-shadow 0.1s;
+  z-index: 2;
+  /* Prevent text selection during drag */
+  user-select: none;
+  /* Small gap between adjacent events */
+  box-sizing: border-box;
+}
+
+.event-block:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 3;
+}
+
+.event-title {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-time {
+  font-size: 11px;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+/* ─── Drag-select ghost ────────────────────────────────────────────────────── */
+.drag-ghost {
+  position: absolute;
+  background: rgba(26, 115, 232, 0.2);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-event);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ─── Current time indicator ───────────────────────────────────────────────── */
+.current-time-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ea4335;
+  z-index: 3;
+  pointer-events: none;
+}
+.current-time-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ea4335;
+}
+
+/* ─── Modal ────────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal {
+  background: var(--color-surface);
+  border-radius: 8px;
+  padding: 28px 32px;
+  width: 420px;
+  max-width: 95vw;
+  box-shadow: var(--shadow-modal);
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.modal-close-btn:hover {
+  background: var(--color-border-light);
+}
+
+#modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--color-text);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="datetime-local"] {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-group input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(26,115,232,0.15);
+}
+
+.form-error {
+  color: var(--color-danger);
+  font-size: 13px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #fce8e6;
+  border-radius: 4px;
+}
+.form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-primary:hover {
+  background: #1557b0;
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-danger:hover {
+  background: var(--color-danger-hover);
+}
+.btn-danger.hidden {
+  display: none;
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 9px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-left: auto;
+}
+.btn-secondary:hover {
+  background: var(--color-border-light);
+}
+
+/* ─── Scrollbar styling ────────────────────────────────────────────────────── */
+#grid-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+#grid-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+#grid-scroll::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+#grid-scroll::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}

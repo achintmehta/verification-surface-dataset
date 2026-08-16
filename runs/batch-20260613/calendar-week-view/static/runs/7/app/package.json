@@ -1,0 +1,24 @@
+{
+  "name": "week-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:server\" \"npm:client\"",
+    "server": "node server/server.js",
+    "client": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "start": "node server/server.js",
+    "lint": "eslint .",
+    "typecheck": "node --check server/server.js && node --check src/main.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "vite": "^5.1.4"
+  },
+  "devDependencies": {}
+}

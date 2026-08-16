@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KanbanFlow – Preview</title>
+  <style>
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}:root{--bg: #0f172a;--bg-col: #1e293b;--bg-col-hover: #263348;--bg-card: #ffffff;--bg-card-drag: #e0f2fe;--accent: #3b82f6;--accent-dark: #2563eb;--text-primary: #f1f5f9;--text-secondary:#94a3b8;--text-card: #1e293b;--border: #334155;--border-card: #e2e8f0;--shadow-card: 0 1px 3px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.12);--shadow-drag: 0 10px 30px rgba(0,0,0,.35);--radius-col: 14px;--radius-card: 10px;--col-width: 300px;--header-h: 60px;--transition: .15s ease}html,body{height:100%;font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-primary);overflow:hidden}.app-header{height:var(--header-h);background:linear-gradient(135deg,#1d4ed8,#7c3aed);display:flex;align-items:center;padding:0 24px;box-shadow:0 2px 12px #0000004d;position:relative;z-index:10}.header-inner{width:100%;display:flex;align-items:center;justify-content:space-between}.header-logo{display:flex;align-items:center;gap:10px}.header-title{font-size:1.25rem;font-weight:700;color:#fff;letter-spacing:-.3px}.header-status{display:flex;align-items:center;gap:8px;font-size:.8rem;color:#fffc}.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}.dot--connecting{background:#fbbf24;animation:pulse 1.4s infinite}.dot--connected{background:#34d399}.dot--error{background:#f87171}@keyframes pulse{0%,to{opacity:1}50%{opacity:.4}}.board-wrapper{height:calc(100vh - var(--header-h));overflow-x:auto;overflow-y:hidden;padding:24px}.board{display:flex;gap:20px;height:100%;align-items:flex-start;min-width:max-content}.column{width:var(--col-width);background:var(--bg-col);border-radius:var(--radius-col);border:1px solid var(--border);display:flex;flex-direction:column;max-height:100%;flex-shrink:0;transition:background var(--transition)}.column.drag-over{background:var(--bg-col-hover);border-color:var(--accent);box-shadow:0 0 0 2px #3b82f64d}.column-header{padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}.column-title{font-size:.9rem;font-weight:600;color:var(--text-primary);letter-spacing:.2px}.column-count{font-size:.75rem;font-weight:600;color:var(--text-secondary);background:#94a3b81f;border-radius:20px;padding:2px 8px;min-width:24px;text-align:center}.card-list{flex:1;overflow-y:auto;padding:10px 10px 6px;display:flex;flex-direction:column;gap:8px;min-height:60px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.card-list::-webkit-scrollbar{width:4px}.card-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.drop-placeholder{height:60px;border:2px dashed var(--accent);border-radius:var(--radius-card);background:#3b82f60f;flex-shrink:0;pointer-events:none;transition:height var(--transition)}.card{background:var(--bg-card);border:1px solid var(--border-card);border-radius:var(--radius-card);padding:12px 14px;cursor:grab;user-select:none;box-shadow:var(--shadow-card);transition:box-shadow var(--transition),transform var(--transition),opacity var(--transition);position:relative;color:var(--text-card);font-size:.875rem;line-height:1.5;word-break:break-word}.card:hover{box-shadow:0 4px 12px #00000026;transform:translateY(-1px)}.card:active{cursor:grabbing}.card.dragging{opacity:.35;box-shadow:none;transform:none;pointer-events:none}.card.ghost{opacity:1;box-shadow:var(--shadow-drag);transform:rotate(2deg) scale(1.03);background:var(--bg-card-drag);border-color:var(--accent);cursor:grabbing;pointer-events:none;z-index:9999;position:fixed}.card-text{font-size:.875rem;color:var(--text-card);line-height:1.5}.card-meta{margin-top:8px;font-size:.7rem;color:#94a3b8}.add-card-area{padding:8px 10px 12px;flex-shrink:0}.add-card-btn{width:100%;background:transparent;border:1.5px dashed var(--border);border-radius:var(--radius-card);color:var(--text-secondary);font-size:.82rem;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all var(--transition)}.add-card-btn:hover{border-color:var(--accent);color:var(--accent);background:#3b82f60f}.add-card-form{display:flex;flex-direction:column;gap:8px}.add-card-form textarea{width:100%;background:var(--bg-card);border:1.5px solid var(--accent);border-radius:var(--radius-card);color:var(--text-card);font-size:.875rem;padding:10px 12px;resize:none;outline:none;font-family:inherit;line-height:1.5;min-height:72px;box-shadow:0 0 0 3px #3b82f626}.add-card-form textarea::placeholder{color:#94a3b8}.add-card-actions{display:flex;gap:8px}.btn-add{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background var(--transition)}.btn-add:hover{background:var(--accent-dark)}.btn-cancel{background:transparent;color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:.82rem;cursor:pointer;transition:all var(--transition)}.btn-cancel:hover{border-color:var(--text-secondary);color:var(--text-primary)}#toast-container{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:10000;pointer-events:none}.toast{background:#1e293b;border:1px solid var(--border);border-left:4px solid var(--accent);color:var(--text-primary);padding:12px 18px;border-radius:10px;font-size:.82rem;box-shadow:0 4px 20px #0006;animation:slideIn .25s ease forwards;max-width:300px}.toast.error{border-left-color:#f87171}.toast.success{border-left-color:#34d399}@keyframes slideIn{0%{transform:translate(40px);opacity:0}to{transform:translate(0);opacity:1}}@keyframes fadeOut{0%{opacity:1}to{opacity:0;transform:translate(20px)}}.skeleton-col{width:var(--col-width);height:300px;background:var(--bg-col);border-radius:var(--radius-col);border:1px solid var(--border);animation:shimmer 1.5s infinite}@keyframes shimmer{0%,to{opacity:.6}50%{opacity:1}}.board-wrapper::-webkit-scrollbar{height:6px}.board-wrapper::-webkit-scrollbar-track{background:transparent}.board-wrapper::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-logo">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="7" height="24" rx="2" fill="white" fill-opacity="0.9"/>
+            <rect x="11" y="2" width="7" height="18" rx="2" fill="white" fill-opacity="0.7"/>
+            <rect x="20" y="2" width="7" height="12" rx="2" fill="white" fill-opacity="0.5"/>
+          </svg>
+          <span class="header-title">KanbanFlow</span>
+        </div>
+        <div class="header-status">
+          <span class="dot dot--connected"></span>
+          <span>Live</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="board-wrapper">
+      <div id="board" class="board">
+
+        <!-- To Do Column -->
+        <div class="column" data-column-id="col-todo">
+          <div class="column-header">
+            <span class="column-title">To Do</span>
+            <span class="column-count">4</span>
+          </div>
+          <div class="card-list" data-column-id="col-todo">
+            <div class="card" data-card-id="card-1">
+              <div class="card-text">Design system architecture</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+            <div class="card" data-card-id="card-2">
+              <div class="card-text">Set up CI/CD pipeline</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+            <div class="card" data-card-id="card-3">
+              <div class="card-text">Write API documentation</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+            <div class="card" data-card-id="card-4">
+              <div class="card-text">Deploy to production</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+          </div>
+          <div class="add-card-area">
+            <button class="add-card-btn">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Add a card
+            </button>
+          </div>
+        </div>
+
+        <!-- In Progress Column -->
+        <div class="column" data-column-id="col-inprogress">
+          <div class="column-header">
+            <span class="column-title">In Progress</span>
+            <span class="column-count">3</span>
+          </div>
+          <div class="card-list" data-column-id="col-inprogress">
+            <div class="card" data-card-id="card-5">
+              <div class="card-text">Build the Kanban UI with drag-and-drop support</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+            <div class="card" data-card-id="card-6">
+              <div class="card-text">Implement SSE real-time sync</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+            <div class="card" data-card-id="card-7">
+              <div class="card-text">Integrate PGLite embedded database</div>
+              <div class="card-meta">Jun 15</div>
+            </div>
+          </div>
+          <div class="add-card-area">
+            <button class="add-card-btn">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Add a card
+            </button>
+          </div>
+        </div>
+
+        <!-- Done Column -->
+        <div class="column" data-column-id="col-done">
+          <div class="column-header">
+            <span class="column-title">Done</span>
+            <span class="column-count">3</span>
+          </div>
+          <div class="card-list" data-column-id="col-done">
+            <div class="card" data-card-id="card-8">
+              <div class="card-text">Initialize Node.js project structure</div>
+              <div class="card-meta">Jun 14</div>
+            </div>
+            <div class="card" data-card-id="card-9">
+              <div class="card-text">Set up Express server with CORS</div>
+              <div class="card-meta">Jun 14</div>
+            </div>
+            <div class="card" data-card-id="card-10">
+              <div class="card-text">Define database schema for columns and cards</div>
+              <div class="card-meta">Jun 14</div>
+            </div>
+          </div>
+          <div class="add-card-area">
+            <button class="add-card-btn">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Add a card
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+</body>
+</html>

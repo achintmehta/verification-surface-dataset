@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Set Light Theme</title></head>
+<body>
+<script>
+fetch('/api/settings', {
+  method: 'PUT',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({theme: 'light'})
+}).then(r => r.json()).then(() => {
+  window.location.href = '/';
+});
+</script>
+<p>Setting light theme...</p>
+</body>
+</html>

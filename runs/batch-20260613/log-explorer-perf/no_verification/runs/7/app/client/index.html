@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Explorer</title>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1>Log Explorer</h1>
+          <p>100k deterministic rows, server-windowed and virtualized.</p>
+        </div>
+        <div id="connection" class="connection">connecting…</div>
+      </header>
+
+      <section class="toolbar" aria-label="filters">
+        <label>
+          Severity
+          <select id="severityFilter">
+            <option value="">All severities</option>
+            <option value="debug">debug</option>
+            <option value="info">info</option>
+            <option value="warn">warn</option>
+            <option value="error">error</option>
+          </select>
+        </label>
+        <label class="searchLabel">
+          Message contains
+          <input id="searchBox" type="search" placeholder="try request, timeout, trace-needle…" autocomplete="off" />
+        </label>
+        <div id="stats" class="stats" aria-live="polite"></div>
+      </section>
+
+      <section class="tableShell">
+        <div class="tableHeader" role="row">
+          <div>Timestamp</div>
+          <div>Severity</div>
+          <div>Service</div>
+          <div>Message</div>
+        </div>
+        <div id="scroller" class="scroller" tabindex="0" aria-label="Virtualized log rows">
+          <div id="spacer" class="spacer"></div>
+          <div id="rows" class="rows"></div>
+        </div>
+      </section>
+
+      <footer class="statusbar">
+        <span id="visibleCount">0 of 0</span>
+        <span id="windowInfo"></span>
+      </footer>
+    </main>
+  </body>
+</html>

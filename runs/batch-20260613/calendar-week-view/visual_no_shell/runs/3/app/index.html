@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top navigation bar -->
+    <header id="cal-header">
+      <div class="header-nav">
+        <button id="btn-prev" class="nav-btn">&#8249; Prev</button>
+        <button id="btn-today" class="nav-btn today-btn">Today</button>
+        <button id="btn-next" class="nav-btn">Next &#8250;</button>
+      </div>
+      <h1 id="week-label"></h1>
+    </header>
+
+    <!-- Calendar body -->
+    <div id="calendar-container">
+      <!-- Sticky header row: gutter + day headers -->
+      <div id="header-row">
+        <div class="header-gutter"></div>
+        <div class="header-days" id="header-days">
+          <!-- Day headers injected by JS -->
+        </div>
+      </div>
+
+      <!-- Scrollable area: gutter + day bodies -->
+      <div id="scroll-area">
+        <div id="time-gutter">
+          <!-- Hour labels injected by JS -->
+        </div>
+        <div id="days-grid">
+          <!-- Day columns injected by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal">
+      <h2 id="modal-title">New Event</h2>
+      <form id="event-form">
+        <input type="hidden" id="event-id" />
+        <div class="form-group">
+          <label for="event-title">Title</label>
+          <input type="text" id="event-title" placeholder="Event title" required />
+        </div>
+        <div class="form-group">
+          <label for="event-start">Start</label>
+          <input type="datetime-local" id="event-start" required />
+        </div>
+        <div class="form-group">
+          <label for="event-end">End</label>
+          <input type="datetime-local" id="event-end" required />
+        </div>
+        <div id="form-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Save</button>
+          <button type="button" id="btn-delete" class="btn-danger hidden">Delete</button>
+          <button type="button" id="btn-cancel" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

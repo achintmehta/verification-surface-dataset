@@ -1,0 +1,49 @@
+
+> log-explorer@1.0.0 dev
+> concurrently "npm run dev:backend" "npm run dev:frontend"
+
+[0] 
+[0] > log-explorer@1.0.0 dev:backend
+[0] > cd backend && npm run dev
+[0] 
+[1] 
+[1] > log-explorer@1.0.0 dev:frontend
+[1] > cd frontend && npm run dev
+[1] 
+[0] 
+[0] > log-explorer-backend@1.0.0 dev
+[0] > node --watch server.js
+[0] 
+[1] 
+[1] > log-explorer-frontend@1.0.0 dev
+[1] > vite
+[1] 
+[0] (node:384849) ExperimentalWarning: Watch mode is an experimental feature and might change at any time
+[0] (Use `node --trace-warnings ...` to show where the warning was created)
+[1] 
+[1]   VITE v5.4.21  ready in 489 ms
+[1] 
+[1]   ➜  Local:   http://localhost:5173/
+[1]   ➜  Network: use --host to expose
+[1] 11:52:54 PM [vite] http proxy error: /api/stats
+[1] Error: connect ECONNREFUSED 127.0.0.1:3001
+[1]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+[1] 11:52:54 PM [vite] http proxy error: /api/logs?offset=0&limit=100
+[1] Error: connect ECONNREFUSED 127.0.0.1:3001
+[1]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+[0] Seeding 100,000 log entries...
+[0] Seeded 0 rows...
+[0] Seeded 10000 rows...
+[0] Seeded 20000 rows...
+[0] Seeded 30000 rows...
+[0] Seeded 40000 rows...
+[0] Seeded 50000 rows...
+[0] Seeded 60000 rows...
+[0] Seeded 70000 rows...
+[0] Seeded 80000 rows...
+[0] Seeded 90000 rows...
+[0] Seeding completed in 3.752s
+[0] Indexes created/verified.
+[0] Backend server running on http://localhost:3001
+[1] npm run dev:frontend exited with code SIGTERM
+[0] npm run dev:backend exited with code SIGTERM

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Message Board</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="board">
+      <header class="board__header">
+        <h1>Realtime Message Board</h1>
+        <span id="status" class="status status--connecting">connecting…</span>
+      </header>
+
+      <ul id="messages" class="messages" aria-live="polite"></ul>
+
+      <p id="empty" class="empty">No messages yet. Be the first to post!</p>
+
+      <form id="message-form" class="composer" autocomplete="off">
+        <input
+          id="message-input"
+          class="composer__input"
+          type="text"
+          name="text"
+          placeholder="Type a message and hit Enter…"
+          maxlength="2000"
+          required
+        />
+        <button class="composer__button" type="submit">Send</button>
+      </form>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

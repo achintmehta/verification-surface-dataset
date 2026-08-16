@@ -1,0 +1,22 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "server": "node server/index.js",
+    "client": "vite --host 0.0.0.0",
+    "dev": "concurrently -k -n server,client \"npm:server\" \"npm:client\"",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "latest",
+    "cors": "latest",
+    "express": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "latest",
+    "concurrently": "latest",
+    "vite": "latest"
+  }
+}

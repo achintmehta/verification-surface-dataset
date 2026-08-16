@@ -1,0 +1,362 @@
+/* ============================================================
+   Theme variables. Default (light) on :root, overridden for
+   [data-theme="dark"]. Applied to body before first paint.
+   ============================================================ */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f7;
+  --border: #e2e6ef;
+  --text: #1a1f2e;
+  --text-muted: #5a6478;
+  --accent: #2f6df6;
+  --accent-soft: #dce7ff;
+  --positive: #1c8a4a;
+  --negative: #c23434;
+  --bar: #2f6df6;
+  --bar-track: #e7ebf4;
+  --chart-axis: #9aa3b5;
+  --chart-grid: #e6e9f1;
+  --chart-line: #2f6df6;
+  --chart-fill: rgba(47, 109, 246, 0.12);
+  --chart-label: #5a6478;
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 1px 2px rgba(20, 30, 60, 0.06);
+}
+
+[data-theme="dark"] {
+  --bg: #0e1320;
+  --surface: #182032;
+  --surface-2: #1f293d;
+  --border: #2a3550;
+  --text: #eef2fb;
+  --text-muted: #9aa6c0;
+  --accent: #5b8dff;
+  --accent-soft: #233458;
+  --positive: #4cd483;
+  --negative: #ff7676;
+  --bar: #5b8dff;
+  --bar-track: #232e46;
+  --chart-axis: #6b7896;
+  --chart-grid: #283450;
+  --chart-line: #5b8dff;
+  --chart-fill: rgba(91, 141, 255, 0.16);
+  --chart-label: #9aa6c0;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* Prevent any element from creating sideways scroll at any width. */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------------- Header ---------------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.header__title {
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  margin: 0;
+  min-width: 0;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+/* ---------------- Status / error state ---------------- */
+.status {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--negative);
+  color: var(--text);
+  padding: 16px 18px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.status__title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.status__detail {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ---------------- Cards (shared) ---------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0; /* allow grid children to shrink, preventing overflow */
+}
+
+.card__title {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ---------------- Stat cards ---------------- */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.stat__label {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.stat__value {
+  margin: 0;
+  font-size: clamp(1.2rem, 5vw, 1.7rem);
+  font-weight: 700;
+  /* Large 7-digit numbers must not overflow the card. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.1;
+}
+
+.stat__sub {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.trend--up {
+  color: var(--positive);
+}
+
+.trend--down {
+  color: var(--negative);
+}
+
+/* ---------------- Body grid (chart / breakdown / table) ---------------- */
+.grid-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* ---------------- Chart ---------------- */
+.chart-container {
+  position: relative;
+  width: 100%;
+  /* Height scales but stays bounded; chart redraws to fit. */
+  height: clamp(220px, 40vw, 300px);
+}
+
+.chart-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------------- Category breakdown ---------------- */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.bar-row__name {
+  font-size: 0.88rem;
+  color: var(--text);
+  /* Long category labels truncate with an ellipsis, never overlapping. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.bar-row__value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.bar-row__track {
+  grid-column: 1 / -1;
+  background: var(--bar-track);
+  border-radius: 6px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.bar-row__fill {
+  height: 100%;
+  background: var(--bar);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+/* ---------------- Recent items table ---------------- */
+.table-wrap {
+  width: 100%;
+  /* Table can scroll within its own card on very narrow screens without
+     forcing the whole document to scroll sideways. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.recent {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  min-width: 0;
+}
+
+table.recent th,
+table.recent td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+table.recent th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+table.recent td.name {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.recent td.value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+table.recent td.category {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   Breakpoints
+   - <640px: 1 column (defaults above)
+   - 640–1023px: 2 columns
+   - >=1024px: 4 stat cards in one row; chart + breakdown side by side
+   ============================================================ */
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-body {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Table spans both columns on medium so it stays usable. */
+  .card--table {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .grid-body {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card--chart {
+    grid-column: 1 / 2;
+  }
+  .card--breakdown {
+    grid-column: 2 / 3;
+  }
+  .card--table {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Kanban Board</h1>
+      <span class="connection-status" id="connection-status" title="SSE connection status">
+        <span class="status-dot"></span>
+        <span class="status-label">Connecting…</span>
+      </span>
+    </header>
+
+    <main class="board" id="board">
+      <!-- Columns are rendered dynamically by board.js -->
+      <div class="board-loading" id="board-loading">Loading board…</div>
+    </main>
+
+    <!-- Card creation modal -->
+    <dialog class="modal" id="card-modal" aria-modal="true" aria-labelledby="modal-title">
+      <form class="modal-form" id="card-form" method="dialog">
+        <h2 class="modal-title" id="modal-title">New Card</h2>
+        <label class="modal-label" for="card-text">Card text</label>
+        <textarea
+          class="modal-textarea"
+          id="card-text"
+          name="text"
+          rows="4"
+          placeholder="Describe the task…"
+          required
+          maxlength="500"
+        ></textarea>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Card</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

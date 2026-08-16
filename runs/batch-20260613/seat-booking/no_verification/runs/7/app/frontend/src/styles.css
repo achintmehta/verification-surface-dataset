@@ -1,0 +1,148 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f7fb;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+button { font: inherit; }
+
+.app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+h1 { margin: 0 0 6px; }
+p { margin: 0; color: #5b6577; }
+
+.session {
+  background: #fff;
+  border: 1px solid #dce2ed;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 240px;
+}
+.session span { display: block; color: #687386; font-size: 12px; text-transform: uppercase; font-weight: 700; }
+.session code { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.toolbar, .hold-panel, .legend, .messages {
+  background: #fff;
+  border: 1px solid #dce2ed;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stats { font-weight: 700; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.actions button, .seat {
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.actions button {
+  padding: 10px 14px;
+  background: #2454d6;
+  color: white;
+}
+.actions button:nth-child(2) { background: #12805c; }
+.actions button:nth-child(3) { background: #aa4b00; }
+.actions button:nth-child(4) { background: #637083; }
+.actions button:disabled { background: #bdc6d6; cursor: not-allowed; }
+
+.hold-panel { border-color: #f0c36c; background: #fff8e8; }
+.hidden { display: none; }
+
+.messages {
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.message {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #edf2ff;
+  color: #24406f;
+}
+.message.success { background: #e8f8f1; color: #12613f; }
+.message.error { background: #ffecec; color: #a01818; }
+.message.warn { background: #fff5dc; color: #805600; }
+
+.legend { display: flex; gap: 18px; flex-wrap: wrap; color: #4f5a6c; }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.swatch { width: 16px; height: 16px; border-radius: 5px; display: inline-block; border: 1px solid #c7cfda; }
+.swatch.available { background: #ffffff; }
+.swatch.selected { background: #8fb2ff; }
+.swatch.held { background: #ffd166; }
+.swatch.own-held { background: #b57dff; }
+.swatch.booked { background: #596273; }
+
+.seat-map {
+  background: #fff;
+  border: 1px solid #dce2ed;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(25, 44, 85, 0.08);
+}
+.seat-map::before {
+  content: "SCREEN / STAGE";
+  display: block;
+  text-align: center;
+  background: linear-gradient(90deg, #e3e8f2, #f8faff, #e3e8f2);
+  color: #657184;
+  letter-spacing: .16em;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 12px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+}
+
+.seat-row {
+  display: grid;
+  grid-template-columns: 36px repeat(10, minmax(42px, 1fr));
+  gap: 9px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.row-label { font-weight: 900; color: #516077; }
+.seat {
+  min-height: 42px;
+  color: #172033;
+  border: 2px solid #cdd6e6;
+  background: #fff;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.seat.available:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(36, 84, 214, .18); }
+.seat.selected { background: #8fb2ff; border-color: #2454d6; }
+.seat.held { background: #ffd166; border-color: #e1a619; cursor: not-allowed; }
+.seat.own-held { background: #b57dff; border-color: #7c3edb; color: #fff; }
+.seat.booked { background: #596273; color: #fff; border-color: #404858; cursor: not-allowed; }
+
+@media (max-width: 720px) {
+  .app { padding: 16px; }
+  header { flex-direction: column; }
+  .seat-row { grid-template-columns: 28px repeat(10, minmax(28px, 1fr)); gap: 5px; }
+  .seat { min-height: 34px; font-size: 12px; }
+}

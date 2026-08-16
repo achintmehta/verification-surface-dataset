@@ -1,0 +1,434 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 64px;          /* px per hour — change here only */
+  --gutter-width: 56px;         /* width of the time labels column */
+  --header-height: 56px;        /* day-name + date header row */
+  --app-header-height: 52px;    /* top nav bar */
+  --event-radius: 4px;
+  --border-color: #e0e0e0;
+  --today-bg: #fffde7;
+  --today-header-bg: #f9a825;
+  --event-bg: #1a73e8;
+  --event-text: #fff;
+  --event-hover-bg: #1558b0;
+  --font: system-ui, -apple-system, sans-serif;
+  --total-height: calc(var(--hour-height) * 24); /* 24 * 64 = 1536px */
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  font-size: 14px;
+  background: #fafafa;
+  color: #202124;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Top navigation header ───────────────────────────────────────────────── */
+#cal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  height: var(--app-header-height);
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+.nav-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.nav-controls button {
+  padding: 6px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3c4043;
+  transition: background .15s;
+}
+.nav-controls button:hover {
+  background: #f1f3f4;
+}
+
+#week-label {
+  font-size: 18px;
+  font-weight: 500;
+  color: #3c4043;
+}
+
+/* ── Calendar container ──────────────────────────────────────────────────── */
+#calendar-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── Time gutter (left labels) ───────────────────────────────────────────── */
+#time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  /* top padding to align with day headers */
+  padding-top: var(--header-height);
+  overflow: hidden;
+  border-right: 1px solid var(--border-color);
+  background: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.gutter-label {
+  height: var(--hour-height);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: 8px;
+  padding-top: 2px;
+  font-size: 11px;
+  color: #70757a;
+  user-select: none;
+  /* shift label up so it sits above the hour line */
+  transform: translateY(-50%);
+}
+/* The 00:00 label at the very top would be cut off; hide it */
+.gutter-label:first-child {
+  visibility: hidden;
+}
+
+/* ── Days grid (headers + body) ──────────────────────────────────────────── */
+#days-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ── Day header row ──────────────────────────────────────────────────────── */
+#day-headers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: var(--header-height);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-color);
+  background: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-color);
+  padding: 4px 0;
+  user-select: none;
+}
+.day-header:last-child {
+  border-right: none;
+}
+
+.day-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #70757a;
+  letter-spacing: .5px;
+}
+
+.day-date {
+  font-size: 22px;
+  font-weight: 400;
+  color: #3c4043;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.day-header.today {
+  background: var(--today-bg);
+}
+.day-header.today .day-name {
+  color: #1a73e8;
+}
+.day-header.today .day-date {
+  background: #1a73e8;
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* ── Scrollable grid body ────────────────────────────────────────────────── */
+#grid-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  /* custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+#grid-body::-webkit-scrollbar { width: 6px; }
+#grid-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+/* ── Hour lines ──────────────────────────────────────────────────────────── */
+#time-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed #ebebeb;
+}
+
+/* ── Event columns ───────────────────────────────────────────────────────── */
+#event-columns {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: var(--total-height);
+  position: relative;
+  z-index: 1;
+}
+
+.day-column {
+  position: relative;
+  border-right: 1px solid var(--border-color);
+  height: 100%;
+  cursor: crosshair;
+}
+.day-column:last-child {
+  border-right: none;
+}
+
+.day-column.today {
+  background: var(--today-bg);
+}
+
+/* ── Event blocks ────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: var(--event-radius);
+  background: var(--event-bg);
+  color: var(--event-text);
+  padding: 3px 6px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  transition: background .12s, box-shadow .12s;
+  /* prevent text selection during drag */
+  user-select: none;
+  /* ensure text doesn't overflow */
+  min-height: 18px;
+  border-left: 3px solid rgba(255,255,255,.4);
+  z-index: 2;
+}
+
+.event-block:hover {
+  background: var(--event-hover-bg);
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+  z-index: 3;
+}
+
+.event-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-time {
+  font-size: 11px;
+  opacity: .85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+/* ── Drag-selection ghost ────────────────────────────────────────────────── */
+.drag-ghost {
+  position: absolute;
+  background: rgba(26, 115, 232, .18);
+  border: 2px solid #1a73e8;
+  border-radius: var(--event-radius);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ── Modal ───────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 28px 32px;
+  width: 380px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,.22);
+}
+
+#modal h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #202124;
+}
+
+#event-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f6368;
+  margin-bottom: 4px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+#event-form label:first-of-type {
+  margin-top: 0;
+}
+
+#event-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #202124;
+  outline: none;
+  transition: border-color .15s;
+}
+#event-form input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26,115,232,.2);
+}
+
+.form-error {
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: #fce8e6;
+  color: #c5221f;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 8px 20px;
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+#btn-save {
+  background: #1a73e8;
+  color: #fff;
+}
+#btn-save:hover {
+  background: #1558b0;
+}
+
+#btn-cancel {
+  background: #f1f3f4;
+  color: #3c4043;
+}
+#btn-cancel:hover {
+  background: #e8eaed;
+}
+
+.danger {
+  background: #ea4335 !important;
+  color: #fff !important;
+}
+.danger:hover {
+  background: #c5221f !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Current-time indicator ──────────────────────────────────────────────── */
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ea4335;
+  z-index: 5;
+  pointer-events: none;
+}
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ea4335;
+}

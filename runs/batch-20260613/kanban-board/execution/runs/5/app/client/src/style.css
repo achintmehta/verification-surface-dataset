@@ -1,0 +1,286 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #f0f2f5;
+  --header-bg:   #1a1f36;
+  --header-fg:   #ffffff;
+  --col-bg:      #ebecf0;
+  --col-radius:  10px;
+  --card-bg:     #ffffff;
+  --card-radius: 6px;
+  --card-shadow: 0 1px 3px rgba(0,0,0,.12);
+  --accent:      #0052cc;
+  --accent-hover:#0065ff;
+  --danger:      #de350b;
+  --text:        #172b4d;
+  --text-muted:  #6b778c;
+  --gap:         16px;
+  --col-width:   280px;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 var(--gap);
+  height: 52px;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+
+.app-header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.connection-status {
+  font-size: 1.1rem;
+  margin-left: auto;
+  transition: color .3s;
+}
+.connection-status.connected    { color: #36b37e; }
+.connection-status.disconnected { color: #de350b; }
+.connection-status.connecting   { color: #ffab00; }
+
+/* ============================================================
+   Board layout
+   ============================================================ */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: var(--gap);
+  overflow-x: auto;
+  min-height: calc(100vh - 52px);
+}
+
+/* ============================================================
+   Column
+   ============================================================ */
+.column {
+  flex: 0 0 var(--col-width);
+  background: var(--col-bg);
+  border-radius: var(--col-radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 52px - 2*var(--gap));
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.column-count {
+  background: rgba(9,30,66,.12);
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.card-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 40px;
+}
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 10px 12px;
+  box-shadow: var(--card-shadow);
+  cursor: grab;
+  user-select: none;
+  font-size: .875rem;
+  line-height: 1.45;
+  word-break: break-word;
+  transition: box-shadow .15s, opacity .15s, transform .15s;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 3px 8px rgba(0,0,0,.18);
+}
+
+.card.dragging {
+  opacity: .45;
+  cursor: grabbing;
+}
+
+/* ============================================================
+   Drop indicator
+   ============================================================ */
+.drop-indicator {
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 0 4px;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Add-card button
+   ============================================================ */
+.add-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(9,30,66,.08);
+  border-radius: 0 0 var(--col-radius) var(--col-radius);
+  color: var(--text-muted);
+  font-size: .85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+}
+
+.add-card-btn:hover {
+  background: rgba(9,30,66,.06);
+  color: var(--text);
+}
+
+.add-card-btn .plus {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* ============================================================
+   Modal
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9,30,66,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-overlay.hidden { display: none; }
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 360px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.modal textarea {
+  width: 100%;
+  border: 1.5px solid #dfe1e6;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: .9rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+}
+
+.modal textarea:focus { border-color: var(--accent); }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-secondary {
+  background: rgba(9,30,66,.08);
+  color: var(--text);
+}
+.btn-secondary:hover { background: rgba(9,30,66,.14); }
+
+/* ============================================================
+   Drag-over column highlight
+   ============================================================ */
+.column.drag-over .card-list {
+  background: rgba(0,82,204,.06);
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Skeleton / loading
+   ============================================================ */
+.loading-text {
+  color: var(--text-muted);
+  font-size: .9rem;
+  padding: var(--gap);
+}
+
+/* ============================================================
+   Scrollbar styling (webkit)
+   ============================================================ */
+.card-list::-webkit-scrollbar { width: 5px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb { background: rgba(9,30,66,.2); border-radius: 3px; }

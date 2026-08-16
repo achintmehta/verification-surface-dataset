@@ -1,0 +1,134 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f5f5f5;
+}
+
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+#inventory {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#seat-map {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.seat.available {
+  background: #90EE90;
+  border-color: #228B22;
+}
+
+.seat.available:hover {
+  background: #32CD32;
+}
+
+.seat.held {
+  background: #FFD700;
+  border-color: #DAA520;
+  cursor: not-allowed;
+}
+
+.seat.booked {
+  background: #FF6B6B;
+  border-color: #DC143C;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background: #87CEEB;
+  border-color: #4169E1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.3);
+}
+
+#controls {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#hold-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+#confirm-btn {
+  background: #2196F3;
+  color: white;
+}
+
+#release-btn {
+  background: #f44336;
+  color: white;
+}
+
+#message {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  min-height: 20px;
+}
+
+.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef5350;
+}
+
+.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #66bb6a;
+}
+
+#hold-info {
+  margin-top: 10px;
+  font-weight: bold;
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🎟️ Event Seat Booking</h1>
+      <div class="status-bar">
+        <span id="connection" class="conn offline">connecting…</span>
+        <span id="inventory" class="inventory"></span>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage">SCREEN / STAGE</section>
+
+      <div id="seatmap" class="seatmap" aria-label="seat map"></div>
+
+      <div class="legend">
+        <span><i class="swatch available"></i> Available</span>
+        <span><i class="swatch selected"></i> Selected</span>
+        <span><i class="swatch held"></i> Held</span>
+        <span><i class="swatch mine"></i> Your hold</span>
+        <span><i class="swatch booked"></i> Booked</span>
+      </div>
+
+      <div class="panel" id="panel">
+        <div id="selection-info" class="selection-info">
+          Select one or more available seats to begin.
+        </div>
+        <div class="actions">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" class="primary" disabled>Confirm booking</button>
+          <button id="release-btn" class="danger" disabled>Release hold</button>
+        </div>
+        <div id="countdown" class="countdown hidden"></div>
+        <div id="message" class="message"></div>
+      </div>
+
+      <p class="session">Session: <code id="session-id"></code></p>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,213 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #0079bf;
+  color: #172b4d;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+header h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.status.connected {
+  background: #61bd4f;
+  color: white;
+}
+
+.status.disconnected {
+  background: #eb5a46;
+  color: white;
+}
+
+#board {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 56px);
+}
+
+.column {
+  background: #ebecf0;
+  border-radius: 8px;
+  min-width: 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 88px);
+}
+
+.column-header {
+  padding: 12px 12px 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #172b4d;
+}
+
+.cards-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+  min-height: 8px;
+}
+
+.card {
+  background: white;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  cursor: grab;
+  user-select: none;
+  word-wrap: break-word;
+  position: relative;
+  transition: box-shadow 0.1s;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+.card.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.card.optimistic {
+  opacity: 0.7;
+  border: 1px dashed #b3bac5;
+}
+
+.card .delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 3px;
+  display: none;
+}
+
+.card:hover .delete-btn {
+  display: block;
+}
+
+.card .delete-btn:hover {
+  background: #eb5a46;
+  color: white;
+}
+
+/* Drop indicator */
+.drop-indicator {
+  height: 3px;
+  background: #0079bf;
+  border-radius: 2px;
+  margin-bottom: 6px;
+  transition: opacity 0.1s;
+}
+
+/* Add card form */
+.add-card-area {
+  padding: 4px 8px 8px;
+}
+
+.add-card-btn {
+  width: 100%;
+  padding: 8px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  color: #5e6c84;
+  font-size: 0.9rem;
+}
+
+.add-card-btn:hover {
+  background: rgba(0,0,0,0.06);
+  color: #172b4d;
+}
+
+.add-card-form {
+  display: none;
+}
+
+.add-card-form.active {
+  display: block;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #0079bf;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+}
+
+.add-card-form .form-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.add-card-form .form-actions button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.add-card-form .form-actions .btn-primary {
+  background: #0079bf;
+  color: white;
+}
+
+.add-card-form .form-actions .btn-primary:hover {
+  background: #026aa7;
+}
+
+.add-card-form .form-actions .btn-cancel {
+  background: none;
+  color: #5e6c84;
+}
+
+.add-card-form .form-actions .btn-cancel:hover {
+  color: #172b4d;
+}

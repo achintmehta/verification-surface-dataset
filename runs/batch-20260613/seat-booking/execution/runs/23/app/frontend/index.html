@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎫 Seat Booking</h1>
+      <div id="connection-status" class="status-disconnected">Disconnected</div>
+    </header>
+    
+    <div id="inventory-bar">
+      <span id="inv-available">Available: -</span>
+      <span id="inv-held">Held: -</span>
+      <span id="inv-booked">Booked: -</span>
+      <span id="inv-total">Total: -</span>
+    </div>
+
+    <div id="seat-map-container">
+      <div id="seat-map"></div>
+    </div>
+
+    <div id="legend">
+      <div class="legend-item"><div class="legend-swatch available"></div> Available</div>
+      <div class="legend-item"><div class="legend-swatch held"></div> Held (other)</div>
+      <div class="legend-item"><div class="legend-swatch held-mine"></div> Held (mine)</div>
+      <div class="legend-item"><div class="legend-swatch booked"></div> Booked</div>
+      <div class="legend-item"><div class="legend-swatch selected"></div> Selected</div>
+    </div>
+
+    <div id="actions-panel">
+      <div id="selection-info">Select seats to hold</div>
+      <div id="hold-info" style="display:none;">
+        <span id="hold-timer"></span>
+        <button id="btn-confirm" class="btn btn-confirm">Confirm Booking</button>
+        <button id="btn-release" class="btn btn-release">Release Hold</button>
+      </div>
+      <button id="btn-hold" class="btn btn-hold" disabled>Hold Selected Seats</button>
+    </div>
+
+    <div id="toast-container"></div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

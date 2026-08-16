@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Seed Events</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #1a1a2e; color: #eee; }
+    h1 { color: #7ec8e3; margin-bottom: 16px; }
+    pre { background: #16213e; padding: 8px 12px; margin: 4px 0; border-radius: 4px; font-size: 13px; }
+    .ok  { color: #4ade80; }
+    .err { color: #f87171; }
+    .info { color: #93c5fd; }
+    button { padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 4px;
+             border: none; border-radius: 6px; font-weight: 600; }
+    #btn-seed  { background: #3b82f6; color: #fff; }
+    #btn-clear { background: #ef4444; color: #fff; }
+    #btn-seed:hover  { background: #2563eb; }
+    #btn-clear:hover { background: #dc2626; }
+    #status { margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <h1>🌱 Seed Test Events</h1>
+  <button id="btn-seed"  onclick="seedAll()">Seed All Test Events</button>
+  <button id="btn-clear" onclick="clearAll()">Clear This Week's Events</button>
+  <div id="status"></div>
+
+  <script>
+    const API = '/api';
+
+    function getMonday() {
+      const d = new Date();
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      d.setDate(d.getDate() + diff);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function dayDate(dayOffset, h, m) {
+      const d = getMonday();
+      d.setDate(d.getDate() + dayOffset);
+      d.setHours(h, m, 0, 0);
+      return d.toISOString();
+    }
+
+    // dayDate(3, 0, 0) = Thursday midnight = Wednesday 24:00
+    const testEvents = [
+      // Monday: single event (full width)
+      { title: 'Morning Standup',    start_at: dayDate(0, 9, 0),   end_at: dayDate(0, 9, 30)  },
+      // Monday: two overlapping (50% each)
+      { title: 'Design Review',      start_at: dayDate(0, 10, 0),  end_at: dayDate(0, 11, 30) },
+      { title: 'Sprint Planning',    start_at: dayDate(0, 10, 30), end_at: dayDate(0, 12, 0)  },
+      // Monday: three simultaneous (33% each)
+      { title: 'Event A',            start_at: dayDate(0, 14, 0),  end_at: dayDate(0, 15, 0)  },
+      { title: 'Event B',            start_at: dayDate(0, 14, 0),  end_at: dayDate(0, 15, 0)  },
+      { title: 'Event C',            start_at: dayDate(0, 14, 0),  end_at: dayDate(0, 15, 0)  },
+      // Monday: solo after cluster (full width)
+      { title: 'Afternoon Solo',     start_at: dayDate(0, 16, 0),  end_at: dayDate(0, 17, 0)  },
+      // Tuesday: chain overlap
+      { title: 'Chain A (9-11)',     start_at: dayDate(1, 9, 0),   end_at: dayDate(1, 11, 0)  },
+      { title: 'Chain B (10-12)',    start_at: dayDate(1, 10, 0),  end_at: dayDate(1, 12, 0)  },
+      { title: 'Chain C (11:30-13)', start_at: dayDate(1, 11, 30), end_at: dayDate(1, 13, 0)  },
+      // Wednesday: event ending at midnight
+      { title: 'Late Night Work',    start_at: dayDate(2, 22, 0),  end_at: dayDate(3, 0, 0)   },
+      { title: 'Lunch Meeting',      start_at: dayDate(2, 12, 0),  end_at: dayDate(2, 13, 0)  },
+      // Thursday: long event
+      { title: 'All Day Workshop',   start_at: dayDate(3, 8, 0),   end_at: dayDate(3, 18, 0)  },
+      // Friday: two non-overlapping (each full width)
+      { title: 'Morning Call',       start_at: dayDate(4, 9, 0),   end_at: dayDate(4, 10, 0)  },
+      { title: 'Afternoon Call',     start_at: dayDate(4, 14, 0),  end_at: dayDate(4, 15, 0)  },
+    ];
+
+    function log(msg, cls = 'info') {
+      const div = document.getElementById('status');
+      const pre = document.createElement('pre');
+      pre.className = cls;
+      pre.textContent = msg;
+      div.appendChild(pre);
+    }
+
+    async function seedAll() {
+      document.getElementById('status').innerHTML = '';
+      log('Seeding events…');
+      let ok = 0, fail = 0;
+      for (const ev of testEvents) {
+        const res = await fetch(`${API}/events`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ev),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          log(`✓ id=${data.id}  "${ev.title}"`, 'ok');
+          ok++;
+        } else {
+          log(`✗ "${ev.title}": ${data.error}`, 'err');
+          fail++;
+        }
+      }
+      log(`\nDone: ${ok} created, ${fail} failed.  → Go to http://localhost:5173`, ok > 0 ? 'ok' : 'err');
+    }
+
+    async function clearAll() {
+      document.getElementById('status').innerHTML = '';
+      const monday = getMonday();
+      const sunday = new Date(monday);
+      sunday.setDate(sunday.getDate() + 7);
+      const res = await fetch(`${API}/events?start=${monday.toISOString()}&end=${sunday.toISOString()}`);
+      const evs = await res.json();
+      log(`Found ${evs.length} events to delete`);
+      for (const ev of evs) {
+        const r = await fetch(`${API}/events/${ev.id}`, { method: 'DELETE' });
+        const d = await r.json();
+        log(`${r.ok ? '✓' : '✗'} Deleted id=${ev.id} "${ev.title}"`, r.ok ? 'ok' : 'err');
+      }
+      log('Done!', 'ok');
+    }
+
+    // Do NOT auto-seed on load (manual only)
+    // window.addEventListener('load', seedAll);
+  </script>
+</body>
+</html>

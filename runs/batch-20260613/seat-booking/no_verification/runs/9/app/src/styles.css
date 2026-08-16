@@ -1,0 +1,67 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #eef2ff;
+  color: #172033;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+
+#app { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0; }
+.hero { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 20px; }
+h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.25rem); letter-spacing: -0.05em; }
+h2 { margin: 0 0 6px; }
+p { margin: 0; }
+.hero p, .muted { color: #667085; }
+.small { font-size: 0.9rem; line-height: 1.45; }
+
+.session-card { background: #fff; border: 1px solid #d9e0f5; box-shadow: 0 10px 30px rgba(35, 52, 104, 0.08); border-radius: 16px; padding: 12px 16px; min-width: 140px; }
+.session-card span { display: block; color: #667085; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .08em; }
+.session-card code { font-size: 1.05rem; color: #3447d4; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; align-items: start; }
+.panel { background: rgba(255,255,255,.94); border: 1px solid #d9e0f5; border-radius: 22px; box-shadow: 0 18px 45px rgba(35, 52, 104, 0.10); padding: 22px; }
+.toolbar { display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 16px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 20px; color: #475467; font-size: 0.92rem; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 14px; height: 14px; border-radius: 4px; display: inline-block; border: 1px solid rgba(0,0,0,.12); }
+.swatch.available { background: #fff; }
+.swatch.selected { background: #4f46e5; }
+.swatch.held { background: #f59e0b; }
+.swatch.booked { background: #64748b; }
+
+.seat-grid { display: grid; grid-template-columns: 32px 1fr; gap: 10px 12px; }
+.row-label { display: flex; align-items: center; justify-content: center; font-weight: 800; color: #344054; }
+.seat-row { display: grid; grid-template-columns: repeat(10, minmax(38px, 1fr)); gap: 8px; }
+.seat { min-height: 44px; border-radius: 12px; border: 1px solid #cdd5ea; background: #fff; color: #172033; cursor: pointer; font-weight: 750; transition: .15s transform, .15s box-shadow, .15s background; }
+.seat:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(52, 71, 212, .16); }
+.seat.selected { background: #4f46e5; color: #fff; border-color: #4338ca; }
+.seat.held { background: #f59e0b; color: #231a00; border-color: #d97706; cursor: not-allowed; }
+.seat.held.own-hold { outline: 3px solid rgba(245, 158, 11, .35); }
+.seat.booked { background: #64748b; border-color: #475569; color: #fff; cursor: not-allowed; }
+.seat:disabled { opacity: .88; }
+
+.controls { position: sticky; top: 20px; }
+.notice { padding: 12px 14px; background: #eef4ff; border: 1px solid #c7d7fe; color: #263b8f; border-radius: 14px; margin: 14px 0 18px; line-height: 1.4; }
+.notice.success { background: #ecfdf3; border-color: #abefc6; color: #067647; }
+.notice.warn { background: #fffaeb; border-color: #fedf89; color: #93370d; }
+.notice.error { background: #fef3f2; border-color: #fecdca; color: #b42318; }
+.selected-box, .hold-box { border: 1px solid #e3e8f7; border-radius: 16px; padding: 14px; margin-bottom: 14px; background: #fbfcff; }
+.hidden { display: none; }
+.pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 28px; color: #667085; }
+.pill { display: inline-flex; align-items: center; padding: 4px 9px; background: #eef2ff; color: #3538cd; border-radius: 999px; font-weight: 700; font-size: .9rem; }
+.countdown { margin-top: 10px; font-size: 1.5rem; font-weight: 850; color: #3447d4; }
+.countdown.warning { color: #b54708; }
+.actions { display: grid; gap: 10px; margin: 18px 0; }
+.actions button, .toolbar button { border: 0; border-radius: 12px; background: #4f46e5; color: #fff; padding: 11px 14px; cursor: pointer; font-weight: 800; box-shadow: 0 10px 22px rgba(79, 70, 229, .22); }
+button.secondary { background: #fff; color: #344054; border: 1px solid #cdd5ea; box-shadow: none; }
+button:disabled { cursor: not-allowed; opacity: .55; box-shadow: none; }
+
+@media (max-width: 900px) {
+  .hero, .toolbar { flex-direction: column; }
+  .layout { grid-template-columns: 1fr; }
+  .controls { position: static; }
+  .seat-row { grid-template-columns: repeat(5, minmax(42px, 1fr)); }
+}

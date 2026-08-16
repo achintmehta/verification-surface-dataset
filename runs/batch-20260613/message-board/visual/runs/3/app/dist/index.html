@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board</title>
+    <script type="module" crossorigin src="/assets/index-Beh34BvO.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BnVBN1H1.css">
+  </head>
+  <body>
+    <div class="app">
+      <!-- ── Header ─────────────────────────────────────────────────────── -->
+      <header class="header">
+        <div class="header__inner">
+          <div class="header__brand">
+            <span class="header__icon">💬</span>
+            <h1 class="header__title">Message Board</h1>
+          </div>
+          <span class="status-badge" id="statusBadge">
+            <span class="status-badge__dot"></span>
+            <span class="status-badge__label" id="statusLabel">Connecting…</span>
+          </span>
+        </div>
+      </header>
+
+      <!-- ── Main ───────────────────────────────────────────────────────── -->
+      <main class="main">
+        <!-- Message feed -->
+        <section class="feed-wrapper">
+          <ul class="feed" id="feed" aria-live="polite" aria-label="Message feed">
+            <!-- Messages are injected here by JS -->
+          </ul>
+          <div class="feed-empty" id="feedEmpty">
+            <span class="feed-empty__icon">🗒️</span>
+            <p>No messages yet. Be the first to say something!</p>
+          </div>
+        </section>
+
+        <!-- Compose form -->
+        <section class="compose">
+          <form class="compose__form" id="composeForm" autocomplete="off">
+            <label class="sr-only" for="messageInput">Your message</label>
+            <div class="compose__row">
+              <input
+                class="compose__input"
+                id="messageInput"
+                type="text"
+                placeholder="Write a message…"
+                maxlength="500"
+                required
+              />
+              <button class="compose__btn" type="submit" id="submitBtn">
+                <span class="compose__btn-text">Send</span>
+                <span class="compose__btn-icon" aria-hidden="true">➤</span>
+              </button>
+            </div>
+            <p class="compose__error" id="composeError" role="alert" hidden></p>
+          </form>
+        </section>
+      </main>
+    </div>
+
+  </body>
+</html>

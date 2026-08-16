@@ -1,0 +1,310 @@
+/* ============================================================
+   Kanban Board – Stylesheet
+   ============================================================ */
+
+/* ---------- Reset / Base ----------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f0f2f5;
+  --color-header-bg:   #1a1f36;
+  --color-header-fg:   #ffffff;
+  --color-column-bg:   #ebecf0;
+  --color-column-hdr:  #172b4d;
+  --color-card-bg:     #ffffff;
+  --color-card-border: #dfe1e6;
+  --color-card-hover:  #f4f5f7;
+  --color-accent:      #0052cc;
+  --color-accent-lt:   #deebff;
+  --color-danger:      #de350b;
+  --color-text:        #172b4d;
+  --color-text-muted:  #6b778c;
+  --color-drop-line:   #0052cc;
+  --color-connected:   #36b37e;
+  --color-disconnected:#de350b;
+
+  --radius-card:   6px;
+  --radius-column: 8px;
+  --shadow-card:   0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+  --shadow-drag:   0 8px 24px rgba(0,0,0,.18);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+/* ---------- Header ----------------------------------------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  height: 52px;
+  background: var(--color-header-bg);
+  color: var(--color-header-fg);
+  flex-shrink: 0;
+}
+
+.app-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.connection-status {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-disconnected);
+  transition: color .3s;
+}
+.connection-status.connected {
+  color: var(--color-connected);
+}
+
+/* ---------- Board ------------------------------------------ */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  height: calc(100vh - 52px);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.board-loading {
+  color: var(--color-text-muted);
+  font-size: 15px;
+  padding: 40px;
+}
+
+/* ---------- Column ----------------------------------------- */
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 272px;
+  min-width: 272px;
+  max-height: 100%;
+  background: var(--color-column-bg);
+  border-radius: var(--radius-column);
+  overflow: hidden;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  flex-shrink: 0;
+}
+
+.column-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-column-hdr);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.column-count {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  background: rgba(9,30,66,.08);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-weight: 600;
+}
+
+/* ---------- Card list -------------------------------------- */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 8px;
+  min-height: 40px;
+  /* Scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,.15) transparent;
+}
+
+.card-list::-webkit-scrollbar { width: 6px; }
+.card-list::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.15);
+  border-radius: 3px;
+}
+
+/* Drop-target highlight */
+.card-list.drag-over {
+  background: rgba(0, 82, 204, .06);
+  border-radius: 4px;
+}
+
+/* ---------- Card ------------------------------------------- */
+.card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  cursor: grab;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .15s, opacity .15s, transform .15s;
+  word-break: break-word;
+  line-height: 1.45;
+  user-select: none;
+  position: relative;
+}
+
+.card:last-child {
+  margin-bottom: 0;
+}
+
+.card:hover {
+  background: var(--color-card-hover);
+  box-shadow: 0 2px 6px rgba(0,0,0,.14);
+}
+
+.card:active,
+.card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* Card being dragged (native drag ghost is hidden; we use a clone) */
+.card.dragging {
+  opacity: .35;
+}
+
+/* Drop indicator line */
+.drop-indicator {
+  height: 3px;
+  background: var(--color-drop-line);
+  border-radius: 2px;
+  margin: 2px 0;
+  pointer-events: none;
+  transition: opacity .1s;
+}
+
+/* ---------- Add-card form ---------------------------------- */
+.add-card-area {
+  padding: 6px 8px 8px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-card);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s, color .15s;
+}
+
+.add-card-btn:hover {
+  background: rgba(9,30,66,.08);
+  color: var(--color-text);
+}
+
+.add-card-btn .icon {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.add-card-form {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-card-form.visible {
+  display: flex;
+}
+
+.add-card-textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: 8px 10px;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-card);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+  resize: vertical;
+  outline: none;
+  color: var(--color-text);
+}
+
+.add-card-textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.add-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  padding: 6px 14px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-primary:hover {
+  background: #0747a6;
+}
+
+.btn-cancel {
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: none;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .15s;
+}
+
+.btn-cancel:hover {
+  color: var(--color-danger);
+}
+
+/* ---------- Drag clone ------------------------------------- */
+#drag-clone {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .92;
+  box-shadow: var(--shadow-drag);
+  transform: rotate(2deg);
+  transition: none;
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/src/style.css" />
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body class="theme-light">
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1 class="header-title">
+          <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Metrics Dashboard
+        </h1>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme" title="Toggle light/dark theme">
+          <span class="theme-btn-icon theme-btn-sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </span>
+          <span class="theme-btn-icon theme-btn-moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+          <span class="theme-btn-label">Toggle theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main-content">
+      <!-- Error banner -->
+      <div id="error-banner" class="error-banner" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="error-message">Unable to reach the backend. Please ensure the server is running.</span>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state">
+        <div class="spinner" aria-label="Loading dashboard data…"></div>
+        <p>Loading dashboard…</p>
+      </div>
+
+      <!-- Dashboard content (hidden until data loads) -->
+      <div id="dashboard" class="dashboard" hidden>
+        <!-- Stat cards -->
+        <section class="stat-cards" aria-label="Summary statistics">
+          <div class="stat-card" id="card-visitors">
+            <div class="stat-card-label">Total Visitors</div>
+            <div class="stat-card-value" id="stat-visitors">—</div>
+            <div class="stat-card-sub" id="stat-trend"></div>
+          </div>
+          <div class="stat-card" id="card-revenue">
+            <div class="stat-card-label">Total Revenue</div>
+            <div class="stat-card-value" id="stat-revenue">—</div>
+            <div class="stat-card-sub">30-day total</div>
+          </div>
+          <div class="stat-card" id="card-bestday">
+            <div class="stat-card-label">Best Day</div>
+            <div class="stat-card-value" id="stat-bestday-visitors">—</div>
+            <div class="stat-card-sub" id="stat-bestday-date"></div>
+          </div>
+          <div class="stat-card" id="card-avg">
+            <div class="stat-card-label">Avg Daily Visitors</div>
+            <div class="stat-card-value" id="stat-avg">—</div>
+            <div class="stat-card-sub">30-day average</div>
+          </div>
+        </section>
+
+        <!-- Body: chart + categories -->
+        <section class="body-grid" aria-label="Charts">
+          <!-- Time-series chart -->
+          <div class="panel chart-panel">
+            <h2 class="panel-title">30-Day Visitor Trend</h2>
+            <div class="chart-container" id="chart-container">
+              <canvas id="timeseries-chart" aria-label="30-day visitor time series chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Category breakdown -->
+          <div class="panel categories-panel">
+            <h2 class="panel-title">Category Breakdown</h2>
+            <div class="categories-list" id="categories-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent items table -->
+        <section class="panel table-panel" aria-label="Recent items">
+          <h2 class="panel-title">Recent Items</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="col-value">Value</th>
+                  <th scope="col" class="col-date">Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

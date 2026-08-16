@@ -1,0 +1,386 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hour-height: 60px;       /* px per hour — change only here */
+  --gutter-width: 52px;      /* width of the time labels column */
+  --header-height: 56px;     /* day-name + date header row */
+  --cal-bg: #f8f9fa;
+  --grid-line: #e0e0e0;
+  --today-bg: #fffde7;
+  --today-border: #f9a825;
+  --event-radius: 4px;
+  --event-default-bg: #1a73e8;
+  --event-default-border: #1558b0;
+  --font: system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--cal-bg);
+  color: #202124;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+#cal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--grid-line);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.nav-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.nav-controls button {
+  padding: 6px 14px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: var(--font);
+  transition: background 0.15s;
+}
+
+.nav-controls button:hover {
+  background: #f1f3f4;
+}
+
+#week-label {
+  font-size: 18px;
+  font-weight: 500;
+  color: #3c4043;
+}
+
+/* ── Calendar container ───────────────────────────────────────────────────── */
+#cal-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Time gutter ──────────────────────────────────────────────────────────── */
+#time-gutter {
+  width: var(--gutter-width);
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid var(--grid-line);
+  overflow: hidden;
+  /* top padding to align with day-header row */
+  padding-top: var(--header-height);
+  position: relative;
+  z-index: 2;
+}
+
+.gutter-hour {
+  height: var(--hour-height);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 11px;
+  color: #70757a;
+  /* shift label up so it sits on the line */
+  transform: translateY(-7px);
+  user-select: none;
+}
+
+/* ── Days wrapper ─────────────────────────────────────────────────────────── */
+#days-wrapper {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Day column ───────────────────────────────────────────────────────────── */
+.day-col {
+  flex: 1;
+  min-width: 0;
+  border-right: 1px solid var(--grid-line);
+  position: relative;
+  background: #fff;
+}
+
+.day-col:last-child {
+  border-right: none;
+}
+
+.day-col.today {
+  background: var(--today-bg);
+}
+
+/* Day header (sticky at top) */
+.day-header {
+  height: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid var(--grid-line);
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 3;
+  user-select: none;
+  cursor: default;
+}
+
+.day-col.today .day-header {
+  border-bottom-color: var(--today-border);
+}
+
+.day-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #70757a;
+  letter-spacing: 0.05em;
+}
+
+.day-date {
+  font-size: 22px;
+  font-weight: 400;
+  color: #3c4043;
+  line-height: 1.2;
+}
+
+.day-col.today .day-date {
+  background: var(--today-border);
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* ── Time grid body ───────────────────────────────────────────────────────── */
+.day-body {
+  position: relative;
+  /* 24 hours */
+  height: calc(var(--hour-height) * 24);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--grid-line);
+  pointer-events: none;
+}
+
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #ebebeb;
+  pointer-events: none;
+}
+
+/* Drag-selection highlight */
+.drag-selection {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  background: rgba(26, 115, 232, 0.15);
+  border: 1px solid rgba(26, 115, 232, 0.5);
+  border-radius: var(--event-radius);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Event blocks ─────────────────────────────────────────────────────────── */
+.event-block {
+  position: absolute;
+  border-radius: var(--event-radius);
+  background: var(--event-default-bg);
+  border-left: 3px solid var(--event-default-border);
+  color: #fff;
+  padding: 2px 4px;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 4;
+  transition: filter 0.1s;
+  /* prevent text selection during drag */
+  user-select: none;
+}
+
+.event-block:hover {
+  filter: brightness(1.1);
+  z-index: 6;
+}
+
+.event-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.event-time {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+  line-height: 1.3;
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#modal-overlay.hidden {
+  display: none;
+}
+
+#modal-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px 28px;
+  width: 360px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+#modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: #202124;
+}
+
+#event-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f6368;
+  margin-bottom: 4px;
+  margin-top: 12px;
+}
+
+#event-form label:first-of-type {
+  margin-top: 0;
+}
+
+#event-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#event-form input:focus {
+  border-color: var(--event-default-bg);
+}
+
+.form-error {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #fce8e6;
+  border-radius: 4px;
+  color: #c5221f;
+  font-size: 13px;
+}
+
+.form-error.hidden {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 8px 18px;
+  border-radius: 4px;
+  border: 1px solid #dadce0;
+  font-size: 14px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#btn-save {
+  background: var(--event-default-bg);
+  color: #fff;
+  border-color: var(--event-default-bg);
+}
+
+#btn-save:hover {
+  background: var(--event-default-border);
+}
+
+#btn-cancel {
+  background: #fff;
+  color: #3c4043;
+}
+
+#btn-cancel:hover {
+  background: #f1f3f4;
+}
+
+.danger {
+  background: #fff;
+  color: #c5221f;
+  border-color: #c5221f !important;
+}
+
+.danger:hover {
+  background: #fce8e6 !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Scrollbar styling ────────────────────────────────────────────────────── */
+#days-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+#days-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+#days-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}

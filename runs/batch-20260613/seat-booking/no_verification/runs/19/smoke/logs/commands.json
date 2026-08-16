@@ -1,0 +1,122 @@
+[
+  {
+    "step": 1,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"{\\n  \\\"name\\\": \\\"seat-booking\\\",\\n  \\\"version\\\": \\\"1.0.0\\\",\\n  \\\"scripts\\\": {\\n    \\\"st"
+  },
+  {
+    "step": 2,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"const express = require('express');\\nconst cors = require('cors');\\nconst { PGlite } = "
+  },
+  {
+    "step": 3,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"import { defineConfig } from 'vite';\\n\\nexport default defineConfig({\\n  server: {\\n   "
+  },
+  {
+    "step": 4,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"<!DOCTYPE html>\\n<html lang=\\\"en\\\">\\n  <head>\\n    <meta charset=\\\"UTF-8\\\" />\\n    <met"
+  },
+  {
+    "step": 5,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"body {\\n  font-family: sans-serif;\\n  margin: 20px;\\n}\\n\\n#controls {\\n  margin-bottom:"
+  },
+  {
+    "step": 6,
+    "tool": "write_file",
+    "args_head": "{\"content\": \"import { v4 as uuidv4 } from 'uuid';\\n\\nconst sessionId = uuidv4();\\nlet currentHoldId "
+  },
+  {
+    "step": 7,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      hold_expires_at TIMESTAMPTZ,\", \"old_str\": \"      hold_expires_at TIMESTAMP,\", \"pa"
+  },
+  {
+    "step": 8,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const holdRes = await db.query(\\n      `SELECT id, status, hold_expires_at FROM sea"
+  },
+  {
+    "step": 9,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"async function expireHolds() {\\n  try {\\n    const now = new Date().toISOString();\\n   "
+  },
+  {
+    "step": 10,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"app.get('/api/seats', async (req, res) => {\\n  try {\\n    await expireHolds();\\n    con"
+  },
+  {
+    "step": 11,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const data = await res.json();\\n    if (res.ok) {\\n      if (data.seatIds) {\\n     "
+  },
+  {
+    "step": 12,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      await db.query('COMMIT');\\n      broadcast({ type: 'seats_updated', seats: seatId"
+  },
+  {
+    "step": 13,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const res = await fetch(`/api/holds/${currentHoldId}`, {\\n      method: 'DELETE'\\n "
+  },
+  {
+    "step": 14,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const data = await res.json();\\n    if (res.ok) {\\n      currentHoldId = data.holdI"
+  },
+  {
+    "step": 15,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"function setupSSE() {\\n  const evtSource = new EventSource('/api/stream');\\n  evtSource"
+  },
+  {
+    "step": 16,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"setupSSE();\", \"old_str\": \"fetchSeats().then(setupSSE);\", \"path\": \"main.js\"}"
+  },
+  {
+    "step": 17,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      hold_expires_at TIMESTAMPTZ,\\n      session_id VARCHAR(36),\\n      booked_by VARC"
+  },
+  {
+    "step": 18,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    await db.query(\\n      `UPDATE seats \\n       SET status = 'held', hold_id = $1, ho"
+  },
+  {
+    "step": 19,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const holdRes = await db.query(\\n      `SELECT id, status, hold_expires_at, session"
+  },
+  {
+    "step": 20,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      `UPDATE seats \\n       SET status = 'available', hold_id = NULL, hold_expires_at "
+  },
+  {
+    "step": 21,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"      await db.query(\\n        `UPDATE seats \\n         SET status = 'available', hold_"
+  },
+  {
+    "step": 22,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"app.delete('/api/holds/:holdId', async (req, res) => {\\n  const { holdId } = req.params"
+  },
+  {
+    "step": 23,
+    "tool": "edit_file",
+    "args_head": "{\"new_str\": \"    const res = await fetch(`/api/holds/${currentHoldId}`, {\\n      method: 'DELETE',\\n"
+  },
+  {
+    "step": 24,
+    "tool": "finish",
+    "args_head": "{}"
+  }
+]

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body class="theme-light">
+    <div id="app">
+      <header class="header">
+        <div class="header-inner">
+          <div class="header-brand">
+            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            <span class="brand-name">Metrics Dashboard</span>
+          </div>
+          <button
+            id="theme-toggle"
+            class="theme-btn"
+            aria-label="Toggle light/dark theme"
+            title="Toggle theme"
+          >
+            <span class="theme-icon theme-icon--light" aria-hidden="true">☀️</span>
+            <span class="theme-icon theme-icon--dark" aria-hidden="true">🌙</span>
+            <span class="theme-label">Theme</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="main" id="main-content">
+        <!-- Error banner -->
+        <div id="error-banner" class="error-banner" hidden>
+          <span class="error-icon" aria-hidden="true">⚠️</span>
+          <span id="error-message">Unable to reach the server. Please check your connection.</span>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loading-state" class="loading-state" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>Loading dashboard data…</p>
+        </div>
+
+        <!-- Dashboard content (hidden until data loads) -->
+        <div id="dashboard" class="dashboard" hidden>
+          <!-- Stat cards -->
+          <section class="stat-cards" aria-label="Summary statistics">
+            <div class="stat-card" id="card-visitors">
+              <div class="stat-card__label">Total Visitors</div>
+              <div class="stat-card__value" id="stat-visitors">—</div>
+              <div class="stat-card__trend" id="stat-trend" aria-label="7-day trend"></div>
+            </div>
+            <div class="stat-card" id="card-revenue">
+              <div class="stat-card__label">Total Revenue</div>
+              <div class="stat-card__value" id="stat-revenue">—</div>
+            </div>
+            <div class="stat-card" id="card-best-day">
+              <div class="stat-card__label">Best Day (Visitors)</div>
+              <div class="stat-card__value" id="stat-best-visitors">—</div>
+              <div class="stat-card__sub" id="stat-best-date"></div>
+            </div>
+            <div class="stat-card" id="card-trend">
+              <div class="stat-card__label">7-Day Trend</div>
+              <div class="stat-card__value" id="stat-trend-pct">—</div>
+              <div class="stat-card__sub">vs previous 7 days</div>
+            </div>
+          </section>
+
+          <!-- Body: chart + categories -->
+          <section class="body-grid" aria-label="Charts">
+            <!-- Time-series chart -->
+            <div class="panel chart-panel">
+              <h2 class="panel__title">30-Day Visitors</h2>
+              <div class="chart-container" id="chart-container" aria-label="30-day visitor time series chart">
+                <canvas id="timeseries-canvas" role="img" aria-label="Line chart of daily visitors over 30 days"></canvas>
+              </div>
+            </div>
+
+            <!-- Category breakdown -->
+            <div class="panel categories-panel">
+              <h2 class="panel__title">Category Breakdown</h2>
+              <div class="categories-list" id="categories-list" aria-label="Category values">
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent items table -->
+          <section class="panel table-panel" aria-label="Recent items">
+            <h2 class="panel__title">Recent Items</h2>
+            <div class="table-wrapper">
+              <table class="data-table" id="recent-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="col-value">Value</th>
+                    <th scope="col" class="col-date">Date</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-tbody">
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

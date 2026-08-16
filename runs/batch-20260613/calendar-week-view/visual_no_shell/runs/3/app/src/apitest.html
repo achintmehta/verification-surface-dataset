@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>API Validation Test</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #0f172a; color: #e2e8f0; }
+    pre { background: #1e293b; padding: 6px 10px; margin: 3px 0; border-radius: 4px; font-size: 12px; }
+    .ok   { color: #4ade80; }
+    .err  { color: #f87171; }
+    .info { color: #93c5fd; }
+    h1 { color: #38bdf8; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <h1>🧪 API Validation Tests</h1>
+  <div id="log"></div>
+
+  <script>
+    const API = '/api';
+
+    function log(msg, cls = 'info') {
+      const div = document.getElementById('log');
+      const pre = document.createElement('pre');
+      pre.className = cls;
+      pre.textContent = msg;
+      div.appendChild(pre);
+    }
+
+    async function testPost(desc, body, expectStatus) {
+      const res = await fetch(`${API}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      const pass = res.status === expectStatus;
+      log(
+        `${pass ? '✓' : '✗'} [${res.status}] ${desc}\n  body: ${JSON.stringify(body)}\n  resp: ${JSON.stringify(data)}`,
+        pass ? 'ok' : 'err'
+      );
+      return pass;
+    }
+
+    async function testPut(id, desc, body, expectStatus) {
+      const res = await fetch(`${API}/events/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      const pass = res.status === expectStatus;
+      log(
+        `${pass ? '✓' : '✗'} [${res.status}] ${desc}\n  resp: ${JSON.stringify(data)}`,
+        pass ? 'ok' : 'err'
+      );
+      return pass;
+    }
+
+    async function run() {
+      log('=== POST /api/events validation ===');
+
+      // Should fail: empty title
+      await testPost('Empty title → 400', { title: '', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' }, 400);
+
+      // Should fail: whitespace-only title
+      await testPost('Whitespace title → 400', { title: '   ', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' }, 400);
+
+      // Should fail: end before start
+      await testPost('end_at < start_at → 400', { title: 'Test', start_at: '2026-06-15T10:00:00Z', end_at: '2026-06-15T09:00:00Z' }, 400);
+
+      // Should fail: end equals start
+      await testPost('end_at = start_at → 400', { title: 'Test', start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T09:00:00Z' }, 400);
+
+      // Should fail: missing title
+      await testPost('Missing title → 400', { start_at: '2026-06-15T09:00:00Z', end_at: '2026-06-15T10:00:00Z' }, 400);
+
+      // Should fail: missing end_at
+      await testPost('Missing end_at → 400', { title: 'Test', start_at: '2026-06-15T09:00:00Z' }, 400);
+
+      // Should succeed: valid event
+      const res = await fetch(`${API}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: 'Valid Test Event', start_at: '2026-06-22T09:00:00Z', end_at: '2026-06-22T10:00:00Z' }),
+      });
+      const created = await res.json();
+      const pass = res.status === 201;
+      log(`${pass ? '✓' : '✗'} [${res.status}] Valid event → 201\n  resp: ${JSON.stringify(created)}`, pass ? 'ok' : 'err');
+
+      if (pass && created.id) {
+        log('\n=== PUT /api/events/:id validation ===');
+
+        // Should fail: empty title
+        await testPut(created.id, 'PUT empty title → 400', { title: '', start_at: '2026-06-22T09:00:00Z', end_at: '2026-06-22T10:00:00Z' }, 400);
+
+        // Should fail: end before start
+        await testPut(created.id, 'PUT end < start → 400', { title: 'Test', start_at: '2026-06-22T10:00:00Z', end_at: '2026-06-22T09:00:00Z' }, 400);
+
+        // Should succeed: valid update
+        await testPut(created.id, 'PUT valid update → 200', { title: 'Updated Event', start_at: '2026-06-22T10:00:00Z', end_at: '2026-06-22T11:00:00Z' }, 200);
+
+        // Should succeed: delete
+        const delRes = await fetch(`${API}/events/${created.id}`, { method: 'DELETE' });
+        const delData = await delRes.json();
+        log(`${delRes.ok ? '✓' : '✗'} [${delRes.status}] DELETE → 200\n  resp: ${JSON.stringify(delData)}`, delRes.ok ? 'ok' : 'err');
+
+        // Should fail: delete again (404)
+        const del2Res = await fetch(`${API}/events/${created.id}`, { method: 'DELETE' });
+        const del2Data = await del2Res.json();
+        const del2Pass = del2Res.status === 404;
+        log(`${del2Pass ? '✓' : '✗'} [${del2Res.status}] DELETE non-existent → 404\n  resp: ${JSON.stringify(del2Data)}`, del2Pass ? 'ok' : 'err');
+      }
+
+      log('\n=== Done ===', 'info');
+    }
+
+    window.addEventListener('load', run);
+  </script>
+</body>
+</html>

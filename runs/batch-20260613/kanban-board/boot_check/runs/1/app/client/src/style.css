@@ -1,0 +1,268 @@
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0f172a;
+  --surface:     #1e293b;
+  --surface2:    #273549;
+  --border:      #334155;
+  --accent:      #6366f1;
+  --accent-h:    #818cf8;
+  --text:        #e2e8f0;
+  --text-muted:  #94a3b8;
+  --danger:      #ef4444;
+  --card-bg:     #1e293b;
+  --card-hover:  #273549;
+  --shadow:      0 4px 16px rgba(0,0,0,.45);
+  --radius:      10px;
+  --col-width:   300px;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text);
+}
+
+.connection-status {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  transition: color .3s;
+}
+.connection-status.connected    { color: #22c55e; }
+.connection-status.disconnected { color: var(--danger); }
+
+/* ── Board ────────────────────────────────────────────────── */
+.board {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  overflow-x: auto;
+  height: calc(100vh - 57px);
+  align-items: flex-start;
+}
+
+/* ── Column ───────────────────────────────────────────────── */
+.column {
+  flex: 0 0 var(--col-width);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.column-title {
+  font-size: .9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.column-count {
+  font-size: .75rem;
+  background: var(--surface2);
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-weight: 600;
+}
+
+/* ── Card list ────────────────────────────────────────────── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 60px;
+}
+
+/* Scrollbar */
+.card-list::-webkit-scrollbar { width: 4px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ── Card ─────────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: .875rem;
+  line-height: 1.5;
+  cursor: grab;
+  user-select: none;
+  transition: background .15s, box-shadow .15s, transform .15s, opacity .15s;
+  word-break: break-word;
+  position: relative;
+}
+
+.card:hover {
+  background: var(--card-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.card.dragging {
+  opacity: .45;
+  cursor: grabbing;
+  transform: scale(.97);
+}
+
+/* Optimistic card (not yet confirmed by server) */
+.card.optimistic {
+  border-style: dashed;
+  opacity: .8;
+}
+
+/* ── Drop indicator ───────────────────────────────────────── */
+.drop-indicator {
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px;
+  margin: 0 2px;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* ── Add-card area ────────────────────────────────────────── */
+.add-card-area {
+  padding: 8px 10px 12px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: .85rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.add-card-btn:hover {
+  background: var(--surface2);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.add-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: .875rem;
+  font-family: inherit;
+  padding: 10px 12px;
+  resize: none;
+  outline: none;
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+.add-card-form textarea::placeholder { color: var(--text-muted); }
+
+.add-card-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 16px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--accent-h); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: color .15s;
+}
+.btn-ghost:hover { color: var(--text); }
+
+/* ── Drag-over column highlight ───────────────────────────── */
+.column.drag-over .card-list {
+  background: rgba(99,102,241,.07);
+  border-radius: 6px;
+}
+
+/* ── Loading / error states ───────────────────────────────── */
+.board-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: var(--text-muted);
+  font-size: 1rem;
+  gap: 10px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

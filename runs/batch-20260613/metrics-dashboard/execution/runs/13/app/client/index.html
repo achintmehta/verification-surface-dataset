@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <script>
+      // Apply persisted theme before first paint to avoid a flash.
+      // We read from a cookie-free quick localStorage hint first (set after the
+      // first server round-trip) and fall back to light; the authoritative value
+      // is fetched from the API and re-applied immediately on load.
+      (function () {
+        try {
+          var hint = localStorage.getItem('theme-hint');
+          if (hint === 'light' || hint === 'dark') {
+            document.documentElement.setAttribute('data-theme', hint);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

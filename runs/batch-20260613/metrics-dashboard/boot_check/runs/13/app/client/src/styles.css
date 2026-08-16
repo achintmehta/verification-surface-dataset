@@ -1,0 +1,429 @@
+/* ===========================================================================
+   Theme tokens
+   =========================================================================== */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f3f9;
+  --border: #e2e7f0;
+  --text: #1b2230;
+  --text-muted: #5a6577;
+  --accent: #3b6ef5;
+  --accent-soft: #e6edff;
+  --positive: #1a9c5b;
+  --negative: #d23b3b;
+  --bar: #3b6ef5;
+  --bar-track: #eef1f7;
+  --chart-axis: #b6bfd0;
+  --chart-grid: #e9edf5;
+  --chart-line: #3b6ef5;
+  --chart-fill: rgba(59, 110, 245, 0.12);
+  --chart-label: #5a6577;
+  --shadow: 0 1px 3px rgba(20, 30, 60, 0.08), 0 1px 2px rgba(20, 30, 60, 0.04);
+}
+
+html[data-theme='dark'] {
+  --bg: #0e1219;
+  --surface: #171d28;
+  --surface-2: #1e2533;
+  --border: #2a3242;
+  --text: #e8ecf4;
+  --text-muted: #9aa6bc;
+  --accent: #6f9bff;
+  --accent-soft: #1f2a44;
+  --positive: #46d086;
+  --negative: #ff6b6b;
+  --bar: #6f9bff;
+  --bar-track: #232b3a;
+  --chart-axis: #4a5468;
+  --chart-grid: #232b3a;
+  --chart-line: #6f9bff;
+  --chart-fill: rgba(111, 155, 255, 0.16);
+  --chart-label: #9aa6bc;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ===========================================================================
+   Reset / base
+   =========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* Guard against accidental sideways scroll at any width. */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+/* ===========================================================================
+   Header
+   =========================================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.app-header__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-title {
+  font-size: clamp(1.05rem, 2.6vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle__icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: inset -3px -3px 0 0 var(--surface-2);
+}
+
+html[data-theme='dark'] .theme-toggle__icon {
+  box-shadow: none;
+  background: radial-gradient(circle at 30% 30%, #ffe9a8, #f4b942);
+}
+
+/* ===========================================================================
+   Layout shell
+   =========================================================================== */
+.dashboard {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ===========================================================================
+   Status banner (error / empty state)
+   =========================================================================== */
+.status-banner {
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--negative);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+}
+
+.status-banner__title {
+  font-weight: 700;
+  color: var(--negative);
+  margin-bottom: 0.2rem;
+}
+
+/* ===========================================================================
+   Cards
+   =========================================================================== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem 1.2rem;
+  min-width: 0; /* allow children to shrink inside grid */
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.card__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ===========================================================================
+   Stat cards
+   =========================================================================== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+  min-width: 0;
+}
+
+.stat-card__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.stat-card__value {
+  font-size: clamp(1.25rem, 4.5vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  /* Big 7-digit numbers must fit the card, never overflow. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.1;
+}
+
+.stat-card__sub {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+}
+
+.trend--up {
+  color: var(--positive);
+}
+
+.trend--down {
+  color: var(--negative);
+}
+
+/* ===========================================================================
+   Body grid (chart + breakdown)
+   =========================================================================== */
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* ===========================================================================
+   Chart
+   =========================================================================== */
+.chart-host {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  min-width: 0;
+}
+
+.chart-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===========================================================================
+   Category breakdown
+   =========================================================================== */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.bar-row__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.bar-row__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar-row__value {
+  flex: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-row__track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  background: var(--bar-track);
+  overflow: hidden;
+}
+
+.bar-row__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--bar);
+  transition: width 0.3s ease;
+}
+
+/* ===========================================================================
+   Recent items table
+   =========================================================================== */
+.table-scroll {
+  /* Keep table scrolling contained inside the card, never the page. */
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 420px; /* below this the card (not the page) scrolls */
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.data-table td.num,
+.data-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.data-table .cell-name {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cat-pill {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 600;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* ===========================================================================
+   Breakpoints
+   - >= 640px: 2 columns
+   - >= 1024px: 4 stat cards in a row, chart + breakdown side-by-side
+   =========================================================================== */
+@media (min-width: 640px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .body-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+  .chart-host {
+    height: 320px;
+  }
+}

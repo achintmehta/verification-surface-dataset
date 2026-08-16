@@ -1,0 +1,36 @@
+
+> metrics-dashboard@1.0.0 dev
+> concurrently "npm run dev:server" "npm run dev:client"
+
+[0] 
+[0] > metrics-dashboard@1.0.0 dev:server
+[0] > node --watch server/index.js
+[0] 
+[1] 
+[1] > metrics-dashboard@1.0.0 dev:client
+[1] > vite client --port 5173
+[1] 
+[0] (node:28605) ExperimentalWarning: Watch mode is an experimental feature and might change at any time
+[0] (Use `node --trace-warnings ...` to show where the warning was created)
+[1] 
+[1]   VITE v5.4.21  ready in 109 ms
+[1] 
+[1]   ➜  Local:   http://localhost:5173/
+[1]   ➜  Network: use --host to expose
+[0] Failed to initialize database: Error: ENOENT: no such file or directory, mkdir '/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/5/app/data/db'
+[0]     at Module.mkdirSync (node:fs:1391:3)
+[0]     at new m (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/5/app/node_modules/@electric-sql/pglite/dist/fs/nodefs.js:1:248)
+[0]     at Ae (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/5/app/node_modules/@electric-sql/pglite/dist/index.js:1:5434)
+[0]     at async pe.qe (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/5/app/node_modules/@electric-sql/pglite/dist/index.js:3:241364)
+[0]     at async initDb (file:///tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/5/app/server/index.js:20:3) {
+[0]   errno: -2,
+[0]   syscall: 'mkdir',
+[0]   code: 'ENOENT',
+[0]   path: '/tmp/runs/final-runs/metrics-dashboard/visual_no_shell/runs/5/app/data/db'
+[0] }
+[0] Failed running 'server/index.js'
+[0] Restarting 'server/index.js'
+[0] Database seeded.
+[0] Server listening on http://localhost:3001
+[1] npm run dev:client exited with code SIGTERM
+[0] npm run dev:server exited with code SIGTERM

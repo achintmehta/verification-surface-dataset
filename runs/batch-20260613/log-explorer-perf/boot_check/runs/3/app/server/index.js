@@ -1,0 +1,37 @@
+import express from 'express';
+import cors from 'cors';
+import { initDb } from './db.js';
+import { logsRouter } from './routes/logs.js';
+import { statsRouter } from './routes/stats.js';
+
+const PORT = process.env.PORT || 3001;
+
+async function main() {
+  console.log('[server] Starting up...');
+  const startTime = Date.now();
+
+  const db = await initDb();
+  console.log(`[server] Database ready in ${Date.now() - startTime}ms`);
+
+  const app = express();
+
+  app.use(cors({
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    methods: ['GET'],
+  }));
+  app.use(express.json());
+
+  app.use('/api/logs', logsRouter(db));
+  app.use('/api/stats', statsRouter(db));
+
+  app.get('/health', (_req, res) => res.json({ status: 'ok', uptime: Date.now() - startTime }));
+
+  app.listen(PORT, () => {
+    console.log(`[server] Listening on http://localhost:${PORT} (boot: ${Date.now() - startTime}ms)`);
+  });
+}
+
+main().catch(err => {
+  console.error('[server] Fatal error:', err);
+  process.exit(1);
+});

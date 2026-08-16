@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-header__inner">
+        <h1 class="app-title">Metrics Dashboard</h1>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="app" class="app-main">
+      <!-- Stat cards -->
+      <section class="stat-grid" id="stat-grid" aria-label="Summary statistics"></section>
+
+      <!-- Body: chart + breakdown side by side on wide screens -->
+      <section class="body-grid">
+        <article class="card card--chart">
+          <h2 class="card__title">Visitors — last 30 days</h2>
+          <div class="chart-host" id="chart-host"></div>
+        </article>
+
+        <article class="card card--breakdown">
+          <h2 class="card__title">Traffic by source</h2>
+          <div class="breakdown" id="breakdown"></div>
+        </article>
+      </section>
+
+      <!-- Recent items table -->
+      <section class="card card--table">
+        <h2 class="card__title">Recent items</h2>
+        <div class="table-scroll" id="recent-host"></div>
+      </section>
+
+      <!-- Global error / empty state -->
+      <div id="error-banner" class="error-banner" hidden role="alert"></div>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

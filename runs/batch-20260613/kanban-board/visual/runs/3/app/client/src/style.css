@@ -1,0 +1,370 @@
+/* ─── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #0f172a;
+  --bg-col:       #1e293b;
+  --bg-col-hover: #263348;
+  --bg-card:      #ffffff;
+  --bg-card-drag: #e0f2fe;
+  --accent:       #3b82f6;
+  --accent-dark:  #2563eb;
+  --text-primary: #f1f5f9;
+  --text-secondary:#94a3b8;
+  --text-card:    #1e293b;
+  --border:       #334155;
+  --border-card:  #e2e8f0;
+  --shadow-card:  0 1px 3px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.12);
+  --shadow-drag:  0 10px 30px rgba(0,0,0,.35);
+  --radius-col:   14px;
+  --radius-card:  10px;
+  --col-width:    300px;
+  --header-h:     60px;
+  --transition:   150ms ease;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+.app-header {
+  height: var(--header-h);
+  background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  position: relative;
+  z-index: 10;
+}
+
+.header-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .8rem;
+  color: rgba(255,255,255,.8);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot--connecting { background: #fbbf24; animation: pulse 1.4s infinite; }
+.dot--connected  { background: #34d399; }
+.dot--error      { background: #f87171; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .4; }
+}
+
+/* ─── Board ────────────────────────────────────────────────────────────────── */
+.board-wrapper {
+  height: calc(100vh - var(--header-h));
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 24px;
+}
+
+.board {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  align-items: flex-start;
+  min-width: max-content;
+}
+
+/* ─── Column ───────────────────────────────────────────────────────────────── */
+.column {
+  width: var(--col-width);
+  background: var(--bg-col);
+  border-radius: var(--radius-col);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+.column.drag-over {
+  background: var(--bg-col-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59,130,246,.3);
+}
+
+.column-header {
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.column-title {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: .2px;
+}
+
+.column-count {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(148,163,184,.12);
+  border-radius: 20px;
+  padding: 2px 8px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ─── Card list ────────────────────────────────────────────────────────────── */
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 60px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.card-list::-webkit-scrollbar { width: 4px; }
+.card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* Drop placeholder */
+.drop-placeholder {
+  height: 60px;
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-card);
+  background: rgba(59,130,246,.06);
+  flex-shrink: 0;
+  pointer-events: none;
+  transition: height var(--transition);
+}
+
+/* ─── Card ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  padding: 12px 14px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition), transform var(--transition), opacity var(--transition);
+  position: relative;
+  color: var(--text-card);
+  font-size: .875rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  transform: translateY(-1px);
+}
+
+.card:active { cursor: grabbing; }
+
+.card.dragging {
+  opacity: .35;
+  box-shadow: none;
+  transform: none;
+  pointer-events: none;
+}
+
+.card.ghost {
+  opacity: 1;
+  box-shadow: var(--shadow-drag);
+  transform: rotate(2deg) scale(1.03);
+  background: var(--bg-card-drag);
+  border-color: var(--accent);
+  cursor: grabbing;
+  pointer-events: none;
+  z-index: 9999;
+  position: fixed;
+}
+
+.card-text {
+  font-size: .875rem;
+  color: var(--text-card);
+  line-height: 1.5;
+}
+
+.card-meta {
+  margin-top: 8px;
+  font-size: .7rem;
+  color: #94a3b8;
+}
+
+/* ─── Add-card form ────────────────────────────────────────────────────────── */
+.add-card-area {
+  padding: 8px 10px 12px;
+  flex-shrink: 0;
+}
+
+.add-card-btn {
+  width: 100%;
+  background: transparent;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-card);
+  color: var(--text-secondary);
+  font-size: .82rem;
+  padding: 9px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition);
+}
+
+.add-card-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(59,130,246,.06);
+}
+
+.add-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-card-form textarea {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-card);
+  color: var(--text-card);
+  font-size: .875rem;
+  padding: 10px 12px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  line-height: 1.5;
+  min-height: 72px;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+
+.add-card-form textarea::placeholder { color: #94a3b8; }
+
+.add-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-add {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.btn-add:hover { background: var(--accent-dark); }
+
+.btn-cancel {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-cancel:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+/* ─── Toast ────────────────────────────────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.toast {
+  background: #1e293b;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  color: var(--text-primary);
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: .82rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  animation: slideIn .25s ease forwards;
+  max-width: 300px;
+}
+
+.toast.error { border-left-color: #f87171; }
+.toast.success { border-left-color: #34d399; }
+
+@keyframes slideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; transform: translateX(20px); }
+}
+
+/* ─── Loading skeleton ─────────────────────────────────────────────────────── */
+.skeleton-col {
+  width: var(--col-width);
+  height: 300px;
+  background: var(--bg-col);
+  border-radius: var(--radius-col);
+  border: 1px solid var(--border);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: .6; }
+  50%       { opacity: 1; }
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+.board-wrapper::-webkit-scrollbar { height: 6px; }
+.board-wrapper::-webkit-scrollbar-track { background: transparent; }
+.board-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }

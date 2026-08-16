@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week Calendar</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="nav-buttons">
+          <button id="btn-prev">Previous</button>
+          <button id="btn-today">Today</button>
+          <button id="btn-next">Next</button>
+        </div>
+        <h2 id="current-week-label"></h2>
+      </header>
+      <main>
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <div class="time-axis-header"></div>
+            <div class="days-header" id="days-header"></div>
+          </div>
+          <div class="calendar-body">
+            <div class="time-axis" id="time-axis"></div>
+            <div class="days-grid" id="days-grid"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="event-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3 id="modal-title">Create Event</h3>
+        <form id="event-form">
+          <input type="hidden" id="event-id" />
+          <div class="form-group">
+            <label for="event-title">Title</label>
+            <input type="text" id="event-title" required />
+          </div>
+          <div class="form-group">
+            <label for="event-start">Start</label>
+            <input type="datetime-local" id="event-start" required />
+          </div>
+          <div class="form-group">
+            <label for="event-end">End</label>
+            <input type="datetime-local" id="event-end" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" id="btn-save">Save</button>
+            <button type="button" id="btn-delete" class="hidden">Delete</button>
+            <button type="button" id="btn-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1 class="header__title">Metrics Dashboard</h1>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-toggle__icon" id="theme-icon">🌙</span>
+      </button>
+    </header>
+    <main class="dashboard" id="dashboard">
+      <div class="loading" id="loading-state">Loading dashboard data…</div>
+      <div class="error-state" id="error-state" style="display:none;">
+        <p>⚠️ Unable to load dashboard data. Please ensure the backend server is running.</p>
+      </div>
+      <div id="dashboard-content" style="display:none;">
+        <section class="stat-cards" id="stat-cards" aria-label="Summary statistics"></section>
+        <div class="dashboard-body">
+          <section class="chart-container card" id="chart-section" aria-label="Time series chart">
+            <h2 class="section-title">Visitors (30 Days)</h2>
+            <div class="chart-wrapper" id="chart-wrapper"></div>
+          </section>
+          <section class="categories-container card" id="categories-section" aria-label="Category breakdown">
+            <h2 class="section-title">Category Breakdown</h2>
+            <div id="categories-list"></div>
+          </section>
+        </div>
+        <section class="table-container card" id="table-section" aria-label="Recent items">
+          <h2 class="section-title">Recent Items</h2>
+          <div class="table-scroll-wrapper">
+            <table class="data-table" id="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Value</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

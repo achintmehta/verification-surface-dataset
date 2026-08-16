@@ -1,0 +1,153 @@
+:root {
+  --available: #2e7d32;
+  --available-bg: #e8f5e9;
+  --held: #f9a825;
+  --held-bg: #fff8e1;
+  --booked: #c62828;
+  --booked-bg: #ffebee;
+  --mine: #1565c0;
+  --mine-bg: #e3f2fd;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  margin: 0;
+  background: #fafafa;
+  color: #222;
+}
+
+header {
+  padding: 1rem 1.5rem;
+  background: #1a1a2e;
+  color: #fff;
+}
+header h1 { margin: 0 0 0.25rem; font-size: 1.4rem; }
+
+.status-line { font-size: 0.85rem; opacity: 0.8; }
+.status-line.live::before { content: '● '; color: #4caf50; }
+.status-line.down::before { content: '● '; color: #e53935; }
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.stage {
+  text-align: center;
+  background: #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  letter-spacing: 0.3em;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: #888;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px 6px 10px 10px;
+  border: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  cursor: default;
+  user-select: none;
+  transition: transform 0.08s ease;
+}
+
+.seat.available {
+  background: var(--available-bg);
+  border-color: var(--available);
+  color: var(--available);
+  cursor: pointer;
+}
+.seat.available:hover { transform: translateY(-2px); }
+.seat.held {
+  background: var(--held-bg);
+  border-color: var(--held);
+  color: var(--held);
+}
+.seat.booked {
+  background: var(--booked-bg);
+  border-color: var(--booked);
+  color: var(--booked);
+  cursor: not-allowed;
+}
+.seat.mine {
+  background: var(--mine-bg);
+  border-color: var(--mine);
+  color: var(--mine);
+  cursor: pointer;
+}
+.seat.selected {
+  outline: 3px solid var(--mine);
+  outline-offset: 1px;
+}
+.seat.conflict {
+  animation: shake 0.4s;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.5rem 0;
+  font-size: 0.8rem;
+}
+.legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+.legend .seat { width: 18px; height: 18px; cursor: default; }
+
+.controls {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 1rem;
+}
+.selection-info { margin-bottom: 0.75rem; font-weight: 500; }
+.buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #1565c0;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled { background: #bbb; cursor: not-allowed; }
+#release-btn { background: #757575; }
+
+.countdown { margin-top: 0.75rem; font-weight: 600; color: var(--held); min-height: 1.2em; }
+.message { margin-top: 0.5rem; min-height: 1.2em; font-size: 0.9rem; }
+.message.error { color: var(--booked); }
+.message.success { color: var(--available); }

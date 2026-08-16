@@ -1,0 +1,344 @@
+/* ------------------------------------------------------------------ */
+/* Reset & base                                                          */
+/* ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-available: #4ade80;
+  --color-available-hover: #22c55e;
+  --color-held: #facc15;
+  --color-held-mine: #f97316;
+  --color-booked: #f87171;
+  --color-selected: #60a5fa;
+  --color-selected-hover: #3b82f6;
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-border: #334155;
+  --color-text: #e2e8f0;
+  --color-muted: #94a3b8;
+  --radius: 6px;
+  --seat-size: 36px;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout                                                               */
+/* ------------------------------------------------------------------ */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 { font-size: 1.4rem; }
+
+main {
+  display: flex;
+  flex: 1;
+  gap: 0;
+}
+
+#seat-map-section {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+}
+
+aside#panel {
+  width: 280px;
+  min-width: 260px;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Connection status dot                                                 */
+/* ------------------------------------------------------------------ */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot.connected    { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+.status-dot.disconnected { background: #f87171; }
+.status-dot.connecting   { background: #facc15; }
+
+/* ------------------------------------------------------------------ */
+/* Legend                                                               */
+/* ------------------------------------------------------------------ */
+#legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.legend-item::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.legend-item.available::before { background: var(--color-available); }
+.legend-item.held::before       { background: var(--color-held); }
+.legend-item.booked::before     { background: var(--color-booked); }
+.legend-item.selected::before   { background: var(--color-selected); }
+
+/* ------------------------------------------------------------------ */
+/* Stage                                                                */
+/* ------------------------------------------------------------------ */
+#stage {
+  width: 60%;
+  max-width: 400px;
+  text-align: center;
+  padding: 8px;
+  background: var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--color-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Seat map                                                             */
+/* ------------------------------------------------------------------ */
+#seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.row-label {
+  width: 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+  user-select: none;
+  position: relative;
+}
+
+.seat:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.seat.available {
+  background: var(--color-available);
+  color: #052e16;
+}
+.seat.available:hover {
+  background: var(--color-available-hover);
+  transform: scale(1.1);
+}
+
+.seat.held {
+  background: var(--color-held);
+  color: #422006;
+  cursor: not-allowed;
+}
+
+.seat.held-mine {
+  background: var(--color-held-mine);
+  color: #fff;
+  cursor: default;
+  border-color: #fb923c;
+}
+
+.seat.booked {
+  background: var(--color-booked);
+  color: #450a0a;
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background: var(--color-selected);
+  color: #fff;
+  border-color: #93c5fd;
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+}
+
+.seat.flash {
+  animation: flash 0.4s ease;
+}
+
+@keyframes flash {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Panel                                                                */
+/* ------------------------------------------------------------------ */
+#inventory h2,
+#action-panel h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+.inv-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.inv-row.total {
+  font-weight: 700;
+  border-bottom: none;
+  margin-top: 4px;
+}
+
+#selection-info {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+#selected-seats-label,
+#hold-info,
+#booked-info {
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------ */
+/* Countdown bar                                                        */
+/* ------------------------------------------------------------------ */
+#countdown-bar {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+#countdown-fill {
+  height: 100%;
+  background: var(--color-held-mine);
+  border-radius: 3px;
+  transition: width 1s linear, background 1s;
+  width: 100%;
+}
+
+#countdown-fill.urgent { background: var(--color-booked); }
+
+#countdown-label {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-bottom: 12px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Buttons                                                              */
+/* ------------------------------------------------------------------ */
+button {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+button:hover  { opacity: 0.9; }
+button:active { transform: scale(0.98); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+button.primary   { background: #3b82f6; color: #fff; }
+button.secondary { background: var(--color-border); color: var(--color-text); }
+
+#btn-hold        { background: var(--color-available-hover); color: #052e16; margin-top: 8px; }
+#btn-new-booking { background: var(--color-border); color: var(--color-text); margin-top: 8px; }
+#btn-dismiss-error { background: var(--color-border); color: var(--color-text); margin-top: 8px; }
+
+.btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Error                                                                */
+/* ------------------------------------------------------------------ */
+.error-text {
+  color: var(--color-booked);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------ */
+/* Utility                                                              */
+/* ------------------------------------------------------------------ */
+.hidden { display: none !important; }
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                           */
+/* ------------------------------------------------------------------ */
+@media (max-width: 700px) {
+  main { flex-direction: column; }
+  aside#panel { width: 100%; border-left: none; border-top: 1px solid var(--color-border); }
+  :root { --seat-size: 30px; }
+}

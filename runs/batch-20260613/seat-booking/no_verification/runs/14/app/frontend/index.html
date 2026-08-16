@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>🎟️ Event Seat Booking</h1>
+      <div class="inventory" id="inventory">
+        <span class="chip chip-available"><b id="cnt-available">–</b> available</span>
+        <span class="chip chip-held"><b id="cnt-held">–</b> held</span>
+        <span class="chip chip-booked"><b id="cnt-booked">–</b> booked</span>
+        <span class="conn" id="conn-status" title="Live connection status">●</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage">SCREEN / STAGE</section>
+
+      <section class="seatmap-wrap">
+        <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+      </section>
+
+      <section class="legend">
+        <span class="legend-item"><span class="swatch s-available"></span> Available</span>
+        <span class="legend-item"><span class="swatch s-selected"></span> Selected</span>
+        <span class="legend-item"><span class="swatch s-held"></span> Held (other)</span>
+        <span class="legend-item"><span class="swatch s-myhold"></span> Your hold</span>
+        <span class="legend-item"><span class="swatch s-booked"></span> Booked</span>
+      </section>
+
+      <section class="controls">
+        <div id="selection-info" class="selection-info">No seats selected.</div>
+        <div class="buttons">
+          <button id="btn-hold" disabled>Hold selected seats</button>
+          <button id="btn-confirm" class="primary" disabled>Confirm booking</button>
+          <button id="btn-release" class="danger" disabled>Release hold</button>
+        </div>
+        <div id="countdown" class="countdown hidden"></div>
+        <div id="message" class="message" role="status"></div>
+      </section>
+
+      <footer class="session-info">
+        Session: <code id="session-id"></code>
+      </footer>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

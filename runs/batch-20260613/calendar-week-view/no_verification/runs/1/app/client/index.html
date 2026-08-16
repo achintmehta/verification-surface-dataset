@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top navigation bar -->
+    <header id="cal-header">
+      <div class="nav-controls">
+        <button id="btn-prev" aria-label="Previous week">&#8592; Prev</button>
+        <button id="btn-today">Today</button>
+        <button id="btn-next" aria-label="Next week">Next &#8594;</button>
+      </div>
+      <h1 id="week-label"></h1>
+    </header>
+
+    <!-- Day-header row (fixed, not scrollable) -->
+    <div id="day-headers-bar">
+      <!-- gutter spacer -->
+      <div id="gutter-spacer"></div>
+      <!-- day header cells injected by JS -->
+      <div id="day-headers"></div>
+    </div>
+
+    <!-- Scrollable time grid -->
+    <div id="scroll-area">
+      <!-- Time gutter -->
+      <div id="time-gutter"></div>
+      <!-- Day columns -->
+      <div id="days-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div id="modal-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="modal-box">
+      <h2 id="modal-title">Event</h2>
+      <form id="event-form" novalidate>
+        <label for="f-title">Title</label>
+        <input id="f-title" type="text" placeholder="Event title" required autocomplete="off" />
+
+        <label for="f-start">Start</label>
+        <input id="f-start" type="datetime-local" required />
+
+        <label for="f-end">End</label>
+        <input id="f-end" type="datetime-local" required />
+
+        <div id="form-error" class="form-error hidden"></div>
+
+        <div class="form-actions">
+          <button type="submit" id="btn-save">Save</button>
+          <button type="button" id="btn-delete" class="hidden danger">Delete</button>
+          <button type="button" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

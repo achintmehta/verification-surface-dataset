@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>🎟️ Live Seat Booking</h1>
+      <div class="status">
+        <span id="connection" class="conn conn--connecting">connecting…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="legend">
+        <span class="legend-item"><span class="swatch seat available"></span> Available</span>
+        <span class="legend-item"><span class="swatch seat held-mine"></span> Your hold</span>
+        <span class="legend-item"><span class="swatch seat held"></span> Held (others)</span>
+        <span class="legend-item"><span class="swatch seat booked"></span> Booked</span>
+        <span class="legend-item"><span class="swatch seat selected"></span> Selected</span>
+      </section>
+
+      <section class="screen">SCREEN</section>
+
+      <section id="seatmap" class="seatmap" aria-label="Seat map"></section>
+
+      <section class="inventory" id="inventory">
+        <span class="inv inv--available">Available: <strong id="count-available">–</strong></span>
+        <span class="inv inv--held">Held: <strong id="count-held">–</strong></span>
+        <span class="inv inv--booked">Booked: <strong id="count-booked">–</strong></span>
+        <span class="inv inv--total">Total: <strong id="count-total">–</strong></span>
+      </section>
+
+      <section class="controls">
+        <div class="selection-info">
+          <span id="selection-text">No seats selected</span>
+        </div>
+        <div class="buttons">
+          <button id="hold-btn" disabled>Hold selected seats</button>
+          <button id="confirm-btn" disabled>Confirm booking</button>
+          <button id="release-btn" disabled>Release hold</button>
+        </div>
+        <div id="hold-status" class="hold-status hidden">
+          <span id="hold-countdown"></span>
+        </div>
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span id="session-label"></span>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

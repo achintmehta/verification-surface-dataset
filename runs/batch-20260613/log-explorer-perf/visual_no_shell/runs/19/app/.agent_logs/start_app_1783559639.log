@@ -1,0 +1,34 @@
+
+> log-explorer@1.0.0 dev
+> concurrently "npm run dev --prefix backend" "npm run dev --prefix frontend"
+
+[1] 
+[1] > frontend@1.0.0 dev
+[1] > vite --port 5173
+[1] 
+[0] 
+[0] > backend@1.0.0 dev
+[0] > node test-perf.js
+[0] 
+[1] 
+[1]   VITE v5.4.21  ready in 376 ms
+[1] 
+[1]   ➜  Local:   http://localhost:5173/
+[1]   ➜  Network: use --host to expose
+[0] node:fs:596
+[0]   handleErrorFromBinding(ctx);
+[0]   ^
+[0] 
+[0] Error: ENOENT: no such file or directory, open 'backend/perf-out.txt'
+[0]     at Object.openSync (node:fs:596:3)
+[0]     at Object.writeFileSync (node:fs:2322:35)
+[0]     at test (file:///mnt/d/eval-coding-agent-runs/runs/batch-20260613/log-explorer-perf/visual_no_shell/runs/19/app/backend/test-perf.js:25:6) {
+[0]   errno: -2,
+[0]   syscall: 'open',
+[0]   code: 'ENOENT',
+[0]   path: 'backend/perf-out.txt'
+[0] }
+[0] 
+[0] Node.js v18.20.8
+[0] npm run dev --prefix backend exited with code 1
+[1] npm run dev --prefix frontend exited with code SIGTERM

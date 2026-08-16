@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <h1 class="header__title">📊 Metrics Dashboard</h1>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-toggle__icon" id="theme-icon">🌙</span>
+      <span class="theme-toggle__label" id="theme-label">Dark</span>
+    </button>
+  </header>
+
+  <main class="dashboard" id="dashboard">
+    <!-- Loading state -->
+    <div class="loading" id="loading-state">
+      <p>Loading dashboard data…</p>
+    </div>
+
+    <!-- Error state -->
+    <div class="error-state" id="error-state" style="display:none;">
+      <p>⚠️ Unable to load dashboard data. Please ensure the backend server is running.</p>
+    </div>
+
+    <!-- Dashboard content (hidden until data loads) -->
+    <div class="dashboard__content" id="dashboard-content" style="display:none;">
+      <!-- Stat cards -->
+      <section class="stat-cards" id="stat-cards">
+        <div class="stat-card" id="card-visitors">
+          <span class="stat-card__label">Total Visitors</span>
+          <span class="stat-card__value" id="stat-visitors">—</span>
+        </div>
+        <div class="stat-card" id="card-revenue">
+          <span class="stat-card__label">Total Revenue</span>
+          <span class="stat-card__value" id="stat-revenue">—</span>
+        </div>
+        <div class="stat-card" id="card-bestday">
+          <span class="stat-card__label">Best Day</span>
+          <span class="stat-card__value" id="stat-bestday">—</span>
+          <span class="stat-card__sub" id="stat-bestday-date"></span>
+        </div>
+        <div class="stat-card" id="card-trend">
+          <span class="stat-card__label">7-Day Trend</span>
+          <span class="stat-card__value" id="stat-trend">—</span>
+          <span class="stat-card__indicator" id="stat-trend-indicator"></span>
+        </div>
+      </section>
+
+      <!-- Charts row -->
+      <section class="charts-row">
+        <div class="chart-container" id="timeseries-container">
+          <h2 class="section-title">Visitors — Last 30 Days</h2>
+          <div class="chart-wrapper" id="timeseries-wrapper">
+            <svg id="timeseries-chart" width="100%" height="300"></svg>
+          </div>
+        </div>
+        <div class="chart-container" id="categories-container">
+          <h2 class="section-title">Category Breakdown</h2>
+          <div class="bars-wrapper" id="categories-wrapper"></div>
+        </div>
+      </section>
+
+      <!-- Recent items table -->
+      <section class="table-container">
+        <h2 class="section-title">Recent Items</h2>
+        <div class="table-scroll">
+          <table class="data-table" id="recent-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th class="text-right">Value</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

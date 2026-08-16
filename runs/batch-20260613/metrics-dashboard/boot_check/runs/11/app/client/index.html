@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="topbar__inner">
+          <h1 class="topbar__title">Metrics Dashboard</h1>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+            <span class="theme-toggle__icon" aria-hidden="true"></span>
+            <span class="theme-toggle__label">Theme</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <div id="error-banner" class="error-banner" hidden>
+          <strong>Unable to load data.</strong>
+          <span id="error-detail">The backend is unreachable. Start the server and reload.</span>
+          <button id="retry" type="button" class="retry-btn">Retry</button>
+        </div>
+
+        <section class="stat-grid" id="stat-grid" aria-label="Summary statistics">
+          <!-- stat cards injected here -->
+        </section>
+
+        <section class="body-grid">
+          <article class="card chart-card">
+            <header class="card__head">
+              <h2 class="card__title">Visitors — last 30 days</h2>
+            </header>
+            <div class="chart-container" id="chart-container">
+              <svg id="chart" class="chart" role="img" aria-label="30-day visitor time series"></svg>
+            </div>
+          </article>
+
+          <article class="card breakdown-card">
+            <header class="card__head">
+              <h2 class="card__title">Category breakdown</h2>
+            </header>
+            <div class="breakdown" id="breakdown">
+              <!-- bars injected here -->
+            </div>
+          </article>
+
+          <article class="card table-card">
+            <header class="card__head">
+              <h2 class="card__title">Recent items</h2>
+            </header>
+            <div class="table-wrap">
+              <table class="data-table" id="recent-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="num">Value</th>
+                    <th scope="col">Created</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-body"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

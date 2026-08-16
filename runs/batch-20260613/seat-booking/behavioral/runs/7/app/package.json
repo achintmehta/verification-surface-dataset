@@ -1,0 +1,22 @@
+{
+  "name": "seat-booking",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "node server/index.js",
+    "dev": "concurrently \"npm:server\" \"npm:client\"",
+    "test": "node --check server/index.js && node --check src/main.js",
+    "client": "vite --host 0.0.0.0",
+    "dev:client": "vite --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "latest",
+    "@vitejs/plugin-basic-ssl": "latest",
+    "concurrently": "latest",
+    "cors": "latest",
+    "express": "latest",
+    "vite": "latest"
+  }
+}

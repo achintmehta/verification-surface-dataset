@@ -1,0 +1,601 @@
+/* ============================================================
+   CSS Custom Properties — Light theme (default)
+   ============================================================ */
+:root {
+  /* Colours */
+  --color-bg:           #f4f6f9;
+  --color-surface:      #ffffff;
+  --color-surface-alt:  #f0f2f5;
+  --color-border:       #e2e6ea;
+  --color-text:         #1a202c;
+  --color-text-muted:   #6b7280;
+  --color-text-inverse: #ffffff;
+  --color-primary:      #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-success:      #10b981;
+  --color-danger:       #ef4444;
+  --color-warning:      #f59e0b;
+
+  /* Chart colours */
+  --color-chart-line:       #3b82f6;
+  --color-chart-fill-start: rgba(59, 130, 246, 0.25);
+  --color-chart-fill-end:   rgba(59, 130, 246, 0.0);
+  --color-chart-grid:       #e2e6ea;
+  --color-chart-axis:       #9ca3af;
+  --color-chart-label:      #6b7280;
+  --color-chart-dot:        #3b82f6;
+  --color-chart-dot-bg:     #ffffff;
+  --color-bar:              #3b82f6;
+  --color-bar-bg:           #e2e6ea;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Spacing */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Radii */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+
+  /* Layout */
+  --header-height: 3.5rem;
+  --content-max-width: 1400px;
+  --content-padding: var(--space-4);
+}
+
+/* ============================================================
+   Dark theme
+   ============================================================ */
+[data-theme="dark"] {
+  --color-bg:           #0f1117;
+  --color-surface:      #1a1d27;
+  --color-surface-alt:  #22263a;
+  --color-border:       #2d3148;
+  --color-text:         #e2e8f0;
+  --color-text-muted:   #94a3b8;
+  --color-text-inverse: #0f1117;
+  --color-primary:      #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-success:      #34d399;
+  --color-danger:       #f87171;
+  --color-warning:      #fbbf24;
+
+  --color-chart-line:       #60a5fa;
+  --color-chart-fill-start: rgba(96, 165, 250, 0.2);
+  --color-chart-fill-end:   rgba(96, 165, 250, 0.0);
+  --color-chart-grid:       #2d3148;
+  --color-chart-axis:       #4b5563;
+  --color-chart-label:      #94a3b8;
+  --color-chart-dot:        #60a5fa;
+  --color-chart-dot-bg:     #1a1d27;
+  --color-bar:              #60a5fa;
+  --color-bar-bg:           #2d3148;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.25);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.25);
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  /* Prevent horizontal overflow at the root */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+img, svg, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.header__logo {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.header__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   Theme Toggle
+   ============================================================ */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--color-border);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Show sun in dark mode, moon in light mode */
+[data-theme="dark"] .theme-toggle__icon--moon { display: none; }
+[data-theme="dark"] .theme-toggle__icon--sun  { display: block; }
+.theme-toggle__icon--moon { display: block; }
+.theme-toggle__icon--sun  { display: none; }
+
+/* ============================================================
+   Main layout
+   ============================================================ */
+.main {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--content-padding);
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.section {
+  margin-bottom: var(--space-6);
+}
+
+/* ============================================================
+   State overlays (loading / error)
+   ============================================================ */
+.state-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: 60vh;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.state-overlay--error {
+  color: var(--color-text);
+}
+
+.state-overlay__icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-danger);
+}
+
+.state-overlay h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.state-overlay p {
+  max-width: 30rem;
+  color: var(--color-text-muted);
+}
+
+/* Spinner */
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-dark);
+}
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  /* Prevent card content from overflowing */
+  min-width: 0;
+  overflow: hidden;
+}
+
+.card__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-4);
+}
+
+/* ============================================================
+   Stat Grid — responsive 1 / 2 / 4 columns
+   ============================================================ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* 2 columns at 640px */
+@media (min-width: 640px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 4 columns at 1024px */
+@media (min-width: 1024px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================================
+   Stat Card
+   ============================================================ */
+.stat-card {
+  /* inherits .card */
+}
+
+.stat-card__label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-card__value {
+  font-size: clamp(1.375rem, 3vw, 1.875rem);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+  /* Allow large numbers to wrap rather than overflow */
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.stat-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  font-size: 0.8125rem;
+}
+
+.stat-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 600;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.stat-card__trend--up {
+  color: var(--color-success);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.stat-card__trend--down {
+  color: var(--color-danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.stat-card__trend--neutral {
+  color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+}
+
+.stat-card__trend-arrow {
+  font-size: 0.75rem;
+}
+
+.stat-card__sub {
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   Charts Grid — 1 column / 2 columns at 1024px
+   ============================================================ */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+.chart-card {
+  /* inherits .card */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   Time-series chart
+   ============================================================ */
+.chart-container {
+  position: relative;
+  width: 100%;
+  /* Maintain a sensible aspect ratio; canvas fills this */
+  aspect-ratio: 16 / 7;
+  min-height: 180px;
+  overflow: hidden;
+}
+
+.chart-container canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ============================================================
+   Category bars
+   ============================================================ */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.category-row {
+  display: grid;
+  /* label | bar | value — label gets remaining space, bar is flexible, value is fixed */
+  grid-template-columns: minmax(0, 1fr) minmax(60px, 2fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.category-row__label {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.category-row__bar-track {
+  height: 0.5rem;
+  background: var(--color-bar-bg);
+  border-radius: 9999px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.category-row__bar-fill {
+  height: 100%;
+  background: var(--color-bar);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.category-row__value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  text-align: right;
+  min-width: 4.5rem;
+}
+
+/* ============================================================
+   Recent items table
+   ============================================================ */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Ensure the wrapper itself doesn't cause page-level overflow */
+  max-width: 100%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  /* Table must not force page-level scroll */
+  min-width: 0;
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  /* Prevent cells from overflowing */
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+  position: sticky;
+  top: 0;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover td {
+  background: var(--color-surface-alt);
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/* On narrow screens, give the table a minimum width so it scrolls
+   within its wrapper rather than forcing page overflow */
+@media (max-width: 639px) {
+  .data-table {
+    min-width: 480px;
+  }
+
+  /* Name column gets more space */
+  .data-table th:first-child,
+  .data-table td:first-child {
+    min-width: 140px;
+  }
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+[hidden] {
+  display: none !important;
+}
+
+/* Ensure nothing bleeds outside the viewport */
+#app {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ============================================================
+   Responsive content padding
+   ============================================================ */
+@media (min-width: 640px) {
+  :root {
+    --content-padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --content-padding: 2rem;
+  }
+}

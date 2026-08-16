@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Board – Preview</title>
+    <style>
+/* ================================================================
+   Message Board – Stylesheet (inlined for preview)
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --clr-bg:          #0f1117;
+  --clr-surface:     #1a1d27;
+  --clr-surface-2:   #22263a;
+  --clr-border:      #2e3350;
+  --clr-accent:      #6c63ff;
+  --clr-accent-h:    #8b85ff;
+  --clr-accent-glow: rgba(108, 99, 255, 0.35);
+  --clr-text:        #e2e4f0;
+  --clr-text-muted:  #7b82a8;
+  --clr-success:     #3ecf8e;
+  --clr-error:       #f87171;
+  --clr-own-bg:      #1e2040;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --transition: 180ms ease;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  flex-shrink: 0;
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+  padding: 0 1.25rem;
+}
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.header__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.header__icon { font-size: 1.3rem; }
+.header__badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-text-muted);
+  background: var(--clr-surface-2);
+}
+.header__badge.connected {
+  color: var(--clr-success);
+  border-color: var(--clr-success);
+  background: rgba(62, 207, 142, 0.1);
+}
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Feed */
+.feed-section { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  scroll-behavior: smooth;
+}
+.feed::-webkit-scrollbar { width: 6px; }
+.feed::-webkit-scrollbar-track { background: transparent; }
+.feed::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 999px; }
+
+/* Message bubble */
+.message { display: flex; flex-direction: column; gap: 0.25rem; max-width: 88%; }
+.message__bubble {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-sm);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.message__time {
+  font-size: 0.7rem;
+  color: var(--clr-text-muted);
+  padding-left: 0.25rem;
+}
+.message--new .message__bubble {
+  border-color: var(--clr-accent);
+  background: var(--clr-own-bg);
+  box-shadow: 0 0 0 1px var(--clr-accent-glow);
+}
+
+/* Compose */
+.compose-section {
+  flex-shrink: 0;
+  background: var(--clr-surface);
+  border-top: 1px solid var(--clr-border);
+  padding: 1rem 1.25rem;
+}
+.compose__label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--clr-text-muted);
+  margin-bottom: 0.5rem;
+}
+.compose__row { display: flex; gap: 0.75rem; align-items: flex-end; }
+.compose__input {
+  flex: 1;
+  background: var(--clr-surface-2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  color: var(--clr-text);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  padding: 0.6rem 0.85rem;
+  resize: none;
+  outline: none;
+}
+.compose__input::placeholder { color: var(--clr-text-muted); }
+.compose__btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--clr-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0 1.1rem;
+  height: 42px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.compose__btn-icon { font-size: 0.8rem; }
+.compose__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.4rem;
+  min-height: 1.1rem;
+}
+.compose__error { font-size: 0.75rem; color: var(--clr-error); }
+.compose__counter { font-size: 0.72rem; color: var(--clr-text-muted); font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="header__inner">
+          <h1 class="header__title">
+            <span class="header__icon">💬</span>
+            Message Board
+          </h1>
+          <span class="header__badge connected" id="status-badge">● live</span>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="feed-section">
+          <div class="feed" id="feed" role="log" aria-live="polite" aria-label="Message feed">
+            <!-- Seeded messages for preview -->
+            <article class="message">
+              <div class="message__bubble">Hello, world! This is the first message.</div>
+              <time class="message__time">Jun 14, 10:09 AM</time>
+            </article>
+            <article class="message">
+              <div class="message__bubble">Real-time updates via SSE are working great!</div>
+              <time class="message__time">Jun 14, 10:09 AM</time>
+            </article>
+            <article class="message">
+              <div class="message__bubble">PGLite embedded PostgreSQL is amazing 🚀</div>
+              <time class="message__time">Jun 14, 10:09 AM</time>
+            </article>
+            <article class="message">
+              <div class="message__bubble">Anyone else loving how lightweight this stack is? No external DB needed!</div>
+              <time class="message__time">Jun 14, 10:10 AM</time>
+            </article>
+            <article class="message message--new">
+              <div class="message__bubble">Just joined — this is so cool. SSE keeps everything in sync instantly ✨</div>
+              <time class="message__time">Jun 14, 10:11 AM</time>
+            </article>
+          </div>
+        </section>
+
+        <section class="compose-section">
+          <form class="compose" id="compose-form" novalidate>
+            <label class="compose__label" for="message-input">New message</label>
+            <div class="compose__row">
+              <textarea
+                class="compose__input"
+                id="message-input"
+                name="text"
+                placeholder="Type your message…"
+                rows="2"
+                maxlength="2000"
+                required
+                autocomplete="off"
+              ></textarea>
+              <button class="compose__btn" type="submit" id="send-btn">
+                <span class="compose__btn-text">Send</span>
+                <span class="compose__btn-icon" aria-hidden="true">➤</span>
+              </button>
+            </div>
+            <div class="compose__meta">
+              <span class="compose__error" id="compose-error" role="alert"></span>
+              <span class="compose__counter" id="char-counter">0 / 2000</span>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

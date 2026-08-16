@@ -1,0 +1,307 @@
+/* ============================================================
+   Reset & base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --col-width:      300px;
+  --col-gap:        16px;
+  --card-radius:    8px;
+  --col-radius:     10px;
+  --header-h:       56px;
+
+  --bg:             #0f172a;
+  --surface:        #1e293b;
+  --surface-2:      #273449;
+  --border:         #334155;
+  --accent:         #6366f1;
+  --accent-hover:   #818cf8;
+  --text:           #e2e8f0;
+  --text-muted:     #94a3b8;
+  --danger:         #ef4444;
+
+  --shadow-card:    0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-drag:    0 8px 24px rgba(0,0,0,.6);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.app-header {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+}
+
+.app-header h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  flex: 1;
+}
+
+.connection-status {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  transition: color .3s;
+}
+.connection-status.connected    { color: #22c55e; }
+.connection-status.disconnected { color: var(--danger); }
+
+/* ============================================================
+   Board
+   ============================================================ */
+.board {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--col-gap);
+  padding: calc(var(--header-h) + 24px) 24px 24px;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.board-loading {
+  color: var(--text-muted);
+  font-size: .95rem;
+  padding: 24px;
+}
+
+/* ============================================================
+   Column
+   ============================================================ */
+.column {
+  flex: 0 0 var(--col-width);
+  width: var(--col-width);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--col-radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-h) - 48px);
+}
+
+.column-header {
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.column-title {
+  font-size: .9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.column-count {
+  font-size: .75rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 8px;
+  color: var(--text-muted);
+}
+
+.card-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 48px;
+}
+
+/* Scrollbar */
+.card-list::-webkit-scrollbar { width: 4px; }
+.card-list::-webkit-scrollbar-track { background: transparent; }
+.card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ============================================================
+   Card
+   ============================================================ */
+.card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 10px 12px;
+  font-size: .875rem;
+  line-height: 1.5;
+  cursor: grab;
+  user-select: none;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .15s, border-color .15s, opacity .15s;
+  word-break: break-word;
+}
+
+.card:hover {
+  border-color: var(--accent);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: .35;
+  cursor: grabbing;
+}
+
+/* ============================================================
+   Drop indicator
+   ============================================================ */
+.drop-indicator {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  margin: -4px 0;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* Column drop-target highlight */
+.column.drag-over .card-list {
+  background: rgba(99,102,241,.06);
+  border-radius: 6px;
+}
+
+/* ============================================================
+   Add-card button
+   ============================================================ */
+.add-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: .85rem;
+  cursor: pointer;
+  border-radius: 0 0 var(--col-radius) var(--col-radius);
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+}
+
+.add-card-btn:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.add-card-btn .icon { font-size: 1.1rem; line-height: 1; }
+
+/* ============================================================
+   Modal / dialog
+   ============================================================ */
+dialog {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  width: min(420px, 90vw);
+  color: var(--text);
+  box-shadow: 0 20px 60px rgba(0,0,0,.7);
+}
+
+dialog::backdrop {
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(2px);
+}
+
+dialog h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+dialog label {
+  display: block;
+  font-size: .8rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+dialog textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: .9rem;
+  padding: 10px 12px;
+  resize: vertical;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .15s;
+}
+
+dialog textarea:focus {
+  border-color: var(--accent);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: .875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}

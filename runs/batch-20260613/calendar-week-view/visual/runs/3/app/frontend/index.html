@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --hour-height: 60px;
+  --gutter-width: 56px;
+  --header-height: 56px;
+  --total-height: 1440px;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-border: #e0e0e0;
+  --color-border-light: #eeeeee;
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --color-primary: #4f46e5;
+  --color-primary-light: #eef2ff;
+  --color-today: #fef3c7;
+  --color-today-header: #f59e0b;
+  --color-danger: #ef4444;
+  --radius: 6px;
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.1);
+}
+
+html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--color-bg); color: var(--color-text); font-size: 14px; line-height: 1.5; }
+#app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* Header */
+.cal-header { display: flex; align-items: center; gap: 16px; padding: 10px 20px; background: var(--color-surface); border-bottom: 1px solid var(--color-border); flex-shrink: 0; z-index: 10; }
+.cal-nav { display: flex; align-items: center; gap: 6px; }
+.nav-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); cursor: pointer; font-size: 18px; transition: background 0.15s; }
+.nav-btn:hover { background: var(--color-primary-light); border-color: var(--color-primary); color: var(--color-primary); }
+.today-btn { width: auto; padding: 0 12px; font-size: 13px; font-weight: 500; }
+.week-label { font-size: 18px; font-weight: 600; }
+
+/* Calendar container */
+.calendar-container { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+.grid-outer { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+
+/* Header row */
+.grid-header-row { display: flex; flex-shrink: 0; border-bottom: 2px solid var(--color-border); background: var(--color-surface); z-index: 5; }
+.grid-corner { width: var(--gutter-width); flex-shrink: 0; border-right: 1px solid var(--color-border); background: var(--color-surface); }
+.day-headers { flex: 1; display: grid; grid-template-columns: repeat(7, 1fr); }
+.day-header { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-right: 1px solid var(--color-border); cursor: default; user-select: none; min-height: var(--header-height); }
+.day-header:last-child { border-right: none; }
+.day-header.today { background: var(--color-today); }
+.day-header .day-name { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); }
+.day-header.today .day-name { color: var(--color-today-header); }
+.day-header .day-num { font-size: 22px; font-weight: 700; line-height: 1.1; }
+.day-header.today .day-num { color: var(--color-today-header); }
+
+/* Body row */
+.grid-body-row { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+.time-gutter { width: var(--gutter-width); flex-shrink: 0; overflow: hidden; border-right: 1px solid var(--color-border); background: var(--color-surface); position: relative; z-index: 3; }
+.time-gutter-inner { position: relative; height: var(--total-height); }
+.time-label { position: absolute; right: 6px; font-size: 10px; font-weight: 500; color: var(--color-text-muted); transform: translateY(-50%); white-space: nowrap; user-select: none; }
+
+/* Scrollable body */
+.grid-body-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
+.grid-body { position: relative; height: var(--total-height); }
+
+/* Hour lines */
+.hour-lines { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hour-line { position: absolute; left: 0; right: 0; height: 0; border-top: 1px solid var(--color-border); }
+.hour-line.half { border-top: 1px dashed var(--color-border-light); }
+
+/* Day columns */
+.day-columns { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(7, 1fr); z-index: 1; }
+.day-col { position: relative; border-right: 1px solid var(--color-border); overflow: hidden; cursor: crosshair; }
+.day-col:last-child { border-right: none; }
+.day-col.today { background: rgba(254,243,199,0.18); }
+
+/* Current time indicator */
+.now-line {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: #ef4444; z-index: 4; pointer-events: none;
+}
+.now-line::before {
+  content: ''; position: absolute; left: -4px; top: -4px;
+  width: 10px; height: 10px; border-radius: 50%; background: #ef4444;
+}
+
+/* Drag selection */
+.drag-selection { position: absolute; left: 2px; right: 2px; background: rgba(79,70,229,0.15); border: 2px solid rgba(79,70,229,0.5); border-radius: 4px; pointer-events: none; z-index: 5; }
+
+/* Event blocks */
+.event-block { position: absolute; border-radius: 4px; padding: 3px 5px; overflow: hidden; cursor: pointer; user-select: none; z-index: 2; border-left: 3px solid rgba(0,0,0,0.2); display: flex; flex-direction: column; min-height: 18px; }
+.event-block:hover { filter: brightness(1.08); box-shadow: 0 2px 8px rgba(0,0,0,0.25); z-index: 10; }
+.event-title { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.event-time  { font-size: 10px; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+
+/* Scrollbar */
+.grid-body-scroll::-webkit-scrollbar { width: 8px; }
+.grid-body-scroll::-webkit-scrollbar-track { background: var(--color-bg); }
+.grid-body-scroll::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+.grid-body-scroll::-webkit-scrollbar-thumb:hover { background: #c0c0c0; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(2px); }
+.modal-overlay.hidden { display: none; }
+.modal { background: var(--color-surface); border-radius: 12px; padding: 28px 32px; width: 420px; max-width: 95vw; box-shadow: var(--shadow-lg); position: relative; animation: modal-in 0.18s ease-out; }
+@keyframes modal-in { from { opacity: 0; transform: scale(0.95) translateY(-8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--color-text-muted); padding: 2px 6px; border-radius: 4px; line-height: 1; }
+.modal-close:hover { background: var(--color-border); }
+.modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 6px; }
+.form-group input { width: 100%; padding: 9px 12px; border: 1.5px solid var(--color-border); border-radius: var(--radius); font-size: 14px; color: var(--color-text); background: var(--color-surface); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.form-group input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.12); }
+.form-error { background: #fef2f2; border: 1px solid #fecaca; color: var(--color-danger); border-radius: var(--radius); padding: 8px 12px; font-size: 13px; margin-bottom: 14px; }
+.form-error.hidden { display: none; }
+.form-actions { display: flex; gap: 10px; margin-top: 20px; }
+.btn-primary { flex: 1; padding: 10px 16px; background: var(--color-primary); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.btn-primary:hover { background: #4338ca; }
+.btn-danger { padding: 10px 16px; background: var(--color-danger); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.btn-danger:hover { background: #dc2626; }
+.btn-danger.hidden { display: none; }
+.btn-secondary { padding: 10px 16px; background: var(--color-surface); color: var(--color-text); border: 1.5px solid var(--color-border); border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+.btn-secondary:hover { background: var(--color-bg); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="cal-header">
+      <div class="cal-nav">
+        <button id="btn-prev" class="nav-btn" title="Previous week">&#8249;</button>
+        <button id="btn-today" class="nav-btn today-btn">Today</button>
+        <button id="btn-next" class="nav-btn" title="Next week">&#8250;</button>
+      </div>
+      <h1 id="week-label" class="week-label"></h1>
+    </header>
+    <div class="calendar-container">
+      <div class="grid-outer">
+        <div class="grid-header-row">
+          <div class="grid-corner"></div>
+          <div class="day-headers" id="day-headers"></div>
+        </div>
+        <div class="grid-body-row">
+          <div class="time-gutter" id="time-gutter">
+            <div class="time-gutter-inner" id="time-gutter-inner"></div>
+          </div>
+          <div class="grid-body-scroll" id="grid-body-scroll">
+            <div class="grid-body" id="grid-body">
+              <div class="hour-lines" id="hour-lines"></div>
+              <div class="day-columns" id="day-columns"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <h2 id="modal-title">New Event</h2>
+      <form id="event-form">
+        <div class="form-group">
+          <label for="input-title">Title</label>
+          <input type="text" id="input-title" placeholder="Event title" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="input-start">Start</label>
+          <input type="datetime-local" id="input-start" />
+        </div>
+        <div class="form-group">
+          <label for="input-end">End</label>
+          <input type="datetime-local" id="input-end" />
+        </div>
+        <div id="form-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="btn-save">Save</button>
+          <button type="button" class="btn-danger hidden" id="btn-delete">Delete</button>
+          <button type="button" class="btn-secondary" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+// ─── Config ───────────────────────────────────────────────────────────────────
+const API_BASE     = 'http://localhost:3001';
+const HOUR_HEIGHT  = 60;
+const TOTAL_HEIGHT = HOUR_HEIGHT * 24;
+const DAY_NAMES    = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const EVENT_COLORS = ['#4f46e5','#0891b2','#059669','#d97706','#dc2626','#7c3aed','#db2777','#0284c7'];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function getWeekStart(date) {
+  const d = new Date(date), day = d.getDay();
+  d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day));
+  d.setHours(0,0,0,0); return d;
+}
+function getWeekDays(ws) {
+  return Array.from({length:7}, (_,i) => { const d=new Date(ws); d.setDate(d.getDate()+i); return d; });
+}
+function fmtWeekRange(ws) {
+  const we = new Date(ws); we.setDate(we.getDate()+6);
+  const o = {month:'short',day:'numeric'};
+  return ws.toLocaleDateString(undefined,o)+' \u2013 '+we.toLocaleDateString(undefined,{...o,year:'numeric'});
+}
+function toDatetimeLocal(d) {
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function fmtTime(d) { return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function snapMins(m) { return Math.round(m/15)*15; }
+function clamp(v,a,b) { return Math.max(a,Math.min(b,v)); }
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ─── Layout engine ────────────────────────────────────────────────────────────
+function computeLayout(evts, dayStart) {
+  if (!evts || !evts.length) return [];
+  const dayStartMs = dayStart.getTime();
+  const MINS = 24*60;
+
+  const items = evts.map(ev => {
+    const startMin = clamp(Math.round((new Date(ev.start_at)-dayStartMs)/60000), 0, MINS);
+    const endMin   = clamp(Math.round((new Date(ev.end_at)  -dayStartMs)/60000), 0, MINS);
+    return { ev, startMin, endMin: Math.max(endMin, startMin+1) };
+  }).filter(n => n.startMin < MINS && n.endMin > 0);
+
+  items.sort((a,b) => a.startMin !== b.startMin ? a.startMin-b.startMin : b.endMin-a.endMin);
+
+  // Build clusters (maximal transitive overlap groups)
+  const clusters = [];
+  let cur = null, maxEnd = 0;
+  for (const item of items) {
+    if (!cur || item.startMin >= maxEnd) { cur=[item]; maxEnd=item.endMin; clusters.push(cur); }
+    else { cur.push(item); maxEnd=Math.max(maxEnd,item.endMin); }
+  }
+
+  // Assign columns within each cluster
+  const result = [];
+  for (const cl of clusters) {
+    const colEnds = [];
+    const asgn = cl.map(item => {
+      let col = colEnds.findIndex(e => e <= item.startMin);
+      if (col===-1) { col=colEnds.length; colEnds.push(item.endMin); }
+      else colEnds[col]=item.endMin;
+      return {item,col};
+    });
+    const n = colEnds.length;
+    for (const {item,col} of asgn) {
+      result.push({
+        event: item.ev,
+        top:    item.startMin * HOUR_HEIGHT / 60,
+        height: (item.endMin-item.startMin) * HOUR_HEIGHT / 60,
+        left:   col/n, width: 1/n,
+      });
+    }
+  }
+  return result;
+}
+
+// ─── API ──────────────────────────────────────────────────────────────────────
+async function apiFetch(path, opts={}) {
+  const res = await fetch(API_BASE+path, opts);
+  const data = await res.json().catch(()=>({}));
+  if (!res.ok) throw new Error(data.error||'HTTP '+res.status);
+  return data;
+}
+const api = {
+  getEvents: (s,e) => apiFetch(`/api/events?start=${encodeURIComponent(s)}&end=${encodeURIComponent(e)}`),
+  create:    p     => apiFetch('/api/events',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}),
+  update:    (id,p)=> apiFetch('/api/events/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}),
+  delete:    id    => apiFetch('/api/events/'+id,{method:'DELETE'}),
+};
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let currentWeekStart = getWeekStart(new Date());
+let events = [];
+let dragState = null;
+let modalMode = null;
+let editingId = null;
+let nowLineInterval = null;
+
+// ─── DOM refs ─────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const weekLabel       = $('week-label');
+const dayHeaders      = $('day-headers');
+const dayColumns      = $('day-columns');
+const hourLines       = $('hour-lines');
+const timeGutterInner = $('time-gutter-inner');
+const timeGutter      = $('time-gutter');
+const gridBodyScroll  = $('grid-body-scroll');
+const modalOverlay    = $('modal-overlay');
+const modalTitle      = $('modal-title');
+const eventForm       = $('event-form');
+const inputTitle      = $('input-title');
+const inputStart      = $('input-start');
+const inputEnd        = $('input-end');
+const formError       = $('form-error');
+const btnSave         = $('btn-save');
+const btnDelete       = $('btn-delete');
+const btnCancel       = $('btn-cancel');
+const modalClose      = $('modal-close');
+
+// ─── Build static grid ────────────────────────────────────────────────────────
+function buildGrid() {
+  // Hour lines
+  for (let h=0; h<=24; h++) {
+    const line = document.createElement('div');
+    line.className='hour-line'; line.style.top=(h*HOUR_HEIGHT)+'px';
+    hourLines.appendChild(line);
+    if (h<24) {
+      const half=document.createElement('div');
+      half.className='hour-line half'; half.style.top=(h*HOUR_HEIGHT+HOUR_HEIGHT/2)+'px';
+      hourLines.appendChild(half);
+    }
+  }
+  // Time labels
+  for (let h=1; h<=23; h++) {
+    const lbl=document.createElement('div');
+    lbl.className='time-label'; lbl.style.top=(h*HOUR_HEIGHT)+'px';
+    lbl.textContent=String(h).padStart(2,'0')+':00';
+    timeGutterInner.appendChild(lbl);
+  }
+  // Sync gutter scroll
+  gridBodyScroll.addEventListener('scroll', ()=>{ timeGutter.scrollTop=gridBodyScroll.scrollTop; });
+}
+
+// ─── Current time indicator ───────────────────────────────────────────────────
+function updateNowLine() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const weekDays = getWeekDays(currentWeekStart);
+  const todayIndex = weekDays.findIndex(d => d.getTime()===today.getTime());
+
+  // Remove existing now lines
+  document.querySelectorAll('.now-line').forEach(el=>el.remove());
+
+  if (todayIndex === -1) return; // today not in current week
+
+  const now = new Date();
+  const mins = now.getHours()*60 + now.getMinutes();
+  const top = mins * HOUR_HEIGHT / 60;
+
+  const cols = dayColumns.querySelectorAll('.day-col');
+  if (cols[todayIndex]) {
+    const line = document.createElement('div');
+    line.className = 'now-line';
+    line.style.top = top + 'px';
+    cols[todayIndex].appendChild(line);
+  }
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function render() {
+  const weekDays = getWeekDays(currentWeekStart);
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  weekLabel.textContent = fmtWeekRange(weekDays[0]);
+
+  // Day headers
+  dayHeaders.innerHTML = '';
+  weekDays.forEach((day,i) => {
+    const isToday = day.getTime()===today.getTime();
+    const h = document.createElement('div');
+    h.className = 'day-header'+(isToday?' today':'');
+    h.innerHTML = `<div class="day-name">${DAY_NAMES[i]}</div><div class="day-num">${day.getDate()}</div>`;
+    dayHeaders.appendChild(h);
+  });
+
+  // Day columns + events
+  dayColumns.innerHTML = '';
+  weekDays.forEach((day,dayIndex) => {
+    const isToday = day.getTime()===today.getTime();
+    const col = document.createElement('div');
+    col.className = 'day-col'+(isToday?' today':'');
+    col.dataset.dayIndex = dayIndex;
+    col.addEventListener('mousedown', onDayMouseDown);
+    dayColumns.appendChild(col);
+
+    const dayStart = new Date(day); dayStart.setHours(0,0,0,0);
+    const dayEnd   = new Date(day); dayEnd.setHours(24,0,0,0);
+    const dayEvts  = events.filter(ev => new Date(ev.start_at)<dayEnd && new Date(ev.end_at)>dayStart);
+    const items    = computeLayout(dayEvts, dayStart);
+
+    items.forEach(({event:ev, top, height, left, width}) => {
+      const GAP = 1;
+      const block = document.createElement('div');
+      block.className = 'event-block';
+      block.style.top    = top+'px';
+      block.style.height = Math.max(height,18)+'px';
+      block.style.left   = `calc(${left*100}% + ${GAP}px)`;
+      block.style.width  = `calc(${width*100}% - ${GAP*2}px)`;
+
+      const idx = ((ev.id||0)%EVENT_COLORS.length+EVENT_COLORS.length)%EVENT_COLORS.length;
+      const color = EVENT_COLORS[idx];
+      block.style.background      = color+'dd';
+      block.style.color           = '#fff';
+      block.style.borderLeftColor = color;
+
+      const s=new Date(ev.start_at), e=new Date(ev.end_at);
+      block.innerHTML = `<div class="event-title">${escHtml(ev.title)}</div>`+
+        (height>=28?`<div class="event-time">${fmtTime(s)} \u2013 ${fmtTime(e)}</div>`:'');
+
+      block.addEventListener('click', evt=>{ evt.stopPropagation(); openEdit(ev); });
+      col.appendChild(block);
+    });
+  });
+
+  // Now line
+  updateNowLine();
+}
+
+// ─── Drag to create ───────────────────────────────────────────────────────────
+function onDayMouseDown(e) {
+  if (e.button!==0||e.target.closest('.event-block')||e.target.closest('.now-line')) return;
+  const col=e.currentTarget;
+  const rect=col.getBoundingClientRect();
+  const y=e.clientY-rect.top+gridBodyScroll.scrollTop;
+  const startMin=clamp(Math.floor(y),0,TOTAL_HEIGHT);
+
+  const sel=document.createElement('div');
+  sel.className='drag-selection'; sel.style.top=startMin+'px'; sel.style.height='1px';
+  col.appendChild(sel);
+  dragState={dayIndex:parseInt(col.dataset.dayIndex,10),startMin,currentMin:startMin,el:sel,col};
+  e.preventDefault();
+}
+
+document.addEventListener('mousemove', e=>{
+  if (!dragState) return;
+  const rect=dragState.col.getBoundingClientRect();
+  const y=e.clientY-rect.top+gridBodyScroll.scrollTop;
+  const cur=clamp(Math.floor(y),0,TOTAL_HEIGHT);
+  dragState.currentMin=cur;
+  dragState.el.style.top=Math.min(dragState.startMin,cur)+'px';
+  dragState.el.style.height=Math.max(Math.abs(cur-dragState.startMin),1)+'px';
+});
+
+document.addEventListener('mouseup', ()=>{
+  if (!dragState) return;
+  const {dayIndex,startMin,currentMin,el}=dragState;
+  el.remove(); dragState=null;
+
+  let s=snapMins(Math.min(startMin,currentMin));
+  let e=snapMins(Math.max(startMin,currentMin));
+  if (e<=s) e=s+15;
+  s=clamp(s,0,24*60-15); e=clamp(e,s+15,24*60);
+
+  const day=getWeekDays(currentWeekStart)[dayIndex];
+  const sd=new Date(day); sd.setHours(Math.floor(s/60),s%60,0,0);
+  const ed=new Date(day); ed.setHours(Math.floor(e/60),e%60,0,0);
+  openCreate(sd,ed);
+});
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+function showErr(msg){ formError.textContent=msg; formError.classList.remove('hidden'); }
+function hideErr()   { formError.classList.add('hidden'); }
+
+function openCreate(sd,ed) {
+  modalMode='create'; editingId=null;
+  modalTitle.textContent='New Event';
+  inputTitle.value=''; inputStart.value=toDatetimeLocal(sd); inputEnd.value=toDatetimeLocal(ed);
+  btnDelete.classList.add('hidden'); hideErr();
+  modalOverlay.classList.remove('hidden');
+  setTimeout(()=>inputTitle.focus(),50);
+}
+function openEdit(ev) {
+  modalMode='edit'; editingId=ev.id;
+  modalTitle.textContent='Edit Event';
+  inputTitle.value=ev.title;
+  inputStart.value=toDatetimeLocal(new Date(ev.start_at));
+  inputEnd.value=toDatetimeLocal(new Date(ev.end_at));
+  btnDelete.classList.remove('hidden'); hideErr();
+  modalOverlay.classList.remove('hidden');
+  setTimeout(()=>inputTitle.focus(),50);
+}
+function closeModal(){ modalOverlay.classList.add('hidden'); modalMode=null; editingId=null; }
+
+modalClose.addEventListener('click',closeModal);
+btnCancel.addEventListener('click',closeModal);
+modalOverlay.addEventListener('click',e=>{ if(e.target===modalOverlay) closeModal(); });
+
+eventForm.addEventListener('submit',async e=>{
+  e.preventDefault(); hideErr();
+  const title=inputTitle.value.trim();
+  if (!title){ showErr('Title is required.'); return; }
+  const sd=new Date(inputStart.value), ed=new Date(inputEnd.value);
+  if (isNaN(sd.getTime())||isNaN(ed.getTime())){ showErr('Invalid dates.'); return; }
+  if (ed<=sd){ showErr('End must be after start.'); return; }
+  const payload={title,start_at:sd.toISOString(),end_at:ed.toISOString()};
+  try {
+    btnSave.disabled=true; btnSave.textContent='Saving\u2026';
+    if (modalMode==='create') await api.create(payload);
+    else await api.update(editingId,payload);
+    closeModal(); await loadAndRender();
+  } catch(err){ showErr(err.message||'Save failed.'); }
+  finally { btnSave.disabled=false; btnSave.textContent='Save'; }
+});
+
+btnDelete.addEventListener('click',async()=>{
+  if (!editingId||!confirm('Delete this event?')) return;
+  try {
+    btnDelete.disabled=true;
+    await api.delete(editingId);
+    closeModal(); await loadAndRender();
+  } catch(err){ showErr(err.message||'Delete failed.'); }
+  finally { btnDelete.disabled=false; }
+});
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+$('btn-prev').addEventListener('click',()=>{ currentWeekStart.setDate(currentWeekStart.getDate()-7); loadAndRender(); });
+$('btn-next').addEventListener('click',()=>{ currentWeekStart.setDate(currentWeekStart.getDate()+7); loadAndRender(); });
+$('btn-today').addEventListener('click',()=>{ currentWeekStart=getWeekStart(new Date()); loadAndRender(); });
+
+// ─── Load & Render ────────────────────────────────────────────────────────────
+async function loadAndRender() {
+  const days=getWeekDays(currentWeekStart);
+  const end=new Date(days[6]); end.setHours(24,0,0,0);
+  try { events=await api.getEvents(days[0].toISOString(),end.toISOString()); }
+  catch(err){ console.error('fetchEvents failed:',err); events=[]; }
+  render();
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildGrid();
+loadAndRender();
+requestAnimationFrame(()=>{ gridBodyScroll.scrollTop=7*HOUR_HEIGHT; });
+
+// Update now line every minute
+if (nowLineInterval) clearInterval(nowLineInterval);
+nowLineInterval = setInterval(updateNowLine, 60000);
+  </script>
+</body>
+</html>

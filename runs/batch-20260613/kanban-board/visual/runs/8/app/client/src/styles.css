@@ -1,0 +1,231 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #eef2f7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button, input, textarea { font: inherit; }
+
+.app-shell {
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.subtitle {
+  margin: 0;
+  color: #5f6f89;
+  max-width: 760px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  margin-top: 8px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: #526173;
+  box-shadow: 0 10px 30px rgba(30, 45, 70, 0.08);
+  font-size: 0.9rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
+}
+
+.status.connected .status-dot {
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
+}
+
+.status.error .status-dot {
+  background: #ef4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.column {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 20px 60px rgba(25, 38, 60, 0.12);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+}
+
+.column-header {
+  padding: 18px 18px 12px;
+  border-bottom: 1px solid #e5eaf1;
+}
+
+.column-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.column h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.count {
+  min-width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.add-card-form {
+  display: flex;
+  margin-top: 14px;
+  gap: 8px;
+}
+
+.add-card-form input {
+  flex: 1;
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #172033;
+  outline: none;
+}
+
+.add-card-form input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.add-card-form button {
+  border: 0;
+  border-radius: 12px;
+  padding: 0 14px;
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.add-card-form button:hover { background: #1d4ed8; }
+.add-card-form button:disabled { opacity: 0.55; cursor: progress; }
+
+.card-list {
+  flex: 1;
+  min-height: 260px;
+  padding: 14px;
+  transition: background 120ms ease;
+}
+
+.card-list.drag-over {
+  background: rgba(59, 130, 246, 0.07);
+}
+
+.card {
+  cursor: grab;
+  user-select: none;
+  margin-bottom: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 20px rgba(30, 45, 70, 0.08);
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  overflow-wrap: anywhere;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(30, 45, 70, 0.13);
+}
+
+.card.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 0.72rem;
+  color: #8491a5;
+}
+
+.empty {
+  border: 2px dashed #cbd5e1;
+  color: #94a3b8;
+  border-radius: 16px;
+  padding: 22px;
+  text-align: center;
+}
+
+.toast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  max-width: min(420px, calc(100vw - 36px));
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #172033;
+  color: white;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+.hidden { display: none; }
+
+@media (max-width: 900px) {
+  .app-shell { padding: 18px; }
+  .header { flex-direction: column; }
+  .board { grid-template-columns: 1fr; }
+  .column { min-height: 320px; }
+}

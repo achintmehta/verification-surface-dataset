@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metrics Dashboard</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <!--
+    Theme is applied before first paint by the inline script below.
+    It reads the persisted theme from the API synchronously via a
+    blocking fetch is not possible, so we default to 'light' and
+    then the JS module corrects it immediately on load (before render).
+    A <meta> trick: the server could inject a class, but since we're
+    a pure SPA we use a tiny inline script that sets the attribute
+    from localStorage as a fast-path, then the API call confirms/overrides.
+  -->
+  <script>
+    // Fast-path: apply any previously cached theme immediately to avoid FOUC.
+    // The authoritative value comes from the API and is applied in main.js.
+    (function () {
+      try {
+        var t = sessionStorage.getItem('dashboard-theme');
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- Skeleton shown while JS loads -->
+    <header class="site-header">
+      <div class="header-inner">
+        <h1 class="site-title">
+          <svg class="logo-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Metrics Dashboard
+        </h1>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme" title="Toggle light/dark theme">
+          <span class="theme-icon theme-icon--light">☀️</span>
+          <span class="theme-icon theme-icon--dark">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="dashboard" id="dashboard">
+      <!-- Content injected by main.js -->
+      <div class="loading-state" id="loading-state">
+        <div class="spinner" aria-label="Loading…"></div>
+        <p>Loading dashboard…</p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

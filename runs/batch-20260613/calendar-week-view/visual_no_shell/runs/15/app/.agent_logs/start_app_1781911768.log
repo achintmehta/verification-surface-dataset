@@ -1,0 +1,37 @@
+
+> week-calendar@1.0.0 dev
+> concurrently -n server,client -c blue,green "npm:dev:server" "npm:dev:client"
+
+[client] 
+[client] > week-calendar@1.0.0 dev:client
+[client] > vite
+[client] 
+[server] 
+[server] > week-calendar@1.0.0 dev:server
+[server] > node server/index.js
+[server] 
+[server] Failed to initialize database Error: ENOENT: no such file or directory, mkdir '/tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/data/pgdata'
+[server]     at Module.mkdirSync (node:fs:1391:3)
+[server]     at new m (file:///tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/node_modules/@electric-sql/pglite/dist/fs/nodefs.js:1:248)
+[server]     at Ae (file:///tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/node_modules/@electric-sql/pglite/dist/index.js:1:5434)
+[server]     at async pe.qe (file:///tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/node_modules/@electric-sql/pglite/dist/index.js:3:241364)
+[server]     at async pe._checkReady (file:///tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/node_modules/@electric-sql/pglite/dist/index.js:3:238920)
+[server]     at async pe.exec (file:///tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/node_modules/@electric-sql/pglite/dist/chunk-A7RFOIQ7.js:8:463)
+[server]     at async getDb (file:///tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/server/db.js:13:3) {
+[server]   errno: -2,
+[server]   syscall: 'mkdir',
+[server]   code: 'ENOENT',
+[server]   path: '/tmp/runs/final-runs/calendar-week-view/visual_no_shell/runs/15/app/data/pgdata'
+[server] }
+[server] npm run dev:server exited with code 1
+[client] 
+[client]   VITE v5.4.21  ready in 105 ms
+[client] 
+[client]   ➜  Local:   http://localhost:5173/
+[client]   ➜  Network: use --host to expose
+[client] 6:29:34 PM [vite] http proxy error: /api.js
+[client] Error: connect ECONNREFUSED 127.0.0.1:3001
+[client]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+[client] 6:29:54 PM [vite] vite.config.js changed, restarting server...
+[client] 6:29:54 PM [vite] server restarted.
+[client] npm run dev:client exited with code SIGTERM

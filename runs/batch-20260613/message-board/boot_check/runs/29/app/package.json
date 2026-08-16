@@ -1,0 +1,22 @@
+{
+  "name": "message-board",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server.js",
+    "client": "npm run dev --workspace=client"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.15",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

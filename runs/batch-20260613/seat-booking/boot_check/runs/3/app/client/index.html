@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seat Booking</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="session-info">
+        Session: <span id="session-id-display"></span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Legend -->
+      <div class="legend">
+        <span class="legend-item"><span class="seat-dot available"></span> Available</span>
+        <span class="legend-item"><span class="seat-dot held-own"></span> Your Hold</span>
+        <span class="legend-item"><span class="seat-dot held-other"></span> Held by Other</span>
+        <span class="legend-item"><span class="seat-dot booked"></span> Booked</span>
+        <span class="legend-item"><span class="seat-dot selected"></span> Selected</span>
+      </div>
+
+      <!-- Stage indicator -->
+      <div class="stage">STAGE</div>
+
+      <!-- Seat map -->
+      <div id="seat-map" class="seat-map">
+        <div class="loading">Loading seats…</div>
+      </div>
+
+      <!-- Action panel -->
+      <div id="action-panel" class="action-panel">
+        <!-- Hold panel -->
+        <div id="hold-panel" class="panel hidden">
+          <h2>Your Hold</h2>
+          <p>Seats: <strong id="hold-seats-display"></strong></p>
+          <p>Expires in: <strong id="hold-countdown"></strong></p>
+          <div class="panel-actions">
+            <button id="confirm-btn" class="btn btn-confirm">✅ Confirm Booking</button>
+            <button id="release-btn" class="btn btn-release">❌ Release Hold</button>
+          </div>
+        </div>
+
+        <!-- Selection panel -->
+        <div id="selection-panel" class="panel">
+          <h2>Select Seats</h2>
+          <p id="selection-hint">Click available seats to select them, then hold.</p>
+          <p id="selected-display" class="hidden">Selected: <strong id="selected-seats-list"></strong></p>
+          <div class="panel-actions">
+            <button id="hold-btn" class="btn btn-hold" disabled>🔒 Hold Selected Seats</button>
+            <button id="clear-btn" class="btn btn-clear" disabled>Clear Selection</button>
+          </div>
+        </div>
+
+        <!-- Booking confirmed panel -->
+        <div id="booked-panel" class="panel hidden">
+          <h2>🎉 Booking Confirmed!</h2>
+          <p>Your seats: <strong id="booked-seats-display"></strong></p>
+          <button id="new-booking-btn" class="btn btn-hold">Start New Booking</button>
+        </div>
+
+        <!-- Error panel -->
+        <div id="error-panel" class="panel hidden">
+          <h2>⚠️ Hold Failed</h2>
+          <p id="error-message"></p>
+          <p id="conflict-seats" class="hidden">Conflicting seats: <strong id="conflict-list"></strong></p>
+          <button id="error-dismiss-btn" class="btn btn-clear">Dismiss</button>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div id="status-bar" class="status-bar">
+        <span id="inventory-display"></span>
+        <span id="sse-status" class="sse-status disconnected">● Disconnected</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

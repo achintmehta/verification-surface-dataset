@@ -1,0 +1,153 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5;
+}
+
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#severity-filter, #search-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#search-input {
+  flex: 1;
+  max-width: 300px;
+}
+
+#row-count {
+  margin-left: auto;
+  color: #666;
+  font-size: 14px;
+}
+
+#virtual-table-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.table-header {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 2px solid #ddd;
+  font-weight: 600;
+  color: #555;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-header .col {
+  padding: 12px;
+}
+
+.col.ts { width: 18%; }
+.col.sev { width: 10%; }
+.col.svc { width: 12%; }
+.col.msg { width: 60%; }
+
+#virtual-scroller {
+  height: 600px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.rows-container {
+  position: relative;
+  width: 100%;
+}
+
+.log-row {
+  display: flex;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+  background: white;
+}
+
+.log-row:hover {
+  background: #f8f9fa;
+}
+
+.log-row .col {
+  padding: 0 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-row .col.msg {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.severity {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.severity-debug { background: #e3f2fd; color: #1976d2; }
+.severity-info { background: #e8f5e9; color: #388e3c; }
+.severity-warn { background: #fff3e0; color: #f57c00; }
+.severity-error { background: #ffebee; color: #d32f2f; }
+
+.timestamp {
+  font-family: monospace;
+  color: #666;
+  white-space: nowrap;
+}
+
+.service {
+  font-weight: 500;
+  color: #555;
+}
+
+.message {
+  word-break: break-word;
+}
+
+#virtual-scroller table {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}

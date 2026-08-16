@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎭 Seat Booking — Preview</title>
+  <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-2: #22263a;
+  --color-border: #2e3250;
+  --color-text: #e8eaf6;
+  --color-text-muted: #8892b0;
+  --color-available: #1e3a5f;
+  --color-available-hover: #2563a8;
+  --color-available-border: #3b82f6;
+  --color-selected: #1a4731;
+  --color-selected-border: #22c55e;
+  --color-held-mine: #4a2c00;
+  --color-held-mine-border: #f59e0b;
+  --color-held-other: #3b1f1f;
+  --color-held-other-border: #ef4444;
+  --color-booked: #1f1f2e;
+  --color-booked-border: #6366f1;
+  --color-primary: #3b82f6;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+#app { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.5px; }
+
+#session-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+#session-info code {
+  background: var(--color-surface-2);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--color-primary);
+}
+
+.status-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block; flex-shrink: 0;
+}
+.status-dot.connected { background: var(--color-success); box-shadow: 0 0 6px var(--color-success); }
+
+.stage-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 2rem;
+  width: fit-content;
+  margin: 0 auto 1.5rem;
+}
+
+#seat-map-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+#seat-map { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.seat-row { display: flex; align-items: center; gap: 0.5rem; }
+
+.row-label {
+  width: 1.5rem; text-align: center;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--color-text-muted); flex-shrink: 0;
+}
+
+.seats-in-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+.seat {
+  width: 38px; height: 38px;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.7rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.1s, box-shadow 0.15s;
+  user-select: none;
+}
+
+.seat.available { background: var(--color-available); border-color: var(--color-available-border); color: #93c5fd; }
+.seat.selected { background: var(--color-selected); border-color: var(--color-selected-border); color: #86efac; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34,197,94,0.4); }
+.seat.held-mine { background: var(--color-held-mine); border-color: var(--color-held-mine-border); color: #fcd34d; }
+.seat.held-other { background: var(--color-held-other); border-color: var(--color-held-other-border); color: #fca5a5; opacity: 0.7; }
+.seat.booked { background: var(--color-booked); border-color: var(--color-booked-border); color: #a5b4fc; opacity: 0.6; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  justify-content: center; margin-bottom: 1.5rem;
+}
+.legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--color-text-muted); }
+.seat-demo { width: 20px; height: 20px; border-radius: 3px; border: 2px solid transparent; }
+.seat-demo.available { background: var(--color-available); border-color: var(--color-available-border); }
+.seat-demo.selected { background: var(--color-selected); border-color: var(--color-selected-border); }
+.seat-demo.held-mine { background: var(--color-held-mine); border-color: var(--color-held-mine-border); }
+.seat-demo.held-other { background: var(--color-held-other); border-color: var(--color-held-other-border); }
+.seat-demo.booked { background: var(--color-booked); border-color: var(--color-booked-border); }
+
+#inventory {
+  display: flex; gap: 1rem; justify-content: center;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
+}
+.inv-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  text-align: center; min-width: 80px;
+}
+.inv-count { display: block; font-size: 1.75rem; font-weight: 700; color: var(--color-primary); line-height: 1; }
+.inv-label { font-size: 0.7rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+#action-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+#selection-hint { color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
+
+#selected-seats-display {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+  margin-bottom: 1rem; min-height: 2rem;
+}
+
+.seat-tag {
+  background: var(--color-selected);
+  border: 1px solid var(--color-selected-border);
+  color: #86efac;
+  padding: 2px 8px; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 600;
+}
+
+button {
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border: none; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
+}
+#btn-hold { background: var(--color-primary); color: white; width: 100%; opacity: 0.4; }
+
+.preview-note {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-warning);
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🎭 Seat Booking</h1>
+      <div id="session-info">
+        <span>Session: <code>sess_preview…</code></span>
+        <span class="status-dot connected" title="SSE: connected"></span>
+      </div>
+    </header>
+
+    <main>
+      <div class="preview-note">
+        📸 Static Preview — Run the backend on port 3001 to use the live app
+      </div>
+
+      <div class="stage-label">STAGE</div>
+
+      <div id="seat-map-container">
+        <div id="seat-map"></div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="seat-demo available"></div><span>Available</span></div>
+        <div class="legend-item"><div class="seat-demo selected"></div><span>Selected</span></div>
+        <div class="legend-item"><div class="seat-demo held-mine"></div><span>Your Hold</span></div>
+        <div class="legend-item"><div class="seat-demo held-other"></div><span>Held by Other</span></div>
+        <div class="legend-item"><div class="seat-demo booked"></div><span>Booked</span></div>
+      </div>
+
+      <div id="inventory">
+        <div class="inv-item"><span class="inv-count">42</span><span class="inv-label">Available</span></div>
+        <div class="inv-item"><span class="inv-count">4</span><span class="inv-label">Held</span></div>
+        <div class="inv-item"><span class="inv-count">4</span><span class="inv-label">Booked</span></div>
+        <div class="inv-item"><span class="inv-count">50</span><span class="inv-label">Total</span></div>
+      </div>
+
+      <div id="action-panel">
+        <p id="selection-hint">Click available seats to select them, then hold them.</p>
+        <div id="selected-seats-display">
+          <span class="seat-tag">A3</span>
+          <span class="seat-tag">A4</span>
+        </div>
+        <button id="btn-hold">Hold 2 Seats</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Generate a realistic seat map for preview
+    const rows = ['A','B','C','D','E'];
+    const seatsPerRow = 10;
+
+    // Some demo states
+    const heldOther = new Set(['B3','B4','C7']);
+    const booked = new Set(['A1','A2','D5','D6']);
+    const heldMine = new Set(['A3','A4']);
+    const selected = new Set();
+
+    const seatMap = document.getElementById('seat-map');
+
+    rows.forEach(row => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'seat-row';
+
+      const label = document.createElement('div');
+      label.className = 'row-label';
+      label.textContent = row;
+      rowEl.appendChild(label);
+
+      const seatsEl = document.createElement('div');
+      seatsEl.className = 'seats-in-row';
+
+      for (let n = 1; n <= seatsPerRow; n++) {
+        const id = `${row}${n}`;
+        const el = document.createElement('div');
+        el.className = 'seat';
+        el.textContent = n;
+
+        if (booked.has(id)) el.classList.add('booked');
+        else if (heldMine.has(id)) el.classList.add('held-mine');
+        else if (heldOther.has(id)) el.classList.add('held-other');
+        else if (selected.has(id)) el.classList.add('selected');
+        else el.classList.add('available');
+
+        seatsEl.appendChild(el);
+      }
+
+      rowEl.appendChild(seatsEl);
+      seatMap.appendChild(rowEl);
+    });
+  </script>
+</body>
+</html>

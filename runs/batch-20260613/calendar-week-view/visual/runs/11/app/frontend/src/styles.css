@@ -1,0 +1,317 @@
+:root {
+  --hour-height: 48px;
+  --gutter-width: 56px;
+  --border: #e2e5ea;
+  --border-strong: #cdd2db;
+  --bg: #ffffff;
+  --bg-muted: #f7f8fa;
+  --accent: #2f6df6;
+  --accent-soft: #e8f0ff;
+  --today: #fff7ed;
+  --today-line: #f59e0b;
+  --text: #1f2430;
+  --text-muted: #6b7280;
+  --event-bg: #3b82f6;
+  --event-border: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg-muted);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ---- Toolbar ---- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+button:hover {
+  background: var(--bg-muted);
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+button.primary:hover {
+  filter: brightness(0.95);
+}
+
+button.danger {
+  background: #fff;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+button.danger:hover {
+  background: #fef2f2;
+}
+
+.week-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.error-banner {
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 8px 16px;
+  border-bottom: 1px solid #fecaca;
+}
+
+/* ---- Calendar ---- */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: var(--bg);
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: var(--gutter-width) repeat(7, 1fr);
+  border-bottom: 1px solid var(--border-strong);
+  /* offset scrollbar so columns align with body */
+  padding-right: 0;
+  flex: 0 0 auto;
+}
+
+.corner {
+  border-right: 1px solid var(--border);
+}
+
+.day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-right: 1px solid var(--border);
+  gap: 2px;
+}
+
+.day-header .dow {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.day-header .dnum {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.day-header.today .dnum {
+  background: var(--accent);
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.calendar-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: var(--gutter-width) repeat(7, 1fr);
+  position: relative;
+}
+
+/* ---- Time gutter ---- */
+.time-gutter {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+
+.hour-label {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---- Day columns ---- */
+.day-column {
+  position: relative;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.day-column.today {
+  background: var(--today);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--border);
+  pointer-events: none;
+}
+
+.hour-line.last {
+  border-top: 1px solid var(--border-strong);
+}
+
+/* ---- Selection (drag to create) ---- */
+.selection {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  background: var(--accent-soft);
+  border: 1px dashed var(--accent);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ---- Event blocks ---- */
+.event {
+  position: absolute;
+  background: var(--event-bg);
+  border: 1px solid var(--event-border);
+  border-radius: 4px;
+  color: #fff;
+  padding: 2px 5px;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 2;
+  font-size: 11px;
+  line-height: 1.25;
+  display: flex;
+  flex-direction: column;
+}
+
+.event:hover {
+  filter: brightness(1.05);
+  z-index: 3;
+}
+
+.event-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Modal ---- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.modal h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.modal input {
+  font: inherit;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+}
+
+.form-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.right-actions {
+  display: flex;
+  gap: 8px;
+}

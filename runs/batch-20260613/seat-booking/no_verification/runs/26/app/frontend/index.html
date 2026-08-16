@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seat Booking</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .seat-map { display: grid; grid-template-columns: repeat(11, 40px); gap: 5px; margin: 20px 0; }
+    .seat { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; cursor: pointer; font-size: 12px; }
+    .seat.available { background: #90EE90; }
+    .seat.held { background: #FFD700; }
+    .seat.booked { background: #FF6B6B; cursor: not-allowed; }
+    .seat.selected { background: #4CAF50; color: white; }
+    .controls { margin: 20px 0; }
+    button { padding: 10px 20px; margin-right: 10px; }
+    .status { margin-top: 20px; }
+    .row-label { width: 40px; text-align: center; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Seat Booking System</h1>
+  <div id="inventory">Available: <span id="avail">0</span> | Held: <span id="held">0</span> | Booked: <span id="booked">0</span></div>
+  
+  <div class="controls">
+    <button id="holdBtn" disabled>Hold Selected Seats</button>
+    <button id="confirmBtn" disabled>Confirm Hold</button>
+    <button id="releaseBtn" disabled>Release Hold</button>
+    <span id="holdInfo"></span>
+  </div>
+
+  <div id="seatMap" class="seat-map"></div>
+
+  <div class="status" id="status"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

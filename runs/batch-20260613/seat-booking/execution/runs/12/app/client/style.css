@@ -1,0 +1,189 @@
+:root {
+  --available: #2e7d32;
+  --available-bg: #e8f5e9;
+  --selected: #1565c0;
+  --held: #b26a00;
+  --mine: #6a1b9a;
+  --booked: #555;
+  --bg: #0f1320;
+  --panel: #1a2030;
+  --text: #e8ecf5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--panel);
+  border-bottom: 1px solid #2a3145;
+}
+
+header h1 { font-size: 1.3rem; margin: 0; }
+
+.conn {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.conn.live { background: #16351c; color: #6fe08a; }
+.conn.down { background: #3a1717; color: #ff8080; }
+.conn.unknown { background: #2a2f40; color: #b9c1d6; }
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.stage {
+  text-align: center;
+  letter-spacing: 0.5em;
+  background: linear-gradient(180deg, #2a3145, #161b29);
+  padding: 0.6rem;
+  border-radius: 8px 8px 40px 40px / 8px 8px 24px 24px;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  color: #aeb6cc;
+}
+
+.seatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.row-label {
+  width: 1.5rem;
+  text-align: center;
+  color: #8b93ab;
+  font-weight: 600;
+}
+
+.seat {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 6px 6px 10px 10px;
+  border: 2px solid transparent;
+  font-size: 0.7rem;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.06s ease, background 0.15s ease;
+  user-select: none;
+}
+.seat:hover.available { transform: translateY(-2px); }
+
+.seat.available { background: var(--available); }
+.seat.selected  { background: var(--selected); border-color: #90caf9; }
+.seat.held      { background: var(--held); cursor: not-allowed; }
+.seat.mine      { background: var(--mine); border-color: #ce93d8; }
+.seat.booked    { background: var(--booked); cursor: not-allowed; opacity: 0.7; }
+.seat.conflict  { animation: flash 0.4s ease 3; }
+
+@keyframes flash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+  50% { box-shadow: 0 0 0 3px rgba(255,80,80,0.9); }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.25rem 0;
+  font-size: 0.8rem;
+  color: #c3cadb;
+}
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.swatch {
+  width: 1rem; height: 1rem; border-radius: 4px; display: inline-block;
+}
+.swatch.available { background: var(--available); }
+.swatch.selected { background: var(--selected); }
+.swatch.held { background: var(--held); }
+.swatch.mine { background: var(--mine); }
+.swatch.booked { background: var(--booked); }
+
+.inventory {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+.inventory .pill {
+  background: var(--panel);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #2a3145;
+}
+.inventory .pill b { color: #fff; }
+
+.controls {
+  background: var(--panel);
+  border: 1px solid #2a3145;
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  margin: 0.8rem 0;
+  flex-wrap: wrap;
+}
+
+button {
+  background: #2962ff;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+button:disabled { background: #3a3f52; color: #8a8f9f; cursor: not-allowed; }
+#confirm-btn { background: #2e7d32; }
+#release-btn { background: #b23838; }
+
+.countdown {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  color: #ffd166;
+}
+.countdown.hidden { display: none; }
+
+.message {
+  margin-top: 0.7rem;
+  min-height: 1.2rem;
+  font-size: 0.9rem;
+}
+.message.error { color: #ff8a80; }
+.message.success { color: #80e0a0; }
+
+footer { text-align: center; margin-top: 1.5rem; color: #6a728c; }
+code { color: #9fb0d6; }

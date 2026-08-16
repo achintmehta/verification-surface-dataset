@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Theme Test</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <script>
+    // Pre-set dark theme in the API before the main app loads
+    (async () => {
+      try {
+        await fetch('http://localhost:3001/api/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ theme: 'dark' })
+        });
+      } catch(e) {}
+      // Now redirect to the main app
+      window.location.href = '/';
+    })();
+  </script>
+</head>
+<body>
+  <p style="padding:2rem;color:#fff;font-family:sans-serif">Setting dark theme and redirecting…</p>
+</body>
+</html>

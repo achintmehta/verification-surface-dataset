@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week Calendar</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation header -->
+    <header id="cal-header">
+      <div class="nav-controls">
+        <button id="btn-prev" aria-label="Previous week">&#8592; Prev</button>
+        <button id="btn-today">Today</button>
+        <button id="btn-next" aria-label="Next week">Next &#8594;</button>
+      </div>
+      <h1 id="week-label"></h1>
+    </header>
+
+    <!-- Main calendar grid -->
+    <div id="cal-container">
+      <!-- Time axis (left gutter) -->
+      <div id="time-axis" aria-hidden="true"></div>
+
+      <!-- Day columns wrapper -->
+      <div id="days-wrapper">
+        <!-- Day header row -->
+        <div id="day-headers"></div>
+        <!-- Scrollable grid body -->
+        <div id="grid-scroll">
+          <div id="grid-body">
+            <!-- Hour lines (background) -->
+            <div id="hour-lines"></div>
+            <!-- Day columns (events rendered here) -->
+            <div id="day-columns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal overlay for create/edit forms -->
+  <div id="modal-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="modal-box">
+      <h2 id="modal-title">Event</h2>
+      <form id="event-form" novalidate>
+        <div class="form-group">
+          <label for="f-title">Title</label>
+          <input type="text" id="f-title" name="title" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="f-start">Start</label>
+          <input type="datetime-local" id="f-start" name="start_at" required />
+        </div>
+        <div class="form-group">
+          <label for="f-end">End</label>
+          <input type="datetime-local" id="f-end" name="end_at" required />
+        </div>
+        <div id="form-error" class="form-error hidden"></div>
+        <div class="form-actions">
+          <button type="submit" id="btn-save">Save</button>
+          <button type="button" id="btn-delete" class="hidden danger">Delete</button>
+          <button type="button" id="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

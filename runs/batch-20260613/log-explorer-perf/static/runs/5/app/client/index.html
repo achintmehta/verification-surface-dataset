@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <h1 class="app-title">📋 Log Explorer</h1>
+        <span class="row-count" id="row-count">Loading…</span>
+      </div>
+      <div class="toolbar-right">
+        <div class="filter-group">
+          <label for="severity-select" class="filter-label">Severity</label>
+          <select id="severity-select" class="filter-select">
+            <option value="">All</option>
+            <option value="error">Error</option>
+            <option value="warn">Warn</option>
+            <option value="info">Info</option>
+            <option value="debug">Debug</option>
+          </select>
+          <span class="badge badge-error"  id="badge-error">0</span>
+          <span class="badge badge-warn"   id="badge-warn">0</span>
+          <span class="badge badge-info"   id="badge-info">0</span>
+          <span class="badge badge-debug"  id="badge-debug">0</span>
+        </div>
+        <div class="filter-group">
+          <label for="search-input" class="filter-label">Search</label>
+          <input
+            id="search-input"
+            class="filter-input"
+            type="text"
+            placeholder="Filter by message…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="table-header">
+      <div class="col-ts">Timestamp</div>
+      <div class="col-severity">Severity</div>
+      <div class="col-service">Service</div>
+      <div class="col-message">Message</div>
+    </div>
+
+    <div class="scroller-container" id="scroller-container">
+      <div class="scroller-inner" id="scroller-inner">
+        <!-- virtual rows rendered here -->
+      </div>
+    </div>
+
+    <div class="status-bar" id="status-bar">Initializing…</div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

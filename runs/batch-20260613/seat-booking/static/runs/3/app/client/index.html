@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>🎭 Seat Booking</h1>
+        <p class="subtitle">Select seats, place a hold, then confirm your booking.</p>
+      </header>
+
+      <main>
+        <!-- Legend -->
+        <div class="legend">
+          <span class="legend-item"><span class="seat-dot available"></span> Available</span>
+          <span class="legend-item"><span class="seat-dot held-other"></span> Held by others</span>
+          <span class="legend-item"><span class="seat-dot held-mine"></span> Your hold</span>
+          <span class="legend-item"><span class="seat-dot selected"></span> Selected</span>
+          <span class="legend-item"><span class="seat-dot booked"></span> Booked</span>
+        </div>
+
+        <!-- Stage indicator -->
+        <div class="stage-label">STAGE</div>
+
+        <!-- Seat map -->
+        <div id="seat-map" class="seat-map" aria-label="Seat map">
+          <div class="loading">Loading seats…</div>
+        </div>
+
+        <!-- Action panel -->
+        <div id="action-panel" class="action-panel hidden">
+          <!-- Hold panel -->
+          <div id="hold-panel" class="panel hidden">
+            <div class="panel-row">
+              <span id="selected-count">0 seat(s) selected</span>
+              <button id="btn-hold" class="btn btn-primary">Place Hold</button>
+              <button id="btn-clear" class="btn btn-ghost">Clear</button>
+            </div>
+          </div>
+
+          <!-- Active hold panel -->
+          <div id="active-hold-panel" class="panel hidden">
+            <div class="panel-row">
+              <div class="hold-info">
+                <span class="hold-label">Hold active –</span>
+                <span id="hold-seats"></span>
+                <span class="hold-timer-label">expires in</span>
+                <span id="hold-countdown" class="countdown"></span>
+              </div>
+              <div class="panel-actions">
+                <button id="btn-confirm" class="btn btn-success">Confirm Booking</button>
+                <button id="btn-release" class="btn btn-danger">Release Hold</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Booking confirmed panel -->
+          <div id="booked-panel" class="panel hidden">
+            <div class="panel-row">
+              <span class="booked-msg">✅ Booking confirmed! Seats: <strong id="booked-seats"></strong></span>
+              <button id="btn-new-booking" class="btn btn-primary">New Booking</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error / notification banner -->
+        <div id="notification" class="notification hidden" role="alert"></div>
+
+        <!-- Inventory summary -->
+        <div id="inventory" class="inventory">
+          <span>Available: <strong id="inv-available">–</strong></span>
+          <span>Held: <strong id="inv-held">–</strong></span>
+          <span>Booked: <strong id="inv-booked">–</strong></span>
+          <span>Total: <strong id="inv-total">–</strong></span>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

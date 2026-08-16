@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaborative Kanban — Labels Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #eef2f7;
+      color: #172033;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; }
+
+    /* Topbar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, #172033, #334155);
+      color: white;
+      box-shadow: 0 2px 16px rgba(15,23,42,0.2);
+    }
+    h1, h2, p { margin: 0; }
+    .topbar p { color: #cbd5e1; margin-top: 0.35rem; }
+    .status {
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      background: #16a34a;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      background: #f1f5f9;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    .filter-label-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #475569;
+      margin-right: 0.25rem;
+    }
+    .filter-chip {
+      border: 2px solid var(--chip-color, #94a3b8);
+      background: transparent;
+      color: #172033;
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 120ms, color 120ms;
+    }
+    .filter-chip.active {
+      background: var(--chip-color, #94a3b8);
+      color: white;
+    }
+    .filter-clear {
+      border: none;
+      background: #e2e8f0;
+      color: #475569;
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 0.25rem;
+    }
+
+    /* Board */
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 1rem;
+      padding: 1.25rem;
+      align-items: start;
+    }
+    .column {
+      background: #dbe4ef;
+      border: 1px solid #cbd5e1;
+      border-radius: 18px;
+      padding: 1rem;
+      min-height: 420px;
+      box-shadow: 0 12px 35px rgba(15,23,42,0.08);
+    }
+    .column h2 { font-size: 1.05rem; margin-bottom: 0.8rem; color: #0f172a; }
+    .add-card { display: flex; gap: 0.45rem; margin-bottom: 0.85rem; }
+    .add-card input {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.65rem 0.7rem;
+      outline: none;
+      font: inherit;
+    }
+    .add-card button {
+      border: none;
+      border-radius: 10px;
+      padding: 0.65rem 0.85rem;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .cards { min-height: 300px; border-radius: 12px; padding: 0.25rem; }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 0.85rem;
+      margin-bottom: 0.65rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+      cursor: grab;
+      overflow-wrap: anywhere;
+      user-select: none;
+    }
+    .card.hidden-by-filter { display: none; }
+    .card-text { margin-bottom: 0.4rem; }
+
+    /* Label chips on cards */
+    .card-label-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-bottom: 0.35rem;
+    }
+    .label-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+
+    /* Card label picker */
+    .card-label-section { margin-top: 0.35rem; }
+    .card-label-picker { margin-top: 0.25rem; }
+    .card-label-picker-toggle {
+      font-size: 0.75rem;
+      color: #64748b;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+    }
+    .card-label-picker-toggle::-webkit-details-marker { display: none; }
+    .card-label-picker-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.35rem;
+    }
+    .label-assign-btn {
+      border: 2px solid var(--chip-color, #94a3b8);
+      background: transparent;
+      color: #172033;
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .label-assign-btn.assigned {
+      background: var(--chip-color, #94a3b8);
+      color: white;
+    }
+
+    /* Label manager */
+    .label-manager {
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      padding: 1rem 1.25rem 1.25rem;
+    }
+    .label-manager-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+    }
+    .label-list {
+      list-style: none;
+      margin: 0 0 0.75rem;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .label-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0.35rem 0.6rem;
+    }
+    .label-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    .label-name-display { font-size: 0.85rem; font-weight: 600; color: #172033; }
+    .label-btn {
+      border: none;
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .label-delete-btn { background: #fee2e2; color: #b91c1c; }
+    .label-create-form {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .label-create-name {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 0.5rem 0.65rem;
+      font: inherit;
+      font-size: 0.85rem;
+      outline: none;
+      width: 180px;
+    }
+    .label-create-color {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      padding: 0;
+      cursor: pointer;
+      background: none;
+    }
+    .label-create-btn {
+      background: #2563eb;
+      color: white;
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .label-manager-error {
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: #b91c1c;
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div>
+    <h1>Collaborative Kanban</h1>
+    <p>Drag cards between columns. Updates are broadcast in real time with SSE.</p>
+  </div>
+  <div class="status">Live</div>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label-text">Filter:</span>
+  <button class="filter-chip active" style="--chip-color:#ef4444">Bug</button>
+  <button class="filter-chip" style="--chip-color:#3b82f6">Feature</button>
+  <button class="filter-chip" style="--chip-color:#16a34a">Enhancement</button>
+  <button class="filter-chip" style="--chip-color:#f59e0b">Design</button>
+  <button class="filter-clear">Clear filter</button>
+</div>
+
+<!-- BOARD -->
+<main class="board">
+
+  <!-- TO DO -->
+  <section class="column">
+    <h2>To Do</h2>
+    <form class="add-card">
+      <input type="text" maxlength="500" placeholder="Add a card…" autocomplete="off" />
+      <button type="submit">Add</button>
+    </form>
+    <div class="cards">
+
+      <article class="card" draggable="true">
+        <div class="card-text">Fix login page crash on Safari</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#ef4444">Bug</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn assigned" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="card hidden-by-filter" draggable="true">
+        <div class="card-text">Update onboarding copy</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#f59e0b">Design</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn assigned" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="card" draggable="true">
+        <div class="card-text">Null pointer in payment service</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#ef4444">Bug</span>
+            <span class="label-chip" style="background:#3b82f6">Feature</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn assigned" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn assigned" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- IN PROGRESS -->
+  <section class="column">
+    <h2>In Progress</h2>
+    <form class="add-card">
+      <input type="text" maxlength="500" placeholder="Add a card…" autocomplete="off" />
+      <button type="submit">Add</button>
+    </form>
+    <div class="cards">
+
+      <article class="card" draggable="true">
+        <div class="card-text">Dark mode toggle</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#ef4444">Bug</span>
+            <span class="label-chip" style="background:#16a34a">Enhancement</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn assigned" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn assigned" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="card hidden-by-filter" draggable="true">
+        <div class="card-text">Redesign settings page layout</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#f59e0b">Design</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn assigned" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section class="column">
+    <h2>Done</h2>
+    <form class="add-card">
+      <input type="text" maxlength="500" placeholder="Add a card…" autocomplete="off" />
+      <button type="submit">Add</button>
+    </form>
+    <div class="cards">
+
+      <article class="card" draggable="true">
+        <div class="card-text">Export CSV report</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#3b82f6">Feature</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn assigned" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="card hidden-by-filter" draggable="true">
+        <div class="card-text">Migrate CI to GitHub Actions</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#f59e0b">Design</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn assigned" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="card" draggable="true">
+        <div class="card-text">Fix broken avatar upload</div>
+        <div class="card-label-section">
+          <div class="card-label-chips">
+            <span class="label-chip" style="background:#ef4444">Bug</span>
+          </div>
+          <details class="card-label-picker">
+            <summary class="card-label-picker-toggle">Labels ▾</summary>
+            <div class="card-label-picker-list">
+              <button class="label-assign-btn assigned" style="--chip-color:#ef4444">Bug</button>
+              <button class="label-assign-btn" style="--chip-color:#3b82f6">Feature</button>
+              <button class="label-assign-btn" style="--chip-color:#16a34a">Enhancement</button>
+              <button class="label-assign-btn" style="--chip-color:#f59e0b">Design</button>
+            </div>
+          </details>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- LABEL MANAGER -->
+<aside class="label-manager">
+  <h2 class="label-manager-title">Labels</h2>
+  <ul class="label-list">
+    <li class="label-row">
+      <span class="label-swatch" style="background:#ef4444"></span>
+      <span class="label-name-display">Bug</span>
+      <button class="label-btn">Edit</button>
+      <button class="label-btn label-delete-btn">Delete</button>
+    </li>
+    <li class="label-row">
+      <span class="label-swatch" style="background:#3b82f6"></span>
+      <span class="label-name-display">Feature</span>
+      <button class="label-btn">Edit</button>
+      <button class="label-btn label-delete-btn">Delete</button>
+    </li>
+    <li class="label-row">
+      <span class="label-swatch" style="background:#16a34a"></span>
+      <span class="label-name-display">Enhancement</span>
+      <button class="label-btn">Edit</button>
+      <button class="label-btn label-delete-btn">Delete</button>
+    </li>
+    <li class="label-row">
+      <span class="label-swatch" style="background:#f59e0b"></span>
+      <span class="label-name-display">Design</span>
+      <button class="label-btn">Edit</button>
+      <button class="label-btn label-delete-btn">Delete</button>
+    </li>
+  </ul>
+  <form class="label-create-form">
+    <input class="label-create-name" type="text" maxlength="50" placeholder="Label name…" autocomplete="off" />
+    <input class="label-create-color" type="color" value="#3b82f6" />
+    <button type="submit" class="label-create-btn">Create</button>
+  </form>
+  <div class="label-manager-error"></div>
+</aside>
+
+</body>
+</html>

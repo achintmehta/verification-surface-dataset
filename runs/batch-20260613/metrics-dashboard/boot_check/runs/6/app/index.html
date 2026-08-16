@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-booting>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Metrics Dashboard</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script>
+      (function () {
+        var done = function (theme) {
+          document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'light';
+          document.documentElement.removeAttribute('data-booting');
+        };
+        fetch('/api/settings', { headers: { Accept: 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : { theme: 'light' }; })
+          .then(function (s) { done(s.theme); })
+          .catch(function () { done('light'); });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="title-block">
+          <p class="eyebrow">Read-mostly analytics</p>
+          <h1>Metrics Dashboard</h1>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+          <span class="toggle-icon" aria-hidden="true">◐</span>
+          <span class="toggle-text">Dark mode</span>
+        </button>
+      </header>
+
+      <main>
+        <section id="errorState" class="error-state" role="status" hidden>
+          <strong>Dashboard data is unavailable.</strong>
+          <span>Start the backend server and refresh to load live metrics.</span>
+        </section>
+
+        <section id="statsGrid" class="stats-grid" aria-label="Summary metrics"></section>
+
+        <section class="dashboard-grid" aria-label="Dashboard charts and recent data">
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">30 day series</p>
+                <h2>Visitors & Revenue</h2>
+              </div>
+            </div>
+            <div id="timeChart" class="chart-shell" aria-label="30 day visitors and revenue line chart"></div>
+          </article>
+
+          <article class="card breakdown-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">Category mix</p>
+                <h2>Breakdown</h2>
+              </div>
+            </div>
+            <div id="categoryBars" class="category-bars"></div>
+          </article>
+        </section>
+
+        <section class="card table-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Latest activity</p>
+              <h2>Recent items</h2>
+            </div>
+          </div>
+          <div class="responsive-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Value</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="recentBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

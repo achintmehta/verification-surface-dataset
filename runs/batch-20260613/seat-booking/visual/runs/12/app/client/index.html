@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Booking</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>🎟️ Seat Booking</h1>
+        <div class="status-bar">
+          <span class="conn" id="conn">connecting…</span>
+          <span class="inv" id="inventory"></span>
+        </div>
+      </header>
+
+      <main>
+        <div class="screen">SCREEN</div>
+
+        <section class="seatmap-wrap">
+          <div id="seatmap" class="seatmap" aria-label="Seat map"></div>
+        </section>
+
+        <div class="legend">
+          <span><i class="swatch available"></i> Available</span>
+          <span><i class="swatch selected"></i> Selected</span>
+          <span><i class="swatch held"></i> Held</span>
+          <span><i class="swatch mine"></i> Your hold</span>
+          <span><i class="swatch booked"></i> Booked</span>
+        </div>
+
+        <section class="controls">
+          <div class="selection-info" id="selectionInfo">
+            No seats selected.
+          </div>
+
+          <div id="holdPanel" class="hold-panel hidden">
+            <span id="holdSeats"></span>
+            <span class="countdown">⏳ <strong id="countdown">--</strong></span>
+            <button id="confirmBtn" class="btn btn-primary">Confirm booking</button>
+            <button id="releaseBtn" class="btn btn-ghost">Release</button>
+          </div>
+
+          <div id="selectPanel" class="select-panel">
+            <button id="holdBtn" class="btn btn-primary" disabled>Hold selected seats</button>
+            <button id="clearBtn" class="btn btn-ghost" disabled>Clear</button>
+          </div>
+
+          <div id="message" class="message" role="status" aria-live="polite"></div>
+        </section>
+
+        <footer class="session">
+          Session: <code id="sessionId"></code>
+        </footer>
+      </main>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+:root {
+  --hour-height: 48px;
+  --axis-width: 56px;
+  --border: #e2e5ea;
+  --border-strong: #cfd4dc;
+  --accent: #2f6fed;
+  --accent-soft: #dce8ff;
+  --today-bg: #f1f6ff;
+  --text: #1d2330;
+  --muted: #6b7280;
+  --event-bg: #3b82f6;
+  --event-border: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--text);
+  background: #fafbfc;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar -------------------------------------------------------------------*/
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbar button {
+  font: inherit;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text);
+}
+.toolbar button:hover {
+  background: #f3f4f6;
+}
+.btn-today {
+  font-weight: 600;
+}
+
+.week-label {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Calendar ------------------------------------------------------------------*/
+.calendar {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #fff;
+}
+
+.cal-head {
+  display: grid;
+  grid-template-columns: var(--axis-width) repeat(7, 1fr);
+  border-bottom: 1px solid var(--border-strong);
+  flex: 0 0 auto;
+  /* leave room for scrollbar so headers align with body columns */
+  padding-right: 0;
+}
+
+.cal-corner {
+  border-right: 1px solid var(--border);
+}
+
+.day-head {
+  padding: 0.5rem 0.4rem;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.day-head .dh-weekday {
+  font-weight: 600;
+  color: var(--text);
+}
+.day-head.is-today {
+  background: var(--today-bg);
+}
+.day-head.is-today .dh-date {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.cal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: var(--axis-width) repeat(7, 1fr);
+  position: relative;
+}
+
+/* Time axis -----------------------------------------------------------------*/
+.time-axis {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+.hour-label {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Day columns ---------------------------------------------------------------*/
+.day-col {
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+.day-col.is-today {
+  background: var(--today-bg);
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--border);
+  pointer-events: none;
+}
+
+.event-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Event blocks --------------------------------------------------------------*/
+.event-block {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  padding: 2px 5px;
+  background: var(--event-bg);
+  border: 1px solid var(--event-border);
+  border-left: 3px solid var(--event-border);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.72rem;
+  line-height: 1.15;
+  overflow: hidden;
+  cursor: pointer;
+  /* small horizontal gap between side-by-side blocks */
+  margin-right: 1px;
+}
+.event-block:hover {
+  filter: brightness(1.05);
+  z-index: 5;
+}
+.ev-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ev-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+}
+
+.event-ghost {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--accent-soft);
+  border: 1px dashed var(--accent);
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Now line ------------------------------------------------------------------*/
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px solid #e11d48;
+  z-index: 6;
+  pointer-events: none;
+}
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e11d48;
+}
+
+/* Modal ---------------------------------------------------------------------*/
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  width: 340px;
+  max-width: 90vw;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+.modal h2 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.85rem;
+}
+.field input {
+  font: inherit;
+  padding: 0.5rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+.form-error {
+  color: #dc2626;
+  font-size: 0.8rem;
+  min-height: 1rem;
+  margin-bottom: 0.5rem;
+}
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.modal-actions button {
+  font: inherit;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-danger {
+  margin-left: auto;
+  color: #dc2626;
+  border-color: #f3b4b4 !important;
+}
+.btn-danger:hover {
+  background: #fef2f2;
+}

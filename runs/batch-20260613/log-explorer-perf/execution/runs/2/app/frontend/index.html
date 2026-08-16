@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Explorer</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="app-title">
+          <span class="title-icon">📋</span>
+          Log Explorer
+        </h1>
+        <span class="corpus-badge" id="corpus-badge">Loading...</span>
+      </div>
+      <div class="header-right">
+        <span class="row-count" id="row-count"></span>
+      </div>
+    </header>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="severity-select" class="filter-label">Severity</label>
+        <select id="severity-select" class="filter-select">
+          <option value="">All</option>
+          <option value="error">Error</option>
+          <option value="warn">Warn</option>
+          <option value="info">Info</option>
+          <option value="debug">Debug</option>
+        </select>
+      </div>
+
+      <div class="filter-group search-group">
+        <label for="search-input" class="filter-label">Search</label>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="search-input"
+            class="filter-input"
+            placeholder="Filter by message content..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="clear-search" class="clear-btn" title="Clear search" style="display:none">✕</button>
+        </div>
+      </div>
+
+      <div class="severity-badges" id="severity-badges">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="col-ts">Timestamp</div>
+        <div class="col-severity">Severity</div>
+        <div class="col-service">Service</div>
+        <div class="col-message">Message</div>
+      </div>
+
+      <div class="virtual-scroll-container" id="scroll-container">
+        <div class="virtual-scroll-spacer" id="scroll-spacer"></div>
+        <div class="virtual-rows" id="virtual-rows"></div>
+      </div>
+
+      <div class="empty-state" id="empty-state" style="display:none">
+        <span class="empty-icon">🔎</span>
+        <p>No log entries match your filters.</p>
+      </div>
+
+      <div class="loading-overlay" id="loading-overlay" style="display:none">
+        <div class="spinner"></div>
+        <span>Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
