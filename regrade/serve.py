@@ -50,6 +50,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("rid")
     ap.add_argument("--script", help="npm script to run (default: first available)")
+    ap.add_argument("--cmd", help="run this raw command in the app dir instead of an "
+                                  "npm script, for a recorded launch accommodation "
+                                  "(e.g. --cmd \"npx vite\"). Logged verbatim.")
     a = ap.parse_args()
 
     row = load(a.rid)
@@ -61,8 +64,8 @@ def main():
     scripts = {}
     if pkg_path.exists():
         scripts = (json.load(pkg_path.open(encoding="utf-8")) or {}).get("scripts", {})
-    chosen = a.script or next((s for s in SCRIPT_ORDER if s in scripts), None)
-    if not chosen:
+    chosen = None if a.cmd else (a.script or next((s for s in SCRIPT_ORDER if s in scripts), None))
+    if not chosen and not a.cmd:
         print(f"{a.rid}: no recognised start script. Declared: "
               f"{', '.join(scripts) or '(none)'}")
         print("Pick one with --script, or treat as a launch failure per the "
@@ -74,12 +77,14 @@ def main():
     outdir.mkdir(parents=True, exist_ok=True)
     log = (outdir / "serve.log").open("w", encoding="utf-8")
 
-    print(f"{a.rid} - starting (npm run {chosen}); output is redacted, "
+    label = a.cmd if a.cmd else f"npm run {chosen}"
+    print(f"{a.rid} - starting ({label}); output is redacted, "
           f"full copy in {outdir/'serve.log'}")
     env = dict(os.environ, NO_COLOR="1", FORCE_COLOR="0", BROWSER="none")
-    proc = subprocess.Popen(["npm", "run", chosen], cwd=str(app), env=env,
+    argv = a.cmd if a.cmd else ["npm", "run", chosen]
+    proc = subprocess.Popen(argv, cwd=str(app), env=env, shell=bool(a.cmd) or (os.name == "nt"),
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                            text=True, bufsize=1, shell=(os.name == "nt"))
+                            text=True, bufsize=1)
 
     seen = set()
 
