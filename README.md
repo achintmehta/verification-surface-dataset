@@ -3,9 +3,9 @@
 
 
 This repo holds the data and the grading and analysis code behind the paper
-**"What a Coding Agent Can Observe Determines What It Ships: A Controlled
-Study of Verification Tools and Artifact Quality"** (A. Mehta, under review,
-2026).
+**"The reach of a verification tool decides its value: A controlled study
+of verification surface, artifact quality, and cost in AI coding agents"**
+(A. Mehta, under review, 2026).
 
 Six language models (claude-4.6-sonnet, claude-4.6-opus, claude-4.8-opus,
 gpt-5.5, gemini-3.1-pro, grok-4.3) each built seven small web applications

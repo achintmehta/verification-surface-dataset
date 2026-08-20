@@ -4,6 +4,27 @@ All notable changes to this dataset release. Dataset snapshots are sealed,
 SHA256-checksummed folders (`freeze-YYYYMMDD/`); a snapshot is never modified
 after sealing, and a superseded snapshot is retained for provenance.
 
+## [1.2.1] - 2026-08-20
+
+*(Repository-only patch. Tagged in this changelog but not archived as a
+separate Zenodo version; the archive of record remains 1.2.0 at
+[10.5281/zenodo.21961591](https://doi.org/10.5281/zenodo.21961591). No data,
+no result and no sealed snapshot changed.)*
+
+- `regrade/status.py`: corrected the graded-count test. It counted a card as
+  graded if any field in it was non-empty, but a blanked card still carries
+  its criteria, weights and task name, so every staged card read as complete
+  and the tool reported the whole sample graded from the moment staging
+  finished. It now tests only the fields `stage.py` blanks, and reports
+  untouched, partly scored and complete separately.
+- `regrade/serve.py`: added `--cmd`, which runs a recorded launch
+  accommodation in the app directory instead of an npm script, with the same
+  path, task and condition redaction and the same logging.
+- `README.md`: the article title now matches `CITATION.cff` and the Zenodo
+  record. The two had diverged.
+- `.gitignore`: whitelisted the re-grade protocol records so they ship with
+  the re-grade release.
+
 ## [1.2.0] - 2026-08-16
 
 Correction and cross-check release. No graded data changed and no sealed
