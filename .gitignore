@@ -242,3 +242,12 @@ results-regrade.jsonl
 !/regrade/analyse.py
 !/regrade/agreement.csv
 !/regrade/regrade-report.md
+# the 112 scored cards: re-include the directories so git descends into them,
+# re-exclude their contents, then whitelist the card itself (not serve.log)
+!/regrade/R[0-9][0-9][0-9]/
+/regrade/R[0-9][0-9][0-9]/*
+!/regrade/R[0-9][0-9][0-9]/card.json
+# sample and mapping: sealed during grading, published afterwards as provenance
+!/regrade/_sealed/
+!/regrade/_sealed/sample.csv
+!/regrade/_sealed/MAPPING.csv

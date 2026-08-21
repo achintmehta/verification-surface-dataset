@@ -4,6 +4,36 @@ All notable changes to this dataset release. Dataset snapshots are sealed,
 SHA256-checksummed folders (`freeze-YYYYMMDD/`); a snapshot is never modified
 after sealing, and a superseded snapshot is retained for provenance.
 
+## [1.3.0] - 2026-08-20
+
+Intra-rater re-grade release. No graded data changed, no sealed snapshot was
+modified, and no published score was revised; the dataset of record remains
+`freeze-20260720/`. Archived at Zenodo: concept (all-versions) DOI
+[10.5281/zenodo.21961590](https://doi.org/10.5281/zenodo.21961590); this
+release's version DOI is
+[10.5281/zenodo.22036687](https://doi.org/10.5281/zenodo.22036687).
+
+- The 10% intra-rater check specified in `REGRADE_RUNBOOK.md` was carried out.
+  A 112-run sample (seed 20260812, stratified proportionally across task x
+  condition, drawn from the 1,098-run frame after the 18 pre-registered
+  exclusions) was staged under opaque identifiers with blanked cards and
+  re-graded across four sessions, 16 to 19 August 2026, four weeks after
+  grading closed. On the 105 launched runs the second pass reproduced the
+  first on 98.7% of individual rubric items (545 of 552), with linearly
+  weighted kappa 0.940, ICC(A,1) 0.991 on `human_pct`, mean absolute
+  difference 0.56 points, and complete agreement on the whole-application
+  survival call. Launched and non-launched runs are reported separately
+  because non-launched cards are all-fail by rule and agreement on them is
+  close to automatic.
+- `verify-output-v1.2.0.txt` is unchanged and remains current: no input to
+  `verify_paper_claims.py` was altered by this release.
+- Added `regrade/analyse.py` (the step 5 analysis), `regrade/agreement.csv`
+  (per-run output), `regrade/regrade-report.md`, `regrade/SESSIONS.txt`,
+  `regrade/SWAPS.csv`, `regrade/ENVIRONMENT.txt`, the 112 scored cards
+  `regrade/R001`-`R112`, and `regrade/_sealed/` holding `sample.csv` and
+  `MAPPING.csv`. The last was sealed during grading and is published now so
+  that the draw can be reproduced from the recorded seed.
+
 ## [1.2.1] - 2026-08-20
 
 *(Repository-only patch. Tagged in this changelog but not archived as a
