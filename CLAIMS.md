@@ -44,10 +44,10 @@ A few things to know before comparing numbers yourself:
 - Two median conventions. The sealed tables (sections 8 and 9) report the
   middle run's value (for an even count, the upper of the two middle runs).
   Medians computed directly from the manifests and quoted in the paper's text
-  (182k/263k, 195k/247k input, 369k/810k, 22/49 steps) are standard medians
-  (the average of the two middle runs). The two differ visibly only for the
-  behavioral arm: 375,389 in the sealed table versus 368,548 (369k) in the
-  text, from the same 24 runs.
+  (182k/263k, 195k/247k input, 13.5k/16.8k output, the ~49k probe saving,
+  369k/810k, 22/49 steps) are standard medians (the average of the two middle
+  runs). The two differ visibly only for the behavioral arm: 375,389 in the
+  sealed table versus 368,548 (369k) in the text, from the same 24 runs.
 - "Survives" or "boots" means the run-summary column `runs_via_declared_path`
   is True.
 - Grades: `functional_pct` is the machine score, `human_pct_current` is the
@@ -77,7 +77,7 @@ A few things to know before comparing numbers yourself:
 | 1,116 applications, six models | run-summary has 1,116 rows, 186 per model; stats header says n=1116 |
 | no tools fails to boot about 14% of the time | tables, section 1, pooled line: 26 of 192 no_verification runs failed = 13.5% |
 | boot probe costs about 35% of a full shell | tables, section 8: 213,878 / 615,296 = 0.35 |
-| full shell multiplies cost by 2.4 | tables, section 8: 615,296 / 261,602 = 2.35 |
+| full shell multiplies cost by 2.35 | tables, section 8: 615,296 / 261,602 = 2.35 |
 | sight helps but does not survive correction | stats, P4 block: +6.88, Holm p = .0826 |
 
 ## I. Introduction
@@ -123,6 +123,8 @@ A few things to know before comparing numbers yourself:
 | Number | Where |
 |---|---|
 | Puppeteer showed up in 3 of the 252 shell-only runs, never took a screenshot | the `commands.json` logs of kanban-board/delayed_verification runs 16 and 17 and kanban-labels-brownfield/execution run 17. No `.screenshot(` call anywhere **[output: shell-only runs]** |
+| outside the two sight conditions the model is called with no visual input at all (vision = false) | the `vision` field in every run manifest: true in visual and visual_no_shell, false in the other six conditions |
+| the command logs show no run computed facts about a screenshot with a script | no image-analysis tooling (PIL/pillow, jimp, sharp, pngjs, tesseract/OCR, pixelmatch, canvas, image-size, opencv, ImageMagick) appears in any recorded command across the 450 execution, delayed_verification, visual, and behavioral logs **[output: self-provisioned]** |
 
 ### II-G. Controlled test environment
 
@@ -137,6 +139,25 @@ A few things to know before comparing numbers yourself:
 | the three Claude models used every granted tool in all 462 of their tool-granted runs | `tool_uptake` in `freeze-20260720/merged_results.jsonl`; a run counts as non-use when the condition's checking tool has no invocation. Tool-granted = the seven conditions that grant any verification tool (all but no_verification): 154 per Claude model (32 static + 32 boot_check + 32 execution + 29 visual + 15 visual_no_shell + 10 delayed_verification + 4 behavioral) **[output: granted tools]** |
 | grok-4.3 accounts for 55 of the 100 non-use runs | same field, grouped by model **[output: granted tools]** |
 | the linter went unused in 23% of static runs, screenshots in 27% of visual runs | same field, grouped by condition (44 of 192 and 47 of 174) **[output: granted tools]** |
+
+### II-J. Grading mechanism (intra-rater re-grade)
+
+The re-grade data lives under `regrade/` (protocol: `REGRADE_RUNBOOK.md`,
+written before the sample was drawn). The agreement numbers are computed by
+`python3 regrade/analyse.py` from fixed inputs — the 112 second-pass cards
+(`regrade/R*/card.json`) against the first-pass record
+(`freeze-20260720/visual_items.jsonl`) — and written to
+`regrade/agreement.csv`.
+
+| Number | Where |
+|---|---|
+| per-item exact agreement 98.8% (589 of 596), weighted kappa 0.973, ICC(A,1) 0.997, mean absolute difference 0.52 points | pooled block of the analyse.py report; per-run columns in `regrade/agreement.csv` |
+| launched-only split: 98.7% exact agreement, kappa 0.940, ICC 0.991 | launched block of the same report (105 runs, 552 item comparisons) |
+| the two passes agreed on the survival call for all 112 runs; no run moved between zero and non-zero | `survived_first` / `survived_regrade` columns of `regrade/agreement.csv` |
+| every item-level disagreement is between adjacent categories (pass/partial or fail/partial) | compare `regrade/R*/card.json` items with `visual_items.jsonl`: 7 disagreements, none pass-to-fail |
+| 10 percent sample: 112 runs, stratified proportionally, 18 runs excluded from the frame, runs that never launched kept | `regrade/_sealed/sample.csv` (draw seed 20260812 in `regrade/draw_sample.py`), `regrade/exclusions.csv` (18 rows), `REGRADE_RUNBOOK.md` |
+| four-week washout: grading closed July 15, re-grading ran August 16-19, 2026 | card mtimes / `REGRADE_RUNBOOK.md` ("not before 12 Aug"), `regrade/SESSIONS.txt` |
+| blinding sentence: procedural blinding held — the mechanically blinded re-grade reproduced first-pass scores at 98.8% with every survival call unchanged | same sources; the opaque staging and path redaction are `regrade/stage.py` and `regrade/serve.py` |
 
 ### II-L. Whole application survival
 
@@ -166,7 +187,7 @@ A few things to know before comparing numbers yourself:
 | half the never-rendering frontends came from static | 5 of the 10 LAUNCH-FAILED rows in `frontend-launch-audit.csv` are static-condition runs (the rest: 2 no_verification, 1 each boot_check, visual, behavioral) **[output: failure anatomy]** |
 | functional 81.9 / 78.3 / 91.7 / 94.2 / 92.6 | tables, section 2, "API tasks pooled" line |
 | Table II, all of it (effects, intervals, p-values) | stats, blocks P1 to P6, printed exactly |
-| the mixed-effects cross-check agrees with every primary contrast in direction and magnitude | `paper/stats-mixed-effects.txt`, printed exactly; regenerate with `python3 paper/stats_mixed_effects.py` (needs the statsmodels library; every other analysis script is standard-library only) |
+| **Table IV** (mixed-effects cross-check: estimates, SEs, CIs, two-sided p) and the claim that it agrees with every primary contrast | `paper/stats-mixed-effects.txt`, printed exactly (the two p-values printed as 0.0000 appear as <.0001 in the table); regenerate with `python3 paper/stats_mixed_effects.py` (needs the statsmodels library; every other analysis script is standard-library only) |
 | P1 positive in five of six models | stats, P1 per-model line (the sixth is +0.0) |
 | P2: gemini +50 survival points, gpt-5.5 +20, rest at ceiling | stats, P2 per-model line (+0.5 and +0.2 on a 0-1 scale) |
 | linter: -3.6 functional, -2 points survival | stats, S4a and S4b |
@@ -192,12 +213,13 @@ A few things to know before comparing numbers yourself:
 |---|---|
 | medians 262k / 276k / 214k / 615k / 674k / 659k / 1,199k / 375k | tables, section 8 |
 | 2.35x the baseline; screenshots about a tenth over the shell; delayed about double | divide the section 8 medians |
-| **Table V**, median cost spread by condition: 81k / 77k / 47k / 149k / 188k / 408k | tables, section 9. Each value is the median, across that condition's model-and-task combinations, of the standard deviation of the four or five repeat runs in a combination |
+| **Table VI**, median cost spread by condition: 81k / 77k / 47k / 149k / 188k / 408k | tables, section 9. Each value is the median, across that condition's model-and-task combinations, of the standard deviation of the four or five repeat runs in a combination |
 | 42 combinations per core condition, 12 for delayed_verification | six models times seven applications; delayed_verification ran on two applications; the per-cell run counts are printed in stats, Appendix F |
 | Table III (S1 to S5) | stats, secondary blocks, printed exactly |
 | the boot probe is the only configuration cheaper than building blind | tables, section 8: 213,878 against 261,602 |
 | failed blind builds cost less than successful ones (182k vs 263k) | median `total_tokens_used.total_tokens` in the manifests, split by `runs_via_declared_path` **[output: token accounting]** |
-| among builds that started: 17 vs 19 steps, 13.5k vs 16.8k output, 195k vs 247k input | `steps` and `total_tokens_used` in the manifests, boot_check against no_verification **[output: token accounting]** |
+| among builds that started: 17 vs 19 steps, 13.5k vs 16.8k output, 195k vs 247k input | `steps` and `total_tokens_used` in the manifests, boot_check against no_verification, survivors only; the output pair is the completion-token medians (13,513 vs 16,760) and the script checks all three pairs **[output: token accounting]** |
+| comparing only builds that started, the boot probe still costs about 49 thousand tokens less than working blind | median `total_tokens_used.total_tokens` among survivors: boot_check 213,878 against no_verification 263,406; 263k − 214k = 49k **[output: token accounting]** |
 | after the shell unlocked, 45 of the 60 delayed_verification runs edited their code before finishing again | `verification_unlocked_at_step` in each manifest, plus the tool calls after that step in `commands.json` **[output: delayed_verification: discovery]** |
 | delayed runs that finished unchanged scored about seven functional points higher (97.1 vs 90.1) | join the same edit flags with `functional_pct` in run-summary **[output: delayed_verification: discovery]** |
 
@@ -205,13 +227,13 @@ A few things to know before comparing numbers yourself:
 
 | Number | Where |
 |---|---|
-| **Table VI** (calendar and dashboard rows) | tables, section 3 |
+| **Table VII** (calendar and dashboard rows) | tables, section 3 |
 | the four gaps +10.9, +4.3, +2.9, +5.7 | tables, section 3: subtract the execution column from the visual and visual_no_shell columns **[output: score ladders]** |
 | P4: +6.88, interval +0.83 to +13.41, p .0413, Holm .0826 | stats, P4 |
 | S2: +4.98, interval -1.42 to +11.75 | stats, S2 |
 | sight without a shell matches sight with one (97.7 vs 94.9 on the dashboard) | tables, section 3, metrics-dashboard row |
 | gaps +10.9 calendar, +2.9 dashboard, -2.1 log explorer | tables, section 3 **[output: score ladders]** |
-| **Table VII**, per-model gaps and screenshot counts | stats, S6 blocks (also tables, section 6) |
+| **Table VIII**, per-model gaps and screenshot counts | stats, S6 blocks (also tables, section 6) |
 | grok's shell baseline 48 to 56; sonnet's 74 | tables, section 6 (execution = 48.2 and 55.8; 74.1) |
 
 ### IV-E Brownfield
@@ -230,7 +252,7 @@ A few things to know before comparing numbers yourself:
 | the visual venues' figures quoted for contrast (97.3 / 86.4, 94.9 / 92.0) | tables, section 3, calendar and dashboard rows |
 | 13 of the 66 failures on this task, 11 of the 13 blind or linter | count in run-summary **[output: census and survival]** |
 | P6: +15.33, p .0225, Holm .0675; gemini +100 | stats, P6 and its per-model line |
-| **Table VIII**, per-model gaps and launch counts on the log explorer | run-summary, log-explorer-perf rows: mean `human_pct_current` per model for execution and no_verification, and `runs_via_declared_path` for the launch counts. None of gemini's five blind builds started **[output: log explorer]** |
+| **Table IX**, per-model gaps and launch counts on the log explorer | run-summary, log-explorer-perf rows: mean `human_pct_current` per model for execution and no_verification, and `runs_via_declared_path` for the launch counts. None of gemini's five blind builds started **[output: log explorer]** |
 | S3: -2.17, interval -12.50 to +7.33 | stats, S3 |
 
 ### IV-G Self-authored tests
@@ -240,6 +262,7 @@ A few things to know before comparing numbers yourself:
 | 24 runs, 83% survival; 71.2 vs 87.3 (same task) vs 94.2 (pooled) | tables, sections 1 and 2 |
 | S5: -16.07, p .0425; negative for five of six models | stats, S5 and its per-model line |
 | the arm stopped early rather than running out: 369k vs 810k tokens, 22 vs 49 steps, similar output | `total_tokens_used` and `steps` in the seat-booking manifests, behavioral against execution **[output: token accounting]** |
+| "while writing a similar amount of code" | median completion tokens in the same seat-booking manifests: behavioral 22,019 against execution 21,800 **[output: token accounting]** |
 | no run was stopped by a budget | every manifest has status `finished`; `max_total_tokens` varies by run and only 5 runs reach 90% of their own cap **[output: token accounting]** |
 
 ## V. The Defect Catalog
@@ -268,7 +291,7 @@ A few things to know before comparing numbers yourself:
 | Number | Where |
 |---|---|
 | by model: 41% sonnet, 24% 4.8-opus, 3% gemini, one single grok build | tables, section 7 by model; the grok count **[output: configuration defects]** |
-| **Table IX**, the Cramér's V values | work them out from `runs/batch-20260613/architecture-report.csv`; the script does (V = sqrt(chi-squared / (n * (k - 1)))) **[output: architecture signatures]** |
+| **Table X**, the Cramér's V values | work them out from `runs/batch-20260613/architecture-report.csv`; the script does (V = sqrt(chi-squared / (n * (k - 1)))) **[output: architecture signatures]** |
 | gpt-5.5 lays out a src tree in 77% of runs and starts its frontend bare in 94% | architecture-report, `dir_style` and `vite_invocation` columns (144/186 and 174/186) **[output: architecture signatures]** |
 | grok-4.3 mixes manifest layouts in 82% of runs | architecture-report, `manifest_layout` column (152/186) **[output: architecture signatures]** |
 | grok-4.3 uses the positional launch in 75% of runs yet produced no wiring defects | architecture-report `vite_invocation` (140/186) against `wiring_report.csv` (0 defects) **[output: structural idioms]** |
@@ -280,6 +303,7 @@ A few things to know before comparing numbers yourself:
 | Number | Where |
 |---|---|
 | 4 to 5 replicates per cell, six models | group run-summary rows by task, condition, and model |
+| single grader: the re-grade reproduced item verdicts at 98.8 percent (weighted kappa 0.97 pooled, 0.94 on launched runs) and agreed on every survival call | the II-J re-grade rows above (`regrade/agreement.csv`, `regrade/analyse.py`) |
 | the screenshot channel: 264 runs, 214 took a screenshot, 1,326 calls to 260 distinct URLs | `trace.jsonl` across `*/visual*/runs/*`, counting `screenshot` tool calls and their `url` argument **[output: screenshot channel]** |
 | 512 of those calls (39%) went beyond the application's own root | same, counting URLs with a path, query, or fragment after the origin **[output: screenshot channel]** |
 | 110 runs used at least one such URL; 67 built a purpose-made page to photograph | same, grouped by run; harness pages match names such as preview, test, demo, seed, viewport **[output: screenshot channel]** |
@@ -293,7 +317,7 @@ A few things to know before comparing numbers yourself:
 |---|---|
 | one build in seven fails blind; one in 192 under the boot probe | tables, section 1, pooled line |
 | weakest model gained 37 points from a shell, strongest gained nothing | `model-profiles.csv` (36.7 and 0.0); same numbers in the stats P1 per-model line |
-| full shell multiplies cost by 2.4 | tables, section 8 |
+| full shell multiplies cost by 2.35 times | tables, section 8: 615,296 / 261,602 |
 
 ## If you want to rebuild the two source files themselves
 

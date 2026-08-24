@@ -409,6 +409,16 @@ check("browser tooling installed in exactly the 5 gemini runs named in the paper
 check("no model installed test/lint/load tooling in any shell-holding run",
       not other_runs, f"found {sorted(other_runs)}")
 
+IMG = re.compile(r"jimp|sharp\b|pngjs|tesseract|\bocr\b|pixelmatch|getImageData|createCanvas|"
+                 r"image-size|opencv|\bPIL\b|pillow|imagemagick", re.I)
+bhv_cmds = glob.glob(f"{BATCH}/*/behavioral/runs/*/smoke/logs/commands.json")
+img_logs = cmds + vis_cmds + bhv_cmds
+img_hits = sorted(f.replace("\\", "/") for f in img_logs
+                  if any(IMG.search(c.get("args_head", "")) for c in json.load(open(f, encoding="utf-8"))))
+check("no run computed facts about a screenshot: image-analysis tooling in none of the 450 logs",
+      not img_hits and len(img_logs) == 450,
+      f"logs={len(img_logs)} hits={img_hits[:3]}")
+
 print("== delayed_verification: discovery after the first finish (60 runs) ==")
 SHELL = {"run_command", "run_background_command", "run_command_and_capture_output",
          "list_background_commands", "stop_background_command"}
@@ -469,6 +479,15 @@ if not SKIP_TREE:
           med([m["steps"] for m in bc]) == 17 and med([m["steps"] for m in nv]) == 19
           and round(med([m["prompt"] for m in bc]) / 1000) == 195
           and round(med([m["prompt"] for m in nv]) / 1000) == 247)
+    check("started builds under the probe also write somewhat less: 13.5k vs 16.8k output tokens",
+          round(med([m["completion"] for m in bc]) / 1000, 1) == 13.5
+          and round(med([m["completion"] for m in nv]) / 1000, 1) == 16.8,
+          f"probe={med([m['completion'] for m in bc])/1000:.1f}k blind={med([m['completion'] for m in nv])/1000:.1f}k")
+    check("among builds that started the probe still costs about 49k less (214k vs 263k)",
+          round(med([m["total"] for m in bc]) / 1000) == 214
+          and round(med([m["total"] for m in nv]) / 1000) == 263
+          and round(med([m["total"] for m in nv]) / 1000) - round(med([m["total"] for m in bc]) / 1000) == 49,
+          f"probe={med([m['total'] for m in bc])/1000:.0f}k blind={med([m['total'] for m in nv])/1000:.0f}k")
     sb = {c: [m for k, m in MAN.items() if k[0] == "seat-booking" and k[1] == c and m["total"]]
           for c in ("behavioral", "execution")}
     check("the behavioral arm stopped early: 369k vs 810k tokens, 22 vs 49 steps",
@@ -476,6 +495,11 @@ if not SKIP_TREE:
           and round(med([m["total"] for m in sb["execution"]]) / 1000) == 810
           and med([m["steps"] for m in sb["behavioral"]]) == 22
           and med([m["steps"] for m in sb["execution"]]) == 49)
+    check("yet wrote a similar amount of code: 22.0k vs 21.8k output tokens (seat-booking)",
+          round(med([m["completion"] for m in sb["behavioral"]]) / 100) == 220
+          and round(med([m["completion"] for m in sb["execution"]]) / 100) == 218,
+          f"behavioral={med([m['completion'] for m in sb['behavioral']])/1000:.1f}k "
+          f"execution={med([m['completion'] for m in sb['execution']])/1000:.1f}k")
 
 if WITH_TRACES:
     print("== screenshot channel is passive (visual + visual_no_shell traces) ==")
