@@ -67,6 +67,19 @@ to its file here. Most are printed in `freeze-20260720/freeze-tables.txt` or
 `paper/stats-results.txt`, which you can read in the browser.
 `verify_paper_claims.py` works out the rest from the data files.
 
+## Requirements
+
+- Python 3.10. The verification chain and the scripts that rebuild the analysis table use only the standard library.
+- Statistics (paper/stats_mixed_effects.py): numpy, pandas and statsmodels.
+- Figures: matplotlib and Pillow.
+- Regrading applications from scratch: Node.js 22 with npm, Playwright with Chromium, and psutil.
+
+## Contribution guidelines
+
+This archive is the frozen dataset of record for the published study, so released files are not changed. Corrections are
+published as new versions and listed in CHANGELOG.md. Please report problems or questions by email to the author
+(achintmehta@gmail.com) or as an issue on the GitHub repository.
+
 ## Reproducing the results
 
 You need Python 3.10 or newer; the analysis scripts use only the standard
