@@ -4,6 +4,15 @@ All notable changes to this dataset release. Dataset snapshots are sealed,
 SHA256-checksummed folders (`freeze-YYYYMMDD/`); a snapshot is never modified
 after sealing, and a superseded snapshot is retained for provenance.
 
+## [1.3.2] — 2026-10-06
+
+No graded data changed, no sealed snapshot was modified, and the dataset of
+record remains freeze-20260720/. Added Requirements and Contribution guidelines
+sections to README.md. Fixed the obfuscated llm endpoint in manifest.json.
+
+Archived at Zenodo: concept (all-versions) DOI [10.5281/zenodo.21961590](https://doi.org/10.5281/zenodo.21961590)
+This release's version DOI is [10.5281/zenodo.23194502](https://doi.org/10.5281/zenodo.23194502).
+
 ## [1.3.1] — 2026-08-24
 
 Verification and documentation only, no graded data changed, no sealed snapshot was modified, and the dataset of record remains freeze-20260720/. verify_paper_claims.py gains four checks, the boot probe's output-token medians among started builds (13,513 vs 16,760), its ~49k total-token saving over building blind (213,878 vs 263,406), the behavioral arm's near-identical code output on seat-booking (22,019 vs 21,800 completion tokens), and a sweep confirming no shell-holding run invoked image-analysis tooling (450 command logs, zero hits). verify-output-v1.3.1.txt supersedes v1.2.0's output. CLAIMS.md updated to match the submitted manuscript: mixed-effects results now in-paper as Table IV (later tables shift by one), the cost multiplier stated as 2.35 throughout, and new provenance rows for the intra-rater re-grade and the vision=false / self-built-sight claims.

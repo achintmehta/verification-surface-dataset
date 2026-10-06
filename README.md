@@ -2,22 +2,12 @@
 # Verification-Surface Dataset: 1,116 Controlled Web-Application Builds by Six LLMs
 
 
+## Description
+
 This repo holds the data and the grading and analysis code behind the paper
 **"The reach of a verification tool decides its value: A controlled study
 of verification surface, artifact quality, and cost in AI coding agents"**
 (A. Mehta, under review, 2026).
-
-Six language models (claude-4.6-sonnet, claude-4.6-opus, claude-4.8-opus,
-gpt-5.5, gemini-3.1-pro, grok-4.3) each built seven small web applications
-over and over, under five to eight different tool setups, from no checking
-tools at all up to a full shell plus screenshots. That comes to 1,116 builds.
-Only the tool list changed between setups: the system prompt, the environment
-briefing, and the task text were byte-for-byte the same in every run, and
-every run's manifest records their hashes so you can check that yourself.
-Every finished app was then graded exactly as the model shipped it. Automatic
-probes tested the apps whose behavior can be checked over the API, and a
-human scored every app against a fixed checklist, in shuffled order, without
-knowing which model or tool setup had built it.
 
 ## The dataset of record
 
@@ -37,7 +27,7 @@ byte-identical, so the two `SHA256SUMS` agree on every other line.
 `CHANGELOG.md` and `runs/batch-20260613/frontend-launch-audit.csv` account
 for all 14.
 
-## What is where
+## Dataset and code information
 
 | path | contents |
 |---|---|
@@ -49,7 +39,7 @@ for all 14.
 | `specs/brownfield-starter/` | the starting codebase for the modification task |
 | `agent-interface/` | the exact base prompt and environment briefing (their sha256 prefixes match every manifest), the tool schemas per condition, and one full example trace per condition. The author's local username in tool outputs (npm log paths and the like) is redacted to `user`; the traces are otherwise untouched |
 | `grader/` | the grading instrument: `automatic_probes.py`, the probe catalog (`GRADER.md`), the row schema (`RESULTS-SCHEMA.md`), and the frozen rubric cards (`rubrics/`) |
-| `paper/` | the analysis plan written before the analysis (`stats-plan.md`), the statistics code (`stats_analysis.py`), and its complete output (`stats-results.txt`) |
+| `paper/` | the analysis plan written before the analysis (`stats-plan.md`), the statistics code (`stats_analysis.py`), and its complete output (`stats-results.txt`), plus the mixed-effects cross-check (`stats_mixed_effects.py`) and its output (`stats-mixed-effects.txt`) |
 | `guidelines/` | the grading protocol (`app-grading-guide.md`), terminology (`glossary.md`), and the defect notebook (`defect-specimens-batch-20260613.md`) |
 
 What each machine-grade field means: `grader/RESULTS-SCHEMA.md`. Where every
@@ -80,7 +70,7 @@ This archive is the frozen dataset of record for the published study, so release
 published as new versions and listed in CHANGELOG.md. Please report problems or questions by email to the author
 (achintmehta@gmail.com) or as an issue on the GitHub repository.
 
-## Reproducing the results
+## Usage instructions
 
 You need Python 3.10 or newer; the analysis scripts use only the standard
 library. Re-grading apps also needs Linux, Node.js 22+, `curl`, and `ss`.
@@ -161,8 +151,22 @@ schemas per condition, one full example trace per condition
 (`agent-interface/`), the complete tool-call log of every run
 (`commands.json`), and the complete request-response trace of every run
 (`trace.jsonl`, published as a supplementary archive in the Zenodo record,
-roughly 5 GB; unpack it over a clone to restore the per-run paths). If you
-need the harness itself, ask the author.
+roughly 5 GB; unpack it over a clone to restore the per-run paths). The harness
+source code is provided with the article as Supplemental Data S1.
+
+## Methodology
+
+Six language models (claude-4.6-sonnet, claude-4.6-opus, claude-4.8-opus,
+gpt-5.5, gemini-3.1-pro, grok-4.3) each built seven small web applications
+over and over, under five to eight different tool setups, from no checking
+tools at all up to a full shell plus screenshots. That comes to 1,116 builds.
+Only the tool list changed between setups: the system prompt, the environment
+briefing, and the task text were byte-for-byte the same in every run, and
+every run's manifest records their hashes so you can check that yourself.
+Every finished app was then graded exactly as the model shipped it. Automatic
+probes tested the apps whose behavior can be checked over the API, and a
+human scored every app against a fixed checklist, in shuffled order, without
+knowing which model or tool setup had built it.
 
 ## License and citation
 
