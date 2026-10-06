@@ -10,8 +10,8 @@ No graded data changed, no sealed snapshot was modified, and the dataset of
 record remains freeze-20260720/. Added Requirements and Contribution guidelines
 sections to README.md. Fixed the obfuscated llm endpoint in manifest.json.
 
-Archived at Zenodo: concept (all-versions) DOI [10.5281/zenodo.21961590](https://doi.org/10.5281/zenodo.21961590)
-This release's version DOI is [10.5281/zenodo.23194502](https://doi.org/10.5281/zenodo.23194502).
+Archived at Zenodo: concept (all-versions) DOI [10.5281/zenodo.21961590](https://doi.org/10.5281/zenodo.21961590);
+this release's version DOI is [10.5281/zenodo.23197787](https://doi.org/10.5281/zenodo.23197787).
 
 ## [1.3.1] — 2026-08-24
 
